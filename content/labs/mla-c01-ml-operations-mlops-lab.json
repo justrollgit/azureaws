@@ -1,0 +1,313 @@
+{
+  "id": "mla-c01-ml-operations-mlops-lab",
+  "title": "AWS SageMaker to Azure ML: MLOps, Automation, and Machine Learning Operations Excellence",
+  "category": "ml-operations-mlops",
+  "difficulty": "advanced",
+  "estimatedTime": "120 minutes",
+  "awsCertification": "MLA-C01",
+  "certificationWeight": "16% - ML Operations & MLOps Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master machine learning operations by implementing comprehensive MLOps workflows with SageMaker Pipelines and migrating to Azure ML equivalents with CI/CD automation, infrastructure as code, model governance, and end-to-end ML lifecycle management.",
+
+  "learningObjectives": [
+    "Implement comprehensive MLOps workflows with SageMaker Pipelines and Azure ML Pipelines",
+    "Build CI/CD automation for machine learning model development and deployment",
+    "Create infrastructure as code for ML platforms and reproducible environments",
+    "Design model governance and compliance frameworks for enterprise ML operations",
+    "Implement automated testing and validation workflows for ML systems",
+    "Build monitoring and observability for end-to-end ML operations"
+  ],
+
+  "prerequisites": [
+    "Completion of all previous MLA-C01 labs (Data Engineering, EDA, Model Development, Deployment)",
+    "Understanding of DevOps practices and CI/CD pipeline concepts",
+    "Experience with infrastructure as code, containerization, and cloud automation",
+    "Familiarity with model governance, compliance, and operational monitoring"
+  ],
+
+  "awsServices": [
+    "Amazon SageMaker Pipelines",
+    "Amazon SageMaker Model Registry", 
+    "AWS CodePipeline",
+    "AWS CodeBuild",
+    "AWS CodeCommit",
+    "AWS CloudFormation",
+    "AWS Step Functions",
+    "Amazon EventBridge",
+    "AWS Lambda",
+    "Amazon CloudWatch"
+  ],
+
+  "azureServices": [
+    "Azure ML Pipelines",
+    "Azure ML Model Registry",
+    "Azure DevOps Pipelines",
+    "Azure Container Registry",
+    "Azure Resource Manager",
+    "Azure Logic Apps",
+    "Azure Event Grid",
+    "Azure Functions",
+    "Azure Monitor"
+  ],
+
+  "businessScenario": "MLOps Enterprise provides machine learning platform services for large organizations requiring comprehensive ML operations, governance, and automation. Their platform engineering team needs to implement enterprise-grade MLOps workflows including automated pipelines, model governance, compliance monitoring, and infrastructure management. They must master both AWS and Azure ML operations platforms to deliver reliable, scalable, and compliant ML services.",
+
+  "sections": [
+    {
+      "title": "MLOps Pipeline Automation and Orchestration",
+      "duration": "35 minutes",
+      "topics": [
+        "End-to-end ML pipeline automation with SageMaker Pipelines and Azure ML Pipelines",
+        "CI/CD integration for ML model development and deployment workflows",
+        "Pipeline orchestration and dependency management for complex ML workflows",
+        "Automated testing and validation integration within ML pipelines",
+        "Pipeline monitoring and failure recovery automation"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive MLOps Pipeline Automation",
+          "description": "Build end-to-end automated ML pipelines with CI/CD integration",
+          "steps": [
+            "Configure SageMaker Pipelines for end-to-end ML workflow automation",
+            "Setup Azure ML Pipelines with equivalent orchestration and automation",
+            "Integrate CI/CD workflows with CodePipeline and Azure DevOps",
+            "Implement automated testing and validation within ML pipeline workflows",
+            "Configure pipeline monitoring and automated failure recovery",
+            "Setup pipeline versioning and rollback capabilities for ML workflows"
+          ],
+          "deliverables": [
+            "SageMaker Pipelines configuration with comprehensive automation",
+            "Azure ML Pipelines setup with CI/CD integration",
+            "Automated testing and validation framework for ML pipelines",
+            "Pipeline monitoring and failure recovery automation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Infrastructure as Code and Environment Management",
+      "duration": "30 minutes",
+      "topics": [
+        "Infrastructure as code for ML platforms using CloudFormation and ARM templates",
+        "Containerization and environment management for ML workloads",
+        "Automated provisioning and scaling of ML infrastructure",
+        "Configuration management and environment consistency across ML stages",
+        "Cost optimization and resource management automation for ML operations"
+      ],
+      "tasks": [
+        {
+          "title": "Build Infrastructure as Code for ML Operations",
+          "description": "Implement automated infrastructure management and environment provisioning",
+          "steps": [
+            "Create CloudFormation templates for complete ML platform infrastructure",
+            "Develop Azure Resource Manager templates for equivalent ML infrastructure",
+            "Implement containerization and environment management for ML workloads",
+            "Configure automated provisioning and scaling of ML compute resources",
+            "Setup configuration management and environment consistency workflows",
+            "Implement cost optimization and automated resource management"
+          ],
+          "deliverables": [
+            "CloudFormation templates for ML platform infrastructure",
+            "Azure ARM templates with environment management automation",
+            "Containerization and consistent environment provisioning",
+            "Cost optimization and automated resource management system"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Model Governance and Compliance Automation",
+      "duration": "30 minutes",
+      "topics": [
+        "Model registry and governance with SageMaker Model Registry and Azure ML Registry",
+        "Automated compliance validation and regulatory requirement enforcement",
+        "Model approval workflows and governance policy automation",
+        "Audit trails and documentation automation for ML model lifecycle",
+        "Security and access control automation for ML operations"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Model Governance and Compliance Framework",
+          "description": "Build comprehensive model governance with automated compliance",
+          "steps": [
+            "Configure SageMaker Model Registry with comprehensive governance policies",
+            "Setup Azure ML Model Registry with equivalent governance and approval workflows",
+            "Implement automated compliance validation and regulatory enforcement",
+            "Configure model approval workflows and policy automation",
+            "Setup comprehensive audit trails and automated documentation",
+            "Implement security and access control automation for ML operations"
+          ],
+          "deliverables": [
+            "Model registry with comprehensive governance policies",
+            "Automated compliance validation and regulatory enforcement",
+            "Model approval workflows and policy automation",
+            "Audit trails and security automation for ML governance"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Monitoring and Observability for ML Operations",
+      "duration": "25 minutes",
+      "topics": [
+        "Comprehensive monitoring and observability for ML operations and pipelines",
+        "Automated alerting and incident response for ML system failures",
+        "Performance tracking and operational metrics for ML platforms",
+        "Log aggregation and analysis for ML workflow troubleshooting",
+        "Executive dashboards and reporting automation for ML operations"
+      ],
+      "tasks": [
+        {
+          "title": "Build MLOps Monitoring and Observability Platform",
+          "description": "Implement comprehensive monitoring with automated incident response",
+          "steps": [
+            "Configure comprehensive monitoring for all ML operations and pipelines",
+            "Setup automated alerting and incident response for ML system failures",
+            "Implement performance tracking and operational metrics collection",
+            "Configure log aggregation and analysis for ML workflow troubleshooting",
+            "Setup executive dashboards and automated reporting for ML operations",
+            "Create operational runbooks and automated remediation workflows"
+          ],
+          "deliverables": [
+            "Comprehensive ML operations monitoring and observability",
+            "Automated alerting and incident response system",
+            "Performance tracking and operational metrics platform",
+            "Executive dashboards and automated reporting for MLOps"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Enterprise MLOps Platform Implementation",
+      "description": "Build comprehensive enterprise MLOps platform with full automation and governance",
+      "steps": [
+        "Design and implement enterprise-grade MLOps architecture and workflows",
+        "Build automated ML pipelines with CI/CD integration and testing",
+        "Implement model governance and compliance automation for regulatory requirements",
+        "Configure infrastructure as code and environment management automation",
+        "Setup comprehensive monitoring and incident response for ML operations",
+        "Test end-to-end platform with multiple ML projects and teams"
+      ],
+      "expectedOutcome": "Production-ready enterprise MLOps platform with comprehensive automation and governance"
+    },
+    {
+      "title": "Multi-Team ML Collaboration Platform",
+      "description": "Implement MLOps platform supporting multiple teams with governance and isolation",
+      "steps": [
+        "Design multi-tenant MLOps architecture with team isolation and collaboration",
+        "Implement role-based access control and team-specific ML workflows",
+        "Build shared model registry and governance policies across teams",
+        "Configure automated resource management and cost allocation by team",
+        "Setup collaborative ML development and knowledge sharing workflows",
+        "Test platform with multiple teams and complex ML project scenarios"
+      ],
+      "expectedOutcome": "Multi-team MLOps platform with collaboration, governance, and resource management"
+    },
+    {
+      "title": "Regulatory Compliance MLOps Framework",
+      "description": "Build MLOps platform with comprehensive regulatory compliance and audit capabilities",
+      "steps": [
+        "Design MLOps architecture meeting regulatory requirements (GDPR, HIPAA, SOX)",
+        "Implement automated compliance validation and audit trail generation",
+        "Build model governance workflows with regulatory approval processes",
+        "Configure comprehensive logging and documentation for compliance reporting",
+        "Setup automated compliance monitoring and violation detection",
+        "Test compliance framework with regulatory audit simulation and validation"
+      ],
+      "expectedOutcome": "Regulatory compliant MLOps platform with automated audit and compliance validation"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex ML pipeline failures and dependency management across multiple services",
+      "solution": "Implement comprehensive error handling, use circuit breakers, implement detailed logging, create dependency mapping, use pipeline visualization, and implement automated rollback"
+    },
+    {
+      "issue": "Infrastructure scaling issues and resource contention in multi-team environments",
+      "solution": "Implement resource quotas, use intelligent scheduling, implement auto-scaling policies, create resource monitoring, implement priority queues, and use cost optimization"
+    },
+    {
+      "issue": "Model governance policy conflicts and approval workflow bottlenecks",
+      "solution": "Implement flexible policy frameworks, use automated policy validation, create escalation procedures, implement approval automation, use risk-based governance, and create clear policies"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "MLOps Pipeline Automation",
+      "criteria": [
+        "Can implement end-to-end ML pipeline automation and orchestration",
+        "Understands CI/CD integration for ML model development workflows",
+        "Can configure automated testing and validation for ML pipelines",
+        "Demonstrates pipeline monitoring and failure recovery automation"
+      ]
+    },
+    {
+      "category": "Infrastructure as Code",
+      "criteria": [
+        "Can implement infrastructure as code for ML platforms",
+        "Understands containerization and environment management for ML",
+        "Can configure automated provisioning and scaling of ML infrastructure",
+        "Demonstrates cost optimization and resource management automation"
+      ]
+    },
+    {
+      "category": "Model Governance and Compliance",
+      "criteria": [
+        "Can implement comprehensive model governance and registry management",
+        "Understands automated compliance validation and regulatory enforcement",
+        "Can configure model approval workflows and policy automation",
+        "Demonstrates audit trails and security automation for ML governance"
+      ]
+    },
+    {
+      "category": "MLOps Monitoring and Observability",
+      "criteria": [
+        "Can implement comprehensive monitoring for ML operations",
+        "Understands automated alerting and incident response for ML systems",
+        "Can configure performance tracking and operational metrics",
+        "Demonstrates executive reporting and operational runbook automation"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "MLA-C01": {
+      "domain": "ML Operations & MLOps",
+      "weight": "16%",
+      "coverage": [
+        "Build machine learning solutions for performance, availability, scalability, resiliency, and fault tolerance",
+        "Implement machine learning solutions using AWS services",
+        "Apply basic AWS security practices to machine learning solutions",
+        "Deploy and operationalize machine learning solutions",
+        "Apply machine learning operations and automation"
+      ],
+      "examTopics": [
+        "SageMaker Pipelines for ML workflow automation and orchestration",
+        "Model registry and governance with SageMaker Model Registry",
+        "CI/CD integration for ML model development and deployment",
+        "Infrastructure as code for ML platforms and automation",
+        "Monitoring and observability for ML operations and pipelines"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive MLOps workflows with pipeline automation",
+    "Demonstrates ability to build infrastructure as code for ML operations",
+    "Shows understanding of model governance and compliance automation",
+    "Can create monitoring and observability for end-to-end ML operations",
+    "Understands enterprise MLOps practices and automation strategies"
+  ],
+
+  "nextSteps": [
+    "Complete MLA-C01 certification preparation and practice exams",
+    "Begin exploring specialty certifications (ANS-C01, MLS-C01, SCS-C02, DBS-C01)",
+    "Gain hands-on experience with advanced MLOps practices and enterprise implementations",
+    "Practice implementing comprehensive ML platforms in production environments with governance"
+  ]
+}

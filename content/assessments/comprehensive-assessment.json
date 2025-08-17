@@ -1,0 +1,1326 @@
+{
+  "assessment_metadata": {
+    "title": "Complete AWS to Azure Knowledge Assessment",
+    "description": "Comprehensive evaluation covering all major service categories",
+    "total_questions": 85,
+    "estimated_time": "30-45 minutes",
+    "categories": ["Compute", "Storage", "Networking", "Databases", "Serverless", "Identity", "Monitoring", "Containers", "DevOps", "Messaging", "Security", "NoSQL"]
+  },
+  "questions": [
+    {
+      "id": "compute-1",
+      "category": "Compute Services",
+      "aws_service": "EC2",
+      "azure_equivalent": "Virtual Machines",
+      "question": "Which Azure VM series is most similar to AWS t3 instances (burstable performance)?",
+      "difficulty": "beginner",
+      "options": [
+        {
+          "id": "a",
+          "text": "Standard_D series",
+          "correct": false,
+          "explanation": "D series are general purpose but not burstable like t3 instances."
+        },
+        {
+          "id": "b", 
+          "text": "Standard_B series",
+          "correct": true,
+          "explanation": "B series VMs are burstable performance instances, similar to AWS t3 instances with baseline and burst capabilities."
+        },
+        {
+          "id": "c",
+          "text": "Standard_F series", 
+          "correct": false,
+          "explanation": "F series are compute-optimized, similar to AWS c5 instances."
+        },
+        {
+          "id": "d",
+          "text": "Standard_M series",
+          "correct": false,
+          "explanation": "M series are memory-optimized, similar to AWS r5 instances."
+        }
+      ]
+    },
+    {
+      "id": "storage-1",
+      "category": "Storage",
+      "aws_service": "S3",
+      "azure_equivalent": "Blob Storage",
+      "question": "Which Azure Blob Storage access tier is equivalent to S3 Standard-IA?",
+      "difficulty": "beginner",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hot tier",
+          "correct": false,
+          "explanation": "Hot tier is for frequently accessed data, equivalent to S3 Standard."
+        },
+        {
+          "id": "b",
+          "text": "Cool tier",
+          "correct": true,
+          "explanation": "Cool tier is for infrequently accessed data with lower storage costs and higher access costs, similar to S3 Standard-IA."
+        },
+        {
+          "id": "c",
+          "text": "Archive tier",
+          "correct": false,
+          "explanation": "Archive tier is for rarely accessed data, similar to S3 Glacier."
+        },
+        {
+          "id": "d",
+          "text": "Premium tier",
+          "correct": false,
+          "explanation": "Premium tier is for high-performance scenarios, not equivalent to S3-IA."
+        }
+      ]
+    },
+    {
+      "id": "storage-2",
+      "category": "Storage",
+      "aws_service": "EBS",
+      "azure_equivalent": "Managed Disks",
+      "question": "What is a key advantage of Azure Managed Disks over AWS EBS?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lower cost per GB",
+          "correct": false,
+          "explanation": "Pricing is competitive but not necessarily lower in all cases."
+        },
+        {
+          "id": "b",
+          "text": "Built-in encryption by default",
+          "correct": true,
+          "explanation": "Azure Managed Disks have encryption at rest enabled by default, while EBS requires explicit enablement."
+        },
+        {
+          "id": "c",
+          "text": "Higher IOPS limits",
+          "correct": false,
+          "explanation": "Both platforms offer similar high-IOPS options."
+        },
+        {
+          "id": "d",
+          "text": "Better snapshot performance",
+          "correct": false,
+          "explanation": "Both platforms offer incremental snapshots with similar performance characteristics."
+        }
+      ]
+    },
+    {
+      "id": "networking-1",
+      "category": "Networking",
+      "aws_service": "Security Groups",
+      "azure_equivalent": "Network Security Groups",
+      "question": "What's a key difference between AWS Security Groups and Azure Network Security Groups?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "NSGs can be applied to subnets, Security Groups cannot",
+          "correct": true,
+          "explanation": "NSGs can be applied to both network interfaces and subnets, while Security Groups only apply to instances."
+        },
+        {
+          "id": "b",
+          "text": "Security Groups support more protocols than NSGs",
+          "correct": false,
+          "explanation": "Both support similar protocol sets."
+        },
+        {
+          "id": "c",
+          "text": "NSGs don't support outbound rules",
+          "correct": false,
+          "explanation": "NSGs support both inbound and outbound rules."
+        },
+        {
+          "id": "d",
+          "text": "Security Groups require priority numbers",
+          "correct": false,
+          "explanation": "NSGs require priority numbers, not Security Groups."
+        }
+      ]
+    },
+    {
+      "id": "networking-2",
+      "category": "Networking",
+      "aws_service": "VPC",
+      "azure_equivalent": "Virtual Network",
+      "question": "How does Azure VNet peering differ from AWS VPC peering?",
+      "difficulty": "advanced",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure VNet peering is always free",
+          "correct": false,
+          "explanation": "Azure VNet peering has data transfer charges."
+        },
+        {
+          "id": "b",
+          "text": "Azure supports global VNet peering across regions",
+          "correct": true,
+          "explanation": "Azure VNet peering works across regions and uses the Azure backbone network, while VPC peering is region-specific."
+        },
+        {
+          "id": "c",
+          "text": "Azure doesn't support transitive routing",
+          "correct": false,
+          "explanation": "Both platforms don't support transitive routing through peering by default."
+        },
+        {
+          "id": "d",
+          "text": "Azure requires VPN gateways for peering",
+          "correct": false,
+          "explanation": "VNet peering doesn't require gateways, similar to VPC peering."
+        }
+      ]
+    },
+    {
+      "id": "serverless-1",
+      "category": "Serverless",
+      "aws_service": "Lambda",
+      "azure_equivalent": "Functions",
+      "question": "What's the maximum execution timeout for Azure Functions on the Consumption plan?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "5 minutes",
+          "correct": true,
+          "explanation": "Azure Functions on Consumption plan have a default 5-minute timeout (configurable up to 10 minutes)."
+        },
+        {
+          "id": "b",
+          "text": "15 minutes",
+          "correct": false,
+          "explanation": "15 minutes is the AWS Lambda maximum timeout."
+        },
+        {
+          "id": "c",
+          "text": "30 minutes",
+          "correct": false,
+          "explanation": "30 minutes is available on Premium and App Service plans, not Consumption."
+        },
+        {
+          "id": "d",
+          "text": "1 hour",
+          "correct": false,
+          "explanation": "1 hour timeouts are not available on any Azure Functions plan."
+        }
+      ]
+    },
+    {
+      "id": "serverless-2",
+      "category": "Serverless",
+      "aws_service": "API Gateway",
+      "azure_equivalent": "Function Apps",
+      "question": "How do Azure Functions HTTP triggers compare to AWS API Gateway + Lambda?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure Functions require a separate API Gateway service",
+          "correct": false,
+          "explanation": "Azure Functions can handle HTTP requests directly without a separate API Gateway."
+        },
+        {
+          "id": "b",
+          "text": "HTTP triggers are built into Azure Functions",
+          "correct": true,
+          "explanation": "Azure Functions can be triggered directly by HTTP requests without needing a separate API Gateway service."
+        },
+        {
+          "id": "c",
+          "text": "Azure doesn't support custom domains for functions",
+          "correct": false,
+          "explanation": "Azure Functions support custom domains through Function Apps."
+        },
+        {
+          "id": "d",
+          "text": "Azure has worse cold start performance",
+          "correct": false,
+          "explanation": "Cold start performance is similar, and Azure Premium plans eliminate cold starts."
+        }
+      ]
+    },
+    {
+      "id": "database-1",
+      "category": "Databases",
+      "aws_service": "DynamoDB",
+      "azure_equivalent": "Cosmos DB",
+      "question": "What's a key advantage of Azure Cosmos DB over AWS DynamoDB?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lower cost per request",
+          "correct": false,
+          "explanation": "Cosmos DB is generally more expensive than DynamoDB."
+        },
+        {
+          "id": "b",
+          "text": "Multiple consistency levels",
+          "correct": true,
+          "explanation": "Cosmos DB offers 5 consistency levels (Strong, Bounded Staleness, Session, Consistent Prefix, Eventual) vs DynamoDB's 2 (Strong, Eventual)."
+        },
+        {
+          "id": "c",
+          "text": "Better performance",
+          "correct": false,
+          "explanation": "Both databases offer similar performance characteristics."
+        },
+        {
+          "id": "d",
+          "text": "Larger item size limits",
+          "correct": false,
+          "explanation": "Both have similar item size limitations."
+        }
+      ]
+    },
+    {
+      "id": "database-2",
+      "category": "Databases",
+      "aws_service": "RDS",
+      "azure_equivalent": "SQL Database",
+      "question": "What's the Azure equivalent of RDS Multi-AZ deployments?",
+      "difficulty": "beginner",
+      "options": [
+        {
+          "id": "a",
+          "text": "Read replicas",
+          "correct": false,
+          "explanation": "Read replicas are for scaling read workloads, not high availability."
+        },
+        {
+          "id": "b",
+          "text": "Zone-redundant configuration",
+          "correct": true,
+          "explanation": "Zone-redundant configuration in Azure SQL Database provides high availability across availability zones, similar to RDS Multi-AZ."
+        },
+        {
+          "id": "c",
+          "text": "Backup retention",
+          "correct": false,
+          "explanation": "Backup retention is about data protection, not high availability."
+        },
+        {
+          "id": "d",
+          "text": "Connection pooling",
+          "correct": false,
+          "explanation": "Connection pooling is about performance optimization, not availability."
+        }
+      ]
+    },
+    {
+      "id": "identity-1", 
+      "category": "Identity & Access",
+      "aws_service": "IAM",
+      "azure_equivalent": "Azure AD",
+      "question": "In Azure RBAC, what scope level is equivalent to AWS account-level permissions?",
+      "difficulty": "advanced",
+      "options": [
+        {
+          "id": "a",
+          "text": "Management Group",
+          "correct": false,
+          "explanation": "Management Groups can contain multiple subscriptions."
+        },
+        {
+          "id": "b",
+          "text": "Subscription",
+          "correct": true,
+          "explanation": "Azure Subscription scope is equivalent to AWS account-level permissions."
+        },
+        {
+          "id": "c",
+          "text": "Resource Group", 
+          "correct": false,
+          "explanation": "Resource Groups are containers within a subscription."
+        },
+        {
+          "id": "d",
+          "text": "Resource",
+          "correct": false,
+          "explanation": "Resource scope is the most granular level."
+        }
+      ]
+    },
+    {
+      "id": "identity-2",
+      "category": "Identity & Access",
+      "aws_service": "IAM Roles",
+      "azure_equivalent": "Managed Identity",
+      "question": "What type of Azure Managed Identity is equivalent to an IAM role for EC2 instances?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "User-assigned managed identity",
+          "correct": false,
+          "explanation": "User-assigned identities are shared across resources."
+        },
+        {
+          "id": "b",
+          "text": "System-assigned managed identity",
+          "correct": true,
+          "explanation": "System-assigned managed identity is tied to a specific resource, similar to IAM roles for EC2."
+        },
+        {
+          "id": "c",
+          "text": "Service principal",
+          "correct": false,
+          "explanation": "Service principals are for applications, not compute resources."
+        },
+        {
+          "id": "d",
+          "text": "Azure AD group",
+          "correct": false,
+          "explanation": "Azure AD groups are for user management, not resource identity."
+        }
+      ]
+    },
+    {
+      "id": "monitoring-1",
+      "category": "Monitoring",
+      "aws_service": "CloudWatch",
+      "azure_equivalent": "Azure Monitor",
+      "question": "What Azure service is equivalent to CloudWatch Logs?",
+      "difficulty": "beginner",
+      "options": [
+        {
+          "id": "a",
+          "text": "Log Analytics",
+          "correct": true,
+          "explanation": "Log Analytics workspace is the equivalent of CloudWatch Logs for storing and querying log data."
+        },
+        {
+          "id": "b",
+          "text": "Application Insights",
+          "correct": false,
+          "explanation": "Application Insights is more specific to application performance monitoring."
+        },
+        {
+          "id": "c",
+          "text": "Azure Metrics",
+          "correct": false,
+          "explanation": "Azure Metrics is for numeric metrics, not log data."
+        },
+        {
+          "id": "d",
+          "text": "Event Hub",
+          "correct": false,
+          "explanation": "Event Hub is for real-time event streaming, not log storage."
+        }
+      ]
+    },
+    {
+      "id": "containers-1",
+      "category": "Containers",
+      "aws_service": "ECS",
+      "azure_equivalent": "Container Instances",
+      "question": "What's the main difference between AWS ECS and Azure Container Instances?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "ACI doesn't support orchestration",
+          "correct": true,
+          "explanation": "ACI is for simple container hosting without orchestration, while ECS provides orchestration capabilities."
+        },
+        {
+          "id": "b",
+          "text": "ACI is more expensive",
+          "correct": false,
+          "explanation": "Pricing models differ but aren't necessarily more expensive."
+        },
+        {
+          "id": "c",
+          "text": "ACI doesn't support Linux containers",
+          "correct": false,
+          "explanation": "ACI supports both Linux and Windows containers."
+        },
+        {
+          "id": "d",
+          "text": "ACI requires VM management",
+          "correct": false,
+          "explanation": "ACI is serverless and doesn't require VM management."
+        }
+      ]
+    },
+    {
+      "id": "containers-2",
+      "category": "Containers",
+      "aws_service": "EKS",
+      "azure_equivalent": "AKS",
+      "question": "What's included in the managed service offering of AKS vs EKS?",
+      "difficulty": "advanced",
+      "options": [
+        {
+          "id": "a",
+          "text": "AKS master nodes are free",
+          "correct": true,
+          "explanation": "Azure doesn't charge for the Kubernetes master nodes in AKS, while AWS charges for the EKS control plane."
+        },
+        {
+          "id": "b",
+          "text": "AKS includes worker node management",
+          "correct": false,
+          "explanation": "Both services require you to manage worker nodes separately."
+        },
+        {
+          "id": "c",
+          "text": "AKS has better autoscaling",
+          "correct": false,
+          "explanation": "Both offer similar autoscaling capabilities."
+        },
+        {
+          "id": "d",
+          "text": "AKS only supports Azure CNI",
+          "correct": false,
+          "explanation": "AKS supports both Azure CNI and kubenet networking."
+        }
+      ]
+    },
+    {
+      "id": "devops-1",
+      "category": "DevOps",
+      "aws_service": "CodePipeline",
+      "azure_equivalent": "Azure DevOps",
+      "question": "What's a key advantage of Azure DevOps over AWS CodePipeline?",
+      "difficulty": "intermediate",
+      "options": [
+        {
+          "id": "a",
+          "text": "Integrated work item tracking",
+          "correct": true,
+          "explanation": "Azure DevOps includes integrated project management, work item tracking, and agile planning tools."
+        },
+        {
+          "id": "b",
+          "text": "Better GitHub integration",
+          "correct": false,
+          "explanation": "Both platforms integrate well with GitHub."
+        },
+        {
+          "id": "c",
+          "text": "Lower cost per pipeline",
+          "correct": false,
+          "explanation": "Pricing models are different and depend on usage patterns."
+        },
+        {
+          "id": "d",
+          "text": "Faster build times",
+          "correct": false,
+          "explanation": "Build performance depends on configuration and resources allocated."
+        }
+      ]
+    },
+    {
+      "id": "messaging-1",
+      "category": "Messaging",
+      "aws_service": "SQS",
+      "azure_equivalent": "Service Bus Queue",
+      "question": "What is the key difference between AWS SQS Standard queues and Azure Service Bus Queues?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Service Bus guarantees message ordering",
+          "correct": true,
+          "explanation": "Azure Service Bus Queues guarantee FIFO ordering by default, while SQS Standard queues don't guarantee order."
+        },
+        {
+          "id": "b",
+          "text": "SQS has higher throughput",
+          "correct": false,
+          "explanation": "Both can handle high throughput, though SQS Standard may have slightly higher limits."
+        },
+        {
+          "id": "c",
+          "text": "Service Bus is cheaper",
+          "correct": false,
+          "explanation": "Pricing varies by usage patterns and regions."
+        },
+        {
+          "id": "d",
+          "text": "SQS supports transactions",
+          "correct": false,
+          "explanation": "Service Bus supports transactions, SQS Standard does not."
+        }
+      ]
+    },
+    {
+      "id": "messaging-2",
+      "category": "Messaging",
+      "aws_service": "SNS",
+      "azure_equivalent": "Event Grid",
+      "question": "When migrating from AWS SNS to Azure, which scenario would require Event Grid instead of Service Bus Topics?",
+      "difficulty": "advanced",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Publishing custom application events with schema registry",
+          "correct": true,
+          "explanation": "Event Grid is designed for event-driven architectures with custom events and built-in schema support."
+        },
+        {
+          "id": "b",
+          "text": "Simple pub/sub messaging between services",
+          "correct": false,
+          "explanation": "Service Bus Topics would be sufficient for basic pub/sub patterns."
+        },
+        {
+          "id": "c",
+          "text": "High-volume message queuing",
+          "correct": false,
+          "explanation": "Service Bus would be better for high-volume messaging scenarios."
+        },
+        {
+          "id": "d",
+          "text": "Email and SMS notifications",
+          "correct": false,
+          "explanation": "Both could work, but this doesn't specifically require Event Grid."
+        }
+      ]
+    },
+    {
+      "id": "messaging-3",
+      "category": "Messaging",
+      "aws_service": "SQS FIFO",
+      "azure_equivalent": "Service Bus Queue with Sessions",
+      "question": "How do you achieve message grouping in Azure Service Bus equivalent to SQS FIFO MessageGroupId?",
+      "difficulty": "advanced",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use SessionId property",
+          "correct": true,
+          "explanation": "SessionId in Service Bus provides the same message grouping functionality as MessageGroupId in SQS FIFO."
+        },
+        {
+          "id": "b",
+          "text": "Use PartitionKey property",
+          "correct": false,
+          "explanation": "PartitionKey is used for load distribution, not message grouping."
+        },
+        {
+          "id": "c",
+          "text": "Use custom message properties",
+          "correct": false,
+          "explanation": "Custom properties won't provide the built-in grouping behavior."
+        },
+        {
+          "id": "d",
+          "text": "Use multiple queues",
+          "correct": false,
+          "explanation": "This would be a workaround but not equivalent functionality."
+        }
+      ]
+    },
+    {
+      "id": "nosql-1",
+      "category": "NoSQL",
+      "aws_service": "DynamoDB",
+      "azure_equivalent": "Cosmos DB",
+      "question": "What is the equivalent of DynamoDB's partition key and sort key in Cosmos DB?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Partition key and id property",
+          "correct": true,
+          "explanation": "Cosmos DB uses partition key for distribution and id as unique identifier within partition, similar to DynamoDB's key structure."
+        },
+        {
+          "id": "b",
+          "text": "Container name and item key",
+          "correct": false,
+          "explanation": "Container name is not equivalent to partition key."
+        },
+        {
+          "id": "c",
+          "text": "Database name and collection key",
+          "correct": false,
+          "explanation": "These are higher-level organizational concepts."
+        },
+        {
+          "id": "d",
+          "text": "Primary key and secondary key",
+          "correct": false,
+          "explanation": "This doesn't reflect Cosmos DB's actual structure."
+        }
+      ]
+    },
+    {
+      "id": "nosql-2",
+      "category": "NoSQL",
+      "aws_service": "DynamoDB Streams",
+      "azure_equivalent": "Cosmos DB Change Feed",
+      "question": "How does Cosmos DB Change Feed differ from DynamoDB Streams?",
+      "difficulty": "advanced",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Change Feed provides ordered events per partition key",
+          "correct": true,
+          "explanation": "Cosmos DB Change Feed maintains order per logical partition, similar to DynamoDB Streams per shard."
+        },
+        {
+          "id": "b",
+          "text": "Change Feed includes deleted items",
+          "correct": false,
+          "explanation": "Change Feed doesn't capture delete operations by default."
+        },
+        {
+          "id": "c",
+          "text": "Change Feed has lower latency",
+          "correct": false,
+          "explanation": "Both have similar near real-time latency characteristics."
+        },
+        {
+          "id": "d",
+          "text": "Change Feed requires separate provisioning",
+          "correct": false,
+          "explanation": "Change Feed is included with Cosmos DB containers."
+        }
+      ]
+    },
+    {
+      "id": "nosql-3",
+      "category": "NoSQL",
+      "aws_service": "DynamoDB GSI",
+      "azure_equivalent": "Cosmos DB Composite Index",
+      "question": "When migrating DynamoDB Global Secondary Indexes to Cosmos DB, what's the key consideration?",
+      "difficulty": "advanced",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "RU consumption for index maintenance",
+          "correct": true,
+          "explanation": "Cosmos DB indexes consume RUs for maintenance, unlike DynamoDB GSI which has separate capacity."
+        },
+        {
+          "id": "b",
+          "text": "Maximum number of indexes per container",
+          "correct": false,
+          "explanation": "Cosmos DB supports many more index paths than DynamoDB GSI limits."
+        },
+        {
+          "id": "c",
+          "text": "Cross-partition query limitations",
+          "correct": false,
+          "explanation": "Both systems handle cross-partition queries similarly."
+        },
+        {
+          "id": "d",
+          "text": "Index rebuild time",
+          "correct": false,
+          "explanation": "Cosmos DB indexes are maintained automatically and continuously."
+        }
+      ]
+    },
+    {
+      "id": "security-1",
+      "category": "Security",
+      "aws_service": "KMS",
+      "azure_equivalent": "Key Vault",
+      "question": "What's the main architectural difference between AWS KMS and Azure Key Vault?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Key Vault stores keys, secrets, and certificates in one service",
+          "correct": true,
+          "explanation": "Key Vault is a unified service for keys, secrets, and certificates, while AWS has separate services (KMS, Secrets Manager, Certificate Manager)."
+        },
+        {
+          "id": "b",
+          "text": "KMS provides better encryption performance",
+          "correct": false,
+          "explanation": "Both services offer similar performance characteristics."
+        },
+        {
+          "id": "c",
+          "text": "Key Vault requires HSM for all operations",
+          "correct": false,
+          "explanation": "Key Vault offers both software and HSM-protected keys."
+        },
+        {
+          "id": "d",
+          "text": "KMS supports cross-region replication",
+          "correct": false,
+          "explanation": "KMS is regional; Key Vault can replicate across regions."
+        }
+      ]
+    },
+    {
+      "id": "security-2",
+      "category": "Security",
+      "aws_service": "KMS Customer Managed Keys",
+      "azure_equivalent": "Key Vault Customer-Managed Keys",
+      "question": "When implementing customer-managed keys in Azure, what's equivalent to KMS key policies?",
+      "difficulty": "advanced",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Key Vault Access Policies combined with RBAC",
+          "correct": true,
+          "explanation": "Azure uses a combination of Key Vault access policies and RBAC to control key access, similar to KMS key policies."
+        },
+        {
+          "id": "b",
+          "text": "Azure AD Conditional Access",
+          "correct": false,
+          "explanation": "Conditional Access is for user authentication, not key access control."
+        },
+        {
+          "id": "c",
+          "text": "Resource tags and policies",
+          "correct": false,
+          "explanation": "Tags and policies are governance features, not access control mechanisms."
+        },
+        {
+          "id": "d",
+          "text": "Network security groups",
+          "correct": false,
+          "explanation": "NSGs control network traffic, not cryptographic key access."
+        }
+      ]
+    },
+    {
+      "id": "security-3",
+      "category": "Security",
+      "aws_service": "AWS Certificate Manager",
+      "azure_equivalent": "Key Vault Certificates",
+      "question": "What's a key difference when migrating from AWS Certificate Manager to Key Vault certificates?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Key Vault requires certificate authority integration setup",
+          "correct": true,
+          "explanation": "Key Vault requires explicit integration with certificate authorities, while ACM has built-in Let's Encrypt integration."
+        },
+        {
+          "id": "b",
+          "text": "Key Vault certificates are more expensive",
+          "correct": false,
+          "explanation": "Cost structures differ but aren't necessarily more expensive."
+        },
+        {
+          "id": "c",
+          "text": "Key Vault doesn't support wildcard certificates",
+          "correct": false,
+          "explanation": "Key Vault supports wildcard certificates."
+        },
+        {
+          "id": "d",
+          "text": "Key Vault requires manual certificate renewal",
+          "correct": false,
+          "explanation": "Key Vault supports automatic certificate renewal when properly configured."
+        }
+      ]
+    },
+    {
+      "id": "messaging-4",
+      "category": "Messaging",
+      "aws_service": "EventBridge",
+      "azure_equivalent": "Event Grid",
+      "question": "What's the equivalent of EventBridge custom event buses in Azure Event Grid?",
+      "difficulty": "advanced",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Event Grid Custom Topics",
+          "correct": true,
+          "explanation": "Custom Topics in Event Grid serve the same purpose as custom event buses in EventBridge."
+        },
+        {
+          "id": "b",
+          "text": "Event Grid System Topics",
+          "correct": false,
+          "explanation": "System Topics are for Azure service events, not custom application events."
+        },
+        {
+          "id": "c",
+          "text": "Event Hub Namespaces",
+          "correct": false,
+          "explanation": "Event Hub is for high-volume streaming, not event-driven architectures."
+        },
+        {
+          "id": "d",
+          "text": "Service Bus Topics",
+          "correct": false,
+          "explanation": "Service Bus Topics are messaging topics, not event routing mechanisms."
+        }
+      ]
+    },
+    {
+      "id": "nosql-4",
+      "category": "NoSQL",
+      "aws_service": "DynamoDB Global Tables",
+      "azure_equivalent": "Cosmos DB Multi-region writes",
+      "question": "How does Cosmos DB handle conflicts in multi-region writes compared to DynamoDB Global Tables?",
+      "difficulty": "expert",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cosmos DB provides configurable conflict resolution policies",
+          "correct": true,
+          "explanation": "Cosmos DB offers last-write-wins, custom, and async conflict resolution policies, while DynamoDB uses last-write-wins only."
+        },
+        {
+          "id": "b",
+          "text": "Cosmos DB prevents write conflicts",
+          "correct": false,
+          "explanation": "Multi-region writes will inevitably have conflicts that need resolution."
+        },
+        {
+          "id": "c",
+          "text": "Cosmos DB requires manual conflict resolution",
+          "correct": false,
+          "explanation": "Cosmos DB can handle conflicts automatically based on configured policies."
+        },
+        {
+          "id": "d",
+          "text": "Cosmos DB uses vector clocks",
+          "correct": false,
+          "explanation": "Cosmos DB uses timestamps and other metadata, not vector clocks."
+        }
+      ]
+    },
+    {
+      "id": "cost-optimization-1",
+      "category": "Cost Optimization",
+      "aws_service": "Cost Explorer",
+      "azure_equivalent": "Cost Management",
+      "question": "What is the main advantage of Azure Cost Management over AWS Cost Explorer?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03",
+      "options": [
+        {
+          "id": "a",
+          "text": "Multi-subscription cost aggregation",
+          "correct": true,
+          "explanation": "Azure Cost Management provides unified cost tracking across multiple subscriptions and management groups."
+        },
+        {
+          "id": "b",
+          "text": "Better forecasting algorithms",
+          "correct": false,
+          "explanation": "Both services provide similar forecasting capabilities."
+        },
+        {
+          "id": "c",
+          "text": "Lower cost for usage analysis",
+          "correct": false,
+          "explanation": "Both services include cost analysis at no additional charge."
+        },
+        {
+          "id": "d",
+          "text": "Real-time cost tracking",
+          "correct": false,
+          "explanation": "Both services have similar latency for cost data."
+        }
+      ]
+    },
+    {
+      "id": "cost-optimization-2",
+      "category": "Cost Optimization",
+      "aws_service": "Reserved Instances",
+      "azure_equivalent": "Reserved VM Instances",
+      "question": "How do Azure Reserved VM Instances differ from AWS Reserved Instances?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure reservations offer exchange capabilities",
+          "correct": true,
+          "explanation": "Azure reservations can be exchanged for different VM sizes or regions with more flexibility than AWS RIs."
+        },
+        {
+          "id": "b",
+          "text": "AWS RIs provide better discounts",
+          "correct": false,
+          "explanation": "Both platforms offer similar discount percentages."
+        },
+        {
+          "id": "c",
+          "text": "Azure reservations are region-specific only",
+          "correct": false,
+          "explanation": "Azure reservations can be scoped to subscription, resource group, or single resource."
+        },
+        {
+          "id": "d",
+          "text": "AWS RIs support more instance families",
+          "correct": false,
+          "explanation": "Both platforms support their respective instance/VM families."
+        }
+      ]
+    },
+    {
+      "id": "disaster-recovery-1",
+      "category": "Disaster Recovery",
+      "aws_service": "AWS Backup",
+      "azure_equivalent": "Azure Backup",
+      "question": "What is a key architectural difference between AWS Backup and Azure Backup?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure Backup uses Recovery Services vaults for centralized management",
+          "correct": true,
+          "explanation": "Azure Backup centralizes backup management through Recovery Services vaults, while AWS Backup uses backup plans."
+        },
+        {
+          "id": "b",
+          "text": "AWS Backup supports more services",
+          "correct": false,
+          "explanation": "Both services support their respective platform services comprehensively."
+        },
+        {
+          "id": "c",
+          "text": "Azure Backup has better compression",
+          "correct": false,
+          "explanation": "Both services use efficient compression algorithms."
+        },
+        {
+          "id": "d",
+          "text": "AWS Backup is more cost-effective",
+          "correct": false,
+          "explanation": "Cost effectiveness depends on usage patterns and requirements."
+        }
+      ]
+    },
+    {
+      "id": "disaster-recovery-2",
+      "category": "Disaster Recovery",
+      "aws_service": "Route 53 Health Checks",
+      "azure_equivalent": "Traffic Manager",
+      "question": "How does Azure Traffic Manager health monitoring compare to Route 53 health checks?",
+      "difficulty": "advanced",
+      "certification_focus": "saa-c03-critical",
+      "options": [
+        {
+          "id": "a",
+          "text": "Traffic Manager integrates better with Site Recovery",
+          "correct": true,
+          "explanation": "Azure Traffic Manager integrates seamlessly with Site Recovery for automated disaster recovery scenarios."
+        },
+        {
+          "id": "b",
+          "text": "Route 53 has more monitoring locations",
+          "correct": false,
+          "explanation": "Both services have global monitoring networks."
+        },
+        {
+          "id": "c",
+          "text": "Traffic Manager only supports HTTP checks",
+          "correct": false,
+          "explanation": "Traffic Manager supports HTTP, HTTPS, and TCP monitoring."
+        },
+        {
+          "id": "d",
+          "text": "Route 53 provides faster failover",
+          "correct": false,
+          "explanation": "Both services provide similar failover speeds."
+        }
+      ]
+    },
+    {
+      "id": "api-management-1",
+      "category": "API Management",
+      "aws_service": "API Gateway",
+      "azure_equivalent": "API Management",
+      "question": "What is the main advantage of Azure API Management over AWS API Gateway?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03",
+      "options": [
+        {
+          "id": "a",
+          "text": "Unified developer portal with interactive documentation",
+          "correct": true,
+          "explanation": "Azure API Management provides a comprehensive developer portal with self-service capabilities and interactive API testing."
+        },
+        {
+          "id": "b",
+          "text": "Better Lambda integration",
+          "correct": false,
+          "explanation": "AWS API Gateway is designed for Lambda integration, while Azure API Management integrates with Azure Functions."
+        },
+        {
+          "id": "c",
+          "text": "Lower cost per API call",
+          "correct": false,
+          "explanation": "Pricing models differ and depend on usage patterns."
+        },
+        {
+          "id": "d",
+          "text": "Faster request processing",
+          "correct": false,
+          "explanation": "Both services provide similar performance characteristics."
+        }
+      ]
+    },
+    {
+      "id": "api-management-2",
+      "category": "API Management",
+      "aws_service": "API Gateway Usage Plans",
+      "azure_equivalent": "API Management Products",
+      "question": "How do Azure API Management products differ from AWS API Gateway usage plans?",
+      "difficulty": "intermediate",
+      "certification_focus": "saa-c03",
+      "options": [
+        {
+          "id": "a",
+          "text": "Products can include multiple APIs",
+          "correct": true,
+          "explanation": "Azure API Management products can bundle multiple APIs together, while AWS usage plans are typically per API."
+        },
+        {
+          "id": "b",
+          "text": "Usage plans provide better rate limiting",
+          "correct": false,
+          "explanation": "Both platforms provide comprehensive rate limiting capabilities."
+        },
+        {
+          "id": "c",
+          "text": "Products require API keys",
+          "correct": false,
+          "explanation": "Both platforms support API key-based access control."
+        },
+        {
+          "id": "d",
+          "text": "Usage plans support more authentication methods",
+          "correct": false,
+          "explanation": "Both platforms support various authentication methods."
+        }
+      ]
+    },
+    {
+      "id": "advanced-security-1",
+      "category": "Security Monitoring",
+      "aws_service": "GuardDuty",
+      "azure_equivalent": "Security Center",
+      "question": "What is a key difference between AWS GuardDuty and Azure Security Center?",
+      "difficulty": "advanced",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Security Center includes security posture management",
+          "correct": true,
+          "explanation": "Azure Security Center provides both threat detection and security posture management, while GuardDuty focuses on threat detection."
+        },
+        {
+          "id": "b",
+          "text": "GuardDuty has better machine learning",
+          "correct": false,
+          "explanation": "Both services use advanced machine learning for threat detection."
+        },
+        {
+          "id": "c",
+          "text": "Security Center is more expensive",
+          "correct": false,
+          "explanation": "Cost depends on usage and features enabled."
+        },
+        {
+          "id": "d",
+          "text": "GuardDuty supports more data sources",
+          "correct": false,
+          "explanation": "Both services analyze comprehensive data sources for their respective platforms."
+        }
+      ]
+    },
+    {
+      "id": "advanced-security-2",
+      "category": "Security Monitoring",
+      "aws_service": "Security Hub",
+      "azure_equivalent": "Azure Sentinel",
+      "question": "How does Azure Sentinel compare to AWS Security Hub?",
+      "difficulty": "expert",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sentinel provides native SIEM and SOAR capabilities",
+          "correct": true,
+          "explanation": "Azure Sentinel is a cloud-native SIEM with built-in security orchestration, while Security Hub aggregates findings."
+        },
+        {
+          "id": "b",
+          "text": "Security Hub has better compliance reporting",
+          "correct": false,
+          "explanation": "Both platforms provide comprehensive compliance reporting capabilities."
+        },
+        {
+          "id": "c",
+          "text": "Sentinel only works with Microsoft products",
+          "correct": false,
+          "explanation": "Azure Sentinel integrates with many third-party security solutions."
+        },
+        {
+          "id": "d",
+          "text": "Security Hub provides automated response",
+          "correct": false,
+          "explanation": "Security Hub primarily aggregates findings; response automation requires additional services."
+        }
+      ]
+    },
+    {
+      "id": "performance-optimization-1",
+      "category": "Performance",
+      "aws_service": "ElastiCache",
+      "azure_equivalent": "Azure Cache for Redis",
+      "question": "What is a key difference between AWS ElastiCache and Azure Cache for Redis?",
+      "difficulty": "intermediate",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure Cache provides unified Redis service",
+          "correct": true,
+          "explanation": "Azure Cache for Redis focuses on Redis, while ElastiCache supports both Redis and Memcached."
+        },
+        {
+          "id": "b",
+          "text": "ElastiCache has better performance",
+          "correct": false,
+          "explanation": "Both services provide high-performance caching with similar capabilities."
+        },
+        {
+          "id": "c",
+          "text": "Azure Cache is more expensive",
+          "correct": false,
+          "explanation": "Pricing varies based on cache size and features used."
+        },
+        {
+          "id": "d",
+          "text": "ElastiCache supports more data structures",
+          "correct": false,
+          "explanation": "Both Redis implementations support the same data structures."
+        }
+      ]
+    },
+    {
+      "id": "performance-optimization-2",
+      "category": "Performance",
+      "aws_service": "CloudFront",
+      "azure_equivalent": "Azure CDN",
+      "question": "How does Azure CDN compare to AWS CloudFront for global content delivery?",
+      "difficulty": "intermediate",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure CDN integrates better with Azure Front Door for advanced routing",
+          "correct": true,
+          "explanation": "Azure CDN works seamlessly with Front Door for advanced global load balancing and routing."
+        },
+        {
+          "id": "b",
+          "text": "CloudFront has more global edge locations",
+          "correct": false,
+          "explanation": "Both services have extensive global networks."
+        },
+        {
+          "id": "c",
+          "text": "Azure CDN provides better caching rules",
+          "correct": false,
+          "explanation": "Both services provide comprehensive caching rule engines."
+        },
+        {
+          "id": "d",
+          "text": "CloudFront is more cost-effective",
+          "correct": false,
+          "explanation": "Cost effectiveness depends on usage patterns and geographic distribution."
+        }
+      ]
+    },
+    {
+      "id": "devops-cicd-1",
+      "category": "DevOps",
+      "aws_service": "CodeBuild",
+      "azure_equivalent": "Azure Pipelines",
+      "question": "What is an advantage of Azure Pipelines over AWS CodeBuild?",
+      "difficulty": "intermediate",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Integrated work item tracking and project management",
+          "correct": true,
+          "explanation": "Azure DevOps provides integrated work item tracking, while CodeBuild requires separate project management tools."
+        },
+        {
+          "id": "b",
+          "text": "Better container support",
+          "correct": false,
+          "explanation": "Both services provide comprehensive container build support."
+        },
+        {
+          "id": "c",
+          "text": "Faster build execution",
+          "correct": false,
+          "explanation": "Build performance depends on build complexity and resource allocation."
+        },
+        {
+          "id": "d",
+          "text": "Lower cost per build minute",
+          "correct": false,
+          "explanation": "Pricing varies based on build requirements and usage patterns."
+        }
+      ]
+    },
+    {
+      "id": "governance-1",
+      "category": "Governance",
+      "aws_service": "AWS Config",
+      "azure_equivalent": "Azure Policy",
+      "question": "How does Azure Policy differ from AWS Config for governance?",
+      "difficulty": "intermediate",
+      "certification_focus": "sap-c02",
+      "options": [
+        {
+          "id": "a",
+          "text": "Azure Policy can prevent non-compliant resource creation",
+          "correct": true,
+          "explanation": "Azure Policy can enforce compliance at resource creation time, while AWS Config primarily provides compliance monitoring."
+        },
+        {
+          "id": "b",
+          "text": "AWS Config has better reporting",
+          "correct": false,
+          "explanation": "Both services provide comprehensive compliance reporting."
+        },
+        {
+          "id": "c",
+          "text": "Azure Policy is more expensive",
+          "correct": false,
+          "explanation": "Both services are included at no additional charge for basic governance."
+        },
+        {
+          "id": "d",
+          "text": "AWS Config supports more resource types",
+          "correct": false,
+          "explanation": "Both services support comprehensive resource governance for their respective platforms."
+        }
+      ]
+    }
+  ]
+}

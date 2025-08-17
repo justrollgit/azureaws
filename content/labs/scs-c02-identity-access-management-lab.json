@@ -1,0 +1,317 @@
+{
+  "id": "scs-c02-identity-access-management-lab",
+  "title": "AWS IAM to Azure AD: Advanced Identity Management and Zero-Trust Access Control",
+  "category": "identity-access-management",
+  "difficulty": "expert",
+  "estimatedTime": "140 minutes",
+  "awsCertification": "SCS-C02",
+  "certificationWeight": "16% - Identity & Access Management Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master enterprise identity and access management by implementing comprehensive AWS IAM and access control solutions, then migrating to Azure Active Directory equivalents with zero-trust architecture, advanced authentication, and enterprise-grade identity governance.",
+
+  "learningObjectives": [
+    "Implement comprehensive identity management and zero-trust architecture",
+    "Build advanced authentication and multi-factor authentication systems",
+    "Create privileged access management and just-in-time access controls",
+    "Design identity federation and cross-platform access management",
+    "Implement identity governance and access certification frameworks",
+    "Build identity threat detection and automated response capabilities"
+  ],
+
+  "prerequisites": [
+    "Completion of previous SCS-C02 labs or equivalent security experience",
+    "Strong understanding of identity management principles and access control frameworks",
+    "Experience with enterprise authentication systems and directory services",
+    "Familiarity with zero-trust security architecture and compliance frameworks"
+  ],
+
+  "awsServices": [
+    "AWS IAM",
+    "AWS Organizations",
+    "AWS SSO",
+    "AWS Cognito",
+    "AWS Directory Service",
+    "AWS Secrets Manager",
+    "AWS CloudTrail",
+    "AWS Config",
+    "Amazon GuardDuty",
+    "AWS Security Token Service",
+    "AWS Certificate Manager",
+    "AWS Systems Manager"
+  ],
+
+  "azureServices": [
+    "Azure Active Directory",
+    "Azure Management Groups",
+    "Azure AD Connect",
+    "Azure AD B2C",
+    "Azure AD Domain Services",
+    "Azure Key Vault",
+    "Azure Activity Log",
+    "Azure Policy",
+    "Microsoft Defender for Identity",
+    "Azure AD Identity Protection",
+    "Azure Certificate Service",
+    "Azure Automation"
+  ],
+
+  "businessScenario": "Identity Solutions Enterprise provides advanced identity and access management services for global organizations requiring zero-trust security, regulatory compliance, and sophisticated access controls. Their identity management team needs expertise in enterprise IAM, privileged access management, identity federation, and threat detection. They must master both AWS and Azure identity platforms for comprehensive identity security excellence.",
+
+  "sections": [
+    {
+      "title": "Enterprise Identity Management and Zero-Trust Architecture",
+      "duration": "40 minutes",
+      "topics": [
+        "Zero-trust identity architecture and enterprise identity management",
+        "Advanced identity governance and lifecycle management",
+        "Identity federation and cross-platform authentication",
+        "Enterprise directory integration and hybrid identity solutions",
+        "Identity risk assessment and conditional access policies"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Enterprise Identity Management and Zero-Trust Platform",
+          "description": "Build comprehensive identity management with zero-trust architecture and governance",
+          "steps": [
+            "Configure enterprise identity management with AWS IAM and Azure AD",
+            "Implement zero-trust architecture and conditional access policies",
+            "Setup identity federation with AWS SSO and Azure AD Connect",
+            "Configure enterprise directory integration and hybrid identity solutions",
+            "Implement identity governance and lifecycle management workflows",
+            "Setup identity risk assessment and compliance monitoring"
+          ],
+          "deliverables": [
+            "Enterprise identity management with zero-trust architecture",
+            "Advanced identity governance and lifecycle management system",
+            "Identity federation and cross-platform authentication platform",
+            "Identity risk assessment and conditional access implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Authentication and Multi-Factor Authentication",
+      "duration": "35 minutes",
+      "topics": [
+        "Multi-factor authentication and adaptive authentication strategies",
+        "Passwordless authentication and biometric integration",
+        "Certificate-based authentication and PKI management",
+        "Device trust and endpoint authentication controls",
+        "Authentication risk analysis and fraud prevention"
+      ],
+      "tasks": [
+        {
+          "title": "Build Advanced Authentication and MFA Platform",
+          "description": "Implement comprehensive authentication with MFA and adaptive security controls",
+          "steps": [
+            "Configure multi-factor authentication with AWS Cognito and Azure AD MFA",
+            "Implement passwordless authentication and biometric integration",
+            "Setup certificate-based authentication and PKI management",
+            "Configure device trust and endpoint authentication controls",
+            "Implement authentication risk analysis and fraud prevention",
+            "Setup adaptive authentication and risk-based access controls"
+          ],
+          "deliverables": [
+            "Advanced multi-factor authentication with adaptive controls",
+            "Passwordless authentication and biometric integration system",
+            "Certificate-based authentication and PKI management platform",
+            "Authentication risk analysis and fraud prevention capabilities"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Privileged Access Management and Just-in-Time Access",
+      "duration": "35 minutes",
+      "topics": [
+        "Privileged access management (PAM) and elevated access controls",
+        "Just-in-time (JIT) access and time-bound permissions",
+        "Privileged account monitoring and session management",
+        "Emergency access procedures and break-glass mechanisms",
+        "Privileged identity analytics and behavior monitoring"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Privileged Access Management and JIT Platform",
+          "description": "Build comprehensive PAM with just-in-time access and session management",
+          "steps": [
+            "Configure privileged access management and elevated access controls",
+            "Implement just-in-time access and time-bound permissions",
+            "Setup privileged account monitoring and session management",
+            "Configure emergency access procedures and break-glass mechanisms",
+            "Implement privileged identity analytics and behavior monitoring",
+            "Setup PAM compliance reporting and access certification"
+          ],
+          "deliverables": [
+            "Privileged access management with elevated access controls",
+            "Just-in-time access and time-bound permissions system",
+            "Privileged account monitoring and session management platform",
+            "Emergency access and privileged identity analytics capabilities"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Identity Threat Detection and Automated Response",
+      "duration": "30 minutes",
+      "topics": [
+        "Identity threat detection and behavioral analytics",
+        "Automated incident response for identity security events",
+        "Identity attack pattern recognition and threat intelligence",
+        "Account compromise detection and automated remediation",
+        "Identity security metrics and compliance reporting"
+      ],
+      "tasks": [
+        {
+          "title": "Build Identity Threat Detection and Response Platform",
+          "description": "Implement comprehensive identity threat detection with automated response",
+          "steps": [
+            "Configure identity threat detection with GuardDuty and Azure AD Identity Protection",
+            "Implement automated incident response for identity security events",
+            "Setup identity attack pattern recognition and threat intelligence",
+            "Configure account compromise detection and automated remediation",
+            "Implement identity security metrics and compliance reporting",
+            "Setup identity threat hunting and forensic analysis capabilities"
+          ],
+          "deliverables": [
+            "Identity threat detection and behavioral analytics system",
+            "Automated incident response for identity security events",
+            "Identity attack pattern recognition and threat intelligence platform",
+            "Account compromise detection and automated remediation capabilities"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Financial Services Identity Management and SOX Compliance",
+      "description": "Build comprehensive identity management for financial services with SOX compliance",
+      "steps": [
+        "Design enterprise identity architecture for financial services SOX compliance",
+        "Implement zero-trust identity management and advanced authentication",
+        "Build privileged access management for financial systems and data",
+        "Configure identity governance and access certification for SOX requirements",
+        "Implement identity threat detection and financial fraud prevention",
+        "Test platform with financial services identity scenarios and regulatory validation"
+      ],
+      "expectedOutcome": "Production-ready identity management platform for financial services with SOX compliance"
+    },
+    {
+      "title": "Healthcare Identity Management and HIPAA Privacy Controls",
+      "description": "Implement healthcare identity management with HIPAA compliance and patient privacy",
+      "steps": [
+        "Design healthcare identity architecture for HIPAA compliance and patient privacy",
+        "Implement medical professional authentication and role-based access",
+        "Build privileged access management for electronic health records (EHR)",
+        "Configure identity governance and access controls for HIPAA requirements",
+        "Implement identity threat detection and healthcare privacy protection",
+        "Test platform with healthcare identity scenarios and HIPAA validation"
+      ],
+      "expectedOutcome": "Healthcare identity management platform with HIPAA compliance and patient privacy controls"
+    },
+    {
+      "title": "Multi-Cloud Identity Federation and Global Access Management",
+      "description": "Build unified identity platform spanning AWS and Azure with global access control",
+      "steps": [
+        "Design multi-cloud identity federation architecture with unified access management",
+        "Implement cross-cloud authentication and single sign-on capabilities",
+        "Build unified privileged access management across cloud platforms",
+        "Configure multi-cloud identity governance and centralized access certification",
+        "Implement unified identity threat detection and cross-platform incident response",
+        "Test platform with complex multi-cloud identity and access scenarios"
+      ],
+      "expectedOutcome": "Multi-cloud identity platform with unified federation and global access management"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Identity federation complexity and authentication latency",
+      "solution": "Implement efficient federation protocols (SAML, OIDC), use caching for identity tokens, optimize authentication flows, implement regional identity endpoints, and use session management for reduced re-authentication"
+    },
+    {
+      "issue": "Privileged access management complexity and user experience friction",
+      "solution": "Implement just-in-time access workflows, use automated approval processes, implement risk-based access controls, use self-service capabilities where appropriate, and optimize PAM user interfaces"
+    },
+    {
+      "issue": "Identity threat detection false positives and behavioral baseline accuracy",
+      "solution": "Implement machine learning-based behavioral analysis, use contextual risk scoring, implement feedback loops for detection accuracy, use threat intelligence integration, and implement risk-based response automation"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Identity Management Excellence",
+      "criteria": [
+        "Can implement enterprise identity management with zero-trust architecture",
+        "Understands advanced identity governance and lifecycle management",
+        "Can configure identity federation and cross-platform authentication",
+        "Demonstrates identity risk assessment and conditional access policies"
+      ]
+    },
+    {
+      "category": "Authentication Mastery",
+      "criteria": [
+        "Can implement advanced multi-factor authentication with adaptive controls",
+        "Understands passwordless authentication and biometric integration",
+        "Can configure certificate-based authentication and PKI management",
+        "Demonstrates authentication risk analysis and fraud prevention"
+      ]
+    },
+    {
+      "category": "Privileged Access Management",
+      "criteria": [
+        "Can implement privileged access management with elevated access controls",
+        "Understands just-in-time access and time-bound permissions",
+        "Can configure privileged account monitoring and session management",
+        "Demonstrates emergency access and privileged identity analytics"
+      ]
+    },
+    {
+      "category": "Identity Threat Detection",
+      "criteria": [
+        "Can implement identity threat detection and behavioral analytics",
+        "Understands automated incident response for identity security events",
+        "Can configure identity attack pattern recognition and threat intelligence",
+        "Demonstrates account compromise detection and automated remediation"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SCS-C02": {
+      "domain": "Identity & Access Management",
+      "weight": "16%",
+      "coverage": [
+        "Design and implement authentication systems for AWS",
+        "Design and implement authorization systems for AWS",
+        "Design and implement access management for multi-account AWS environments",
+        "Troubleshoot authentication and authorization issues"
+      ],
+      "examTopics": [
+        "Enterprise identity management and zero-trust architecture with IAM",
+        "Advanced authentication and multi-factor authentication implementation",
+        "Privileged access management and just-in-time access controls",
+        "Identity threat detection and automated response capabilities",
+        "Cross-platform identity federation and access management"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement enterprise identity management with comprehensive zero-trust architecture",
+    "Demonstrates ability to build advanced authentication and multi-factor authentication",
+    "Shows understanding of privileged access management and just-in-time access controls",
+    "Can create identity threat detection and automated response capabilities",
+    "Understands cross-platform identity federation and access management"
+  ],
+
+  "nextSteps": [
+    "Proceed to SCS-C02 Threat Detection & Incident Response Lab (14% domain weight)",
+    "Gain hands-on experience with enterprise identity management in production environments",
+    "Practice implementing identity security for various compliance frameworks",
+    "Explore advanced authentication and privileged access management techniques"
+  ]
+}

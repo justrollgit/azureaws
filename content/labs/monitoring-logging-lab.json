@@ -1,0 +1,256 @@
+{
+  "id": "monitoring-logging-lab",
+  "title": "AWS CloudWatch to Azure Monitor: Monitoring Migration Lab",
+  "difficulty": "intermediate",
+  "estimated_time": "75 minutes",
+  "aws_prerequisite": "Experience with CloudWatch metrics, logs, alarms, and dashboards",
+  "azure_target": "Implement comprehensive monitoring with Azure Monitor, Log Analytics, and Application Insights",
+  "learning_objectives": [
+    "Understand Azure Monitor vs CloudWatch architecture",
+    "Migrate CloudWatch metrics to Azure Monitor metrics",
+    "Convert CloudWatch Logs to Log Analytics",
+    "Implement Application Insights for application monitoring",
+    "Create Azure Monitor alerts equivalent to CloudWatch alarms",
+    "Build Azure dashboards to replace CloudWatch dashboards",
+    "Set up automated responses and notifications"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "cloudwatch": "Azure Monitor + Log Analytics",
+      "cloudwatch_logs": "Log Analytics + Azure Monitor Logs",
+      "x_ray": "Application Insights",
+      "cloudtrail": "Azure Activity Log + Azure Monitor",
+      "config": "Azure Policy + Resource Graph",
+      "systems_manager": "Azure Arc + Update Management"
+    },
+    "key_concepts": [
+      "CloudWatch Metrics → Azure Monitor Metrics",
+      "CloudWatch Logs → Log Analytics Workspaces",
+      "CloudWatch Alarms → Azure Monitor Alerts",
+      "CloudWatch Dashboards → Azure Monitor Workbooks",
+      "X-Ray Traces → Application Insights",
+      "CloudTrail Events → Activity Log",
+      "Custom Metrics → Custom Metrics via REST API",
+      "Log Groups → Log Analytics Tables"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Monitoring Architecture Comparison", 
+      "content": "Understanding the differences between AWS CloudWatch and Azure Monitor ecosystem.",
+      "comparison_table": {
+        "metrics_collection": {
+          "aws": "CloudWatch agent, custom metrics via API",
+          "azure": "Azure Monitor agent, diagnostic settings, custom metrics",
+          "difference": "Azure has more unified agent and easier configuration"
+        },
+        "log_aggregation": {
+          "aws": "CloudWatch Logs, separate log groups per service",
+          "azure": "Log Analytics workspaces with structured query language (KQL)",
+          "difference": "Azure provides more powerful querying capabilities"
+        },
+        "application_monitoring": {
+          "aws": "X-Ray for distributed tracing, separate service",
+          "azure": "Application Insights integrated with Azure Monitor",
+          "difference": "Azure provides more integrated application monitoring"
+        },
+        "alerting": {
+          "aws": "CloudWatch Alarms with SNS notifications",
+          "azure": "Azure Monitor Alerts with Action Groups",
+          "difference": "Azure provides more flexible alert routing and actions"
+        },
+        "dashboards": {
+          "aws": "CloudWatch Dashboards, limited customization",
+          "azure": "Azure Monitor Workbooks, highly customizable with KQL",
+          "difference": "Azure workbooks are more powerful and flexible"
+        }
+      }
+    },
+    {
+      "title": "Log Analytics Workspace Setup",
+      "content": "Create Log Analytics workspace as the foundation for logging (equivalent to CloudWatch Logs).",
+      "code_examples": {
+        "create_workspace": {
+          "language": "bash",
+          "title": "Create Log Analytics Workspace",
+          "code": "# Create resource group for monitoring lab\naz group create \\\n  --name monitoring-lab-rg \\\n  --location eastus\n\n# Create Log Analytics workspace\naz monitor log-analytics workspace create \\\n  --resource-group monitoring-lab-rg \\\n  --workspace-name monitoring-lab-workspace \\\n  --location eastus \\\n  --retention-time 30 \\\n  --sku PerGB2018\n\n# Get workspace ID and key for agent configuration\nWORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group monitoring-lab-rg \\\n  --workspace-name monitoring-lab-workspace \\\n  --query customerId -o tsv)\n\nWORKSPACE_KEY=$(az monitor log-analytics workspace get-shared-keys \\\n  --resource-group monitoring-lab-rg \\\n  --workspace-name monitoring-lab-workspace \\\n  --query primarySharedKey -o tsv)\n\necho \"Workspace ID: $WORKSPACE_ID\"\necho \"Workspace Key: [REDACTED]\"\n\n# List available solutions that can be added to workspace\necho \"Available monitoring solutions:\"\necho \"- SecurityCenterFree\"\necho \"- Updates\"\necho \"- ContainerInsights\"\necho \"- ServiceMap\"\necho \"- VMInsights\""
+        }
+      }
+    },
+    {
+      "title": "Virtual Machine Monitoring Setup",
+      "content": "Configure VM monitoring equivalent to CloudWatch agent installation.",
+      "code_examples": {
+        "create_monitored_vm": {
+          "language": "bash",
+          "title": "Create VM with Monitoring Extensions",
+          "code": "# Create VM for monitoring\naz vm create \\\n  --resource-group monitoring-lab-rg \\\n  --name monitor-test-vm \\\n  --image Ubuntu2204 \\\n  --admin-username azureuser \\\n  --generate-ssh-keys \\\n  --size Standard_B1s\n\n# Install Azure Monitor Agent (AMA) - new unified agent\naz vm extension set \\\n  --resource-group monitoring-lab-rg \\\n  --vm-name monitor-test-vm \\\n  --name AzureMonitorLinuxAgent \\\n  --publisher Microsoft.Azure.Monitor \\\n  --version 1.0 \\\n  --enable-auto-upgrade true\n\n# Create data collection rule (DCR) for the VM\ncat > vm-dcr.json << 'EOF'\n{\n  \"location\": \"eastus\",\n  \"properties\": {\n    \"dataSources\": {\n      \"performanceCounters\": [\n        {\n          \"name\": \"VMInsightsPerfCounters\",\n          \"streams\": [\"Microsoft-InsightsMetrics\"],\n          \"scheduledTransferPeriod\": \"PT1M\",\n          \"samplingFrequencyInSeconds\": 60,\n          \"counterSpecifiers\": [\n            \"\\\\Processor Information(_Total)\\\\% Processor Time\",\n            \"\\\\Processor Information(_Total)\\\\% Privileged Time\", \n            \"\\\\Processor Information(_Total)\\\\% User Time\",\n            \"\\\\Processor Information(_Total)\\\\Processor Frequency\",\n            \"\\\\System\\\\Processes\",\n            \"\\\\Process(_Total)\\\\Thread Count\",\n            \"\\\\Process(_Total)\\\\Handle Count\",\n            \"\\\\Memory\\\\% Committed Bytes In Use\",\n            \"\\\\Memory\\\\Available Bytes\",\n            \"\\\\Memory\\\\Committed Bytes\",\n            \"\\\\Memory\\\\Cache Bytes\",\n            \"\\\\Memory\\\\Pool Paged Bytes\",\n            \"\\\\Memory\\\\Pool Nonpaged Bytes\",\n            \"\\\\Network Interface(*)\\\\Bytes Sent/sec\",\n            \"\\\\Network Interface(*)\\\\Bytes Received/sec\"\n          ]\n        }\n      ],\n      \"syslog\": [\n        {\n          \"name\": \"SyslogDataSource\",\n          \"streams\": [\"Microsoft-Syslog\"],\n          \"facilityNames\": [\"cron\", \"daemon\", \"kern\", \"syslog\", \"user\"],\n          \"logLevels\": [\"Alert\", \"Critical\", \"Emergency\"]\n        }\n      ]\n    },\n    \"destinations\": {\n      \"logAnalytics\": [\n        {\n          \"workspaceResourceId\": \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.OperationalInsights/workspaces/monitoring-lab-workspace\",\n          \"name\": \"VMInsightsPerf-Logs-Dest\"\n        }\n      ]\n    },\n    \"dataFlows\": [\n      {\n        \"streams\": [\"Microsoft-InsightsMetrics\"],\n        \"destinations\": [\"VMInsightsPerf-Logs-Dest\"]\n      },\n      {\n        \"streams\": [\"Microsoft-Syslog\"],\n        \"destinations\": [\"VMInsightsPerf-Logs-Dest\"]\n      }\n    ]\n  }\n}\nEOF\n\n# Create data collection rule\naz monitor data-collection rule create \\\n  --resource-group monitoring-lab-rg \\\n  --name vm-monitoring-dcr \\\n  --rule-file vm-dcr.json\n\n# Associate DCR with the VM\naz monitor data-collection rule association create \\\n  --resource-group monitoring-lab-rg \\\n  --name vm-dcr-association \\\n  --rule-id \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Insights/dataCollectionRules/vm-monitoring-dcr\" \\\n  --target-resource-id \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Compute/virtualMachines/monitor-test-vm\""
+        }
+      }
+    },
+    {
+      "title": "Application Insights Setup",
+      "content": "Configure Application Insights for application monitoring (equivalent to X-Ray).",
+      "code_examples": {
+        "create_app_insights": {
+          "language": "bash",
+          "title": "Create Application Insights Resource",
+          "code": "# Create Application Insights resource\naz monitor app-insights component create \\\n  --resource-group monitoring-lab-rg \\\n  --app web-app-insights \\\n  --location eastus \\\n  --workspace \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.OperationalInsights/workspaces/monitoring-lab-workspace\"\n\n# Get Application Insights instrumentation key and connection string\nINSTRUMENTATION_KEY=$(az monitor app-insights component show \\\n  --resource-group monitoring-lab-rg \\\n  --app web-app-insights \\\n  --query instrumentationKey -o tsv)\n\nCONNECTION_STRING=$(az monitor app-insights component show \\\n  --resource-group monitoring-lab-rg \\\n  --app web-app-insights \\\n  --query connectionString -o tsv)\n\necho \"Instrumentation Key: $INSTRUMENTATION_KEY\"\necho \"Connection String: $CONNECTION_STRING\"\n\n# Create a sample web app with Application Insights\naz appservice plan create \\\n  --resource-group monitoring-lab-rg \\\n  --name monitoring-app-plan \\\n  --location eastus \\\n  --sku B1 \\\n  --is-linux\n\naz webapp create \\\n  --resource-group monitoring-lab-rg \\\n  --plan monitoring-app-plan \\\n  --name monitoring-sample-app-$RANDOM \\\n  --runtime \"NODE|18-lts\"\n\n# Configure Application Insights for the web app\naz webapp config appsettings set \\\n  --resource-group monitoring-lab-rg \\\n  --name $(az webapp list --resource-group monitoring-lab-rg --query '[0].name' -o tsv) \\\n  --settings APPINSIGHTS_INSTRUMENTATIONKEY=\"$INSTRUMENTATION_KEY\" \\\n             APPLICATIONINSIGHTS_CONNECTION_STRING=\"$CONNECTION_STRING\" \\\n             ApplicationInsightsAgent_EXTENSION_VERSION=\"~3\""
+        },
+        "sample_app_with_telemetry": {
+          "language": "javascript",
+          "title": "Sample Node.js Application with Application Insights",
+          "code": "// Create sample application code with telemetry\ncat > app.js << 'EOF'\nconst appInsights = require('applicationinsights');\nconst express = require('express');\n\n// Initialize Application Insights\nappInsights.setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING)\n    .setAutoDependencyCorrelation(true)\n    .setAutoCollectRequests(true)\n    .setAutoCollectPerformance(true, true)\n    .setAutoCollectExceptions(true)\n    .setAutoCollectDependencies(true)\n    .setAutoCollectConsole(true)\n    .setUseDiskRetryCaching(true)\n    .setSendLiveMetrics(false)\n    .start();\n\nconst client = appInsights.defaultClient;\nconst app = express();\nconst port = process.env.PORT || 3000;\n\n// Custom telemetry example\napp.get('/', (req, res) => {\n    // Track custom event\n    client.trackEvent({ name: 'HomePageVisit', properties: { userAgent: req.headers['user-agent'] } });\n    \n    // Track custom metric\n    client.trackMetric({ name: 'HomePageResponseTime', value: Date.now() });\n    \n    res.send('Hello from monitored Node.js app!');\n});\n\napp.get('/api/data', (req, res) => {\n    // Simulate some processing time\n    const processingTime = Math.random() * 1000;\n    \n    setTimeout(() => {\n        // Track dependency call (simulated)\n        client.trackDependency({\n            name: 'Database Query',\n            data: 'SELECT * FROM users',\n            duration: processingTime,\n            resultCode: 200,\n            success: true,\n            dependencyTypeName: 'SQL'\n        });\n        \n        res.json({ message: 'Data retrieved', processingTime });\n    }, processingTime);\n});\n\napp.get('/api/error', (req, res) => {\n    // Simulate an error for testing\n    const error = new Error('Simulated application error');\n    client.trackException({ exception: error });\n    res.status(500).json({ error: 'Something went wrong' });\n});\n\napp.listen(port, () => {\n    console.log(`App listening at http://localhost:${port}`);\n    client.trackTrace({ message: `Application started on port ${port}` });\n});\nEOF\n\n# Create package.json\ncat > package.json << 'EOF'\n{\n  \"name\": \"monitoring-sample-app\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Sample app with Application Insights\",\n  \"main\": \"app.js\",\n  \"scripts\": {\n    \"start\": \"node app.js\"\n  },\n  \"dependencies\": {\n    \"applicationinsights\": \"^2.9.0\",\n    \"express\": \"^4.18.0\"\n  }\n}\nEOF\n\necho \"Sample application code created. Deploy to Azure Web App for monitoring.\""
+        }
+      ]
+    },
+    {
+      "title": "Custom Metrics and Logs",
+      "content": "Send custom metrics and logs equivalent to CloudWatch custom metrics.",
+      "code_examples": {
+        "send_custom_metrics": {
+          "language": "bash",
+          "title": "Send Custom Metrics to Azure Monitor",
+          "code": "# Create script to send custom metrics\ncat > send_custom_metrics.sh << 'EOF'\n#!/bin/bash\n\n# Get VM metadata\nRESOURCE_ID=\"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Compute/virtualMachines/monitor-test-vm\"\nREGION=\"eastus\"\n\n# Get access token for Azure Monitor\nACCESS_TOKEN=$(az account get-access-token --resource https://monitoring.azure.com/ --query accessToken -o tsv)\n\n# Send custom metric\ncurl -X POST \"https://$REGION.monitoring.azure.com$RESOURCE_ID/metrics\" \\\n  -H \"Authorization: Bearer $ACCESS_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"time\": \"'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'\",\n    \"data\": {\n      \"baseData\": {\n        \"metric\": \"CustomApplicationMetric\",\n        \"namespace\": \"Custom/Application\",\n        \"dimNames\": [\"Environment\", \"Component\"],\n        \"series\": [\n          {\n            \"dimValues\": [\"Production\", \"WebServer\"],\n            \"min\": 1.0,\n            \"max\": 10.0,\n            \"sum\": 25.0,\n            \"count\": 5\n          }\n        ]\n      }\n    }\n  }'\nEOF\n\nchmod +x send_custom_metrics.sh\necho \"Custom metrics script created. Run ./send_custom_metrics.sh to send metrics.\""
+        },
+        "custom_log_ingestion": {
+          "language": "bash",
+          "title": "Send Custom Logs to Log Analytics",
+          "code": "# Create custom log ingestion script\ncat > send_custom_logs.py << 'EOF'\nimport requests\nimport json\nimport datetime\nimport hashlib\nimport hmac\nimport base64\nimport os\n\n# Log Analytics workspace credentials\ncustomer_id = os.environ.get('WORKSPACE_ID')\nshared_key = os.environ.get('WORKSPACE_KEY')\nlog_type = 'CustomApplicationLog'\n\ndef build_signature(customer_id, shared_key, date, content_length, method, content_type, resource):\n    x_headers = 'x-ms-date:' + date\n    string_to_hash = method + \"\\n\" + str(content_length) + \"\\n\" + content_type + \"\\n\" + x_headers + \"\\n\" + resource\n    bytes_to_hash = bytes(string_to_hash, encoding=\"utf-8\")\n    decoded_key = base64.b64decode(shared_key)\n    encoded_hash = base64.b64encode(hmac.new(decoded_key, bytes_to_hash, digestmod=hashlib.sha256).digest()).decode()\n    authorization = \"SharedKey {}:{}\".format(customer_id, encoded_hash)\n    return authorization\n\ndef post_data(customer_id, shared_key, body, log_type):\n    method = 'POST'\n    content_type = 'application/json'\n    resource = '/api/logs'\n    rfc1123date = datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')\n    content_length = len(body)\n    signature = build_signature(customer_id, shared_key, rfc1123date, content_length, method, content_type, resource)\n    uri = 'https://' + customer_id + '.ods.opinsights.azure.com' + resource + '?api-version=2016-04-01'\n    \n    headers = {\n        'content-type': content_type,\n        'Authorization': signature,\n        'Log-Type': log_type,\n        'x-ms-date': rfc1123date\n    }\n    \n    response = requests.post(uri, data=body, headers=headers)\n    if (response.status_code >= 200 and response.status_code <= 299):\n        print('Log data accepted')\n    else:\n        print(f\"Response code: {response.status_code}\")\n\n# Sample log data\nlog_data = [\n    {\n        \"Timestamp\": datetime.datetime.utcnow().isoformat(),\n        \"Application\": \"WebApp\",\n        \"Level\": \"INFO\",\n        \"Message\": \"User logged in successfully\",\n        \"UserId\": \"user123\",\n        \"IPAddress\": \"192.168.1.100\",\n        \"UserAgent\": \"Mozilla/5.0\"\n    },\n    {\n        \"Timestamp\": datetime.datetime.utcnow().isoformat(),\n        \"Application\": \"WebApp\", \n        \"Level\": \"ERROR\",\n        \"Message\": \"Database connection failed\",\n        \"ErrorCode\": \"DB001\",\n        \"Duration\": 5000\n    }\n]\n\nbody = json.dumps(log_data)\npost_data(customer_id, shared_key, body, log_type)\nEOF\n\necho \"Custom log ingestion script created.\"\necho \"Set WORKSPACE_ID and WORKSPACE_KEY environment variables and run:\"\necho \"python3 send_custom_logs.py\""
+        }
+      ]
+    },
+    {
+      "title": "Alert Rules and Action Groups",
+      "content": "Create alert rules equivalent to CloudWatch alarms with notification actions.",
+      "code_examples": {
+        "create_action_group": {
+          "language": "bash",
+          "title": "Create Action Group for Alert Notifications",
+          "code": "# Create action group (equivalent to SNS topic)\naz monitor action-group create \\\n  --resource-group monitoring-lab-rg \\\n  --name alert-notifications \\\n  --short-name alerts \\\n  --action email admin admin@company.com \\\n  --action sms mobile +1234567890\n\n# Create webhook action for Slack/Teams integration\naz monitor action-group create \\\n  --resource-group monitoring-lab-rg \\\n  --name webhook-notifications \\\n  --short-name webhooks \\\n  --action webhook slack https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK\n\n# List created action groups\naz monitor action-group list \\\n  --resource-group monitoring-lab-rg \\\n  --output table"
+        },
+        "create_metric_alerts": {
+          "language": "bash",
+          "title": "Create Metric Alert Rules (Equivalent to CloudWatch Alarms)",
+          "code": "# Create CPU usage alert for VM\naz monitor metrics alert create \\\n  --name \"High CPU Usage\" \\\n  --resource-group monitoring-lab-rg \\\n  --scopes \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Compute/virtualMachines/monitor-test-vm\" \\\n  --condition \"avg Percentage CPU > 80\" \\\n  --window-size 5m \\\n  --evaluation-frequency 1m \\\n  --action alert-notifications \\\n  --description \"Alert when CPU usage exceeds 80%\" \\\n  --severity 2\n\n# Create memory usage alert\naz monitor metrics alert create \\\n  --name \"High Memory Usage\" \\\n  --resource-group monitoring-lab-rg \\\n  --scopes \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Compute/virtualMachines/monitor-test-vm\" \\\n  --condition \"avg Available Memory Bytes < 1000000000\" \\\n  --window-size 5m \\\n  --evaluation-frequency 1m \\\n  --action alert-notifications \\\n  --description \"Alert when available memory is less than 1GB\" \\\n  --severity 3\n\n# Create application response time alert\nWEB_APP_NAME=$(az webapp list --resource-group monitoring-lab-rg --query '[0].name' -o tsv)\nif [ ! -z \"$WEB_APP_NAME\" ]; then\n  az monitor metrics alert create \\\n    --name \"High Response Time\" \\\n    --resource-group monitoring-lab-rg \\\n    --scopes \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Web/sites/$WEB_APP_NAME\" \\\n    --condition \"avg AverageResponseTime > 5\" \\\n    --window-size 5m \\\n    --evaluation-frequency 1m \\\n    --action alert-notifications \\\n    --description \"Alert when response time exceeds 5 seconds\" \\\n    --severity 2\nfi\n\n# List all metric alerts\naz monitor metrics alert list \\\n  --resource-group monitoring-lab-rg \\\n  --output table"
+        },
+        "create_log_alerts": {
+          "language": "bash",
+          "title": "Create Log-based Alert Rules",
+          "code": "# Create log alert for application errors\ncat > error_alert_query.json << 'EOF'\n{\n  \"query\": \"AppTraces | where SeverityLevel >= 3 | summarize count() by bin(TimeGenerated, 5m) | where count_ > 10\",\n  \"timeAggregation\": {\n    \"aggregationType\": \"Count\",\n    \"threshold\": 1\n  }\n}\nEOF\n\naz monitor scheduled-query create \\\n  --resource-group monitoring-lab-rg \\\n  --name \"Application Error Spike\" \\\n  --scopes \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.Insights/components/web-app-insights\" \\\n  --condition-query \"AppTraces | where SeverityLevel >= 3 | summarize count() by bin(TimeGenerated, 5m) | where count_ > 10\" \\\n  --condition-threshold 1 \\\n  --condition-operator GreaterThan \\\n  --condition-time-aggregation Count \\\n  --evaluation-frequency 5m \\\n  --window-size 15m \\\n  --severity 2 \\\n  --action-groups \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/microsoft.insights/actionGroups/alert-notifications\" \\\n  --description \"Alert when application error count spikes\"\n\n# Create log alert for failed login attempts\naz monitor scheduled-query create \\\n  --resource-group monitoring-lab-rg \\\n  --name \"Failed Login Attempts\" \\\n  --scopes \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/Microsoft.OperationalInsights/workspaces/monitoring-lab-workspace\" \\\n  --condition-query \"CustomApplicationLog_CL | where Level_s == 'ERROR' and Message_s contains 'login failed' | summarize count() by bin(TimeGenerated, 5m) | where count_ > 5\" \\\n  --condition-threshold 1 \\\n  --condition-operator GreaterThan \\\n  --condition-time-aggregation Count \\\n  --evaluation-frequency 5m \\\n  --window-size 10m \\\n  --severity 3 \\\n  --action-groups \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/monitoring-lab-rg/providers/microsoft.insights/actionGroups/webhook-notifications\" \\\n  --description \"Alert on suspicious login activity\""
+        }
+      }
+    },
+    {
+      "title": "Azure Monitor Workbooks and Dashboards",
+      "content": "Create comprehensive dashboards equivalent to CloudWatch dashboards.",
+      "code_examples": {
+        "create_workbook_template": {
+          "language": "json",
+          "title": "Azure Monitor Workbook Template",
+          "code": "# Create workbook template JSON\ncat > monitoring-workbook.json << 'EOF'\n{\n  \"version\": \"Notebook/1.0\",\n  \"items\": [\n    {\n      \"type\": 1,\n      \"content\": {\n        \"json\": \"## Infrastructure Monitoring Dashboard\\n\\nComprehensive monitoring dashboard for AWS to Azure migration\"\n      },\n      \"name\": \"text - 0\"\n    },\n    {\n      \"type\": 10,\n      \"content\": {\n        \"chartId\": \"workbook-chart\",\n        \"version\": \"MetricsItem/2.0\",\n        \"size\": 2,\n        \"chartType\": 2,\n        \"resourceType\": \"Microsoft.Compute/virtualMachines\",\n        \"metricScope\": 0,\n        \"resourceIds\": [\n          \"/subscriptions/{subscription-id}/resourceGroups/monitoring-lab-rg/providers/Microsoft.Compute/virtualMachines/monitor-test-vm\"\n        ],\n        \"timeContext\": {\n          \"durationMs\": 3600000\n        },\n        \"metrics\": [\n          {\n            \"namespace\": \"Microsoft.Compute/virtualMachines\",\n            \"metric\": \"Microsoft.Compute/virtualMachines--Percentage CPU\",\n            \"aggregation\": 4\n          },\n          {\n            \"namespace\": \"Microsoft.Compute/virtualMachines\", \n            \"metric\": \"Microsoft.Compute/virtualMachines--Available Memory Bytes\",\n            \"aggregation\": 4\n          }\n        ],\n        \"title\": \"VM Performance Metrics\",\n        \"gridSettings\": {\n          \"formatters\": [\n            {\n              \"columnMatch\": \"Subscription\",\n              \"formatter\": 5,\n              \"formatOptions\": {\n                \"showIcon\": true\n              }\n            }\n          ]\n        }\n      },\n      \"name\": \"metrics - 1\"\n    },\n    {\n      \"type\": 3,\n      \"content\": {\n        \"version\": \"KqlItem/1.0\",\n        \"query\": \"InsightsMetrics\\n| where Namespace == \\\"Processor\\\" and Name == \\\"UtilizationPercentage\\\"\\n| summarize avg(Val) by bin(TimeGenerated, 5m)\\n| render timechart\",\n        \"size\": 2,\n        \"title\": \"CPU Utilization Over Time\",\n        \"timeContext\": {\n          \"durationMs\": 3600000\n        },\n        \"queryType\": 0,\n        \"resourceType\": \"microsoft.operationalinsights/workspaces\"\n      },\n      \"name\": \"query - 2\"\n    },\n    {\n      \"type\": 3,\n      \"content\": {\n        \"version\": \"KqlItem/1.0\", \n        \"query\": \"Syslog\\n| where Facility == \\\"daemon\\\"\\n| summarize count() by SeverityLevel, bin(TimeGenerated, 1h)\\n| render columnchart\",\n        \"size\": 2,\n        \"title\": \"System Log Distribution\",\n        \"timeContext\": {\n          \"durationMs\": 86400000\n        },\n        \"queryType\": 0,\n        \"resourceType\": \"microsoft.operationalinsights/workspaces\"\n      },\n      \"name\": \"query - 3\"\n    }\n  ],\n  \"fallbackResourceIds\": [\n    \"/subscriptions/{subscription-id}/resourceGroups/monitoring-lab-rg/providers/Microsoft.OperationalInsights/workspaces/monitoring-lab-workspace\"\n  ]\n}\nEOF\n\necho \"Workbook template created. Import this JSON in Azure Monitor Workbooks.\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Set up comprehensive monitoring for migrated applications equivalent to CloudWatch setup",
+    "requirements": [
+      "Create Log Analytics workspace for centralized logging",
+      "Deploy VM with monitoring agent and custom metrics",
+      "Set up Application Insights for web application monitoring",
+      "Create alert rules for critical metrics and log patterns",
+      "Build dashboard for infrastructure and application monitoring"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify Log Analytics workspace",
+        "command": "az monitor log-analytics workspace show --resource-group monitoring-lab-rg --workspace-name monitoring-lab-workspace",
+        "expected": "Workspace should be in 'Succeeded' provisioning state"
+      },
+      {
+        "step": "Check VM monitoring agent",
+        "command": "az vm extension list --resource-group monitoring-lab-rg --vm-name monitor-test-vm --query '[?name==`AzureMonitorLinuxAgent`]'",
+        "expected": "Should return AzureMonitorLinuxAgent extension"
+      },
+      {
+        "step": "Verify Application Insights",
+        "command": "az monitor app-insights component show --resource-group monitoring-lab-rg --app web-app-insights",
+        "expected": "Should return Application Insights configuration"
+      },
+      {
+        "step": "Check alert rules",
+        "command": "az monitor metrics alert list --resource-group monitoring-lab-rg --query 'length(@)'",
+        "expected": "Should return count of created alert rules"
+      },
+      {
+        "step": "Test custom metrics",
+        "command": "./send_custom_metrics.sh",
+        "expected": "Should successfully send custom metric to Azure Monitor"
+      }
+    ]
+  },
+  "kql_queries_reference": {
+    "performance_monitoring": [
+      "// CPU utilization over time\nInsightsMetrics\n| where Namespace == \"Processor\" and Name == \"UtilizationPercentage\"\n| summarize avg(Val) by bin(TimeGenerated, 5m), Computer\n| render timechart",
+      "// Memory usage analysis\nInsightsMetrics\n| where Namespace == \"Memory\" and Name == \"AvailableMB\"\n| summarize avg(Val) by bin(TimeGenerated, 5m), Computer\n| render timechart",
+      "// Disk I/O performance\nInsightsMetrics\n| where Namespace == \"LogicalDisk\" and Name in (\"TransfersPerSecond\", \"BytesPerSecond\")\n| summarize avg(Val) by bin(TimeGenerated, 5m), Name\n| render timechart"
+    ],
+    "application_monitoring": [
+      "// Application request rate and response time\nrequests\n| summarize RequestRate = count(), AvgResponseTime = avg(duration) by bin(timestamp, 5m)\n| render timechart",
+      "// Error rate analysis\nexceptions\n| summarize ErrorCount = count() by bin(timestamp, 1h), type\n| render columnchart",
+      "// Dependency call analysis\ndependencies\n| where success == false\n| summarize FailedCalls = count() by bin(timestamp, 15m), target\n| render timechart"
+    ],
+    "security_monitoring": [
+      "// Failed authentication attempts\nSecurityEvent\n| where EventID == 4625\n| summarize FailedLogins = count() by bin(TimeGenerated, 1h), Account\n| render timechart",
+      "// Suspicious activity detection\nSigninLogs\n| where ResultType != 0\n| summarize FailedSignins = count() by bin(TimeGenerated, 1h), IPAddress\n| where FailedSignins > 10\n| render table"
+    ]
+  },
+  "cost_comparison": {
+    "cloudwatch_vs_azure_monitor": {
+      "metrics": {
+        "aws": "First 10 metrics free, then $0.30 per metric per month",
+        "azure": "Platform metrics free, custom metrics $0.10 per metric per month"
+      },
+      "logs": {
+        "aws": "$0.50 per GB ingested, $0.03 per GB stored",
+        "azure": "$2.30 per GB ingested (first 5GB free), included storage"
+      },
+      "alerts": {
+        "aws": "$0.10 per alarm per month",
+        "azure": "$0.10 per signal evaluated per month"
+      },
+      "dashboards": {
+        "aws": "$3.00 per dashboard per month",
+        "azure": "Free (Workbooks)"
+      }
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove all monitoring resources to avoid ongoing charges",
+    "commands": [
+      "az monitor metrics alert delete --resource-group monitoring-lab-rg --name 'High CPU Usage'",
+      "az monitor metrics alert delete --resource-group monitoring-lab-rg --name 'High Memory Usage'",
+      "az monitor scheduled-query delete --resource-group monitoring-lab-rg --name 'Application Error Spike'",
+      "az monitor action-group delete --resource-group monitoring-lab-rg --name alert-notifications",
+      "az webapp delete --resource-group monitoring-lab-rg --name $(az webapp list --resource-group monitoring-lab-rg --query '[0].name' -o tsv)",
+      "az vm delete --resource-group monitoring-lab-rg --name monitor-test-vm --yes",
+      "az group delete --name monitoring-lab-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure Monitor provides more unified monitoring than CloudWatch",
+    "KQL (Kusto Query Language) is more powerful than CloudWatch Insights queries",
+    "Application Insights offers deeper application monitoring than X-Ray",
+    "Azure Monitor Workbooks are more flexible than CloudWatch dashboards",
+    "Log Analytics provides better log correlation and analysis",
+    "Azure Monitor alerts offer more sophisticated routing and actions"
+  ],
+  "next_steps": [
+    "Learn advanced KQL queries for complex log analysis",
+    "Explore Azure Monitor for containers and Kubernetes monitoring",
+    "Study Azure Sentinel for security monitoring and SIEM capabilities",
+    "Practice with Azure Monitor Private Link for secure monitoring",
+    "Learn about Azure Monitor autoscale for automated scaling"
+  ]
+}

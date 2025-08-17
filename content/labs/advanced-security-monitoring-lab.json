@@ -1,0 +1,375 @@
+{
+  "id": "advanced-security-monitoring-lab",
+  "title": "CloudTrail to Security Center: Advanced Security Monitoring and Threat Detection",
+  "category": "security",
+  "difficulty": "advanced",
+  "estimated_time": "150 minutes",
+  "description": "Master security monitoring with comprehensive threat detection and incident response patterns migrating from AWS to Azure",
+  "aws_services": [
+    "CloudTrail",
+    "GuardDuty", 
+    "Security Hub",
+    "AWS Config",
+    "CloudWatch Events",
+    "SNS"
+  ],
+  "azure_services": [
+    "Activity Log",
+    "Security Center",
+    "Azure Sentinel",
+    "Azure Policy",
+    "Event Grid",
+    "Logic Apps"
+  ],
+  "learning_objectives": [
+    "Compare CloudTrail and Azure Activity Log for audit trail management",
+    "Migrate GuardDuty threat detection to Azure Security Center",
+    "Transform Security Hub to Azure Sentinel for centralized security management",
+    "Implement automated security incident response workflows",
+    "Configure compliance monitoring and reporting",
+    "Design security analytics and threat hunting procedures",
+    "Implement security automation and orchestration (SOAR)",
+    "Build comprehensive security dashboards and alerting"
+  ],
+  "aws_context": {
+    "equivalent_service": "CloudTrail, GuardDuty, Security Hub",
+    "key_concepts": [
+      "CloudTrail → Activity Log + Azure Monitor",
+      "GuardDuty → Security Center threat detection",
+      "Security Hub → Azure Sentinel",
+      "AWS Config → Azure Policy + Security Center",
+      "CloudWatch Events → Event Grid",
+      "SNS notifications → Logic Apps + Action Groups"
+    ]
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "Security Monitoring Fundamentals",
+      "estimated_time": "25 minutes",
+      "description": "Understanding security monitoring principles and comparing AWS vs Azure security architectures",
+      "learning_outcomes": [
+        "Understand defense-in-depth security strategies",
+        "Compare AWS and Azure security monitoring capabilities",
+        "Design comprehensive security monitoring frameworks"
+      ],
+      "content": {
+        "theory": {
+          "security_monitoring_principles": {
+            "defense_in_depth": "Multiple layers of security controls across network, compute, data, and application layers",
+            "continuous_monitoring": "Real-time security event collection, analysis, and response",
+            "threat_intelligence": "Integration of external threat feeds and indicators of compromise",
+            "incident_response": "Automated detection, investigation, and response to security incidents"
+          },
+          "monitoring_frameworks": {
+            "nist_framework": [
+              "Identify: Asset discovery and risk assessment",
+              "Protect: Preventive security controls implementation",
+              "Detect: Continuous monitoring and threat detection",
+              "Respond: Incident response and containment",
+              "Recover: Recovery planning and lessons learned"
+            ]
+          },
+          "aws_vs_azure_comparison": {
+            "audit_logging": {
+              "aws": "CloudTrail provides comprehensive API call logging with data events and insights",
+              "azure": "Activity Log captures control plane operations with detailed resource logs"
+            },
+            "threat_detection": {
+              "aws": "GuardDuty uses machine learning for threat detection across DNS, VPC Flow Logs, and CloudTrail",
+              "azure": "Security Center provides unified threat detection with behavioral analytics"
+            },
+            "security_orchestration": {
+              "aws": "Security Hub aggregates findings from multiple security services",
+              "azure": "Azure Sentinel provides SIEM and SOAR capabilities with advanced analytics"
+            }
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Security Monitoring Assessment",
+            "description": "Assess current security monitoring gaps and requirements",
+            "steps": [
+              "Evaluate existing AWS security monitoring setup",
+              "Identify security monitoring requirements for Azure",
+              "Design comprehensive security monitoring architecture"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-2",
+      "title": "CloudTrail to Azure Activity Log Migration",
+      "estimated_time": "35 minutes",
+      "description": "Migrating comprehensive audit logging from CloudTrail to Azure Activity Log and Monitor",
+      "learning_outcomes": [
+        "Configure Azure Activity Log for comprehensive audit trail",
+        "Set up log aggregation and long-term retention",
+        "Implement log analysis and alerting"
+      ],
+      "content": {
+        "theory": {
+          "cloudtrail_capabilities": [
+            "API call logging for all AWS services",
+            "Data events for S3 and Lambda",
+            "CloudTrail Insights for anomaly detection",
+            "Multi-region and organization-wide logging"
+          ],
+          "azure_activity_log": [
+            "Administrative operations logging",
+            "Resource health and service health events",
+            "Autoscale and alert rule activities",
+            "Integration with Log Analytics for advanced queries"
+          ],
+          "log_categories": {
+            "administrative": "Resource creation, modification, and deletion activities",
+            "service_health": "Azure service incidents and planned maintenance",
+            "resource_health": "Health status changes for individual resources",
+            "autoscale": "Autoscale engine activities and alerts",
+            "security": "Security-related events and alerts",
+            "recommendation": "Azure Advisor recommendations"
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Activity Log Configuration", 
+            "description": "Configure comprehensive activity logging in Azure",
+            "steps": [
+              "Enable Activity Log collection and retention",
+              "Configure Log Analytics workspace integration",
+              "Set up diagnostic settings for resources"
+            ]
+          },
+          {
+            "title": "Log Analytics Workspace Setup",
+            "description": "Create centralized log collection and analysis",
+            "steps": [
+              "Create Log Analytics workspace with appropriate retention",
+              "Configure data sources and log ingestion",
+              "Create custom log queries for security analysis"
+            ]
+          },
+          {
+            "title": "Security Audit Queries",
+            "description": "Implement security-focused log analysis queries", 
+            "steps": [
+              "Create queries for privileged account activities",
+              "Monitor resource configuration changes",
+              "Detect unusual administrative activities"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-3",
+      "title": "GuardDuty to Security Center Migration",
+      "estimated_time": "40 minutes",
+      "description": "Migrating threat detection from AWS GuardDuty to Azure Security Center",
+      "learning_outcomes": [
+        "Configure Azure Security Center for threat detection",
+        "Implement security recommendations and compliance monitoring",
+        "Set up automated security response workflows"
+      ],
+      "content": {
+        "theory": {
+          "guardduty_features": [
+            "Machine learning-based threat detection",
+            "DNS, VPC Flow Logs, and CloudTrail analysis",
+            "Integration with threat intelligence feeds",
+            "Custom threat lists and trusted IP lists"
+          ],
+          "security_center_capabilities": [
+            "Unified security posture management",
+            "Threat protection for Azure and hybrid resources",
+            "Security recommendations with priority scoring",
+            "Integration with Azure Sentinel for advanced analytics"
+          ],
+          "threat_detection_types": {
+            "malware": "Detection of known malicious files and processes",
+            "network_attacks": "Analysis of network traffic for attack patterns",
+            "behavioral_analytics": "Machine learning-based anomaly detection",
+            "threat_intelligence": "Integration with Microsoft and third-party threat feeds"
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Security Center Configuration",
+            "description": "Enable and configure Azure Security Center",
+            "steps": [
+              "Enable Security Center Standard tier",
+              "Configure data collection and agent deployment",
+              "Set up security policies and initiatives"
+            ]
+          },
+          {
+            "title": "Threat Protection Setup",
+            "description": "Configure threat protection for different resource types",
+            "steps": [
+              "Enable threat protection for VMs and servers",
+              "Configure SQL threat protection",
+              "Set up Key Vault threat protection"
+            ]
+          },
+          {
+            "title": "Security Recommendations Implementation",
+            "description": "Implement security recommendations and monitoring",
+            "steps": [
+              "Review and prioritize security recommendations",
+              "Implement automated remediation where possible",
+              "Create custom security policies"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-4",
+      "title": "Security Hub to Azure Sentinel Migration",
+      "estimated_time": "35 minutes",
+      "description": "Implementing Azure Sentinel for centralized security information and event management",
+      "learning_outcomes": [
+        "Configure Azure Sentinel for SIEM capabilities",
+        "Create custom detection rules and analytics",
+        "Implement security incident management workflows"
+      ],
+      "content": {
+        "theory": {
+          "security_hub_features": [
+            "Centralized security findings aggregation",
+            "Custom insights and security standards",
+            "Integration with AWS and third-party security tools",
+            "Automated finding correlation and prioritization"
+          ],
+          "azure_sentinel_capabilities": [
+            "Cloud-native SIEM with unlimited scalability",
+            "Advanced analytics with machine learning",
+            "Security orchestration and automated response (SOAR)",
+            "Integration with Microsoft and third-party security solutions"
+          ],
+          "sentinel_data_sources": [
+            "Azure services and Activity Log",
+            "Microsoft 365 and security products",
+            "Third-party security solutions via APIs",
+            "Custom data ingestion via Log Analytics"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Azure Sentinel Workspace Setup",
+            "description": "Configure Azure Sentinel for security analytics",
+            "steps": [
+              "Create Sentinel workspace on Log Analytics",
+              "Configure data connectors for Azure services",
+              "Set up workbooks for security monitoring"
+            ]
+          },
+          {
+            "title": "Custom Detection Rules",
+            "description": "Create custom detection rules for security threats",
+            "steps": [
+              "Create scheduled analytics rules",
+              "Configure Microsoft security analytics rules",
+              "Set up fusion rules for advanced correlation"
+            ]
+          },
+          {
+            "title": "Incident Management Workflow",
+            "description": "Implement security incident response procedures",
+            "steps": [
+              "Configure incident creation and assignment",
+              "Create automation rules for incident triage",
+              "Set up notification and escalation procedures"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-5",
+      "title": "Security Automation and Response",
+      "estimated_time": "15 minutes",
+      "description": "Implementing automated security response and orchestration workflows",
+      "learning_outcomes": [
+        "Create automated incident response playbooks",
+        "Implement security orchestration workflows",
+        "Configure automated remediation procedures"
+      ],
+      "content": {
+        "theory": {
+          "security_automation": [
+            "Automated threat hunting and investigation",
+            "Security incident response orchestration", 
+            "Compliance monitoring and reporting",
+            "Integration with external security tools"
+          ],
+          "soar_capabilities": [
+            "Playbook-driven incident response",
+            "Case management and collaboration",
+            "Automated evidence collection",
+            "Integration with threat intelligence platforms"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Automated Response Playbooks",
+            "description": "Create security automation playbooks",
+            "steps": [
+              "Create Logic Apps for incident response",
+              "Configure automated isolation procedures",
+              "Set up notification and escalation workflows"
+            ]
+          },
+          {
+            "title": "Security Compliance Automation",
+            "description": "Automate compliance monitoring and reporting",
+            "steps": [
+              "Create automated compliance checks",
+              "Configure compliance reporting dashboards",
+              "Set up policy violation alerting"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "assessment": {
+    "quiz_questions": [
+      {
+        "question": "What is the main advantage of Azure Sentinel over AWS Security Hub?",
+        "options": [
+          "Lower cost for security monitoring",
+          "Better integration with third-party tools",
+          "Native SIEM and SOAR capabilities", 
+          "Faster security finding correlation"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure Sentinel provides native SIEM and SOAR capabilities, while Security Hub primarily aggregates findings from other security services."
+      },
+      {
+        "question": "How does Azure Security Center differ from AWS GuardDuty?",
+        "options": [
+          "Security Center only monitors Azure resources",
+          "GuardDuty provides better machine learning",
+          "Security Center includes security posture management",
+          "GuardDuty has lower false positive rates"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure Security Center provides both threat detection and security posture management, while GuardDuty focuses primarily on threat detection."
+      }
+    ]
+  },
+  "next_steps": {
+    "recommended_follow_up": [
+      "kms-keyvault-security-lab", 
+      "disaster-recovery-business-continuity-lab",
+      "well-architected-framework-lab"
+    ],
+    "additional_resources": [
+      "Azure Security Center documentation",
+      "Azure Sentinel deployment guide",
+      "Security monitoring best practices"
+    ]
+  }
+}

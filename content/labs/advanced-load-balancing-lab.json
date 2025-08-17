@@ -1,0 +1,614 @@
+{
+  "lab_metadata": {
+    "id": "advanced-load-balancing-lab",
+    "title": "AWS Load Balancer to Azure Application Gateway: Advanced Traffic Management and Routing",
+    "category": "networking",
+    "difficulty": "intermediate",
+    "estimated_time": "120 minutes",
+    "description": "Master advanced load balancing patterns by migrating from AWS ALB/NLB to Azure Application Gateway and Load Balancer with enterprise routing scenarios",
+    "aws_services": ["Application Load Balancer", "Network Load Balancer", "Classic Load Balancer", "Target Groups"],
+    "azure_services": ["Application Gateway v2", "Load Balancer Standard", "Traffic Manager", "Azure Front Door"],
+    "tags": ["networking", "load-balancing", "traffic-management", "enterprise", "saa-c03-critical", "performance"],
+    "prerequisites": [
+      "Completion of networking-fundamentals-lab",
+      "Understanding of OSI layers and HTTP/HTTPS protocols",
+      "Knowledge of health checks and failover concepts",
+      "Familiarity with SSL/TLS certificates",
+      "Basic understanding of DNS and routing"
+    ],
+    "learning_objectives": [
+      "Migrate AWS ALB path-based routing to Application Gateway",
+      "Transform NLB TCP load balancing to Azure Load Balancer",
+      "Implement advanced health probes and custom routing rules",
+      "Configure SSL termination and certificate management",
+      "Set up WAF protection and DDoS mitigation", 
+      "Implement global load balancing with Traffic Manager",
+      "Configure autoscaling and performance monitoring"
+    ]
+  },
+  "scenario": {
+    "title": "E-commerce Platform Load Balancing Migration",
+    "description": "MegaCommerce operates a high-traffic e-commerce platform with complex routing requirements, handling 100K+ requests/minute during peak sales. They need to migrate their AWS load balancing infrastructure to Azure while improving performance and security.",
+    "business_requirements": [
+      "Zero downtime during migration",
+      "Sub-100ms response times for all requests",
+      "Advanced routing based on geography and device type",
+      "SSL termination with automatic certificate renewal",
+      "WAF protection against OWASP Top 10 threats",
+      "Global traffic distribution across multiple regions",
+      "Cost optimization through intelligent traffic routing"
+    ],
+    "current_aws_architecture": [
+      "ALB for HTTP/HTTPS traffic with path-based routing",
+      "NLB for TCP traffic and high-performance scenarios",
+      "Target Groups for different application tiers",
+      "Route 53 for DNS-based load balancing",
+      "CloudFront for global content distribution",
+      "WAF for web application firewall protection",
+      "Auto Scaling Groups for backend capacity"
+    ],
+    "target_azure_architecture": [
+      "Application Gateway v2 for HTTP/HTTPS with advanced routing",
+      "Load Balancer Standard for TCP/UDP traffic",
+      "Backend Pools for application tier distribution",
+      "Traffic Manager for DNS-based global load balancing",
+      "Azure Front Door for global HTTP acceleration",
+      "Web Application Firewall for security protection",
+      "Virtual Machine Scale Sets for backend scaling"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Application Load Balancer to Application Gateway Migration",
+      "estimated_time": "40 minutes",
+      "description": "Transform HTTP/HTTPS load balancing with advanced routing rules",
+      "aws_context": {
+        "service": "AWS Application Load Balancer (ALB)",
+        "description": "Layer 7 load balancer for HTTP/HTTPS traffic with content-based routing",
+        "key_features": [
+          "Path-based and host-based routing",
+          "SSL termination and SNI support",
+          "HTTP/2 and WebSocket support",
+          "Integration with Auto Scaling Groups",
+          "CloudWatch metrics and logging"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Application Gateway v2",
+        "description": "Layer 7 load balancer with web application firewall capabilities",
+        "key_features": [
+          "URL path-based and multi-site routing",
+          "SSL/TLS termination and end-to-end encryption",
+          "HTTP/2 support and connection draining",
+          "Autoscaling and zone redundancy",
+          "Integrated Web Application Firewall"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Create Application Gateway with Advanced Routing",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Application Gateway v2 with WAF capabilities",
+              "aws_context": "Similar to creating ALB with security groups",
+              "azure_command": "az network application-gateway create --name megacommerce-appgw --location eastus --resource-group rg-ecommerce --vnet-name ecommerce-vnet --subnet appgw-subnet --capacity 2 --sku WAF_v2 --http-settings-cookie-based-affinity Disabled --frontend-port 80 --http-settings-port 80 --http-settings-protocol Http --public-ip-address appgw-public-ip",
+              "explanation": "Creates v2 Application Gateway with WAF tier for enhanced security"
+            },
+            {
+              "step": 2,
+              "description": "Configure backend pools for different application tiers",
+              "aws_context": "Equivalent to ALB Target Groups for microservices",
+              "azure_cli_commands": [
+                "az network application-gateway address-pool create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name web-servers --servers 10.0.1.10 10.0.1.11 10.0.1.12",
+                "az network application-gateway address-pool create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name api-servers --servers 10.0.2.10 10.0.2.11 10.0.2.12",
+                "az network application-gateway address-pool create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name admin-servers --servers 10.0.3.10 10.0.3.11"
+              ],
+              "explanation": "Creates separate backend pools for web tier, API tier, and admin applications"
+            },
+            {
+              "step": 3,
+              "description": "Set up path-based routing rules",
+              "aws_context": "Converting ALB listener rules with path patterns",
+              "routing_configuration": {
+                "rules": [
+                  {
+                    "name": "api-rule",
+                    "paths": ["/api/*", "/v1/*", "/v2/*"],
+                    "backend_pool": "api-servers",
+                    "priority": 100
+                  },
+                  {
+                    "name": "admin-rule", 
+                    "paths": ["/admin/*", "/management/*"],
+                    "backend_pool": "admin-servers",
+                    "priority": 200
+                  },
+                  {
+                    "name": "default-rule",
+                    "paths": ["/*"],
+                    "backend_pool": "web-servers",
+                    "priority": 300
+                  }
+                ]
+              },
+              "azure_command": "az network application-gateway url-path-map create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name path-map --paths /api/* --address-pool api-servers --default-address-pool web-servers",
+              "explanation": "Implements sophisticated routing based on URL paths"
+            },
+            {
+              "step": 4,
+              "description": "Configure SSL termination with custom certificates",
+              "aws_context": "Similar to ALB HTTPS listener with ACM certificates",
+              "ssl_configuration": {
+                "certificate_upload": "az network application-gateway ssl-cert create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name ecommerce-ssl --cert-file ecommerce.pfx --cert-password {password}",
+                "https_listener": "az network application-gateway http-listener create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name https-listener --frontend-port 443 --ssl-cert ecommerce-ssl",
+                "redirect_rule": "az network application-gateway redirect-config create --gateway-name megacommerce-appgw --resource-group rg-ecommerce --name http-to-https --type Permanent --target-listener https-listener"
+              },
+              "explanation": "Implements SSL termination with automatic HTTP to HTTPS redirection"
+            }
+          ],
+          "validation": [
+            "Test path-based routing with different URL patterns",
+            "Verify SSL certificate installation and HTTPS functionality",
+            "Confirm health probe status for all backend pools",
+            "Validate HTTP to HTTPS redirection works correctly"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Network Load Balancer to Azure Load Balancer Migration", 
+      "estimated_time": "30 minutes",
+      "description": "Transform Layer 4 TCP/UDP load balancing for high-performance scenarios",
+      "aws_context": {
+        "service": "AWS Network Load Balancer (NLB)",
+        "description": "Layer 4 load balancer for TCP/UDP traffic with ultra-low latency",
+        "key_features": [
+          "TCP and UDP load balancing",
+          "Static IP addresses and Elastic IP support",
+          "Cross-zone load balancing",
+          "Connection flow hash algorithm",
+          "Preserve source IP addresses"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Load Balancer Standard",
+        "description": "Layer 4 load balancer with high availability and performance",
+        "key_features": [
+          "TCP and UDP load balancing",
+          "Zone-redundant and zonal deployments",
+          "Outbound connectivity management",
+          "Multiple frontend IP configurations",
+          "Health probe customization"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Standard Load Balancer for Database Tier",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Standard Load Balancer with static public IP",
+              "aws_context": "Similar to creating NLB with Elastic IP",
+              "azure_commands": [
+                "az network public-ip create --resource-group rg-ecommerce --name db-lb-ip --sku Standard --allocation-method Static",
+                "az network lb create --resource-group rg-ecommerce --name database-lb --sku Standard --public-ip-address db-lb-ip --frontend-ip-name frontend-ip --backend-pool-name database-pool"
+              ],
+              "explanation": "Creates Standard SKU load balancer with static IP for consistent database access"
+            },
+            {
+              "step": 2,
+              "description": "Configure TCP load balancing rule for database connections",
+              "aws_context": "Equivalent to NLB listener for database port 5432",
+              "load_balancing_rule": {
+                "name": "database-rule",
+                "protocol": "Tcp",
+                "frontend_port": 5432,
+                "backend_port": 5432,
+                "idle_timeout": 15,
+                "enable_floating_ip": false,
+                "load_distribution": "SourceIPProtocol"
+              },
+              "azure_command": "az network lb rule create --resource-group rg-ecommerce --lb-name database-lb --name database-rule --protocol tcp --frontend-port 5432 --backend-port 5432 --frontend-ip-name frontend-ip --backend-pool-name database-pool --probe-name db-health-probe --load-distribution SourceIPProtocol",
+              "explanation": "Configures session persistence using source IP and protocol"
+            },
+            {
+              "step": 3,
+              "description": "Set up custom health probes for database monitoring",
+              "aws_context": "Converting NLB health checks with custom intervals",
+              "health_probe_config": {
+                "name": "db-health-probe", 
+                "protocol": "Tcp",
+                "port": 5432,
+                "interval_in_seconds": 15,
+                "number_of_probes": 2,
+                "probe_threshold": 2
+              },
+              "azure_command": "az network lb probe create --resource-group rg-ecommerce --lb-name database-lb --name db-health-probe --protocol tcp --port 5432 --interval 15 --threshold 2",
+              "explanation": "Implements aggressive health monitoring for database availability"
+            }
+          ],
+          "validation": [
+            "Test TCP connectivity through load balancer",
+            "Verify health probe status and failover behavior",
+            "Confirm session persistence works as expected",
+            "Validate load distribution across backend servers"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Global Load Balancing: Route 53 to Traffic Manager",
+      "estimated_time": "35 minutes", 
+      "description": "Implement DNS-based global traffic distribution and failover",
+      "aws_context": {
+        "service": "AWS Route 53",
+        "description": "DNS web service with health checking and traffic routing",
+        "key_features": [
+          "Latency-based routing",
+          "Geolocation routing",
+          "Weighted routing policies",
+          "Health checks and failover",
+          "Alias records for AWS resources"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Traffic Manager",
+        "description": "DNS-based traffic load balancer with global reach",
+        "key_features": [
+          "Performance-based routing",
+          "Geographic routing",
+          "Weighted traffic distribution",
+          "Endpoint monitoring and failover",
+          "Nested profiles for complex scenarios"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Global Load Balancing with Failover",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Traffic Manager profile with performance routing",
+              "aws_context": "Similar to Route 53 hosted zone with latency routing",
+              "azure_command": "az network traffic-manager profile create --name megacommerce-global --resource-group rg-ecommerce --routing-method Performance --unique-dns-name megacommerce-global --ttl 30 --monitor-protocol HTTP --monitor-port 80 --monitor-path /health",
+              "explanation": "Creates global profile that routes users to nearest healthy endpoint"
+            },
+            {
+              "step": 2, 
+              "description": "Add regional endpoints with priority and weight",
+              "aws_context": "Converting Route 53 records with health checks",
+              "endpoint_configuration": [
+                {
+                  "name": "primary-east",
+                  "type": "Azure endpoint",
+                  "target": "eastus-appgw.eastus.cloudapp.azure.com",
+                  "priority": 1,
+                  "weight": 100,
+                  "location": "East US"
+                },
+                {
+                  "name": "secondary-west",
+                  "type": "Azure endpoint", 
+                  "target": "westus-appgw.westus.cloudapp.azure.com",
+                  "priority": 2,
+                  "weight": 100,
+                  "location": "West US"
+                },
+                {
+                  "name": "disaster-recovery",
+                  "type": "External endpoint",
+                  "target": "dr.megacommerce.com",
+                  "priority": 3,
+                  "weight": 100,
+                  "location": "West Europe"
+                }
+              ],
+              "azure_commands": [
+                "az network traffic-manager endpoint create --profile-name megacommerce-global --resource-group rg-ecommerce --name primary-east --type azureEndpoints --target-resource-id /subscriptions/{sub}/resourceGroups/rg-ecommerce/providers/Microsoft.Network/publicIPAddresses/eastus-appgw-ip --priority 1",
+                "az network traffic-manager endpoint create --profile-name megacommerce-global --resource-group rg-ecommerce --name secondary-west --type azureEndpoints --target-resource-id /subscriptions/{sub}/resourceGroups/rg-ecommerce/providers/Microsoft.Network/publicIPAddresses/westus-appgw-ip --priority 2"
+              ],
+              "explanation": "Configures active-passive failover with geographic distribution"
+            },
+            {
+              "step": 3,
+              "description": "Configure advanced health monitoring",
+              "aws_context": "Similar to Route 53 health checks with custom endpoints",
+              "monitoring_configuration": {
+                "protocol": "HTTPS",
+                "port": 443,
+                "path": "/api/health/detailed",
+                "interval": 30,
+                "timeout": 10,
+                "tolerated_failures": 3,
+                "expected_status_codes": ["200", "201"]
+              },
+              "azure_command": "az network traffic-manager profile update --name megacommerce-global --resource-group rg-ecommerce --monitor-protocol HTTPS --monitor-port 443 --monitor-path /api/health/detailed --monitor-interval 30 --monitor-timeout 10 --monitor-tolerated-failures 3",
+              "explanation": "Implements comprehensive health monitoring with custom criteria"
+            }
+          ],
+          "validation": [
+            "Test DNS resolution from different geographic locations",
+            "Verify automatic failover when primary endpoint fails",
+            "Confirm health monitoring detects endpoint issues",
+            "Validate traffic distribution matches expected patterns"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "WAF and Security Integration",
+      "estimated_time": "15 minutes",
+      "description": "Implement Web Application Firewall and security best practices",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure WAF Policies and Rules",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create WAF policy with OWASP rule sets",
+              "aws_context": "Similar to AWS WAF with managed rule groups",
+              "azure_command": "az network application-gateway waf-policy create --name ecommerce-waf --resource-group rg-ecommerce --type OWASP --version 3.2 --mode Prevention",
+              "explanation": "Enables comprehensive protection against OWASP Top 10 threats"
+            },
+            {
+              "step": 2,
+              "description": "Configure custom rules for business logic protection",
+              "custom_rules": [
+                {
+                  "name": "rate-limiting",
+                  "description": "Limit requests per IP to 1000 per minute",
+                  "priority": 100,
+                  "action": "Block",
+                  "condition": "RemoteAddr and RequestCount > 1000 in 60s"
+                },
+                {
+                  "name": "geo-blocking",
+                  "description": "Block requests from high-risk countries",
+                  "priority": 200,
+                  "action": "Block",
+                  "condition": "RemoteAddr in high_risk_countries"
+                }
+              ],
+              "explanation": "Implements application-specific security rules"
+            }
+          ],
+          "validation": [
+            "Test WAF rules with simulated attack patterns",
+            "Verify rate limiting blocks excessive requests",
+            "Confirm geo-blocking works for restricted regions",
+            "Validate logging captures security events"
+          ]
+        }
+      ]
+    }
+  ],
+  "performance_optimization": [
+    {
+      "optimization": "Connection Multiplexing",
+      "aws_equivalent": "ALB connection pooling",
+      "azure_implementation": "Application Gateway HTTP/2 support",
+      "benefits": [
+        "Reduced latency through connection reuse",
+        "Lower memory usage on backend servers",
+        "Improved throughput for concurrent requests"
+      ],
+      "configuration": "Enable HTTP/2 on Application Gateway listeners"
+    },
+    {
+      "optimization": "Session Affinity",
+      "aws_equivalent": "ALB sticky sessions with cookies",
+      "azure_implementation": "Application Gateway cookie-based affinity",
+      "benefits": [
+        "Consistent user experience for stateful applications",
+        "Reduced database queries for session data",
+        "Improved application performance"
+      ],
+      "configuration": "Configure cookie-based session affinity on backend settings"
+    },
+    {
+      "optimization": "Health Probe Optimization",
+      "aws_equivalent": "Target Group health checks",
+      "azure_implementation": "Custom health probes with faster intervals",
+      "benefits": [
+        "Faster detection of unhealthy backends",
+        "Reduced user impact during server failures",
+        "Improved overall availability"
+      ],
+      "configuration": "Set aggressive health probe intervals and thresholds"
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Application Gateway Pricing",
+      "aws_comparison": "ALB charges per hour plus LCU consumption",
+      "azure_model": "Application Gateway v2 charges per hour plus capacity units",
+      "optimization_strategies": [
+        "Use autoscaling to match capacity with demand",
+        "Implement connection draining to reduce waste",
+        "Monitor capacity unit consumption patterns",
+        "Right-size minimum instance count"
+      ],
+      "estimated_savings": "30-50% compared to over-provisioned ALB"
+    },
+    {
+      "area": "Traffic Manager Costs",
+      "aws_comparison": "Route 53 charges per hosted zone and queries",
+      "azure_model": "Traffic Manager charges per profile and health checks",
+      "optimization_strategies": [
+        "Consolidate profiles where possible",
+        "Optimize health check frequency",
+        "Use nested profiles for complex routing",
+        "Monitor DNS query patterns"
+      ],
+      "estimated_savings": "20-40% for high-volume DNS scenarios"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "SSL/TLS Management",
+      "practices": [
+        "Use managed certificates with automatic renewal",
+        "Implement perfect forward secrecy (PFS)",
+        "Disable weak cipher suites and protocols",
+        "Enable HTTP Strict Transport Security (HSTS)"
+      ]
+    },
+    {
+      "category": "Network Security",
+      "practices": [
+        "Use private backend pools without public IPs",
+        "Implement network security groups for traffic filtering",
+        "Enable DDoS Protection Standard for public endpoints",
+        "Configure WAF in prevention mode for production"
+      ]
+    },
+    {
+      "category": "Monitoring and Logging",
+      "practices": [
+        "Enable diagnostic logging for all load balancers",
+        "Set up alerts for health probe failures",
+        "Monitor SSL certificate expiration dates",
+        "Track WAF blocked requests and patterns"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Backend Health Check Failures",
+      "symptoms": [
+        "502 Bad Gateway errors from Application Gateway",
+        "Intermittent connection failures",
+        "Slow response times during traffic spikes"
+      ],
+      "solutions": [
+        "Verify backend server health and capacity",
+        "Check network security group rules",
+        "Review health probe configuration and timeout values",
+        "Monitor backend pool member status in portal"
+      ]
+    },
+    {
+      "issue": "SSL Certificate Problems",
+      "symptoms": [
+        "SSL handshake failures",
+        "Certificate validation errors",
+        "Mixed content warnings in browsers"
+      ],
+      "solutions": [
+        "Verify certificate chain completeness",
+        "Check certificate expiration dates",
+        "Ensure proper SNI configuration",
+        "Test SSL configuration with external tools"
+      ]
+    },
+    {
+      "issue": "Traffic Manager Failover Issues",
+      "symptoms": [
+        "Users directed to unhealthy endpoints",
+        "Slow failover during outages",
+        "Inconsistent routing behavior"
+      ],
+      "solutions": [
+        "Review endpoint health monitoring configuration",
+        "Check DNS TTL values for faster propagation",
+        "Verify endpoint priority and weight settings",
+        "Test failover scenarios in staging environment"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment",
+      "tasks": [
+        "Document current AWS load balancer configurations",
+        "Identify SSL certificates and renewal processes",
+        "Map current routing rules and health checks",
+        "Assess traffic patterns and capacity requirements",
+        "Plan Azure network architecture and subnets"
+      ]
+    },
+    {
+      "phase": "Azure Infrastructure Setup",
+      "tasks": [
+        "Create virtual networks and subnets",
+        "Deploy Application Gateway with proper SKU",
+        "Configure Standard Load Balancer for TCP traffic",
+        "Set up Traffic Manager profiles and endpoints",
+        "Implement WAF policies and security rules"
+      ]
+    },
+    {
+      "phase": "Configuration Migration",
+      "tasks": [
+        "Migrate routing rules and listener configurations",
+        "Transfer SSL certificates to Azure Key Vault",
+        "Configure health probes and monitoring",
+        "Set up backend pools and target servers",
+        "Test load balancing behavior in staging"
+      ]
+    },
+    {
+      "phase": "DNS and Traffic Cutover",
+      "tasks": [
+        "Update DNS records to point to Azure endpoints",
+        "Monitor traffic distribution and health status",
+        "Validate SSL certificate functionality",
+        "Test failover scenarios and recovery procedures",
+        "Implement monitoring and alerting"
+      ]
+    },
+    {
+      "phase": "Post-Migration Optimization",
+      "tasks": [
+        "Optimize capacity and autoscaling settings",
+        "Fine-tune health probe configurations",
+        "Review and adjust WAF rules based on traffic",
+        "Monitor performance metrics and costs",
+        "Document new operational procedures"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure Application Gateway documentation - https://docs.microsoft.com/en-us/azure/application-gateway/",
+        "Azure Load Balancer documentation - https://docs.microsoft.com/en-us/azure/load-balancer/",
+        "Traffic Manager documentation - https://docs.microsoft.com/en-us/azure/traffic-manager/"
+      ]
+    },
+    {
+      "type": "Migration Guides",
+      "links": [
+        "AWS to Azure networking services comparison",
+        "Load balancer migration best practices",
+        "SSL certificate migration guide"
+      ]
+    },
+    {
+      "type": "Hands-on Tutorials",
+      "links": [
+        "Application Gateway quickstart templates",
+        "Traffic Manager configuration samples",
+        "WAF policy implementation guides"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Front Door for global HTTP acceleration",
+    "Set up Azure DDoS Protection for enhanced security",
+    "Configure Private Link for secure backend connectivity",
+    "Explore Azure API Management for API gateway scenarios",
+    "Implement advanced monitoring with Network Watcher",
+    "Set up disaster recovery across multiple regions"
+  ]
+}

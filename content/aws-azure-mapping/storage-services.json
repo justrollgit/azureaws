@@ -1,0 +1,84 @@
+{
+  "category": "Storage Services",
+  "description": "Object storage, file systems, and block storage solutions",
+  "services": [
+    {
+      "aws": {
+        "name": "Amazon S3",
+        "description": "Object storage service with 11 9's durability",
+        "use_cases": ["Static websites", "Data archiving", "Content distribution", "Big data analytics", "Backup and restore"],
+        "pricing_model": "Pay-per-GB stored, requests, and data transfer"
+      },
+      "azure": {
+        "name": "Azure Blob Storage",
+        "description": "Massively scalable object storage for unstructured data",
+        "use_cases": ["Static websites", "Data archiving", "Content distribution", "Big data analytics", "Backup and restore"],
+        "pricing_model": "Pay-per-GB with Hot, Cool, and Archive tiers"
+      },
+      "migration_notes": [
+        "Blob Storage has access tiers (Hot, Cool, Archive) similar to S3 storage classes",
+        "Azure containers map to S3 buckets - different naming conventions",
+        "Both support lifecycle management policies for cost optimization",
+        "Azure has geo-redundant storage options similar to S3 cross-region replication",
+        "REST API operations are similar but syntax differs - use Azure Storage SDK"
+      ],
+      "learning_resources": [
+        "Azure Blob Storage quickstart guide",
+        "S3 to Blob Storage migration tool",
+        "Storage performance comparison guide"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon EBS",
+        "description": "High-performance block storage for EC2 instances",
+        "use_cases": ["Database storage", "File systems", "Boot volumes", "High-performance computing"],
+        "pricing_model": "Pay-per-GB provisioned and IOPS"
+      },
+      "azure": {
+        "name": "Azure Managed Disks",
+        "description": "High-performance managed block storage for VMs",
+        "use_cases": ["Database storage", "File systems", "Boot volumes", "High-performance computing"],
+        "pricing_model": "Pay-per-GB provisioned with performance tiers"
+      },
+      "migration_notes": [
+        "Azure Managed Disks eliminate the need for storage accounts (unlike unmanaged disks)",
+        "Performance tiers: Standard HDD, Standard SSD, Premium SSD, Ultra Disk",
+        "Encryption at rest is enabled by default in Azure",
+        "Snapshot and backup capabilities are built-in",
+        "Zone-redundant storage available for high availability"
+      ],
+      "learning_resources": [
+        "Azure Managed Disks overview",
+        "EBS to Managed Disks migration guide",
+        "Disk performance optimization best practices"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon EFS",
+        "description": "Fully managed NFS file system for EC2",
+        "use_cases": ["Content repositories", "Web serving", "Data analytics", "Media processing"],
+        "pricing_model": "Pay-per-GB stored with throughput modes"
+      },
+      "azure": {
+        "name": "Azure Files",
+        "description": "Fully managed file shares using SMB and NFS protocols",
+        "use_cases": ["Content repositories", "Web serving", "Data analytics", "Media processing"],
+        "pricing_model": "Pay-per-GB with transaction-based pricing"
+      },
+      "migration_notes": [
+        "Azure Files supports both SMB and NFS protocols (EFS only supports NFS)",
+        "Can be mounted simultaneously by cloud and on-premises deployments",
+        "Azure File Sync provides hybrid cloud file services",
+        "Performance tiers: Standard and Premium with different IOPS limits",
+        "Integration with Azure AD for identity-based authentication"
+      ],
+      "learning_resources": [
+        "Azure Files deployment guide",
+        "File sharing migration strategies",
+        "Azure File Sync configuration"
+      ]
+    }
+  ]
+}

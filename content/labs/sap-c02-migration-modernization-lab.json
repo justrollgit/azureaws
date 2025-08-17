@@ -1,0 +1,246 @@
+{
+  "id": "sap-c02-migration-modernization-lab",
+  "title": "AWS Enterprise Migration & Modernization to Azure: Large-Scale Workload Migration and Application Transformation",
+  "category": "migration-modernization",
+  "difficulty": "expert",
+  "estimatedTime": "280 minutes",
+  "description": "Master enterprise-scale migration and modernization by planning and executing complex AWS workload migrations, legacy application modernization, and platform transformation, then implementing equivalent migration strategies on Azure with advanced assessment, migration, and modernization tools.",
+  "awsCertification": "SAP-C02",
+  "certificationWeight": "20% - Accelerate Workload Migration and Modernization Domain",
+  "awsServices": [
+    "Migration Hub",
+    "Application Migration Service",
+    "Database Migration Service",
+    "DataSync",
+    "Snow Family",
+    "Application Discovery Service",
+    "Migration Evaluator",
+    "Replication Agent",
+    "CloudEndure",
+    "App2Container",
+    "Mainframe Modernization",
+    "Connect",
+    "Direct Connect",
+    "Transit Gateway",
+    "CloudFormation",
+    "Systems Manager",
+    "Lambda",
+    "ECS",
+    "EKS"
+  ],
+  "azureServices": [
+    "Azure Migrate",
+    "Database Migration Service",
+    "Data Box",
+    "Azure Site Recovery",
+    "Azure App Service Migration Assistant",
+    "Azure Database Migration Assistant",
+    "Azure Arc",
+    "Azure Stack",
+    "ExpressRoute",
+    "Virtual WAN",
+    "ARM Templates",
+    "Automation",
+    "Azure Functions",
+    "Container Instances",
+    "AKS"
+  ],
+  "prerequisites": [
+    "Advanced understanding of enterprise architecture patterns",
+    "Experience with large-scale system migrations",
+    "Knowledge of application modernization strategies",
+    "Understanding of network and security architecture",
+    "Familiarity with containerization and cloud-native patterns"
+  ],
+  "learningObjectives": [
+    "Design comprehensive migration strategies and wave planning",
+    "Implement large-scale workload discovery and assessment",
+    "Execute complex database and application migrations",
+    "Modernize legacy applications with cloud-native patterns",
+    "Design hybrid and multi-cloud connectivity architectures",
+    "Implement migration validation and cutover procedures",
+    "Establish post-migration optimization and governance"
+  ],
+  "businessScenario": {
+    "description": "GlobalEnterpriseInc needs to migrate 500+ applications, 200TB of data, and 1000+ servers from on-premises to cloud while modernizing 60% of workloads to cloud-native architectures, achieving 40% cost reduction and improving agility by 200%.",
+    "requirements": [
+      "Migration of 500+ applications with minimal downtime",
+      "Database migration with <1 hour downtime per system",
+      "Legacy application modernization to cloud-native",
+      "Hybrid connectivity with 99.9% availability",
+      "Comprehensive security and compliance during migration",
+      "Cost optimization achieving 40% reduction",
+      "Accelerated deployment capabilities post-migration"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Migration Strategy and Planning",
+      "content": "Develop comprehensive migration strategies with detailed assessment, wave planning, and risk management.",
+      "hands-on": {
+        "aws": "1. Configure Migration Hub for centralized tracking\\n2. Set up Application Discovery Service\\n3. Use Migration Evaluator for business case development\\n4. Design migration wave strategy\\n5. Configure CloudFormation for infrastructure\\n6. Set up migration project management\\n7. Implement risk assessment and mitigation",
+        "azure": "1. Configure Azure Migrate for assessment\\n2. Set up dependency mapping and discovery\\n3. Use Azure Total Cost of Ownership calculator\\n4. Design migration wave planning\\n5. Configure ARM Templates for infrastructure\\n6. Set up Azure DevOps for project management\\n7. Implement comprehensive risk management"
+      }
+    },
+    {
+      "title": "Application Discovery and Assessment",
+      "content": "Implement comprehensive application discovery with detailed assessment and modernization planning.",
+      "hands-on": {
+        "aws": "1. Deploy Application Discovery Service agents\\n2. Configure network-based discovery\\n3. Analyze application dependencies\\n4. Assess application migration readiness\\n5. Identify modernization opportunities\\n6. Create application portfolios\\n7. Generate migration recommendations",
+        "azure": "1. Deploy Azure Migrate appliances\\n2. Configure agentless discovery\\n3. Analyze application dependencies with Service Map\\n4. Assess VM and application readiness\\n5. Identify containerization opportunities\\n6. Create application inventory\\n7. Generate modernization roadmaps"
+      }
+    },
+    {
+      "title": "Database Migration and Modernization",
+      "content": "Execute complex database migrations with minimal downtime and modernization to cloud-native services.",
+      "hands-on": {
+        "aws": "1. Set up Database Migration Service\\n2. Configure continuous replication\\n3. Implement schema conversion with SCT\\n4. Set up validation and testing\\n5. Execute cutover procedures\\n6. Modernize to Aurora Serverless\\n7. Implement post-migration optimization",
+        "azure": "1. Configure Database Migration Service\\n2. Set up online migration with DMS\\n3. Implement schema migration\\n4. Configure validation and testing\\n5. Execute cutover with minimal downtime\\n6. Modernize to Azure SQL Database\\n7. Implement performance optimization"
+      }
+    },
+    {
+      "title": "Application Migration and Containerization",
+      "content": "Migrate and modernize applications with containerization and cloud-native transformation.",
+      "hands-on": {
+        "aws": "1. Use Application Migration Service for lift-and-shift\\n2. Configure App2Container for containerization\\n3. Migrate to ECS and EKS\\n4. Implement CI/CD for modernized apps\\n5. Configure service mesh for microservices\\n6. Implement monitoring and observability\\n7. Set up automated scaling and management",
+        "azure": "1. Use Azure Site Recovery for migration\\n2. Configure App Service Migration Assistant\\n3. Migrate to AKS and Container Instances\\n4. Implement Azure DevOps pipelines\\n5. Configure service mesh with Linkerd\\n6. Implement Application Insights monitoring\\n7. Set up autoscaling and management"
+      }
+    },
+    {
+      "title": "Data Migration and Synchronization",
+      "content": "Implement large-scale data migration with synchronization, validation, and optimization strategies.",
+      "hands-on": {
+        "aws": "1. Configure DataSync for file migration\\n2. Set up Snow Family for large data transfers\\n3. Implement S3 Transfer Acceleration\\n4. Configure data validation and integrity checks\\n5. Set up incremental synchronization\\n6. Implement data lifecycle management\\n7. Configure backup and recovery",
+        "azure": "1. Configure Azure Data Box for large transfers\\n2. Set up Azure File Sync\\n3. Implement Azure Data Factory for ETL\\n4. Configure data validation pipelines\\n5. Set up incremental data synchronization\\n6. Implement data governance policies\\n7. Configure backup and disaster recovery"
+      }
+    },
+    {
+      "title": "Hybrid Connectivity and Network Migration",
+      "content": "Design and implement hybrid connectivity with secure, high-performance network architectures.",
+      "hands-on": {
+        "aws": "1. Configure Direct Connect for hybrid connectivity\\n2. Set up Transit Gateway for network consolidation\\n3. Implement VPN backup connections\\n4. Configure Route 53 for DNS migration\\n5. Set up network monitoring and optimization\\n6. Implement security controls and segmentation\\n7. Configure disaster recovery networking",
+        "azure": "1. Configure ExpressRoute for hybrid connectivity\\n2. Set up Virtual WAN for network hub\\n3. Implement VPN gateway backup\\n4. Configure Azure DNS for migration\\n5. Set up Network Watcher for monitoring\\n6. Implement network security groups\\n7. Configure network disaster recovery"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Execute Enterprise-Scale Migration Program",
+      "description": "Plan and execute complete migration of 500+ applications with modernization and optimization.",
+      "tasks": [
+        "Conduct comprehensive discovery and assessment",
+        "Design wave-based migration strategy",
+        "Execute database migrations with minimal downtime",
+        "Migrate and modernize applications to containers",
+        "Implement large-scale data migration",
+        "Establish hybrid connectivity architecture",
+        "Validate and optimize post-migration performance"
+      ],
+      "validation": [
+        "500+ applications migrated successfully",
+        "Database downtime <1 hour per system",
+        "60% of applications containerized",
+        "40% cost reduction achieved",
+        "99.9% hybrid connectivity availability",
+        "Zero data loss during migration"
+      ]
+    },
+    {
+      "title": "Implement Legacy Modernization Factory",
+      "description": "Create automated modernization factory for transforming legacy applications to cloud-native architectures.",
+      "tasks": [
+        "Set up automated assessment pipelines",
+        "Implement containerization automation",
+        "Create microservices decomposition strategies",
+        "Set up automated testing and validation",
+        "Implement CI/CD for modernized applications",
+        "Configure monitoring and observability"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "Application dependencies causing migration failures",
+        "solution": "Implement comprehensive dependency mapping and staged migration approach"
+      },
+      {
+        "issue": "Database migration taking longer than planned downtime",
+        "solution": "Use online migration with continuous replication and cutover optimization"
+      },
+      {
+        "issue": "Network connectivity issues during hybrid operations",
+        "solution": "Implement redundant connectivity with automated failover and monitoring"
+      },
+      {
+        "issue": "Performance degradation after cloud migration",
+        "solution": "Implement proper rightsizing, performance optimization, and monitoring"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can design comprehensive migration strategies",
+      "Can execute large-scale application and database migrations",
+      "Can modernize legacy applications to cloud-native",
+      "Can implement hybrid connectivity architectures",
+      "Can manage complex migration programs",
+      "Can optimize post-migration performance and costs"
+    ],
+    "certificationAlignment": {
+      "SAP-C02": {
+        "domain": "Accelerate Workload Migration and Modernization",
+        "weight": "20%",
+        "keyTopics": [
+          "Migration strategy and planning",
+          "Application discovery and assessment",
+          "Database migration strategies",
+          "Application modernization patterns",
+          "Data migration and synchronization",
+          "Hybrid connectivity design",
+          "Post-migration optimization"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "Migration tool capabilities and feature differences",
+      "Assessment and discovery tool variations",
+      "Database migration service differences",
+      "Application containerization approaches",
+      "Data transfer and synchronization options",
+      "Hybrid connectivity architecture differences"
+    ],
+    "tools": [
+      "Azure Migrate comprehensive platform",
+      "Database Migration Service equivalents",
+      "Azure Site Recovery for workload protection",
+      "Application modernization accelerators"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "500+ applications migrated with 99.9% success rate",
+      "Database migrations completed with <1 hour downtime",
+      "60% of applications modernized to cloud-native",
+      "99.9% hybrid connectivity availability",
+      "Zero data loss during entire migration",
+      "Post-migration performance meets or exceeds baseline"
+    ],
+    "business": [
+      "40% cost reduction achieved post-migration",
+      "200% improvement in deployment agility",
+      "60% reduction in operational overhead",
+      "50% faster time to market for new features",
+      "Enhanced security posture with cloud-native controls",
+      "Improved disaster recovery with <1 hour RTO"
+    ]
+  },
+  "nextSteps": [
+    "Explore advanced cloud-native patterns and architectures",
+    "Study multi-cloud and edge computing strategies",
+    "Implement advanced automation and GitOps workflows",
+    "Practice with emerging migration and modernization tools"
+  ]
+}

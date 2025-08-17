@@ -1,0 +1,318 @@
+{
+  "id": "enterprise-governance-lab",
+  "title": "AWS Organizations to Azure Enterprise Governance: Complete Migration Guide",
+  "difficulty": "expert",
+  "estimated_time": "300 minutes",
+  "aws_prerequisite": "Experience with AWS Organizations, Control Tower, Config, CloudTrail, and enterprise governance",
+  "azure_target": "Implement comprehensive Azure enterprise governance with Policy, Blueprints, Cost Management, and Security Center",
+  "learning_objectives": [
+    "Master complete enterprise governance migration from AWS to Azure",
+    "Implement comprehensive compliance frameworks equivalent to AWS Config",
+    "Set up enterprise cost management and optimization strategies",
+    "Deploy security governance equivalent to AWS Security Hub + GuardDuty",
+    "Create disaster recovery and business continuity frameworks",
+    "Establish enterprise DevOps and automation governance",
+    "Implement data governance and sovereignty controls",
+    "Set up comprehensive monitoring and compliance reporting"
+  ],
+  "aws_context": {
+    "enterprise_services_mapping": {
+      "aws_organizations": "Azure Management Groups + Subscriptions",
+      "control_tower": "Azure Landing Zones + Blueprints",
+      "config": "Azure Policy + Resource Graph + Security Center",
+      "cloudtrail": "Azure Activity Log + Monitor + Sentinel",
+      "security_hub": "Azure Security Center + Defender for Cloud",
+      "guardduty": "Azure Defender + Sentinel",
+      "cost_explorer": "Azure Cost Management + Advisor",
+      "trusted_advisor": "Azure Advisor + Monitor + Security Center",
+      "systems_manager": "Azure Arc + Automation + Update Management",
+      "secrets_manager": "Azure Key Vault + Managed Identity"
+    }
+  },
+  "sections": [
+    {
+      "title": "Enterprise Governance Framework Architecture",
+      "content": "Comprehensive governance framework covering all aspects of enterprise Azure management.",
+      "governance_pillars": {
+        "identity_governance": {
+          "aws_approach": "AWS SSO + Cross-account roles + Organizations SCPs",
+          "azure_approach": "Azure AD + RBAC + Conditional Access + PIM",
+          "azure_advantages": [
+            "Unified identity across all Azure services",
+            "More granular conditional access policies",
+            "Built-in privileged identity management",
+            "Better integration with on-premises Active Directory"
+          ]
+        },
+        "resource_governance": {
+          "aws_approach": "Organizations OUs + SCPs + Config Rules",
+          "azure_approach": "Management Groups + Azure Policy + Resource Graph",
+          "azure_advantages": [
+            "More flexible policy inheritance model",
+            "Comprehensive policy effects (deny, audit, append, modify)",
+            "Better resource tagging and organization capabilities",
+            "Integrated compliance dashboard"
+          ]
+        },
+        "security_governance": {
+          "aws_approach": "Security Hub + Config + GuardDuty + CloudTrail",
+          "azure_approach": "Security Center + Defender + Sentinel + Activity Log",
+          "azure_advantages": [
+            "Integrated security management across all services",
+            "Advanced threat detection with AI/ML",
+            "Built-in compliance frameworks",
+            "Better incident response automation"
+          ]
+        },
+        "cost_governance": {
+          "aws_approach": "Cost Explorer + Budgets + Trusted Advisor",
+          "azure_approach": "Cost Management + Budgets + Advisor + Hybrid Benefit",
+          "azure_advantages": [
+            "More granular cost allocation capabilities",
+            "Better reservation management",
+            "Azure Hybrid Benefit for significant licensing savings",
+            "More sophisticated budget and alert configurations"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Comprehensive Policy Framework Implementation",
+      "content": "Implement enterprise-wide governance policies covering all major compliance requirements.",
+      "code_examples": {
+        "create_enterprise_policy_framework": {
+          "language": "bash",
+          "title": "Create Comprehensive Enterprise Policy Framework",
+          "code": "# Create resource group for enterprise governance\naz group create \\\n  --name enterprise-governance-rg \\\n  --location eastus\n\n# Create comprehensive tagging policy\ncat > enterprise-tagging-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"notIn\": [\n            \"Microsoft.Resources/resourceGroups\",\n            \"Microsoft.Resources/subscriptions\"\n          ]\n        },\n        {\n          \"anyOf\": [\n            {\n              \"field\": \"tags['Environment']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['CostCenter']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['Owner']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['Project']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['DataClassification']\",\n              \"exists\": \"false\"\n            }\n          ]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"parameters\": {},\n  \"metadata\": {\n    \"displayName\": \"Require Enterprise Resource Tags\",\n    \"description\": \"Enforces required tags on all resources for governance and cost allocation\",\n    \"category\": \"Enterprise Governance\"\n  }\n}\nEOF\n\n# Create security baseline policy\ncat > security-baseline-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"anyOf\": [\n        {\n          \"allOf\": [\n            {\n              \"field\": \"type\",\n              \"equals\": \"Microsoft.Storage/storageAccounts\"\n            },\n            {\n              \"anyOf\": [\n                {\n                  \"field\": \"Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly\",\n                  \"equals\": \"false\"\n                },\n                {\n                  \"field\": \"Microsoft.Storage/storageAccounts/minimumTlsVersion\",\n                  \"notEquals\": \"TLS1_2\"\n                }\n              ]\n            }\n          ]\n        },\n        {\n          \"allOf\": [\n            {\n              \"field\": \"type\",\n              \"equals\": \"Microsoft.Sql/servers\"\n            },\n            {\n              \"field\": \"Microsoft.Sql/servers/minimalTlsVersion\",\n              \"notEquals\": \"1.2\"\n            }\n          ]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Enterprise Security Baseline\",\n    \"description\": \"Enforces minimum security standards across all resources\",\n    \"category\": \"Security\"\n  }\n}\nEOF\n\n# Create policy definitions\naz policy definition create \\\n  --name enterprise-tagging-policy \\\n  --rules enterprise-tagging-policy.json\n\naz policy definition create \\\n  --name security-baseline-policy \\\n  --rules security-baseline-policy.json"
+        },
+        "create_compliance_initiatives": {
+          "language": "bash",
+          "title": "Create Compliance Policy Initiatives",
+          "code": "# Create SOC 2 compliance initiative\ncat > soc2-compliance-initiative.json << 'EOF'\n{\n  \"displayName\": \"SOC 2 Compliance Initiative\",\n  \"description\": \"Policies to ensure SOC 2 Type II compliance\",\n  \"metadata\": {\n    \"category\": \"Compliance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/404c3081-a854-4457-ae30-26a93ef643f9\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/subscriptions/$(az account show --query id -o tsv)/providers/Microsoft.Authorization/policyDefinitions/enterprise-tagging-policy\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/subscriptions/$(az account show --query id -o tsv)/providers/Microsoft.Authorization/policyDefinitions/security-baseline-policy\",\n      \"parameters\": {}\n    }\n  ]\n}\nEOF\n\n# Create ISO 27001 compliance initiative\ncat > iso27001-compliance-initiative.json << 'EOF'\n{\n  \"displayName\": \"ISO 27001 Compliance Initiative\",\n  \"description\": \"Policies to ensure ISO 27001 compliance\",\n  \"metadata\": {\n    \"category\": \"Compliance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/0a914e76-4921-4c19-b460-a2d36003525a\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/013e242c-8828-4970-87b3-ab247555486d\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/1e30110a-5ceb-460c-a204-c1c3969c6d62\",\n      \"parameters\": {}\n    }\n  ]\n}\nEOF\n\n# Create initiatives\naz policy set-definition create \\\n  --name soc2-compliance \\\n  --definitions soc2-compliance-initiative.json\n\naz policy set-definition create \\\n  --name iso27001-compliance \\\n  --definitions iso27001-compliance-initiative.json\n\n# Assign compliance initiatives at subscription level\naz policy assignment create \\\n  --name \"SOC 2 Compliance\" \\\n  --policy-set-definition soc2-compliance \\\n  --scope \"/subscriptions/$(az account show --query id -o tsv)\" \\\n  --display-name \"SOC 2 Compliance Assignment\"\n\naz policy assignment create \\\n  --name \"ISO 27001 Compliance\" \\\n  --policy-set-definition iso27001-compliance \\\n  --scope \"/subscriptions/$(az account show --query id -o tsv)\" \\\n  --display-name \"ISO 27001 Compliance Assignment\""
+        }
+      ]
+    },
+    {
+      "title": "Enterprise Security and Compliance Framework",
+      "content": "Implement comprehensive security governance equivalent to AWS Security Hub and GuardDuty.",
+      "code_examples": {
+        "deploy_security_center": {
+          "language": "bash",
+          "title": "Deploy Enterprise Security Framework",
+          "code": "# Enable Defender for Cloud (Security Center) for all resource types\necho \"Enabling Microsoft Defender for Cloud across all services...\"\n\n# Enable for Virtual Machines\naz security pricing create \\\n  --name VirtualMachines \\\n  --tier Standard\n\n# Enable for Storage Accounts\naz security pricing create \\\n  --name StorageAccounts \\\n  --tier Standard\n\n# Enable for SQL Servers\naz security pricing create \\\n  --name SqlServers \\\n  --tier Standard\n\n# Enable for App Services\naz security pricing create \\\n  --name AppServices \\\n  --tier Standard\n\n# Enable for Key Vaults\naz security pricing create \\\n  --name KeyVaults \\\n  --tier Standard\n\n# Enable for Kubernetes\naz security pricing create \\\n  --name KubernetesService \\\n  --tier Standard\n\n# Enable for Container Registries\naz security pricing create \\\n  --name ContainerRegistry \\\n  --tier Standard\n\n# Configure auto-provisioning of security agents\naz security auto-provisioning-setting update \\\n  --name default \\\n  --auto-provision On\n\n# Create Log Analytics workspace for security logging\naz monitor log-analytics workspace create \\\n  --resource-group enterprise-governance-rg \\\n  --workspace-name enterprise-security-workspace \\\n  --location eastus \\\n  --retention-time 90\n\nSECURITY_WORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group enterprise-governance-rg \\\n  --workspace-name enterprise-security-workspace \\\n  --query id -o tsv)\n\n# Configure Security Center to use the workspace\naz security workspace-setting create \\\n  --name default \\\n  --target-workspace $SECURITY_WORKSPACE_ID\n\necho \"Microsoft Defender for Cloud enabled across all services\""
+        },
+        "deploy_azure_sentinel": {
+          "language": "bash",
+          "title": "Deploy Azure Sentinel for SIEM Capabilities",
+          "code": "# Enable Sentinel on the security workspace\necho \"Enabling Azure Sentinel...\"\n\n# Create Sentinel workspace connection\ncat > sentinel-workspace.json << 'EOF'\n{\n  \"properties\": {\n    \"workspaceId\": \"WORKSPACE_ID\"\n  }\n}\nEOF\n\n# Replace workspace ID\nsed -i \"s/WORKSPACE_ID/$(az monitor log-analytics workspace show --resource-group enterprise-governance-rg --workspace-name enterprise-security-workspace --query customerId -o tsv)/g\" sentinel-workspace.json\n\n# Enable Sentinel (requires REST API call)\nSUBSCRIPTION_ID=$(az account show --query id -o tsv)\nACCESS_TOKEN=$(az account get-access-token --query accessToken -o tsv)\n\ncurl -X PUT \\\n  \"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/enterprise-governance-rg/providers/Microsoft.OperationalInsights/workspaces/enterprise-security-workspace/providers/Microsoft.SecurityInsights/onboardingStates/default?api-version=2021-03-01-preview\" \\\n  -H \"Authorization: Bearer $ACCESS_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d @sentinel-workspace.json\n\necho \"Azure Sentinel enabled\"\n\n# Install common data connectors\necho \"Configuring Azure Activity data connector...\"\n\n# Configure data connectors via Azure CLI (where supported)\naz sentinel data-connector create \\\n  --resource-group enterprise-governance-rg \\\n  --workspace-name enterprise-security-workspace \\\n  --name azure-activity-connector \\\n  --kind AzureActivityLog \\\n  --subscription-id $SUBSCRIPTION_ID || echo \"Data connector configuration available via Azure portal\"\n\necho \"Security framework deployment completed\""
+        }
+      ]
+    },
+    {
+      "title": "Enterprise Cost Management and Optimization",
+      "content": "Implement comprehensive cost governance equivalent to AWS Cost Explorer and Budgets.",
+      "code_examples": {
+        "setup_enterprise_cost_management": {
+          "language": "bash",
+          "title": "Setup Enterprise Cost Management Framework",
+          "code": "# Create comprehensive budget structure\necho \"Creating enterprise budget framework...\"\n\n# Create overall enterprise budget\naz consumption budget create \\\n  --budget-name \"Enterprise-Annual-Budget\" \\\n  --amount 120000 \\\n  --category Cost \\\n  --time-grain Annually \\\n  --time-period-start-date \"$(date -d 'first day of this year' +%Y-%m-%d)\" \\\n  --time-period-end-date \"$(date -d 'last day of this year' +%Y-%m-%d)\" \\\n  --notifications '[\n    {\n      \"enabled\": true,\n      \"operator\": \"GreaterThan\",\n      \"threshold\": 50,\n      \"contactEmails\": [\"cfo@company.com\", \"finance@company.com\"],\n      \"contactRoles\": [\"Owner\"],\n      \"thresholdType\": \"Percentage\"\n    },\n    {\n      \"enabled\": true,\n      \"operator\": \"GreaterThan\",\n      \"threshold\": 80,\n      \"contactEmails\": [\"cfo@company.com\", \"cto@company.com\"],\n      \"contactRoles\": [\"Owner\", \"Contributor\"],\n      \"thresholdType\": \"Percentage\"\n    },\n    {\n      \"enabled\": true,\n      \"operator\": \"GreaterThan\",\n      \"threshold\": 100,\n      \"contactEmails\": [\"cfo@company.com\", \"cto@company.com\", \"ceo@company.com\"],\n      \"contactRoles\": [\"Owner\"],\n      \"thresholdType\": \"Percentage\"\n    }\n  ]'\n\n# Create monthly department budgets\nfor dept in \"Development\" \"Production\" \"Shared-Services\"; do\n  echo \"Creating budget for $dept department...\"\n  az consumption budget create \\\n    --budget-name \"${dept}-Monthly-Budget\" \\\n    --amount 5000 \\\n    --category Cost \\\n    --time-grain Monthly \\\n    --time-period-start-date \"$(date -d 'first day of this month' +%Y-%m-%d)\" \\\n    --time-period-end-date \"$(date -d 'last day of this month' +%Y-%m-%d)\" \\\n    --filters '{\n      \"tags\": {\n        \"Department\": [\"'$dept'\"]\n      }\n    }' \\\n    --notifications '[\n      {\n        \"enabled\": true,\n        \"operator\": \"GreaterThan\",\n        \"threshold\": 80,\n        \"contactEmails\": [\"finance@company.com\", \"'$(echo $dept | tr '[:upper:]' '[:lower:]')'@company.com\"],\n        \"thresholdType\": \"Percentage\"\n      }\n    ]'\ndone\n\n# Create cost anomaly detection alert\necho \"Setting up cost anomaly detection...\"\ncat > cost-anomaly-alert.json << 'EOF'\n{\n  \"properties\": {\n    \"displayName\": \"Enterprise Cost Anomaly Detection\",\n    \"description\": \"Detect unusual spending patterns across the enterprise\",\n    \"enabled\": true,\n    \"source\": {\n      \"dataSourceId\": \"/subscriptions/SUBSCRIPTION_ID\",\n      \"queryType\": \"Usage\"\n    },\n    \"schedule\": {\n      \"frequencyInMinutes\": 360,\n      \"timeWindowInMinutes\": 1440\n    },\n    \"action\": {\n      \"actionGroupId\": \"/subscriptions/SUBSCRIPTION_ID/resourceGroups/enterprise-governance-rg/providers/microsoft.insights/actionGroups/enterprise-alerts\"\n    },\n    \"criteria\": {\n      \"allOf\": [\n        {\n          \"metricName\": \"UsageValue\",\n          \"operator\": \"GreaterThan\",\n          \"threshold\": 500,\n          \"timeAggregation\": \"Total\"\n        }\n      ]\n    }\n  }\n}\nEOF\n\nsed -i \"s/SUBSCRIPTION_ID/$(az account show --query id -o tsv)/g\" cost-anomaly-alert.json\necho \"Cost management framework configured\""
+        }
+      ]
+    },
+    {
+      "title": "Data Governance and Sovereignty",
+      "content": "Implement data governance controls equivalent to AWS data classification and sovereignty requirements.",
+      "code_examples": {
+        "implement_data_governance": {
+          "language": "bash",
+          "title": "Implement Enterprise Data Governance",
+          "code": "# Create data classification policy\ncat > data-classification-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"in\": [\n            \"Microsoft.Storage/storageAccounts\",\n            \"Microsoft.Sql/servers/databases\",\n            \"Microsoft.DocumentDB/databaseAccounts\",\n            \"Microsoft.DBforMySQL/servers\",\n            \"Microsoft.DBforPostgreSQL/servers\"\n          ]\n        },\n        {\n          \"field\": \"tags['DataClassification']\",\n          \"notIn\": [\"Public\", \"Internal\", \"Confidential\", \"Restricted\"]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Require Data Classification Tags\",\n    \"description\": \"All data stores must be classified according to data sensitivity\",\n    \"category\": \"Data Governance\"\n  }\n}\nEOF\n\n# Create data residency policy\ncat > data-residency-policy.json << 'EOF'\n{\n  \"mode\": \"Indexed\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"in\": [\n            \"Microsoft.Storage/storageAccounts\",\n            \"Microsoft.Sql/servers\",\n            \"Microsoft.DocumentDB/databaseAccounts\"\n          ]\n        },\n        {\n          \"field\": \"tags['DataResidency']\",\n          \"equals\": \"EU\"\n        },\n        {\n          \"not\": {\n            \"field\": \"location\",\n            \"in\": [\"westeurope\", \"northeurope\", \"francecentral\", \"germanywestcentral\"]\n          }\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"EU Data Residency Compliance\",\n    \"description\": \"Data marked for EU residency must be stored in EU regions\",\n    \"category\": \"Data Sovereignty\"\n  }\n}\nEOF\n\n# Create encryption policy\ncat > encryption-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"equals\": \"Microsoft.Storage/storageAccounts\"\n        },\n        {\n          \"anyOf\": [\n            {\n              \"field\": \"Microsoft.Storage/storageAccounts/encryption.services.blob.enabled\",\n              \"equals\": \"false\"\n            },\n            {\n              \"field\": \"Microsoft.Storage/storageAccounts/encryption.services.file.enabled\",\n              \"equals\": \"false\"\n            },\n            {\n              \"field\": \"Microsoft.Storage/storageAccounts/encryption.keySource\",\n              \"notEquals\": \"Microsoft.Keyvault\"\n            }\n          ]\n        },\n        {\n          \"field\": \"tags['DataClassification']\",\n          \"in\": [\"Confidential\", \"Restricted\"]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Customer-Managed Encryption for Sensitive Data\",\n    \"description\": \"Confidential and Restricted data must use customer-managed encryption keys\",\n    \"category\": \"Data Security\"\n  }\n}\nEOF\n\n# Create policy definitions\naz policy definition create \\\n  --name data-classification-policy \\\n  --rules data-classification-policy.json\n\naz policy definition create \\\n  --name data-residency-policy \\\n  --rules data-residency-policy.json\n\naz policy definition create \\\n  --name encryption-policy \\\n  --rules encryption-policy.json\n\necho \"Data governance policies created\""
+        }
+      ]
+    },
+    {
+      "title": "Disaster Recovery and Business Continuity",
+      "content": "Implement enterprise DR and BC frameworks equivalent to AWS disaster recovery strategies.",
+      "code_examples": {
+        "setup_disaster_recovery": {
+          "language": "bash",
+          "title": "Setup Enterprise Disaster Recovery Framework",
+          "code": "# Create Recovery Services Vault\naz backup vault create \\\n  --resource-group enterprise-governance-rg \\\n  --name enterprise-recovery-vault \\\n  --location eastus \\\n  --storage-model-type GeoRedundant\n\n# Create Site Recovery Vault\naz backup vault create \\\n  --resource-group enterprise-governance-rg \\\n  --name enterprise-site-recovery-vault \\\n  --location westus2 \\\n  --storage-model-type GeoRedundant\n\n# Create backup policy for VMs\ncat > vm-backup-policy.json << 'EOF'\n{\n  \"properties\": {\n    \"backupManagementType\": \"AzureIaasVM\",\n    \"schedulePolicy\": {\n      \"schedulePolicyType\": \"SimpleSchedulePolicy\",\n      \"scheduleRunFrequency\": \"Daily\",\n      \"scheduleRunTimes\": [\"2023-01-01T02:00:00.000Z\"],\n      \"scheduleWeeklyFrequency\": 0\n    },\n    \"retentionPolicy\": {\n      \"retentionPolicyType\": \"LongTermRetentionPolicy\",\n      \"dailySchedule\": {\n        \"retentionTimes\": [\"2023-01-01T02:00:00.000Z\"],\n        \"retentionDuration\": {\n          \"count\": 30,\n          \"durationType\": \"Days\"\n        }\n      },\n      \"weeklySchedule\": {\n        \"daysOfTheWeek\": [\"Sunday\"],\n        \"retentionTimes\": [\"2023-01-01T02:00:00.000Z\"],\n        \"retentionDuration\": {\n          \"count\": 12,\n          \"durationType\": \"Weeks\"\n        }\n      },\n      \"monthlySchedule\": {\n        \"retentionScheduleFormatType\": \"Weekly\",\n        \"retentionScheduleWeekly\": {\n          \"daysOfTheWeek\": [\"Sunday\"],\n          \"weeksOfTheMonth\": [\"First\"]\n        },\n        \"retentionTimes\": [\"2023-01-01T02:00:00.000Z\"],\n        \"retentionDuration\": {\n          \"count\": 12,\n          \"durationType\": \"Months\"\n        }\n      },\n      \"yearlySchedule\": {\n        \"retentionScheduleFormatType\": \"Weekly\",\n        \"monthsOfYear\": [\"January\"],\n        \"retentionScheduleWeekly\": {\n          \"daysOfTheWeek\": [\"Sunday\"],\n          \"weeksOfTheMonth\": [\"First\"]\n        },\n        \"retentionTimes\": [\"2023-01-01T02:00:00.000Z\"],\n        \"retentionDuration\": {\n          \"count\": 7,\n          \"durationType\": \"Years\"\n        }\n      }\n    },\n    \"timeZone\": \"UTC\"\n  }\n}\nEOF\n\n# Create DR runbook\ncat > dr-runbook.ps1 << 'EOF'\n# Enterprise Disaster Recovery Runbook\n# This runbook orchestrates failover procedures\n\nparam(\n    [Parameter(Mandatory=$true)]\n    [string]$DisasterType,\n    \n    [Parameter(Mandatory=$true)]\n    [string]$AffectedRegion,\n    \n    [Parameter(Mandatory=$true)]\n    [string]$TargetRegion\n)\n\nWrite-Output \"Starting disaster recovery procedure...\"\nWrite-Output \"Disaster Type: $DisasterType\"\nWrite-Output \"Affected Region: $AffectedRegion\"\nWrite-Output \"Target Region: $TargetRegion\"\n\n# Step 1: Assess affected resources\n$AffectedResources = Get-AzResource -ResourceGroupName \"*\" | Where-Object {$_.Location -eq $AffectedRegion}\nWrite-Output \"Found $($AffectedResources.Count) resources in affected region\"\n\n# Step 2: Initiate failover procedures\nforeach ($Resource in $AffectedResources) {\n    switch ($Resource.ResourceType) {\n        \"Microsoft.Compute/virtualMachines\" {\n            Write-Output \"Initiating VM failover for $($Resource.Name)\"\n            # VM-specific failover logic\n        }\n        \"Microsoft.Sql/servers/databases\" {\n            Write-Output \"Initiating database failover for $($Resource.Name)\"\n            # Database failover logic\n        }\n        \"Microsoft.Storage/storageAccounts\" {\n            Write-Output \"Checking storage replication for $($Resource.Name)\"\n            # Storage failover verification\n        }\n    }\n}\n\n# Step 3: Update DNS and traffic routing\nWrite-Output \"Updating traffic routing to $TargetRegion\"\n\n# Step 4: Verify application functionality\nWrite-Output \"Disaster recovery procedure completed\"\nEOF\n\necho \"Disaster recovery framework configured\""
+        }
+      ]
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Deploy complete enterprise governance framework for large-scale Azure environment",
+    "requirements": [
+      "Implement comprehensive policy framework with compliance initiatives",
+      "Deploy enterprise security and compliance monitoring",
+      "Set up advanced cost management and optimization",
+      "Configure data governance and sovereignty controls",
+      "Establish disaster recovery and business continuity",
+      "Create compliance reporting and monitoring dashboards",
+      "Set up automated remediation for policy violations"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify policy definitions creation",
+        "command": "az policy definition list --custom --query 'length(@)'",
+        "expected": "Should return count of custom policy definitions created"
+      },
+      {
+        "step": "Check compliance initiatives",
+        "command": "az policy set-definition list --query '[?displayName==`SOC 2 Compliance Initiative`].name'",
+        "expected": "Should return SOC 2 compliance initiative"
+      },
+      {
+        "step": "Verify Security Center enablement",
+        "command": "az security pricing list --query '[?name==`VirtualMachines`].pricingTier'",
+        "expected": "Should return 'Standard' for all enabled services"
+      },
+      {
+        "step": "Check budget configuration",
+        "command": "az consumption budget list --query 'length(@)'",
+        "expected": "Should return count of configured budgets"
+      },
+      {
+        "step": "Verify backup vault creation",
+        "command": "az backup vault list --resource-group enterprise-governance-rg --query 'length(@)'",
+        "expected": "Should return count of backup vaults created"
+      }
+    ]
+  },
+  "enterprise_governance_maturity_model": {
+    "level_1_basic": {
+      "characteristics": [
+        "Basic tagging and organization",
+        "Simple RBAC implementation",
+        "Basic security monitoring",
+        "Manual cost tracking"
+      ],
+      "aws_equivalent": "Basic AWS Organizations setup",
+      "timeframe": "1-3 months"
+    },
+    "level_2_managed": {
+      "characteristics": [
+        "Comprehensive policy framework",
+        "Automated compliance monitoring",
+        "Cost allocation and budgeting",
+        "Security baseline implementation"
+      ],
+      "aws_equivalent": "AWS Control Tower with basic customization",
+      "timeframe": "3-6 months"
+    },
+    "level_3_optimized": {
+      "characteristics": [
+        "Advanced automation and remediation",
+        "Predictive cost optimization",
+        "Comprehensive security governance",
+        "Data classification and sovereignty"
+      ],
+      "aws_equivalent": "Advanced AWS Control Tower with custom SCPs",
+      "timeframe": "6-12 months"
+    },
+    "level_4_innovative": {
+      "characteristics": [
+        "AI-driven governance and optimization",
+        "Self-healing infrastructure",
+        "Proactive threat detection",
+        "Advanced analytics and insights"
+      ],
+      "aws_equivalent": "Custom enterprise governance with ML/AI",
+      "timeframe": "12-24 months"
+    }
+  },
+  "compliance_framework_mapping": {
+    "sox_compliance": {
+      "key_controls": [
+        "Change management through Azure Policy",
+        "Access controls through Azure AD and RBAC",
+        "Audit logging through Activity Log and Monitor",
+        "Data retention through backup policies"
+      ],
+      "azure_services": ["Policy", "Monitor", "Backup", "Key Vault"]
+    },
+    "pci_dss": {
+      "key_controls": [
+        "Network segmentation through NSGs",
+        "Encryption through Key Vault and TDE",
+        "Access monitoring through Sentinel",
+        "Vulnerability management through Security Center"
+      ],
+      "azure_services": ["Security Center", "Key Vault", "Sentinel", "Policy"]
+    },
+    "hipaa": {
+      "key_controls": [
+        "Data encryption at rest and in transit",
+        "Access controls and audit logging",
+        "Business associate agreements",
+        "Breach notification procedures"
+      ],
+      "azure_services": ["Key Vault", "Monitor", "Policy", "Sentinel"]
+    },
+    "gdpr": {
+      "key_controls": [
+        "Data residency and sovereignty",
+        "Right to be forgotten implementation",
+        "Consent management",
+        "Breach notification within 72 hours"
+      ],
+      "azure_services": ["Policy", "Monitor", "Key Vault", "Purview"]
+    }
+  },
+  "migration_success_metrics": {
+    "governance_metrics": {
+      "policy_compliance": ">95% compliance across all policies",
+      "automation_coverage": ">80% of governance tasks automated",
+      "mean_time_to_remediation": "<4 hours for critical issues",
+      "cost_variance": "<5% variance from budget"
+    },
+    "security_metrics": {
+      "security_score": ">90% Azure Security Center score",
+      "vulnerability_remediation": "<48 hours for critical vulnerabilities",
+      "incident_response_time": "<1 hour for security incidents",
+      "compliance_coverage": "100% for required frameworks"
+    },
+    "operational_metrics": {
+      "availability_sla": ">99.9% uptime for critical services",
+      "backup_success_rate": ">99% successful backups",
+      "disaster_recovery_rto": "<4 hours recovery time objective",
+      "automation_success_rate": ">95% successful automated tasks"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove enterprise governance resources in proper order",
+    "commands": [
+      "# Remove policy assignments first",
+      "az policy assignment delete --name 'SOC 2 Compliance'",
+      "az policy assignment delete --name 'ISO 27001 Compliance'",
+      "# Remove budgets",
+      "az consumption budget delete --budget-name 'Enterprise-Annual-Budget'",
+      "az consumption budget delete --budget-name 'Development-Monthly-Budget'",
+      "# Disable Security Center",
+      "az security pricing update --name VirtualMachines --tier Free",
+      "az security pricing update --name StorageAccounts --tier Free",
+      "# Remove backup vaults",
+      "az backup vault delete --resource-group enterprise-governance-rg --name enterprise-recovery-vault --yes",
+      "# Remove resource group",
+      "az group delete --name enterprise-governance-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure provides more comprehensive enterprise governance than AWS Organizations",
+    "Azure Policy offers more flexible and powerful governance capabilities than AWS SCPs",
+    "Microsoft Defender for Cloud integrates security better than AWS Security Hub",
+    "Azure Cost Management provides superior cost allocation and optimization",
+    "Azure compliance frameworks are more comprehensive and easier to implement",
+    "Azure governance automation capabilities exceed AWS Control Tower",
+    "Data sovereignty and residency controls are more granular in Azure"
+  ],
+  "next_steps": [
+    "Learn about Azure Purview for comprehensive data governance",
+    "Explore Azure Lighthouse for multi-tenant governance scenarios",
+    "Study Azure Resource Manager templates and Bicep for infrastructure governance",
+    "Practice with Azure DevOps for governance automation and CI/CD",
+    "Learn about Azure Arc for hybrid and multi-cloud governance"
+  ]
+}

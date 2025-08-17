@@ -1,0 +1,1928 @@
+{
+  "labs": [
+    {
+      "id": "saa-c03-resilient-architectures-lab",
+      "title": "AWS Resilient Architectures to Azure: Multi-AZ, Auto Scaling, and Disaster Recovery",
+      "category": "resilient-architecture",
+      "difficulty": "advanced",
+      "estimatedTime": "180 minutes",
+      "awsCertification": "SAA-C03",
+      "certificationWeight": "26% - Design Resilient Architectures Domain",
+      "description": "Master resilient architecture design by implementing AWS multi-AZ deployments, auto scaling, and disaster recovery patterns, then migrating to Azure availability zones, scale sets, and site recovery solutions with enterprise-grade resilience.",
+      "aws_services": ["EC2 Auto Scaling", "RDS Multi-AZ", "Application Load Balancer", "Route 53", "S3 Cross-Region Replication", "AWS Backup", "ElastiCache Multi-AZ", "EFS", "CloudFormation", "CloudWatch"],
+      "azure_services": ["Virtual Machine Scale Sets", "Azure SQL Database", "Application Gateway", "Traffic Manager", "Storage Account GRS", "Azure Backup", "Azure Cache for Redis", "Azure Files", "ARM Templates", "Azure Monitor"],
+      "tags": ["resilient-architecture", "high-availability", "disaster-recovery", "auto-scaling", "saa-c03", "saa-c03-critical", "advanced"],
+      "file_path": "content/labs/saa-c03-resilient-architectures-lab.json"
+    },
+    {
+      "id": "saa-c03-cost-optimized-architectures-lab",
+      "title": "AWS Cost-Optimized Architectures to Azure: Reserved Capacity, Spot Instances, and FinOps",
+      "category": "cost-optimization",
+      "difficulty": "advanced",
+      "estimatedTime": "160 minutes",
+      "awsCertification": "SAA-C03",
+      "certificationWeight": "20% - Design Cost-Optimized Architectures Domain",
+      "description": "Master cost-optimized architecture design by implementing AWS cost optimization strategies including reserved instances, spot instances, and right-sizing, then migrating to Azure with reserved VMs, spot VMs, and comprehensive FinOps practices.",
+      "aws_services": ["EC2 Reserved Instances", "EC2 Spot Instances", "Savings Plans", "S3 Storage Classes", "CloudWatch", "Cost Explorer", "AWS Budgets", "Trusted Advisor", "Lambda", "RDS Reserved Instances"],
+      "azure_services": ["Reserved VM Instances", "Azure Spot VMs", "Azure Reservations", "Storage Account Tiers", "Azure Monitor", "Cost Management", "Azure Budgets", "Azure Advisor", "Azure Functions", "Reserved Capacity"],
+      "tags": ["cost-optimization", "finops", "reserved-instances", "spot-instances", "saa-c03", "saa-c03-critical", "advanced"],
+      "file_path": "content/labs/saa-c03-cost-optimized-architectures-lab.json"
+    },
+    {
+      "id": "dop-c02-sdlc-automation-lab",
+      "title": "AWS DevOps SDLC Automation to Azure DevOps: CI/CD Pipelines, Testing, and Quality Gates",
+      "category": "sdlc-automation",
+      "difficulty": "expert",
+      "estimatedTime": "220 minutes",
+      "awsCertification": "DOP-C02",
+      "certificationWeight": "22% - SDLC Automation Domain",
+      "description": "Master SDLC automation by implementing comprehensive AWS CI/CD pipelines with CodePipeline, CodeBuild, and CodeDeploy, then migrating to Azure DevOps with Azure Pipelines, automated testing, security scanning, and quality gates for enterprise-grade software delivery.",
+      "aws_services": ["CodePipeline", "CodeBuild", "CodeDeploy", "CodeCommit", "CodeGuru", "CodeArtifact", "ECR", "Lambda", "CloudFormation", "Systems Manager", "X-Ray", "CloudWatch"],
+      "azure_services": ["Azure DevOps", "Azure Pipelines", "Azure Repos", "Azure Artifacts", "Azure Container Registry", "Azure Functions", "ARM Templates", "Azure Automation", "Application Insights", "Azure Monitor", "Azure Test Plans"],
+      "tags": ["sdlc-automation", "cicd", "devops", "testing", "quality-gates", "dop-c02", "dop-c02-critical", "expert"],
+      "file_path": "content/labs/dop-c02-sdlc-automation-lab.json"
+    },
+    {
+      "id": "dop-c02-configuration-management-iac-lab",
+      "title": "AWS Configuration Management & IaC to Azure: CloudFormation, CDK, and Advanced Infrastructure Automation",
+      "category": "infrastructure-automation",
+      "difficulty": "expert",
+      "estimatedTime": "200 minutes",
+      "awsCertification": "DOP-C02",
+      "certificationWeight": "17% - Configuration Management and Infrastructure as Code Domain",
+      "description": "Master configuration management and Infrastructure as Code by implementing advanced AWS CloudFormation, CDK, and configuration automation patterns, then migrating to Azure with ARM Templates, Bicep, Terraform, and comprehensive configuration management solutions.",
+      "aws_services": ["CloudFormation", "AWS CDK", "Systems Manager", "Config", "OpsWorks", "Parameter Store", "Secrets Manager", "Service Catalog", "Organizations", "CloudTrail", "Lambda"],
+      "azure_services": ["ARM Templates", "Bicep", "Terraform", "Azure Automation", "Azure Policy", "Azure Blueprints", "Key Vault", "Azure Arc", "Management Groups", "Activity Log", "Azure Functions"],
+      "tags": ["infrastructure-as-code", "configuration-management", "cloudformation", "arm-templates", "bicep", "dop-c02", "dop-c02-critical", "expert"],
+      "file_path": "content/labs/dop-c02-configuration-management-iac-lab.json"
+    },
+    {
+      "id": "dbs-c01-workload-specific-database-design-lab",
+      "title": "AWS Database Design to Azure Database Architecture: Workload-Specific Database Solutions and Design Patterns",
+      "category": "database-design",
+      "difficulty": "expert",
+      "estimatedTime": "180 minutes",
+      "awsCertification": "DBS-C01",
+      "certificationWeight": "26% - Workload-Specific Database Design Domain",
+      "description": "Master workload-specific database design by implementing comprehensive AWS database solutions and migrating to Azure database equivalents with advanced design patterns, performance optimization, and enterprise-grade database architecture for diverse workloads.",
+      "aws_services": ["Amazon RDS", "Amazon Aurora", "Amazon DynamoDB", "Amazon DocumentDB", "Amazon Neptune", "Amazon Redshift"],
+      "azure_services": ["Azure SQL Database", "Azure Database for PostgreSQL", "Azure Cosmos DB", "Azure Database for MongoDB", "Azure SQL Managed Instance", "Azure Synapse Analytics"],
+      "tags": ["database-design", "workload-optimization", "database-architecture", "performance-tuning", "dbs-c01", "dbs-c01-specialty", "expert"],
+      "file_path": "content/labs/dbs-c01-workload-specific-database-design-lab.json"
+    },
+    {
+      "id": "dbs-c01-deployment-migration-lab",
+      "title": "AWS Database Migration to Azure Migration Services: Advanced Deployment and Database Migration Strategies",
+      "category": "database-migration",
+      "difficulty": "expert",
+      "estimatedTime": "160 minutes",
+      "awsCertification": "DBS-C01",
+      "certificationWeight": "20% - Deployment and Migration Domain",
+      "description": "Master database deployment and migration by implementing comprehensive AWS database migration solutions and migrating to Azure database services with advanced migration strategies, automation frameworks, and enterprise-grade migration validation.",
+      "aws_services": ["AWS Database Migration Service", "AWS Schema Conversion Tool", "AWS CloudFormation", "AWS DataSync", "Amazon S3", "AWS Lambda"],
+      "azure_services": ["Azure Database Migration Service", "Azure Data Migration Assistant", "Azure Resource Manager", "Azure Data Factory", "Azure Blob Storage", "Azure Functions"],
+      "tags": ["database-migration", "deployment-automation", "migration-strategies", "data-validation", "dbs-c01", "dbs-c01-specialty", "expert"],
+      "file_path": "content/labs/dbs-c01-deployment-migration-lab.json"
+    },
+    {
+      "id": "dbs-c01-management-operations-lab",
+      "title": "AWS Database Management to Azure Database Operations: Advanced Database Administration and Operational Excellence",
+      "category": "database-operations",
+      "difficulty": "expert",
+      "estimatedTime": "150 minutes",
+      "awsCertification": "DBS-C01",
+      "certificationWeight": "18% - Management and Operations Domain",
+      "description": "Master database management and operations by implementing comprehensive AWS database administration and migrating to Azure database operations with advanced maintenance automation, backup strategies, and enterprise-grade operational excellence.",
+      "aws_services": ["Amazon RDS", "Amazon Aurora", "Amazon DynamoDB", "AWS Backup", "AWS Systems Manager", "Amazon CloudWatch"],
+      "azure_services": ["Azure SQL Database", "Azure Database for PostgreSQL", "Azure Cosmos DB", "Azure Backup", "Azure Automation", "Azure Monitor"],
+      "tags": ["database-operations", "maintenance-automation", "backup-recovery", "operational-excellence", "dbs-c01", "dbs-c01-specialty", "expert"],
+      "file_path": "content/labs/dbs-c01-management-operations-lab.json"
+    },
+    {
+      "id": "dbs-c01-monitoring-troubleshooting-lab",
+      "title": "AWS Database Monitoring to Azure Database Analytics: Advanced Performance Monitoring and Troubleshooting",
+      "category": "database-monitoring",
+      "difficulty": "expert",
+      "estimatedTime": "140 minutes",
+      "awsCertification": "DBS-C01",
+      "certificationWeight": "18% - Monitoring and Troubleshooting Domain",
+      "description": "Master database monitoring and troubleshooting by implementing comprehensive AWS database performance monitoring and migrating to Azure database analytics with advanced troubleshooting frameworks, performance optimization, and enterprise-grade database observability.",
+      "aws_services": ["Amazon CloudWatch", "AWS Performance Insights", "Amazon CloudWatch Logs", "AWS X-Ray", "Amazon SNS", "AWS Lambda"],
+      "azure_services": ["Azure Monitor", "Azure SQL Analytics", "Azure Monitor Logs", "Azure Application Insights", "Azure Action Groups", "Azure Functions"],
+      "tags": ["database-monitoring", "performance-optimization", "troubleshooting", "observability", "dbs-c01", "dbs-c01-specialty", "expert"],
+      "file_path": "content/labs/dbs-c01-monitoring-troubleshooting-lab.json"
+    },
+    {
+      "id": "dbs-c01-database-security-lab",
+      "title": "AWS Database Security to Azure Database Protection: Advanced Database Security and Compliance Management",
+      "category": "database-security",
+      "difficulty": "expert",
+      "estimatedTime": "130 minutes",
+      "awsCertification": "DBS-C01",
+      "certificationWeight": "18% - Database Security Domain",
+      "description": "Master database security by implementing comprehensive AWS database protection and migrating to Azure database security with advanced encryption, access control, compliance automation, and enterprise-grade database security governance.",
+      "aws_services": ["AWS KMS", "AWS IAM", "Amazon RDS", "Amazon Aurora", "AWS Secrets Manager", "AWS CloudTrail"],
+      "azure_services": ["Azure Key Vault", "Azure Active Directory", "Azure SQL Database", "Azure Database for PostgreSQL", "Azure Key Vault HSM", "Azure Activity Log"],
+      "tags": ["database-security", "encryption", "access-control", "compliance-automation", "dbs-c01", "dbs-c01-specialty", "expert"],
+      "file_path": "content/labs/dbs-c01-database-security-lab.json"
+    },
+    {
+      "id": "scs-c02-infrastructure-security-lab",
+      "title": "AWS Infrastructure Security to Azure Infrastructure Protection: Comprehensive Network and Compute Security",
+      "category": "infrastructure-security",
+      "difficulty": "expert",
+      "estimatedTime": "160 minutes",
+      "awsCertification": "SCS-C02",
+      "certificationWeight": "20% - Infrastructure Security Domain",
+      "description": "Master enterprise infrastructure security by implementing comprehensive AWS network, compute, and infrastructure protection, then migrating to Azure security equivalents with advanced threat protection, network security, and infrastructure hardening for enterprise environments.",
+      "aws_services": ["Amazon VPC", "AWS Security Groups", "AWS Network ACLs", "AWS WAF", "AWS Shield", "AWS Network Firewall"],
+      "azure_services": ["Azure Virtual Network", "Network Security Groups", "Azure Application Security Groups", "Azure Web Application Firewall", "Azure DDoS Protection", "Azure Firewall"],
+      "tags": ["infrastructure-security", "network-security", "compute-security", "threat-protection", "scs-c02", "scs-c02-specialty", "expert"],
+      "file_path": "content/labs/scs-c02-infrastructure-security-lab.json"
+    },
+    {
+      "id": "scs-c02-security-logging-monitoring-lab",
+      "title": "AWS Security Logging to Azure Security Monitoring: Advanced Security Analytics and SIEM Integration",
+      "category": "security-monitoring",
+      "difficulty": "expert",
+      "estimatedTime": "150 minutes",
+      "awsCertification": "SCS-C02",
+      "certificationWeight": "18% - Security Logging & Monitoring Domain",
+      "description": "Master enterprise security logging and monitoring by implementing comprehensive AWS security analytics and SIEM solutions, then migrating to Azure security monitoring equivalents with advanced threat detection, security analytics, and enterprise-grade security operations centers.",
+      "aws_services": ["AWS CloudTrail", "Amazon CloudWatch Logs", "AWS Config", "Amazon GuardDuty", "AWS Security Hub", "Amazon Macie"],
+      "azure_services": ["Azure Activity Log", "Azure Monitor Logs", "Azure Policy", "Microsoft Defender for Cloud", "Azure Security Center", "Microsoft Purview"],
+      "tags": ["security-monitoring", "security-analytics", "siem-integration", "threat-detection", "scs-c02", "scs-c02-specialty", "expert"],
+      "file_path": "content/labs/scs-c02-security-logging-monitoring-lab.json"
+    },
+    {
+      "id": "scs-c02-data-protection-lab",
+      "title": "AWS Data Protection to Azure Data Security: Advanced Encryption and Data Privacy Management",
+      "category": "data-protection",
+      "difficulty": "expert",
+      "estimatedTime": "145 minutes",
+      "awsCertification": "SCS-C02",
+      "certificationWeight": "18% - Data Protection Domain",
+      "description": "Master enterprise data protection by implementing comprehensive AWS encryption and data security solutions, then migrating to Azure data protection equivalents with advanced encryption management, data privacy controls, and enterprise-grade data loss prevention.",
+      "aws_services": ["AWS KMS", "AWS CloudHSM", "Amazon Macie", "AWS Secrets Manager", "AWS Certificate Manager", "Amazon S3"],
+      "azure_services": ["Azure Key Vault", "Azure Dedicated HSM", "Microsoft Purview", "Azure Key Vault HSM", "Azure Certificate Service", "Azure Storage"],
+      "tags": ["data-protection", "encryption", "data-privacy", "key-management", "scs-c02", "scs-c02-specialty", "expert"],
+      "file_path": "content/labs/scs-c02-data-protection-lab.json"
+    },
+    {
+      "id": "scs-c02-identity-access-management-lab",
+      "title": "AWS IAM to Azure AD: Advanced Identity Management and Zero-Trust Access Control",
+      "category": "identity-access-management",
+      "difficulty": "expert",
+      "estimatedTime": "140 minutes",
+      "awsCertification": "SCS-C02",
+      "certificationWeight": "16% - Identity & Access Management Domain",
+      "description": "Master enterprise identity and access management by implementing comprehensive AWS IAM and access control solutions, then migrating to Azure Active Directory equivalents with zero-trust architecture, advanced authentication, and enterprise-grade identity governance.",
+      "aws_services": ["AWS IAM", "AWS Organizations", "AWS SSO", "AWS Cognito", "AWS Directory Service", "AWS Secrets Manager"],
+      "azure_services": ["Azure Active Directory", "Azure Management Groups", "Azure AD Connect", "Azure AD B2C", "Azure AD Domain Services", "Azure Key Vault"],
+      "tags": ["identity-management", "access-control", "zero-trust", "authentication", "scs-c02", "scs-c02-specialty", "expert"],
+      "file_path": "content/labs/scs-c02-identity-access-management-lab.json"
+    },
+    {
+      "id": "scs-c02-threat-detection-incident-response-lab",
+      "title": "AWS Threat Detection to Azure Security Response: Advanced Threat Hunting and Incident Management",
+      "category": "threat-detection-response",
+      "difficulty": "expert",
+      "estimatedTime": "135 minutes",
+      "awsCertification": "SCS-C02",
+      "certificationWeight": "14% - Threat Detection & Incident Response Domain",
+      "description": "Master enterprise threat detection and incident response by implementing comprehensive AWS threat hunting and security response solutions, then migrating to Azure security response equivalents with advanced threat intelligence, automated response, and enterprise-grade security operations.",
+      "aws_services": ["Amazon GuardDuty", "AWS Security Hub", "Amazon Detective", "AWS Config", "AWS CloudTrail", "Amazon Macie"],
+      "azure_services": ["Microsoft Defender for Cloud", "Azure Security Center", "Azure Sentinel", "Azure Policy", "Azure Activity Log", "Microsoft Purview"],
+      "tags": ["threat-detection", "incident-response", "threat-hunting", "security-operations", "scs-c02", "scs-c02-specialty", "expert"],
+      "file_path": "content/labs/scs-c02-threat-detection-incident-response-lab.json"
+    },
+    {
+      "id": "scs-c02-governance-security-management-lab",
+      "title": "AWS Security Governance to Azure Security Management: Enterprise Security Strategy and Compliance Automation",
+      "category": "security-governance",
+      "difficulty": "expert",
+      "estimatedTime": "130 minutes",
+      "awsCertification": "SCS-C02",
+      "certificationWeight": "14% - Governance & Security Management Domain",
+      "description": "Master enterprise security governance and management by implementing comprehensive AWS security strategy and compliance frameworks, then migrating to Azure security management equivalents with advanced governance automation, risk management, and enterprise-grade security operations.",
+      "aws_services": ["AWS Organizations", "AWS Config", "AWS CloudFormation", "AWS Systems Manager", "AWS Security Hub", "AWS CloudTrail"],
+      "azure_services": ["Azure Management Groups", "Azure Policy", "Azure Resource Manager", "Azure Automation", "Azure Security Center", "Azure Activity Log"],
+      "tags": ["security-governance", "compliance-automation", "risk-management", "security-strategy", "scs-c02", "scs-c02-specialty", "expert"],
+      "file_path": "content/labs/scs-c02-governance-security-management-lab.json"
+    },
+    {
+      "id": "ans-c01-network-design-lab",
+      "title": "AWS Advanced Networking to Azure Networking: Enterprise Network Design and Architecture",
+      "category": "advanced-networking",
+      "difficulty": "expert",
+      "estimatedTime": "180 minutes",
+      "awsCertification": "ANS-C01",
+      "certificationWeight": "30% - Network Design Domain",
+      "description": "Master advanced network design by implementing enterprise-grade network architectures with AWS advanced networking services and migrating to Azure networking equivalents with global connectivity, hybrid networking, and multi-region designs.",
+      "aws_services": ["AWS Transit Gateway", "AWS Direct Connect", "AWS PrivateLink", "Amazon VPC", "AWS Site-to-Site VPN"],
+      "azure_services": ["Azure Virtual WAN", "Azure ExpressRoute", "Azure Private Link", "Azure Virtual Network", "Azure VPN Gateway"],
+      "tags": ["advanced-networking", "network-design", "enterprise-architecture", "hybrid-connectivity", "ans-c01", "ans-c01-specialty", "expert"],
+      "file_path": "content/labs/ans-c01-network-design-lab.json"
+    },
+    {
+      "id": "ans-c01-network-implementation-lab",
+      "title": "AWS Network Implementation to Azure Network Deployment: Advanced Configuration and Automation",
+      "category": "network-implementation",
+      "difficulty": "expert",
+      "estimatedTime": "160 minutes",
+      "awsCertification": "ANS-C01",
+      "certificationWeight": "26% - Network Implementation Domain",
+      "description": "Master advanced network implementation by deploying complex network configurations with AWS networking services and migrating to Azure equivalents with automation, infrastructure as code, and advanced routing protocols.",
+      "aws_services": ["AWS CloudFormation", "AWS Transit Gateway", "AWS Direct Connect Gateway", "AWS VPC Peering", "AWS PrivateLink"],
+      "azure_services": ["Azure Resource Manager", "Azure Virtual WAN", "Azure ExpressRoute Gateway", "Azure VNet Peering", "Azure Private Link"],
+      "tags": ["network-implementation", "network-automation", "infrastructure-as-code", "routing-protocols", "ans-c01", "ans-c01-specialty", "expert"],
+      "file_path": "content/labs/ans-c01-network-implementation-lab.json"
+    },
+    {
+      "id": "ans-c01-network-management-operations-lab",
+      "title": "AWS Network Operations to Azure Network Management: Monitoring, Troubleshooting, and Optimization",
+      "category": "network-operations",
+      "difficulty": "expert",
+      "estimatedTime": "120 minutes",
+      "awsCertification": "ANS-C01",
+      "certificationWeight": "20% - Network Management & Operations Domain",
+      "description": "Master advanced network operations by implementing comprehensive network monitoring, troubleshooting, and optimization with AWS network management services and migrating to Azure equivalents with automated operations, performance optimization, and intelligent network management.",
+      "aws_services": ["Amazon CloudWatch", "AWS X-Ray", "AWS VPC Flow Logs", "AWS Transit Gateway Network Manager", "AWS Network Insights"],
+      "azure_services": ["Azure Monitor", "Azure Network Watcher", "NSG Flow Logs", "Azure Virtual WAN Insights", "Azure Traffic Analytics"],
+      "tags": ["network-operations", "network-monitoring", "troubleshooting", "performance-optimization", "ans-c01", "ans-c01-specialty", "expert"],
+      "file_path": "content/labs/ans-c01-network-management-operations-lab.json"
+    },
+    {
+      "id": "ans-c01-network-security-compliance-governance-lab",
+      "title": "AWS Network Security to Azure Network Governance: Advanced Security, Compliance, and Governance",
+      "category": "network-security-governance",
+      "difficulty": "expert",
+      "estimatedTime": "140 minutes",
+      "awsCertification": "ANS-C01",
+      "certificationWeight": "24% - Network Security, Compliance & Governance Domain",
+      "description": "Master advanced network security by implementing comprehensive network protection, compliance frameworks, and governance with AWS security services and migrating to Azure equivalents with zero-trust networking, advanced threat protection, and automated compliance.",
+      "aws_services": ["AWS Network Firewall", "AWS WAF", "AWS Shield Advanced", "Amazon GuardDuty", "AWS Security Hub"],
+      "azure_services": ["Azure Firewall", "Azure WAF", "Azure DDoS Protection", "Microsoft Defender for Cloud", "Azure Security Center"],
+      "tags": ["network-security", "zero-trust", "compliance", "governance", "threat-protection", "ans-c01", "ans-c01-specialty", "expert"],
+      "file_path": "content/labs/ans-c01-network-security-compliance-governance-lab.json"
+    },
+    {
+      "id": "mls-c01-data-engineering-lab",
+      "title": "AWS ML Data Engineering to Azure ML Data Science: Advanced Data Preparation and Feature Engineering",
+      "category": "ml-data-science",
+      "difficulty": "expert",
+      "estimatedTime": "120 minutes",
+      "awsCertification": "MLS-C01",
+      "certificationWeight": "20% - Data Engineering Domain",
+      "description": "Master advanced machine learning data engineering by implementing sophisticated data preparation, feature engineering, and data pipeline optimization with AWS ML services and migrating to Azure ML equivalents with enterprise-scale data processing and advanced analytics.",
+      "aws_services": ["Amazon SageMaker Data Wrangler", "Amazon SageMaker Processing", "Amazon SageMaker Feature Store", "AWS Glue", "Amazon EMR"],
+      "azure_services": ["Azure Machine Learning Data Prep", "Azure Machine Learning Compute", "Azure Machine Learning Feature Store", "Azure Data Factory", "Azure HDInsight"],
+      "tags": ["machine-learning", "data-engineering", "feature-engineering", "advanced-analytics", "mls-c01", "mls-c01-specialty", "expert"],
+      "file_path": "content/labs/mls-c01-data-engineering-lab.json"
+    },
+    {
+      "id": "mls-c01-exploratory-data-analysis-lab",
+      "title": "AWS ML Analytics to Azure ML Analytics: Advanced Exploratory Data Analysis and Statistical Modeling",
+      "category": "ml-data-science",
+      "difficulty": "expert",
+      "estimatedTime": "140 minutes",
+      "awsCertification": "MLS-C01",
+      "certificationWeight": "24% - Exploratory Data Analysis Domain",
+      "description": "Master advanced exploratory data analysis by implementing sophisticated statistical analysis, data visualization, and hypothesis testing with AWS ML analytics services and migrating to Azure ML equivalents with advanced analytics, insights generation, and data-driven decision making.",
+      "aws_services": ["Amazon SageMaker Studio", "Amazon SageMaker Data Wrangler", "Amazon QuickSight", "Amazon Athena", "AWS Glue DataBrew"],
+      "azure_services": ["Azure Machine Learning Studio", "Azure Machine Learning Designer", "Power BI", "Azure Synapse Analytics", "Azure Data Factory"],
+      "tags": ["machine-learning", "data-analysis", "statistical-modeling", "data-visualization", "mls-c01", "mls-c01-specialty", "expert"],
+      "file_path": "content/labs/mls-c01-exploratory-data-analysis-lab.json"
+    },
+    {
+      "id": "mls-c01-modeling-lab",
+      "title": "AWS SageMaker to Azure ML: Advanced Machine Learning Modeling and Algorithm Optimization",
+      "category": "ml-data-science",
+      "difficulty": "expert",
+      "estimatedTime": "200 minutes",
+      "awsCertification": "MLS-C01",
+      "certificationWeight": "36% - Modeling Domain",
+      "description": "Master advanced machine learning modeling by implementing sophisticated ML algorithms, optimization techniques, and model evaluation with AWS SageMaker and migrating to Azure ML equivalents with cutting-edge modeling approaches, ensemble methods, and production-ready optimization.",
+      "aws_services": ["Amazon SageMaker Training", "Amazon SageMaker Autopilot", "Amazon SageMaker Hyperparameter Tuning", "Amazon SageMaker Built-in Algorithms", "Amazon SageMaker Clarify"],
+      "azure_services": ["Azure Machine Learning Compute", "Azure Automated Machine Learning", "Azure Machine Learning HyperDrive", "Azure Machine Learning Designer", "Azure Machine Learning Responsible AI"],
+      "tags": ["machine-learning", "advanced-modeling", "algorithm-optimization", "ensemble-methods", "mls-c01", "mls-c01-specialty", "expert"],
+      "file_path": "content/labs/mls-c01-modeling-lab.json"
+    },
+    {
+      "id": "mls-c01-ml-implementation-operations-lab",
+      "title": "AWS SageMaker to Azure ML: Advanced ML Implementation, Deployment, and Production Operations",
+      "category": "ml-data-science",
+      "difficulty": "expert",
+      "estimatedTime": "120 minutes",
+      "awsCertification": "MLS-C01",
+      "certificationWeight": "20% - ML Implementation & Operations Domain",
+      "description": "Master advanced machine learning implementation and operations by deploying production ML systems with AWS SageMaker and migrating to Azure ML equivalents with enterprise-grade deployment, monitoring, automation, and operational excellence for ML at scale.",
+      "aws_services": ["Amazon SageMaker Endpoints", "Amazon SageMaker Pipelines", "Amazon SageMaker Model Monitor", "Amazon SageMaker Multi-Model Endpoints", "AWS Lambda"],
+      "azure_services": ["Azure Machine Learning Endpoints", "Azure Machine Learning Pipelines", "Azure Machine Learning Monitoring", "Azure Machine Learning Compute", "Azure Functions"],
+      "tags": ["machine-learning", "ml-operations", "production-deployment", "enterprise-ml", "mls-c01", "mls-c01-specialty", "expert"],
+      "file_path": "content/labs/mls-c01-ml-implementation-operations-lab.json"
+    },
+    {
+      "id": "mla-c01-data-engineering-ml-lab",
+      "title": "AWS ML Data Engineering to Azure ML Data Prep: Machine Learning Data Pipelines",
+      "category": "ml-data-engineering",
+      "difficulty": "advanced",
+      "estimatedTime": "140 minutes",
+      "awsCertification": "MLA-C01",
+      "certificationWeight": "20% - Data Engineering for ML Domain",
+      "description": "Master machine learning data engineering by implementing AWS ML data pipelines and migrating to Azure ML data preparation equivalents with feature engineering, data validation, ML-specific ETL, and automated data quality for machine learning workloads.",
+      "aws_services": ["Amazon SageMaker Data Wrangler", "Amazon SageMaker Feature Store", "AWS Glue (ML Data Processing)", "Amazon S3 (ML Data Lake)", "Amazon Athena (ML Data Queries)"],
+      "azure_services": ["Azure Machine Learning Data Prep", "Azure Machine Learning Feature Store", "Azure Data Factory (ML Pipelines)", "Azure Data Lake Storage (ML Data)", "Azure Synapse Analytics (ML Queries)"],
+      "tags": ["machine-learning", "data-engineering", "feature-engineering", "ml-pipelines", "mla-c01", "mla-c01-high", "advanced"],
+      "file_path": "content/labs/mla-c01-data-engineering-ml-lab.json"
+    },
+    {
+      "id": "mla-c01-exploratory-data-analysis-lab",
+      "title": "AWS SageMaker to Azure ML: Machine Learning Exploratory Data Analysis and Statistical Modeling",
+      "category": "ml-data-analysis",
+      "difficulty": "advanced",
+      "estimatedTime": "120 minutes",
+      "awsCertification": "MLA-C01",
+      "certificationWeight": "16% - Exploratory Data Analysis Domain",
+      "description": "Master machine learning exploratory data analysis by implementing statistical analysis, data visualization, and hypothesis testing using SageMaker and migrating to Azure ML equivalents with advanced analytics, feature analysis, and data insights for ML model development.",
+      "aws_services": ["Amazon SageMaker Data Wrangler", "Amazon SageMaker Studio", "Amazon SageMaker Clarify", "Amazon QuickSight", "AWS Glue DataBrew"],
+      "azure_services": ["Azure Machine Learning Studio", "Azure Machine Learning Designer", "Azure Synapse Analytics", "Power BI", "Azure Data Factory"],
+      "tags": ["machine-learning", "data-analysis", "statistical-analysis", "data-visualization", "mla-c01", "mla-c01-high", "advanced"],
+      "file_path": "content/labs/mla-c01-exploratory-data-analysis-lab.json"
+    },
+    {
+      "id": "mla-c01-model-development-lab",
+      "title": "AWS SageMaker to Azure ML: Machine Learning Model Development and Training Optimization",
+      "category": "ml-model-development",
+      "difficulty": "advanced",
+      "estimatedTime": "160 minutes",
+      "awsCertification": "MLA-C01",
+      "certificationWeight": "26% - Model Development Domain",
+      "description": "Master machine learning model development by implementing ML model training, hyperparameter optimization, and model evaluation using SageMaker and migrating to Azure ML equivalents with advanced training techniques, automated ML workflows, and comprehensive model validation.",
+      "aws_services": ["Amazon SageMaker Training Jobs", "Amazon SageMaker Hyperparameter Tuning", "Amazon SageMaker Autopilot", "Amazon SageMaker Experiments", "Amazon SageMaker Model Registry"],
+      "azure_services": ["Azure Machine Learning Compute", "Azure Machine Learning HyperDrive", "Azure Automated Machine Learning", "Azure ML Experiments", "Azure ML Model Registry"],
+      "tags": ["machine-learning", "model-development", "hyperparameter-optimization", "model-training", "mla-c01", "mla-c01-high", "advanced"],
+      "file_path": "content/labs/mla-c01-model-development-lab.json"
+    },
+    {
+      "id": "mla-c01-model-deployment-maintenance-lab",
+      "title": "AWS SageMaker to Azure ML: Model Deployment, Inference, and Production Maintenance",
+      "category": "ml-deployment-maintenance",
+      "difficulty": "advanced",
+      "estimatedTime": "130 minutes",
+      "awsCertification": "MLA-C01",
+      "certificationWeight": "22% - Model Deployment & Maintenance Domain",
+      "description": "Master machine learning model deployment by implementing production ML inference with SageMaker endpoints and migrating to Azure ML equivalents with real-time serving, batch inference, model monitoring, and automated maintenance workflows.",
+      "aws_services": ["Amazon SageMaker Endpoints", "Amazon SageMaker Multi-Model Endpoints", "Amazon SageMaker Batch Transform", "Amazon SageMaker Model Monitor", "Amazon SageMaker Clarify"],
+      "azure_services": ["Azure Machine Learning Endpoints", "Azure ML Batch Endpoints", "Azure ML Model Monitoring", "Azure ML Responsible AI", "Azure ML Pipelines"],
+      "tags": ["machine-learning", "model-deployment", "inference", "model-monitoring", "mla-c01", "mla-c01-high", "advanced"],
+      "file_path": "content/labs/mla-c01-model-deployment-maintenance-lab.json"
+    },
+    {
+      "id": "mla-c01-ml-operations-mlops-lab",
+      "title": "AWS SageMaker to Azure ML: MLOps, Automation, and Machine Learning Operations Excellence",
+      "category": "ml-operations-mlops",
+      "difficulty": "advanced",
+      "estimatedTime": "120 minutes",
+      "awsCertification": "MLA-C01",
+      "certificationWeight": "16% - ML Operations & MLOps Domain",
+      "description": "Master machine learning operations by implementing comprehensive MLOps workflows with SageMaker Pipelines and migrating to Azure ML equivalents with CI/CD automation, infrastructure as code, model governance, and end-to-end ML lifecycle management.",
+      "aws_services": ["Amazon SageMaker Pipelines", "Amazon SageMaker Model Registry", "AWS CodePipeline", "AWS CodeBuild", "AWS CloudFormation"],
+      "azure_services": ["Azure ML Pipelines", "Azure ML Model Registry", "Azure DevOps Pipelines", "Azure Container Registry", "Azure Resource Manager"],
+      "tags": ["machine-learning", "mlops", "automation", "ci-cd", "model-governance", "mla-c01", "mla-c01-high", "advanced"],
+      "file_path": "content/labs/mla-c01-ml-operations-mlops-lab.json"
+    },
+    {
+      "id": "clf-c02-cloud-concepts-lab",
+      "title": "AWS Cloud Concepts to Azure Fundamentals: Cloud Benefits and Well-Architected Framework",
+      "category": "cloud-fundamentals",
+      "difficulty": "beginner",
+      "estimated_time": "60 minutes",
+      "awsCertification": "CLF-C02",
+      "certificationWeight": "24% - Cloud Concepts Domain",
+      "description": "Master foundational cloud concepts by understanding AWS benefits and migrating to Azure fundamentals with Well-Architected Framework principles, global infrastructure benefits, and cloud adoption strategies",
+      "aws_services": ["AWS Global Infrastructure", "AWS Well-Architected Framework", "AWS Cloud Adoption Framework", "AWS Regions and Availability Zones"],
+      "azure_services": ["Azure Global Infrastructure", "Azure Well-Architected Framework", "Cloud Adoption Framework for Azure", "Azure Regions and Availability Zones"],
+      "tags": ["cloud-fundamentals", "well-architected", "global-infrastructure", "clf-c02", "clf-c02-critical", "foundational"],
+      "file_path": "content/labs/clf-c02-cloud-concepts-lab.json"
+    },
+    {
+      "id": "clf-c02-security-compliance-lab",
+      "title": "AWS Security to Azure Security: Shared Responsibility and Compliance Fundamentals",
+      "category": "cloud-security-fundamentals",
+      "difficulty": "beginner",
+      "estimated_time": "75 minutes",
+      "awsCertification": "CLF-C02",
+      "certificationWeight": "30% - Security and Compliance Domain",
+      "description": "Master foundational cloud security concepts by understanding AWS shared responsibility model and migrating to Azure security fundamentals with compliance frameworks, access controls, and core security best practices",
+      "aws_services": ["AWS IAM", "AWS Security Groups", "AWS KMS", "AWS CloudTrail", "AWS Config", "AWS GuardDuty"],
+      "azure_services": ["Azure Active Directory", "Network Security Groups", "Azure Key Vault", "Azure Monitor", "Azure Policy", "Microsoft Defender for Cloud"],
+      "tags": ["security", "compliance", "shared-responsibility", "iam", "clf-c02", "clf-c02-critical", "foundational"],
+      "file_path": "content/labs/clf-c02-security-compliance-lab.json"
+    },
+    {
+      "id": "clf-c02-technology-services-lab",
+      "title": "AWS Core Services to Azure Services: Technology Stack and Service Selection",
+      "category": "cloud-services-fundamentals",
+      "difficulty": "beginner",
+      "estimated_time": "90 minutes",
+      "awsCertification": "CLF-C02",
+      "certificationWeight": "34% - Cloud Technology and Services Domain",
+      "description": "Master core cloud services by understanding AWS technology stack and migrating to Azure equivalents with service selection guidance, use case mapping, and hands-on service identification across compute, storage, database, and networking categories",
+      "aws_services": ["Amazon EC2", "AWS Lambda", "Amazon S3", "Amazon RDS", "Amazon DynamoDB", "Amazon VPC", "Amazon CloudFront"],
+      "azure_services": ["Azure Virtual Machines", "Azure Functions", "Azure Blob Storage", "Azure SQL Database", "Azure Cosmos DB", "Azure Virtual Network", "Azure CDN"],
+      "tags": ["compute", "storage", "database", "networking", "service-selection", "clf-c02", "clf-c02-critical", "foundational"],
+      "file_path": "content/labs/clf-c02-technology-services-lab.json"
+    },
+    {
+      "id": "clf-c02-billing-support-lab",
+      "title": "AWS Billing to Azure Cost Management: Pricing Models and Support Strategies",
+      "category": "cloud-financial-management",
+      "difficulty": "beginner",
+      "estimated_time": "45 minutes",
+      "awsCertification": "CLF-C02",
+      "certificationWeight": "12% - Billing, Pricing, and Support Domain",
+      "description": "Master cloud financial management by understanding AWS billing and pricing models and migrating to Azure cost management with support tier comparisons, cost control strategies, and billing optimization techniques",
+      "aws_services": ["AWS Pricing Calculator", "AWS Cost Explorer", "AWS Budgets", "AWS Support Plans", "AWS Trusted Advisor"],
+      "azure_services": ["Azure Pricing Calculator", "Azure Cost Management + Billing", "Azure Budgets", "Azure Support Plans", "Azure Advisor"],
+      "tags": ["cost-management", "billing", "support", "pricing", "financial-management", "clf-c02", "clf-c02-critical", "foundational"],
+      "file_path": "content/labs/clf-c02-billing-support-lab.json"
+    },
+    {
+      "id": "dva-c02-development-services-lab",
+      "title": "AWS Development Services to Azure Development: Application Development and Service Integration",
+      "category": "application-development",
+      "difficulty": "intermediate",
+      "estimated_time": "120 minutes",
+      "awsCertification": "DVA-C02",
+      "certificationWeight": "32% - Development with AWS Services Domain",
+      "description": "Master AWS application development services and migrate to Azure development equivalents with hands-on service integration, API development, event-driven architecture, and application lifecycle management",
+      "aws_services": ["AWS SDK", "AWS CLI", "AWS Lambda", "Amazon DynamoDB", "Amazon API Gateway", "Amazon SNS", "Amazon SQS", "AWS CloudFormation", "AWS X-Ray", "Amazon EventBridge"],
+      "azure_services": ["Azure SDK", "Azure CLI", "Azure Functions", "Azure Cosmos DB", "Azure API Management", "Azure Service Bus", "Azure Event Grid", "Azure Resource Manager Templates", "Azure Application Insights", "Azure Logic Apps"],
+      "tags": ["application-development", "serverless", "api-development", "event-driven", "dva-c02", "dva-c02-critical", "intermediate"],
+      "file_path": "content/labs/dva-c02-development-services-lab.json"
+    },
+    {
+      "id": "dva-c02-security-lab",
+      "title": "AWS Developer Security to Azure Security: Application Security and Access Control",
+      "category": "application-security",
+      "difficulty": "intermediate",
+      "estimated_time": "110 minutes",
+      "awsCertification": "DVA-C02",
+      "certificationWeight": "26% - Security Domain",
+      "description": "Master application security practices by implementing AWS IAM, encryption, and security services for developers, then migrating to Azure security equivalents with hands-on authentication, authorization, secrets management, and security monitoring",
+      "aws_services": ["AWS IAM", "AWS Cognito", "AWS Secrets Manager", "AWS Systems Manager Parameter Store", "AWS KMS", "AWS CloudTrail", "AWS Config", "AWS GuardDuty", "AWS WAF", "AWS Certificate Manager"],
+      "azure_services": ["Azure Active Directory", "Azure AD B2C", "Azure Key Vault", "Azure App Configuration", "Azure Key Vault HSM", "Azure Monitor", "Azure Policy", "Microsoft Defender for Cloud", "Azure Web Application Firewall", "Azure Certificate Service"],
+      "tags": ["application-security", "identity-management", "encryption", "secrets-management", "dva-c02", "dva-c02-critical", "intermediate"],
+      "file_path": "content/labs/dva-c02-security-lab.json"
+    },
+    {
+      "id": "dva-c02-deployment-lab",
+      "title": "AWS Deployment Services to Azure DevOps: CI/CD and Application Deployment",
+      "category": "application-deployment",
+      "difficulty": "intermediate",
+      "estimated_time": "100 minutes",
+      "awsCertification": "DVA-C02",
+      "certificationWeight": "24% - Deployment Domain",
+      "description": "Master application deployment practices by implementing AWS CI/CD pipelines and deployment strategies, then migrating to Azure DevOps equivalents with Infrastructure as Code, automated testing, and deployment automation",
+      "aws_services": ["AWS CodePipeline", "AWS CodeBuild", "AWS CodeDeploy", "AWS CodeCommit", "AWS CloudFormation", "AWS Elastic Beanstalk", "Amazon ECS", "AWS X-Ray", "Amazon CloudWatch", "AWS Lambda"],
+      "azure_services": ["Azure DevOps Pipelines", "Azure DevOps Build", "Azure DevOps Release", "Azure Repos", "Azure Resource Manager Templates", "Azure App Service", "Azure Container Instances", "Azure Application Insights", "Azure Monitor", "Azure Functions"],
+      "tags": ["application-deployment", "cicd", "infrastructure-as-code", "devops", "dva-c02", "dva-c02-critical", "intermediate"],
+      "file_path": "content/labs/dva-c02-deployment-lab.json"
+    },
+    {
+      "id": "dva-c02-troubleshooting-optimization-lab",
+      "title": "AWS Application Troubleshooting to Azure Diagnostics: Performance Optimization and Issue Resolution",
+      "category": "application-optimization",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "awsCertification": "DVA-C02",
+      "certificationWeight": "18% - Troubleshooting and Optimization Domain",
+      "description": "Master application troubleshooting and performance optimization by implementing AWS monitoring and debugging tools, then migrating to Azure diagnostics equivalents with root cause analysis, performance tuning, and operational excellence practices",
+      "aws_services": ["Amazon CloudWatch", "AWS X-Ray", "AWS CloudWatch Logs", "AWS CloudWatch Insights", "AWS Performance Insights", "AWS Systems Manager", "AWS Config", "Amazon SNS", "AWS Lambda", "AWS Cost Explorer"],
+      "azure_services": ["Azure Monitor", "Azure Application Insights", "Azure Log Analytics", "Azure Monitor Logs", "Azure Database Insights", "Azure Automation", "Azure Resource Health", "Azure Action Groups", "Azure Functions", "Azure Cost Management"],
+      "tags": ["application-optimization", "troubleshooting", "performance-monitoring", "observability", "dva-c02", "dva-c02-critical", "intermediate"],
+      "file_path": "content/labs/dva-c02-troubleshooting-optimization-lab.json"
+    },
+    {
+      "id": "soa-c02-monitoring-logging-remediation-lab",
+      "title": "AWS CloudWatch to Azure Monitor: System Monitoring, Logging, and Automated Remediation",
+      "category": "systems-monitoring",
+      "difficulty": "intermediate",
+      "estimated_time": "130 minutes",
+      "awsCertification": "SOA-C02",
+      "certificationWeight": "20% - Monitoring, Logging, and Remediation Domain",
+      "description": "Master comprehensive system monitoring by implementing AWS CloudWatch monitoring and migrating to Azure Monitor equivalents with automated logging, alerting, remediation workflows, and operational intelligence",
+      "aws_services": ["Amazon CloudWatch", "AWS CloudWatch Logs", "AWS CloudWatch Alarms", "AWS CloudWatch Events", "AWS SNS", "AWS Systems Manager", "AWS Lambda", "AWS Config", "AWS CloudTrail", "AWS X-Ray"],
+      "azure_services": ["Azure Monitor", "Azure Log Analytics", "Azure Monitor Alerts", "Azure Event Grid", "Azure Action Groups", "Azure Automation", "Azure Functions", "Azure Policy", "Azure Activity Log", "Azure Application Insights"],
+      "tags": ["systems-monitoring", "logging", "alerting", "remediation", "soa-c02", "soa-c02-critical", "intermediate"],
+      "file_path": "content/labs/soa-c02-monitoring-logging-remediation-lab.json"
+    },
+    {
+      "id": "soa-c02-reliability-business-continuity-lab",
+      "title": "AWS High Availability to Azure Resilience: Reliability and Business Continuity Planning",
+      "category": "reliability-engineering",
+      "difficulty": "intermediate",
+      "estimated_time": "120 minutes",
+      "awsCertification": "SOA-C02",
+      "certificationWeight": "16% - Reliability & Business Continuity Domain",
+      "description": "Master enterprise reliability engineering by implementing AWS high availability and disaster recovery solutions, then migrating to Azure resilience equivalents with backup strategies, failover automation, and comprehensive business continuity planning",
+      "aws_services": ["Amazon RDS Multi-AZ", "AWS Auto Scaling Groups", "Elastic Load Balancing", "Amazon Route 53", "AWS Backup Service", "AWS Site Recovery", "Amazon S3 Cross-Region Replication", "AWS CloudFormation StackSets", "AWS Systems Manager", "Amazon CloudWatch"],
+      "azure_services": ["Azure SQL Database with Geo-Replication", "Virtual Machine Scale Sets", "Azure Load Balancer", "Azure Traffic Manager", "Azure Backup Service", "Azure Site Recovery", "Azure Storage Account Replication", "Azure Resource Manager Templates", "Azure Automation", "Azure Monitor"],
+      "tags": ["reliability-engineering", "high-availability", "disaster-recovery", "business-continuity", "soa-c02", "soa-c02-critical", "intermediate"],
+      "file_path": "content/labs/soa-c02-reliability-business-continuity-lab.json"
+    },
+    {
+      "id": "soa-c02-deployment-provisioning-automation-lab",
+      "title": "AWS Infrastructure Automation to Azure ARM: Deployment, Provisioning, and Infrastructure as Code",
+      "category": "infrastructure-automation",
+      "difficulty": "intermediate",
+      "estimated_time": "115 minutes",
+      "awsCertification": "SOA-C02",
+      "certificationWeight": "18% - Deployment, Provisioning & Automation Domain",
+      "description": "Master infrastructure automation by implementing AWS CloudFormation and Systems Manager automation, then migrating to Azure Resource Manager and Automation equivalents with Infrastructure as Code, configuration management, and operational automation",
+      "aws_services": ["AWS CloudFormation", "AWS Systems Manager", "AWS CodeDeploy", "AWS OpsWorks", "AWS Service Catalog", "AWS Config", "Amazon EC2 Image Builder", "AWS Lambda", "AWS CloudWatch Events", "AWS Step Functions"],
+      "azure_services": ["Azure Resource Manager Templates", "Azure Automation", "Azure DevOps Release Pipelines", "Azure Desired State Configuration", "Azure Service Catalog", "Azure Policy", "Azure Image Builder", "Azure Functions", "Azure Event Grid", "Azure Logic Apps"],
+      "tags": ["infrastructure-automation", "infrastructure-as-code", "configuration-management", "provisioning", "soa-c02", "soa-c02-critical", "intermediate"],
+      "file_path": "content/labs/soa-c02-deployment-provisioning-automation-lab.json"
+    },
+    {
+      "id": "soa-c02-security-compliance-lab",
+      "title": "AWS Security Operations to Azure Security Center: Operational Security and Compliance Management",
+      "category": "security-operations",
+      "difficulty": "intermediate",
+      "estimated_time": "110 minutes",
+      "awsCertification": "SOA-C02",
+      "certificationWeight": "16% - Security & Compliance Domain",
+      "description": "Master operational security by implementing AWS security services and migrating to Azure Security Center equivalents with security monitoring, compliance automation, incident response, and threat detection",
+      "aws_services": ["AWS Security Hub", "AWS Config", "AWS CloudTrail", "AWS GuardDuty", "Amazon Inspector", "AWS Systems Manager Patch Manager", "AWS IAM Access Analyzer", "AWS Secrets Manager", "Amazon Macie", "AWS Well-Architected Tool"],
+      "azure_services": ["Azure Security Center", "Azure Policy", "Azure Activity Log", "Microsoft Sentinel", "Azure Security Center Assessments", "Azure Update Management", "Azure AD Access Reviews", "Azure Key Vault", "Microsoft Purview", "Azure Well-Architected Review"],
+      "tags": ["security-operations", "compliance-automation", "threat-detection", "incident-response", "soa-c02", "soa-c02-critical", "intermediate"],
+      "file_path": "content/labs/soa-c02-security-compliance-lab.json"
+    },
+    {
+      "id": "soa-c02-networking-content-delivery-lab",
+      "title": "AWS Networking to Azure Virtual Networks: Network Operations and Content Delivery",
+      "category": "network-operations",
+      "difficulty": "intermediate",
+      "estimated_time": "125 minutes",
+      "awsCertification": "SOA-C02",
+      "certificationWeight": "18% - Networking & Content Delivery Domain",
+      "description": "Master network operations by implementing AWS VPC networking and migrating to Azure Virtual Networks with advanced routing, security, content delivery, and network performance optimization",
+      "aws_services": ["Amazon VPC", "AWS Transit Gateway", "Amazon CloudFront", "AWS Global Accelerator", "Amazon Route 53", "AWS Direct Connect", "AWS VPN Gateway", "Elastic Load Balancing", "AWS PrivateLink", "AWS Network Firewall"],
+      "azure_services": ["Azure Virtual Network", "Azure Virtual WAN", "Azure CDN", "Azure Front Door", "Azure DNS", "Azure ExpressRoute", "Azure VPN Gateway", "Azure Load Balancer", "Azure Private Link", "Azure Firewall"],
+      "tags": ["network-operations", "content-delivery", "network-security", "performance-optimization", "soa-c02", "soa-c02-critical", "intermediate"],
+      "file_path": "content/labs/soa-c02-networking-content-delivery-lab.json"
+    },
+    {
+      "id": "soa-c02-cost-performance-optimization-lab",
+      "title": "AWS Cost Optimization to Azure Cost Management: Performance Tuning and Financial Operations",
+      "category": "cost-performance-optimization",
+      "difficulty": "intermediate",
+      "estimated_time": "100 minutes",
+      "awsCertification": "SOA-C02",
+      "certificationWeight": "12% - Cost & Performance Optimization Domain",
+      "description": "Master cost and performance optimization by implementing AWS cost management and performance tuning strategies, then migrating to Azure Cost Management equivalents with resource optimization, financial governance, and operational excellence",
+      "aws_services": ["AWS Cost Explorer", "AWS Budgets", "AWS Cost and Usage Reports", "AWS Trusted Advisor", "AWS Compute Optimizer", "AWS Instance Scheduler", "AWS Resource Groups", "Amazon CloudWatch", "AWS Organizations", "AWS Well-Architected Tool"],
+      "azure_services": ["Azure Cost Management + Billing", "Azure Budgets", "Azure Consumption APIs", "Azure Advisor", "Azure Monitor", "Azure Automation", "Azure Resource Groups", "Azure Resource Graph", "Azure Management Groups", "Azure Well-Architected Review"],
+      "tags": ["cost-performance-optimization", "financial-operations", "resource-optimization", "finops", "soa-c02", "soa-c02-critical", "intermediate"],
+      "file_path": "content/labs/soa-c02-cost-performance-optimization-lab.json"
+    },
+    {
+      "id": "dea-c01-data-ingestion-transformation-lab",
+      "title": "AWS Data Pipeline to Azure Data Factory: Data Ingestion and ETL Transformation",
+      "category": "data-engineering",
+      "difficulty": "advanced",
+      "estimated_time": "150 minutes",
+      "awsCertification": "DEA-C01",
+      "certificationWeight": "34% - Data Ingestion & Transformation Domain",
+      "description": "Master data engineering by implementing AWS data ingestion and ETL pipelines, then migrating to Azure Data Factory equivalents with real-time streaming, batch processing, data transformation, and modern data architecture patterns",
+      "aws_services": ["Amazon Kinesis Data Streams", "Amazon Kinesis Data Firehose", "Amazon Kinesis Analytics", "AWS Glue", "AWS Data Pipeline", "AWS Lambda", "Amazon S3", "Amazon EMR", "AWS Step Functions", "Amazon CloudWatch"],
+      "azure_services": ["Azure Event Hubs", "Azure Event Grid", "Azure Stream Analytics", "Azure Data Factory", "Azure Synapse Analytics", "Azure Functions", "Azure Data Lake Storage", "Azure HDInsight", "Azure Logic Apps", "Azure Monitor"],
+      "tags": ["data-engineering", "data-ingestion", "etl", "streaming-analytics", "dea-c01", "dea-c01-critical", "advanced"],
+      "file_path": "content/labs/dea-c01-data-ingestion-transformation-lab.json"
+    },
+    {
+      "id": "dea-c01-data-store-management-lab",
+      "title": "AWS Data Storage to Azure Data Services: Data Warehousing and Lake Management",
+      "category": "data-storage",
+      "difficulty": "advanced",
+      "estimated_time": "140 minutes",
+      "awsCertification": "DEA-C01",
+      "certificationWeight": "26% - Data Store Management Domain",
+      "description": "Master data storage and warehousing by implementing AWS data lake and warehouse solutions, then migrating to Azure data services with modern data architecture, performance optimization, and scalable storage management",
+      "aws_services": ["Amazon S3", "Amazon Redshift", "AWS Glue Data Catalog", "Amazon EMR", "Amazon Athena", "AWS Lake Formation", "Amazon DynamoDB", "Amazon ElastiCache", "AWS Storage Gateway", "Amazon Macie"],
+      "azure_services": ["Azure Data Lake Storage Gen2", "Azure Synapse Analytics", "Azure Purview", "Azure HDInsight", "Azure Data Explorer", "Azure Data Share", "Azure Cosmos DB", "Azure Cache for Redis", "Azure StorSimple", "Microsoft Purview"],
+      "tags": ["data-storage", "data-warehousing", "data-lake", "performance-optimization", "dea-c01", "dea-c01-critical", "advanced"],
+      "file_path": "content/labs/dea-c01-data-store-management-lab.json"
+    },
+    {
+      "id": "dea-c01-data-operations-support-lab",
+      "title": "AWS Data Operations to Azure Data Management: Operations, Monitoring, and Support",
+      "category": "data-operations",
+      "difficulty": "advanced",
+      "estimated_time": "130 minutes",
+      "awsCertification": "DEA-C01",
+      "certificationWeight": "22% - Data Operations & Support Domain",
+      "description": "Master data operations by implementing AWS data platform monitoring and support, then migrating to Azure data management equivalents with operational excellence, performance optimization, troubleshooting, and incident response for data systems",
+      "aws_services": ["Amazon CloudWatch", "AWS CloudTrail", "AWS X-Ray", "Amazon SNS", "AWS Systems Manager", "AWS Backup", "AWS Config", "Amazon QuickSight", "AWS Service Health Dashboard", "AWS Personal Health Dashboard"],
+      "azure_services": ["Azure Monitor", "Azure Activity Log", "Azure Application Insights", "Azure Action Groups", "Azure Automation", "Azure Backup", "Azure Policy", "Power BI", "Azure Service Health", "Azure Resource Health"],
+      "tags": ["data-operations", "monitoring", "troubleshooting", "operational-excellence", "dea-c01", "dea-c01-critical", "advanced"],
+      "file_path": "content/labs/dea-c01-data-operations-support-lab.json"
+    },
+    {
+      "id": "dea-c01-data-security-governance-lab",
+      "title": "AWS Data Security to Azure Data Governance: Privacy, Compliance, and Data Protection",
+      "category": "data-security-governance",
+      "difficulty": "advanced",
+      "estimated_time": "120 minutes",
+      "awsCertification": "DEA-C01",
+      "certificationWeight": "18% - Data Security & Governance Domain",
+      "description": "Master data security and governance by implementing AWS data protection and compliance frameworks, then migrating to Azure data governance equivalents with privacy controls, regulatory compliance, and comprehensive data protection strategies",
+      "aws_services": ["AWS KMS", "Amazon Macie", "AWS IAM", "AWS Lake Formation", "AWS CloudTrail", "AWS Config", "Amazon GuardDuty", "AWS Secrets Manager", "AWS Certificate Manager", "AWS Organizations"],
+      "azure_services": ["Azure Key Vault", "Microsoft Purview", "Azure Active Directory", "Azure Data Share", "Azure Activity Log", "Azure Policy", "Microsoft Defender for Cloud", "Azure Key Vault HSM", "Azure Certificate Service", "Azure Management Groups"],
+      "tags": ["data-security-governance", "data-privacy", "compliance", "data-protection", "dea-c01", "dea-c01-critical", "advanced"],
+      "file_path": "content/labs/dea-c01-data-security-governance-lab.json"
+    },
+    {
+      "id": "blockchain-quantum-lab",
+      "title": "AWS Blockchain to Azure Quantum: Emerging Technologies and Future-Ready Computing",
+      "category": "emerging-tech",
+      "difficulty": "advanced",
+      "estimated_time": "120 minutes",
+      "description": "Explore cutting-edge technologies by migrating from AWS Managed Blockchain and Braket to Azure Blockchain Service and Azure Quantum with practical applications in cryptography, optimization, and distributed systems",
+      "aws_services": ["Managed Blockchain", "Braket", "QLDB", "DocumentDB", "Lambda", "API Gateway"],
+      "azure_services": ["Blockchain Service", "Azure Quantum", "Cosmos DB", "Logic Apps", "Functions", "API Management"],
+      "tags": ["blockchain", "quantum", "emerging-tech", "cryptography", "distributed", "innovation"],
+      "file_path": "content/labs/blockchain-quantum-lab.json"
+    },
+    {
+      "id": "testing-qa-lab",
+      "title": "AWS Testing Services to Azure Test Plans: Comprehensive Quality Assurance and Testing Automation",
+      "category": "testing",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "description": "Master comprehensive testing and QA by migrating from AWS Device Farm and CodeGuru to Azure Test Plans, App Center Test, and integrated quality assurance workflows",
+      "aws_services": ["Device Farm", "CodeGuru Reviewer", "CodeBuild", "X-Ray", "CloudWatch Synthetics"],
+      "azure_services": ["Test Plans", "App Center Test", "Load Testing", "Application Insights", "Playwright Testing"],
+      "tags": ["testing", "quality-assurance", "automation", "mobile", "performance", "saa-c03"],
+      "file_path": "content/labs/testing-qa-lab.json"
+    },
+    {
+      "id": "developer-tools-lab",
+      "title": "AWS Developer Tools to Azure DevOps: Integrated Development Environment and Productivity Platform",
+      "category": "development",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "description": "Master developer productivity by migrating from AWS Cloud9, CodeStar, and CodeGuru to Azure DevOps, GitHub Codespaces, and Application Insights with comprehensive development workflows",
+      "aws_services": ["Cloud9", "CodeStar", "CodeGuru", "CodeCommit", "CodeArtifact", "X-Ray"],
+      "azure_services": ["DevOps", "GitHub Codespaces", "Application Insights", "Repos", "Artifacts", "Monitor"],
+      "tags": ["development", "productivity", "devops", "collaboration", "quality", "saa-c03"],
+      "file_path": "content/labs/developer-tools-lab.json"
+    },
+    {
+      "id": "edge-5g-computing-lab",
+      "title": "AWS Edge Computing to Azure Edge Zones: 5G, MEC, and Ultra-Low Latency Applications",
+      "category": "edge-computing",
+      "difficulty": "advanced",
+      "estimated_time": "180 minutes",
+      "description": "Master next-generation edge computing by migrating from AWS Wavelength, Local Zones, and Outposts to Azure Edge Zones, Private MEC, and Azure Stack with 5G integration and ultra-low latency scenarios",
+      "aws_services": ["Wavelength", "Local Zones", "Outposts", "IoT Greengrass", "CloudFront", "Global Accelerator"],
+      "azure_services": ["Edge Zones", "Private MEC", "Azure Stack Edge", "IoT Edge", "Front Door", "Azure Arc"],
+      "tags": ["edge-computing", "5g", "latency", "iot", "future-tech", "enterprise", "sap-c02"],
+      "file_path": "content/labs/edge-5g-computing-lab.json"
+    },
+    {
+      "id": "secrets-configuration-lab",
+      "title": "AWS Systems Manager to Azure App Configuration: Enterprise Secrets and Configuration Management",
+      "category": "security",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "description": "Master enterprise configuration and secrets management by migrating from AWS Systems Manager Parameter Store and App Config to Azure App Configuration and Key Vault with advanced security patterns",
+      "aws_services": ["Systems Manager Parameter Store", "AppConfig", "Secrets Manager", "KMS", "IAM", "Lambda"],
+      "azure_services": ["App Configuration", "Key Vault", "Managed Identity", "Azure AD", "Logic Apps", "Azure Functions"],
+      "tags": ["configuration", "secrets", "security", "enterprise", "devops", "saa-c03"],
+      "file_path": "content/labs/secrets-configuration-lab.json"
+    },
+    {
+      "id": "compliance-audit-lab",
+      "title": "AWS Compliance Tools to Azure Security Center: Enterprise Governance, Compliance, and Audit Management",
+      "category": "security",
+      "difficulty": "advanced",
+      "estimated_time": "120 minutes",
+      "description": "Master enterprise compliance and audit management by migrating from AWS compliance tools to Azure Security Center and Compliance Manager with comprehensive governance frameworks",
+      "aws_services": ["Audit Manager", "AWS Artifact", "Config Rules", "CloudTrail", "Security Hub", "Well-Architected Tool"],
+      "azure_services": ["Security Center", "Compliance Manager", "Policy", "Activity Log", "Sentinel", "Advisor"],
+      "tags": ["compliance", "governance", "audit", "security", "enterprise", "saa-c03", "sap-c02"],
+      "file_path": "content/labs/compliance-audit-lab.json"
+    },
+    {
+      "id": "hybrid-cloud-connectivity-lab",
+      "title": "AWS Hybrid Cloud to Azure ExpressRoute: Enterprise Hybrid Connectivity and Network Integration",
+      "category": "networking",
+      "difficulty": "advanced",
+      "estimated_time": "180 minutes",
+      "description": "Master enterprise hybrid cloud connectivity by migrating from AWS Direct Connect and VPN solutions to Azure ExpressRoute and VPN Gateway with advanced networking patterns",
+      "aws_services": ["Direct Connect", "VPN Gateway", "Client VPN", "Transit Gateway", "Route 53 Resolver"],
+      "azure_services": ["ExpressRoute", "VPN Gateway", "Point-to-Site VPN", "Virtual WAN", "Private DNS Resolver"],
+      "tags": ["networking", "hybrid-cloud", "connectivity", "enterprise", "saa-c03-critical", "sap-c02"],
+      "file_path": "content/labs/hybrid-cloud-connectivity-lab.json"
+    },
+    {
+      "id": "communication-email-services-lab",
+      "title": "AWS SES to Azure Communication Services: Enterprise Email and Messaging Solutions",
+      "category": "communication",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "description": "Master enterprise communication services by migrating from AWS SES, SNS, and WorkMail to Azure Communication Services, SendGrid, and Exchange Online",
+      "aws_services": ["SES", "SNS", "SQS", "WorkMail", "Pinpoint", "Connect"],
+      "azure_services": ["Communication Services", "SendGrid", "Event Grid", "Service Bus", "Exchange Online", "Logic Apps"],
+      "tags": ["communication", "email", "messaging", "sms", "enterprise", "saa-c03"],
+      "file_path": "content/labs/communication-email-services-lab.json"
+    },
+    {
+      "id": "dns-domain-management-lab",
+      "title": "Route 53 to Azure DNS: Advanced Domain Management and DNS Resolution",
+      "category": "networking",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "description": "Master advanced DNS patterns by migrating from AWS Route 53 to Azure DNS with sophisticated routing policies, health checks, and hybrid name resolution",
+      "aws_services": ["Route 53", "Route 53 Resolver", "Health Checks", "CloudMap"],
+      "azure_services": ["Azure DNS", "Private DNS", "Traffic Manager", "DNS Private Resolver"],
+      "tags": ["networking", "dns", "domain-management", "routing", "saa-c03", "enterprise"],
+      "file_path": "content/labs/dns-domain-management-lab.json"
+    },
+    {
+      "id": "media-game-services-lab",
+      "title": "AWS Media Services to Azure Media: Game Development and Digital Content Processing",
+      "category": "media",
+      "difficulty": "intermediate",
+      "estimated_time": "150 minutes",
+      "description": "Master media processing and game backend services by migrating from AWS GameLift, Elastic Transcoder, and MediaConvert to Azure PlayFab, Media Services, and Video Indexer",
+      "aws_services": ["GameLift", "Elastic Transcoder", "MediaConvert", "MediaLive", "MediaStore", "GameSparks"],
+      "azure_services": ["PlayFab", "Media Services", "Video Indexer", "Live Video Analytics", "Storage", "CDN"],
+      "tags": ["media", "gaming", "content-processing", "streaming", "entertainment", "saa-c03"],
+      "file_path": "content/labs/media-game-services-lab.json"
+    },
+    {
+      "id": "virtual-desktop-lab",
+      "title": "AWS WorkSpaces to Azure Virtual Desktop: Enterprise VDI and Application Streaming",
+      "category": "virtual-desktop",
+      "difficulty": "intermediate",
+      "estimated_time": "150 minutes",
+      "description": "Master enterprise virtual desktop infrastructure by migrating from AWS WorkSpaces and AppStream to Azure Virtual Desktop with advanced management and security",
+      "aws_services": ["WorkSpaces", "AppStream 2.0", "WorkDocs", "WorkLink", "Directory Service"],
+      "azure_services": ["Virtual Desktop", "RemoteApp", "Files", "Application Proxy", "Active Directory"],
+      "tags": ["virtual-desktop", "vdi", "remote-work", "enterprise", "security", "saa-c03"],
+      "file_path": "content/labs/virtual-desktop-lab.json"
+    },
+    {
+      "id": "search-content-management-lab",
+      "title": "AWS Search Services to Azure Cognitive Search: Intelligent Content Discovery and Management",
+      "category": "search",
+      "difficulty": "intermediate",
+      "estimated_time": "120 minutes",
+      "description": "Master intelligent search and content management by migrating from AWS OpenSearch, CloudSearch, and Elasticsearch to Azure Cognitive Search with AI-powered insights",
+      "aws_services": ["OpenSearch", "CloudSearch", "Elasticsearch Service", "Kendra", "Textract", "Comprehend"],
+      "azure_services": ["Cognitive Search", "Search Service", "Form Recognizer", "Text Analytics", "Translator", "Computer Vision"],
+      "tags": ["search", "content-management", "ai", "analytics", "enterprise", "saa-c03"],
+      "file_path": "content/labs/search-content-management-lab.json"
+    },
+    {
+      "id": "advanced-load-balancing-lab",
+      "title": "AWS Load Balancer to Azure Application Gateway: Advanced Traffic Management and Routing",
+      "category": "networking",
+      "difficulty": "intermediate",
+      "estimated_time": "120 minutes",
+      "description": "Master advanced load balancing patterns by migrating from AWS ALB/NLB to Azure Application Gateway and Load Balancer with enterprise routing scenarios",
+      "aws_services": ["Application Load Balancer", "Network Load Balancer", "Classic Load Balancer", "Target Groups"],
+      "azure_services": ["Application Gateway v2", "Load Balancer Standard", "Traffic Manager", "Azure Front Door"],
+      "tags": ["networking", "load-balancing", "traffic-management", "enterprise", "saa-c03-critical", "performance"],
+      "file_path": "content/labs/advanced-load-balancing-lab.json"
+    },
+    {
+      "id": "machine-learning-ai-services-lab",
+      "title": "AWS AI/ML to Azure AI: Enterprise Machine Learning and Cognitive Services Migration",
+      "category": "ai-ml",
+      "difficulty": "expert",
+      "estimated_time": "240 minutes",
+      "description": "Master enterprise AI/ML workload migration from AWS SageMaker and AI services to Azure Machine Learning and Cognitive Services with real-world scenarios",
+      "aws_services": ["SageMaker", "Rekognition", "Comprehend", "Translate", "Polly", "Textract", "Forecast"],
+      "azure_services": ["Machine Learning", "Cognitive Services", "Computer Vision", "Language Services", "Speech Services", "Form Recognizer", "Metrics Advisor"],
+      "tags": ["machine-learning", "artificial-intelligence", "cognitive-services", "mlops", "enterprise", "sap-c02-critical", "advanced"],
+      "file_path": "content/labs/machine-learning-ai-services-lab.json"
+    },
+    {
+      "id": "iot-edge-computing-lab",
+      "title": "AWS IoT to Azure IoT: Enterprise Edge Computing and Device Management",
+      "category": "iot-edge",
+      "difficulty": "advanced",
+      "estimated_time": "180 minutes",
+      "description": "Master IoT device management and edge computing by migrating from AWS IoT services to Azure IoT platform with real-world industrial scenarios",
+      "aws_services": ["IoT Core", "IoT Greengrass", "IoT Analytics", "IoT Device Management"],
+      "azure_services": ["IoT Hub", "IoT Edge", "IoT Central", "Device Provisioning Service"],
+      "tags": ["iot", "edge-computing", "device-management", "analytics", "enterprise", "saa-c03", "sap-c02"],
+      "file_path": "content/labs/iot-edge-computing-lab.json"
+    },
+    {
+      "id": "vm-deployment-lab",
+      "title": "EC2 to Azure VM: Your First Virtual Machine",
+      "category": "compute",
+      "difficulty": "beginner",
+      "estimated_time": "30 minutes",
+      "description": "Learn to deploy and manage Azure VMs with AWS EC2 equivalent features",
+      "aws_services": ["EC2"],
+      "azure_services": ["Virtual Machines"],
+      "tags": ["compute", "infrastructure", "basics", "saa-c03"],
+      "file_path": "content/labs/vm-deployment-lab.json"
+    },
+    {
+      "id": "container-services-lab",
+      "title": "ECS to Azure Container Instances: Containerized Applications",
+      "category": "containers",
+      "difficulty": "intermediate",
+      "estimated_time": "45 minutes",
+      "description": "Migrate from AWS ECS to Azure Container Instances with Docker workflows",
+      "aws_services": ["ECS", "ECR"],
+      "azure_services": ["Container Instances", "Container Registry"],
+      "tags": ["containers", "docker", "microservices", "saa-c03"],
+      "file_path": "content/labs/container-services-lab.json"
+    },
+    {
+      "id": "serverless-functions-lab",
+      "title": "Lambda to Azure Functions: Serverless Computing",
+      "category": "serverless",
+      "difficulty": "intermediate",
+      "estimated_time": "45 minutes",
+      "description": "Build serverless applications using Azure Functions equivalent to AWS Lambda",
+      "aws_services": ["Lambda", "API Gateway"],
+      "azure_services": ["Functions", "API Management"],
+      "tags": ["serverless", "functions", "event-driven", "saa-c03"],
+      "file_path": "content/labs/serverless-functions-lab.json"
+    },
+    {
+      "id": "sqs-sns-servicebus-eventgrid-lab",
+      "title": "SQS/SNS to Service Bus/Event Grid: Message Queuing and Event-Driven Architecture",
+      "category": "messaging",
+      "difficulty": "intermediate",
+      "estimated_time": "120 minutes",
+      "description": "Master message queuing patterns and event-driven architectures with comprehensive SQS to Service Bus and SNS to Event Grid migration",
+      "aws_services": ["SQS", "SNS", "EventBridge"],
+      "azure_services": ["Service Bus Queues", "Service Bus Topics", "Event Grid"],
+      "tags": ["messaging", "queues", "events", "microservices", "saa-c03-critical"],
+      "file_path": "content/labs/sqs-sns-servicebus-eventgrid-lab.json"
+    },
+    {
+      "id": "database-migration-lab",
+      "title": "RDS to Azure Database: Managed Database Services",
+      "category": "databases",
+      "difficulty": "intermediate",
+      "estimated_time": "60 minutes",
+      "description": "Migrate AWS RDS databases to Azure Database services with best practices",
+      "aws_services": ["RDS", "Aurora"],
+      "azure_services": ["Database for MySQL", "Database for PostgreSQL", "SQL Database"],
+      "tags": ["databases", "migration", "data", "saa-c03"],
+      "file_path": "content/labs/database-migration-lab.json"
+    },
+    {
+      "id": "dynamodb-cosmosdb-migration-lab",
+      "title": "DynamoDB to Cosmos DB: NoSQL Database Migration and Performance Optimization",
+      "category": "databases",
+      "difficulty": "advanced",
+      "estimated_time": "180 minutes",
+      "description": "Complete NoSQL database migration from DynamoDB to Cosmos DB with performance optimization and data modeling patterns",
+      "aws_services": ["DynamoDB", "DynamoDB Streams"],
+      "azure_services": ["Cosmos DB", "Change Feed"],
+      "tags": ["databases", "nosql", "migration", "performance", "saa-c03-critical", "sap-c02"],
+      "file_path": "content/labs/dynamodb-cosmosdb-migration-lab.json"
+    },
+    {
+      "id": "storage-migration-lab",
+      "title": "S3 to Azure Storage: Object Storage and Data Transfer",
+      "category": "storage",
+      "difficulty": "intermediate",
+      "estimated_time": "45 minutes",
+      "description": "Transfer data from AWS S3 to Azure Storage with lifecycle management",
+      "aws_services": ["S3", "Glacier"],
+      "azure_services": ["Blob Storage", "Archive Storage"],
+      "tags": ["storage", "data-transfer", "backup", "saa-c03"],
+      "file_path": "content/labs/storage-migration-lab.json"
+    },
+    {
+      "id": "networking-fundamentals-lab",
+      "title": "VPC to Azure Virtual Networks: Core Networking",
+      "category": "networking",
+      "difficulty": "intermediate",
+      "estimated_time": "60 minutes",
+      "description": "Configure Azure Virtual Networks with AWS VPC equivalent features",
+      "aws_services": ["VPC", "Route Tables", "NAT Gateway"],
+      "azure_services": ["Virtual Networks", "Route Tables", "NAT Gateway"],
+      "tags": ["networking", "security", "infrastructure", "saa-c03"],
+      "file_path": "content/labs/networking-fundamentals-lab.json"
+    },
+    {
+      "id": "identity-access-lab",
+      "title": "IAM to Azure AD: Identity and Access Management",
+      "category": "security",
+      "difficulty": "advanced",
+      "estimated_time": "90 minutes",
+      "description": "Implement Azure AD authentication and authorization equivalent to AWS IAM",
+      "aws_services": ["IAM", "Cognito"],
+      "azure_services": ["Azure Active Directory", "RBAC"],
+      "tags": ["security", "identity", "access-control", "saa-c03"],
+      "file_path": "content/labs/identity-access-lab.json"
+    },
+    {
+      "id": "monitoring-logging-lab",
+      "title": "CloudWatch to Azure Monitor: Observability and Monitoring",
+      "category": "monitoring",
+      "difficulty": "advanced",
+      "estimated_time": "75 minutes",
+      "description": "Set up comprehensive monitoring and logging using Azure Monitor and Log Analytics",
+      "aws_services": ["CloudWatch", "CloudTrail", "X-Ray"],
+      "azure_services": ["Azure Monitor", "Log Analytics", "Application Insights"],
+      "tags": ["monitoring", "logging", "observability", "saa-c03"],
+      "file_path": "content/labs/monitoring-logging-lab.json"
+    },
+    {
+      "id": "well-architected-framework-lab",
+      "title": "AWS Well-Architected to Azure Well-Architected Framework",
+      "category": "architecture",
+      "difficulty": "advanced",
+      "estimated_time": "120 minutes",
+      "description": "Compare and implement Well-Architected Framework principles across both clouds",
+      "aws_services": ["Well-Architected Tool"],
+      "azure_services": ["Well-Architected Framework", "Advisor"],
+      "tags": ["architecture", "best-practices", "governance", "enterprise", "saa-c03"],
+      "file_path": "content/labs/well-architected-framework-lab.json"
+    },
+    {
+      "id": "azure-landing-zones-lab",
+      "title": "AWS Control Tower to Azure Landing Zones: Enterprise Foundation",
+      "category": "architecture",
+      "difficulty": "advanced",
+      "estimated_time": "150 minutes",
+      "description": "Build enterprise-ready cloud foundation using Azure Landing Zones equivalent to AWS Control Tower",
+      "aws_services": ["Control Tower", "Organizations", "Config"],
+      "azure_services": ["Landing Zones", "Management Groups", "Policy"],
+      "tags": ["architecture", "governance", "enterprise", "foundation"],
+      "file_path": "content/labs/azure-landing-zones-lab.json"
+    },
+    {
+      "id": "hub-spoke-architecture-lab",
+      "title": "Transit Gateway to Hub-Spoke: Enterprise Networking",
+      "category": "architecture",
+      "difficulty": "advanced",
+      "estimated_time": "180 minutes",
+      "description": "Implement enterprise hub-spoke networking architecture equivalent to AWS Transit Gateway",
+      "aws_services": ["Transit Gateway", "VPC", "Route 53"],
+      "azure_services": ["Hub-Spoke", "Virtual Networks", "Azure Firewall", "DNS"],
+      "tags": ["architecture", "networking", "enterprise", "connectivity"],
+      "file_path": "content/labs/hub-spoke-architecture-lab.json"
+    },
+    {
+      "id": "enterprise-governance-lab",
+      "title": "AWS Config to Azure Policy: Enterprise Governance and Compliance",
+      "category": "architecture",
+      "difficulty": "advanced",
+      "estimated_time": "120 minutes",
+      "description": "Implement comprehensive governance and compliance using Azure Policy equivalent to AWS Config",
+      "aws_services": ["Config", "CloudFormation", "Organizations"],
+      "azure_services": ["Policy", "Blueprints", "Management Groups"],
+      "tags": ["architecture", "governance", "compliance", "enterprise"],
+      "file_path": "content/labs/enterprise-governance-lab.json"
+    },
+    {
+      "id": "aws-organizations-advanced-lab",
+      "title": "AWS Organizations to Azure Management Groups: Advanced Multi-Account Governance",
+      "category": "architecture",
+      "difficulty": "expert",
+      "estimated_time": "360 minutes",
+      "description": "Master advanced organizational hierarchy design and sophisticated policy frameworks for enterprise-scale governance",
+      "aws_services": ["Organizations", "Control Tower", "Config", "CloudFormation"],
+      "azure_services": ["Management Groups", "Policy", "Blueprints", "Resource Manager", "RBAC"],
+      "tags": ["architecture", "governance", "enterprise", "advanced", "organizations", "sap-c02"],
+      "file_path": "content/labs/aws-organizations-advanced-lab.json"
+    },
+    {
+      "id": "advanced-container-orchestration-lab",
+      "title": "ECS/EKS to AKS: Advanced Container Orchestration and Service Mesh",
+      "category": "containers",
+      "difficulty": "expert",
+      "estimated_time": "300 minutes",
+      "description": "Master enterprise container orchestration with advanced cluster architecture, service mesh, and security patterns",
+      "aws_services": ["ECS", "EKS", "Fargate", "ECR", "App Mesh"],
+      "azure_services": ["AKS", "Container Instances", "Container Registry", "Service Mesh"],
+      "tags": ["containers", "orchestration", "service-mesh", "security", "expert", "sap-c02"],
+      "file_path": "content/labs/advanced-container-orchestration-lab.json"
+    },
+    {
+      "id": "data-analytics-realtime-processing-lab",
+      "title": "Kinesis to Event Hubs: Advanced Real-Time Data Processing and Analytics",
+      "category": "analytics",
+      "difficulty": "expert",
+      "estimated_time": "330 minutes",
+      "description": "Build enterprise-scale real-time data processing pipelines with advanced analytics and machine learning integration",
+      "aws_services": ["Kinesis", "Redshift", "EMR", "Glue", "SageMaker"],
+      "azure_services": ["Event Hubs", "Synapse Analytics", "HDInsight", "Data Factory", "Machine Learning"],
+      "tags": ["analytics", "real-time", "data-processing", "machine-learning", "expert", "sap-c02"],
+      "file_path": "content/labs/data-analytics-realtime-processing-lab.json"
+    },
+    {
+      "id": "advanced-migration-modernization-lab",
+      "title": "AWS Migration Hub to Azure Migrate: Advanced Migration and Application Modernization",
+      "category": "migration",
+      "difficulty": "expert",
+      "estimated_time": "360 minutes",
+      "description": "Master comprehensive migration strategies with advanced assessment tools and application modernization patterns",
+      "aws_services": ["Migration Hub", "DMS", "SMS", "Application Discovery Service"],
+      "azure_services": ["Migrate", "Database Migration Service", "App Service Migration Assistant", "Service Map"],
+      "tags": ["migration", "modernization", "assessment", "database", "expert", "sap-c02"],
+      "file_path": "content/labs/advanced-migration-modernization-lab.json"
+    },
+    {
+      "id": "high-performance-computing-lab",
+      "title": "AWS Batch/ParallelCluster to Azure HPC: High Performance Computing and Scientific Workloads",
+      "category": "compute",
+      "difficulty": "expert",
+      "estimated_time": "300 minutes",
+      "description": "Deploy and manage high-performance computing clusters for scientific and technical computing workloads",
+      "aws_services": ["Batch", "ParallelCluster", "EC2 HPC", "FSx"],
+      "azure_services": ["Batch", "CycleCloud", "HPC Cache", "NetApp Files"],
+      "tags": ["hpc", "scientific-computing", "batch", "parallel-processing", "expert", "sap-c02"],
+      "file_path": "content/labs/high-performance-computing-lab.json"
+    },
+    {
+      "id": "advanced-networking-patterns-lab",
+      "title": "Transit Gateway to Virtual WAN: Advanced Global Networking and Traffic Management",
+      "category": "networking",
+      "difficulty": "expert",
+      "estimated_time": "330 minutes",
+      "description": "Implement enterprise-scale global networking architecture with advanced routing, security, and traffic management patterns",
+      "aws_services": ["Transit Gateway", "Direct Connect", "Route 53", "CloudFront", "Global Accelerator"],
+      "azure_services": ["Virtual WAN", "ExpressRoute", "Traffic Manager", "Front Door", "Firewall"],
+      "tags": ["networking", "global-routing", "security", "performance", "expert", "sap-c02"],
+      "file_path": "content/labs/advanced-networking-patterns-lab.json"
+    },
+    {
+      "id": "kms-keyvault-security-lab",
+      "title": "KMS to Key Vault: Advanced Security and Key Management",
+      "category": "security",
+      "difficulty": "advanced",
+      "estimated_time": "150 minutes",
+      "description": "Master advanced key and certificate management migration from AWS KMS to Azure Key Vault with enterprise security patterns",
+      "aws_services": ["KMS", "CloudHSM", "Certificate Manager", "Secrets Manager"],
+      "azure_services": ["Key Vault", "Managed HSM", "Certificates", "Key Vault Secrets"],
+      "tags": ["security", "encryption", "certificates", "enterprise", "saa-c03-critical", "sap-c02"],
+      "file_path": "content/labs/kms-keyvault-security-lab.json"
+    },
+    {
+      "id": "codepipeline-azuredevops-lab",
+      "title": "CodePipeline to Azure DevOps: Enterprise CI/CD and Infrastructure as Code",
+      "category": "cicd",
+      "difficulty": "expert",
+      "estimated_time": "240 minutes",
+      "description": "Master enterprise CI/CD pipeline migration from AWS CodePipeline to Azure DevOps with advanced deployment strategies, Infrastructure as Code, and security integration",
+      "aws_services": ["CodePipeline", "CodeBuild", "CodeDeploy", "CodeCommit", "CloudFormation"],
+      "azure_services": ["Azure DevOps", "Azure Pipelines", "Azure Repos", "ARM Templates", "Bicep"],
+      "tags": ["cicd", "pipelines", "infrastructure", "security", "enterprise", "sap-c02-critical"],
+      "file_path": "content/labs/codepipeline-azuredevops-lab.json"
+    },
+    {
+      "id": "elasticache-cloudfront-optimization-lab",
+      "title": "ElastiCache/CloudFront to Azure Cache/CDN: Advanced Performance Optimization and Global Distribution",
+      "category": "performance",
+      "difficulty": "expert",
+      "estimated_time": "210 minutes",
+      "description": "Master advanced performance optimization through caching strategies and global content distribution, migrating from AWS ElastiCache/CloudFront to Azure Cache for Redis/Azure CDN with advanced optimization patterns",
+      "aws_services": ["ElastiCache", "CloudFront", "Global Accelerator", "Route 53", "WAF"],
+      "azure_services": ["Azure Cache for Redis", "Azure CDN", "Azure Front Door", "Traffic Manager", "Web Application Firewall"],
+      "tags": ["performance", "caching", "cdn", "optimization", "enterprise", "sap-c02-critical"],
+      "file_path": "content/labs/elasticache-cloudfront-optimization-lab.json"
+    },
+    {
+      "id": "cost-optimization-management-lab",
+      "title": "AWS Cost Tools to Azure Cost Management: Advanced Cost Optimization",
+      "category": "cost-optimization",
+      "difficulty": "intermediate",
+      "estimated_time": "120 minutes",
+      "description": "Master cost optimization with comprehensive cost management tools, reserved capacity strategies, and automated cost controls",
+      "aws_services": ["Cost Explorer", "AWS Budgets", "Reserved Instances", "Spot Instances"],
+      "azure_services": ["Cost Management + Billing", "Azure Budgets", "Reserved VM Instances", "Spot Virtual Machines"],
+      "tags": ["cost-optimization", "enterprise", "governance", "saa-c03", "sap-c02"],
+      "file_path": "content/labs/cost-optimization-management-lab.json"
+    },
+    {
+      "id": "disaster-recovery-business-continuity-lab",
+      "title": "AWS Backup to Azure Site Recovery: Comprehensive Disaster Recovery",
+      "category": "disaster-recovery",
+      "difficulty": "advanced",
+      "estimated_time": "180 minutes",
+      "description": "Master disaster recovery patterns with comprehensive backup, replication, and failover strategies",
+      "aws_services": ["AWS Backup", "Cross-region replication", "Route 53 health checks"],
+      "azure_services": ["Azure Backup", "Site Recovery", "Traffic Manager"],
+      "tags": ["disaster-recovery", "backup", "business-continuity", "enterprise", "saa-c03-critical", "sap-c02"],
+      "file_path": "content/labs/disaster-recovery-business-continuity-lab.json"
+    },
+    {
+      "id": "advanced-security-monitoring-lab",
+      "title": "CloudTrail to Security Center: Advanced Security Monitoring and Threat Detection",
+      "category": "security",
+      "difficulty": "advanced",
+      "estimated_time": "150 minutes",
+      "description": "Master security monitoring with comprehensive threat detection and incident response patterns",
+      "aws_services": ["CloudTrail", "GuardDuty", "Security Hub"],
+      "azure_services": ["Activity Log", "Security Center", "Azure Sentinel"],
+      "tags": ["security", "monitoring", "threat-detection", "enterprise", "saa-c03", "sap-c02"],
+      "file_path": "content/labs/advanced-security-monitoring-lab.json"
+    },
+    {
+      "id": "advanced-autoscaling-performance-lab",
+      "title": "AWS Auto Scaling to Azure VMSS: Advanced Performance and Auto Scaling Patterns",
+      "category": "performance",
+      "difficulty": "expert",
+      "estimated_time": "180 minutes",
+      "description": "Master advanced auto scaling and performance optimization by migrating from AWS Auto Scaling Groups to Azure Virtual Machine Scale Sets with enterprise performance patterns",
+      "aws_services": ["Auto Scaling Groups", "Application Auto Scaling", "Spot Fleet", "CloudWatch", "ELB", "Target Groups"],
+      "azure_services": ["Virtual Machine Scale Sets", "App Service Autoscale", "Spot Virtual Machines", "Azure Monitor", "Load Balancer", "Application Gateway"],
+      "tags": ["performance", "auto-scaling", "optimization", "enterprise", "saa-c03-critical", "spot-instances"],
+      "file_path": "content/labs/advanced-autoscaling-performance-lab.json"
+    },
+    {
+      "id": "comprehensive-cost-optimization-lab",
+      "title": "AWS Cost Management to Azure Cost Optimization: Enterprise FinOps and Budget Governance",
+      "category": "cost-optimization",
+      "difficulty": "expert",
+      "estimated_time": "150 minutes",
+      "description": "Master enterprise cost optimization and FinOps practices by migrating from AWS cost management tools to Azure Cost Management with advanced budget governance",
+      "aws_services": ["Cost Explorer", "AWS Budgets", "Trusted Advisor", "Cost Anomaly Detection", "Reserved Instances", "Savings Plans"],
+      "azure_services": ["Cost Management + Billing", "Azure Budgets", "Azure Advisor", "Cost Alerts", "Reserved VM Instances", "Azure Savings Plans"],
+      "tags": ["cost-optimization", "finops", "budget-governance", "enterprise", "saa-c03-critical", "reserved-capacity"],
+      "file_path": "content/labs/comprehensive-cost-optimization-lab.json"
+    },
+    {
+      "id": "systems-manager-advanced-lab",
+      "title": "AWS Systems Manager to Azure Automation: Advanced Configuration Management and Operations",
+      "category": "operations",
+      "difficulty": "expert",
+      "estimated_time": "165 minutes",
+      "description": "Master advanced operations automation by migrating from AWS Systems Manager to Azure Automation with enterprise configuration management",
+      "aws_services": ["Systems Manager", "Parameter Store", "Patch Manager", "Session Manager", "Run Command", "Maintenance Windows"],
+      "azure_services": ["Azure Automation", "App Configuration", "Update Management", "Azure Bastion", "Run Command", "Maintenance Configurations"],
+      "tags": ["operations", "automation", "configuration-management", "enterprise", "dop-c02-critical", "patch-management"],
+      "file_path": "content/labs/systems-manager-advanced-lab.json"
+    },
+    {
+      "id": "multi-account-governance-lab",
+      "title": "AWS Organizations to Azure Management Groups: Enterprise Multi-Account Governance at Scale",
+      "category": "governance",
+      "difficulty": "expert",
+      "estimated_time": "200 minutes",
+      "description": "Master enterprise multi-account governance by migrating from AWS Organizations to Azure Management Groups with advanced policy frameworks",
+      "aws_services": ["AWS Organizations", "Control Tower", "Service Control Policies", "CloudFormation StackSets", "Config", "CloudTrail"],
+      "azure_services": ["Management Groups", "Azure Policy", "Azure Blueprints", "Resource Manager", "Activity Log", "Security Center"],
+      "tags": ["governance", "multi-account", "enterprise", "policy-management", "sap-c02-critical", "organizations"],
+      "file_path": "content/labs/multi-account-governance-lab.json"
+    },
+    {
+      "id": "advanced-networking-security-lab",
+      "title": "AWS Network Security to Azure Network Protection: Advanced Security Architecture and Zero Trust",
+      "category": "networking-security",
+      "difficulty": "expert",
+      "estimated_time": "190 minutes",
+      "description": "Master advanced network security architecture by migrating from AWS network security services to Azure network protection with zero trust patterns",
+      "aws_services": ["Transit Gateway", "Network Firewall", "WAF", "Shield", "VPC Flow Logs", "GuardDuty"],
+      "azure_services": ["Virtual WAN", "Azure Firewall Premium", "Application Gateway WAF", "DDoS Protection", "NSG Flow Logs", "Security Center"],
+      "tags": ["networking", "security", "zero-trust", "enterprise", "sap-c02-critical", "network-protection"],
+      "file_path": "content/labs/advanced-networking-security-lab.json"
+    },
+    {
+      "id": "devops-automation-advanced-lab",
+      "title": "AWS CodeCommit/Build/Deploy to Azure DevOps: Enterprise CI/CD and Infrastructure Automation",
+      "category": "devops-automation",
+      "difficulty": "expert",
+      "estimated_time": "210 minutes",
+      "description": "Master enterprise DevOps automation by migrating from AWS Code services to Azure DevOps with advanced CI/CD and infrastructure as code",
+      "aws_services": ["CodeCommit", "CodeBuild", "CodeDeploy", "CodePipeline", "CloudFormation", "CDK"],
+      "azure_services": ["Azure Repos", "Azure Pipelines", "Azure DevOps", "ARM Templates", "Bicep", "Terraform"],
+      "tags": ["devops", "cicd", "infrastructure-as-code", "enterprise", "dop-c02-critical", "automation"],
+      "file_path": "content/labs/devops-automation-advanced-lab.json"
+    },
+    {
+      "id": "saa-c03-security-deep-dive-lab",
+      "title": "AWS Security Architecture to Azure Security: Advanced IAM, Network Security, and Compliance Deep-Dive",
+      "category": "security-architecture",
+      "difficulty": "expert",
+      "estimated_time": "185 minutes",
+      "awsCertification": "SAA-C03",
+      "certificationWeight": "30% - Design Secure Applications and Architectures Domain",
+      "description": "Master enterprise-scale security architecture by migrating from AWS advanced security patterns to Azure security solutions with comprehensive IAM, network security, threat protection, and compliance frameworks",
+      "aws_services": ["IAM", "Organizations", "SSO", "GuardDuty", "Security Hub", "WAF", "Shield", "Secrets Manager", "KMS", "CloudTrail", "Config"],
+      "azure_services": ["Azure AD", "Privileged Identity Management", "Security Center", "Sentinel", "Key Vault", "Application Gateway WAF", "DDoS Protection", "Azure Monitor", "Policy"],
+      "tags": ["security", "iam", "compliance", "threat-protection", "encryption", "saa-c03-critical", "enterprise"],
+      "file_path": "content/labs/saa-c03-security-deep-dive-lab.json"
+    },
+    {
+      "id": "saa-c03-high-performance-architecture-lab",
+      "title": "AWS High-Performance Architecture to Azure: ElastiCache, CloudFront, and Database Optimization",
+      "category": "high-performance",
+      "difficulty": "expert",
+      "estimated_time": "175 minutes",
+      "awsCertification": "SAA-C03",
+      "certificationWeight": "24% - Design High-Performing Architectures Domain",
+      "description": "Master high-performance architecture patterns by migrating from AWS performance services to Azure high-performance solutions with advanced optimization",
+      "aws_services": ["ElastiCache", "CloudFront", "RDS", "DynamoDB", "Global Accelerator", "Route 53"],
+      "azure_services": ["Azure Cache for Redis", "Azure Front Door", "SQL Database", "Cosmos DB", "Traffic Manager", "Azure DNS"],
+      "tags": ["performance", "caching", "cdn", "database-optimization", "saa-c03-critical", "global-distribution"],
+      "file_path": "content/labs/saa-c03-high-performance-architecture-lab.json"
+    },
+    {
+      "id": "dop-c02-monitoring-incident-response-lab",
+      "title": "DOP-C02 Monitoring & Incident Response: Enterprise Event-Driven Automation",
+      "category": "monitoring-automation",
+      "difficulty": "expert",
+      "estimated_time": "195 minutes",
+      "awsCertification": "DOP-C02",
+      "certificationWeight": "15% - Monitoring and Logging + 14% - Incident and Event Response Domains",
+      "description": "Master enterprise monitoring, incident response automation, and event-driven architectures by migrating from AWS CloudWatch and EventBridge to Azure Monitor and Event Grid",
+      "aws_services": ["CloudWatch", "EventBridge", "Systems Manager", "X-Ray", "SNS", "SQS", "Lambda", "CloudTrail", "Config"],
+      "azure_services": ["Azure Monitor", "Event Grid", "Logic Apps", "Service Health", "Action Groups", "Application Insights", "Log Analytics", "Azure Automation"],
+      "tags": ["monitoring", "incident-response", "event-driven", "automation", "dop-c02-critical", "self-healing"],
+      "file_path": "content/labs/dop-c02-monitoring-incident-response-lab.json"
+    },
+    {
+      "id": "dop-c02-policies-standards-automation-lab",
+      "title": "DOP-C02 Policies & Standards Automation: Enterprise Governance at Scale",
+      "category": "governance-automation",
+      "difficulty": "expert",
+      "estimated_time": "205 minutes",
+      "awsCertification": "DOP-C02",
+      "certificationWeight": "17% - Security and Compliance Domain",
+      "description": "Master enterprise governance automation, policy enforcement, and compliance validation at scale by migrating from AWS Config and Organizations to Azure Policy and Management Groups",
+      "aws_services": ["AWS Config", "AWS Organizations", "IAM", "CloudFormation", "Systems Manager", "Security Hub", "CloudTrail", "Cost and Billing"],
+      "azure_services": ["Azure Policy", "Management Groups", "Azure RBAC", "Azure Blueprints", "Resource Graph", "Security Center", "Activity Log", "Cost Management"],
+      "tags": ["governance", "policy-automation", "compliance", "enterprise", "dop-c02-critical", "regulatory"],
+      "file_path": "content/labs/dop-c02-policies-standards-automation-lab.json"
+    },
+    {
+      "id": "dop-c02-resilient-cloud-solutions-lab",
+      "title": "DOP-C02 Resilient Cloud Solutions: Enterprise Fault Tolerance & Self-Healing",
+      "category": "resilience-automation",
+      "difficulty": "expert",
+      "estimated_time": "215 minutes",
+      "awsCertification": "DOP-C02",
+      "certificationWeight": "15% - Resilient Cloud Solutions Domain",
+      "description": "Master enterprise resilience patterns, fault tolerance architecture, and self-healing systems by migrating from AWS multi-AZ and Auto Scaling to Azure Availability Zones and VMSS",
+      "aws_services": ["Auto Scaling Groups", "Application Load Balancer", "Route 53", "RDS Multi-AZ", "ElastiCache", "S3 Cross-Region Replication", "CloudFormation StackSets", "Systems Manager"],
+      "azure_services": ["Virtual Machine Scale Sets", "Application Gateway", "Traffic Manager", "Azure SQL Database", "Azure Cache for Redis", "Storage Account", "Azure Site Recovery", "Azure Automation"],
+      "tags": ["resilience", "fault-tolerance", "self-healing", "disaster-recovery", "dop-c02-critical", "chaos-engineering"],
+      "file_path": "content/labs/dop-c02-resilient-cloud-solutions-lab.json"
+    },
+    {
+      "id": "api-gateway-management-lab",
+      "title": "API Gateway to API Management: Enterprise API Strategies",
+      "category": "api-management",
+      "difficulty": "intermediate",
+      "estimated_time": "90 minutes",
+      "description": "Master API management patterns with comprehensive gateway migration and policy implementation",
+      "aws_services": ["API Gateway", "Lambda", "Cognito"],
+      "azure_services": ["API Management", "Functions", "Azure AD"],
+      "tags": ["api-management", "serverless", "security", "enterprise", "saa-c03"],
+      "file_path": "content/labs/api-gateway-management-lab.json"
+    },
+    {
+      "id": "cicd-automation-lab",
+      "title": "CodePipeline to Azure DevOps: Complete CI/CD Automation",
+      "category": "devops-automation",
+      "difficulty": "advanced",
+      "estimated_time": "150 minutes",
+      "description": "Master Azure DevOps pipelines, automated testing, and deployment strategies for comprehensive CI/CD automation",
+      "aws_services": ["CodePipeline", "CodeBuild", "CodeDeploy", "CodeCommit", "CodeArtifact"],
+      "azure_services": ["Azure Pipelines", "Azure DevOps", "Azure Repos", "Azure Artifacts"],
+      "tags": ["cicd", "devops", "automation", "testing", "artifact-management", "dop-c02", "dop-c02-critical"],
+      "file_path": "content/labs/cicd-automation-lab.json"
+    },
+    {
+      "id": "infrastructure-as-code-lab",
+      "title": "CloudFormation to ARM/Bicep: Infrastructure as Code Mastery",
+      "category": "infrastructure",
+      "difficulty": "advanced",
+      "estimated_time": "120 minutes",
+      "description": "Master ARM templates, Bicep, and infrastructure automation with multi-region deployments and compliance validation",
+      "aws_services": ["CloudFormation", "AWS SAM", "StackSets", "Change Sets"],
+      "azure_services": ["ARM Templates", "Bicep", "Management Groups", "Azure Policy"],
+      "tags": ["iac", "infrastructure", "automation", "bicep", "arm-templates", "dop-c02", "dop-c02-critical"],
+      "file_path": "content/labs/infrastructure-as-code-lab.json"
+    },
+    {
+      "id": "governance-automation-lab",
+      "title": "AWS Config to Azure Policy: Automated Governance and Compliance",
+      "category": "governance-automation",
+      "difficulty": "expert",
+      "estimated_time": "90 minutes",
+      "description": "Master Azure Policy, Management Groups, and automated governance with compliance monitoring and remediation",
+      "aws_services": ["AWS Config", "AWS Organizations", "Systems Manager", "Service Control Policies"],
+      "azure_services": ["Azure Policy", "Management Groups", "Azure Automation", "Azure Blueprints"],
+      "tags": ["governance", "compliance", "policy-automation", "tagging", "enterprise", "dop-c02", "dop-c02-critical"],
+      "file_path": "content/labs/governance-automation-lab.json"
+    }
+  ],
+  "categories": {
+    "ai-ml": {
+      "title": "AI & Machine Learning",
+      "description": "Machine learning models, cognitive services, and AI-powered applications",
+      "icon": "sparkles"
+    },
+    "ml-data-engineering": {
+      "title": "ML Data Engineering",
+      "description": "Machine learning data pipelines, feature engineering, and ML-specific data processing",
+      "icon": "database"
+    },
+    "ml-data-analysis": {
+      "title": "ML Data Analysis",
+      "description": "Exploratory data analysis, statistical modeling, and data insights for machine learning",
+      "icon": "chart-bar"
+    },
+    "ml-model-development": {
+      "title": "ML Model Development",
+      "description": "Machine learning model training, hyperparameter optimization, and model evaluation",
+      "icon": "cog"
+    },
+    "ml-deployment-maintenance": {
+      "title": "ML Deployment & Maintenance",
+      "description": "Model deployment, inference, monitoring, and production maintenance",
+      "icon": "rocket-launch"
+    },
+    "ml-operations-mlops": {
+      "title": "MLOps & ML Operations",
+      "description": "MLOps workflows, automation, governance, and ML lifecycle management",
+      "icon": "arrows-pointing-out"
+    },
+    "advanced-networking": {
+      "title": "Advanced Networking",
+      "description": "Enterprise network design, global connectivity, and hybrid networking architectures",
+      "icon": "globe-alt"
+    },
+    "network-implementation": {
+      "title": "Network Implementation",
+      "description": "Advanced network configuration, automation, and infrastructure as code",
+      "icon": "cog"
+    },
+    "network-operations": {
+      "title": "Network Operations",
+      "description": "Network monitoring, troubleshooting, and performance optimization",
+      "icon": "chart-bar"
+    },
+    "network-security-governance": {
+      "title": "Network Security & Governance",
+      "description": "Zero-trust networking, compliance, and advanced threat protection",
+      "icon": "shield-check"
+    },
+    "iot-edge": {
+      "title": "IoT & Edge Computing", 
+      "description": "Internet of Things devices, edge computing, and device management",
+      "icon": "cpu-chip"
+    },
+    "compute": {
+      "title": "Compute Services",
+      "description": "Virtual machines, containers, and serverless computing",
+      "icon": "server"
+    },
+    "messaging": {
+      "title": "Messaging & Events",
+      "description": "Message queues, pub/sub topics, and event-driven architectures",
+      "icon": "chat-bubble-left-right"
+    },
+    "containers": {
+      "title": "Container Services",
+      "description": "Docker containers, orchestration, and microservices",
+      "icon": "cube"
+    },
+    "serverless": {
+      "title": "Serverless Computing",
+      "description": "Functions, event-driven architectures, and serverless patterns",
+      "icon": "lightning-bolt"
+    },
+    "databases": {
+      "title": "Database Services",
+      "description": "Managed databases, data migration, and storage solutions",
+      "icon": "database"
+    },
+    "storage": {
+      "title": "Storage Services",
+      "description": "Object storage, file systems, and backup solutions",
+      "icon": "folder"
+    },
+    "networking": {
+      "title": "Networking",
+      "description": "Virtual networks, connectivity, and traffic management",
+      "icon": "globe"
+    },
+    "security": {
+      "title": "Security & Identity",
+      "description": "Authentication, authorization, and security controls",
+      "icon": "shield-check"
+    },
+    "monitoring": {
+      "title": "Monitoring & Observability",
+      "description": "Logging, metrics, and application performance monitoring",
+      "icon": "chart-bar"
+    },
+    "architecture": {
+      "title": "Enterprise Architecture",
+      "description": "Well-architected frameworks, governance, and enterprise patterns",
+      "icon": "building-office"
+    },
+    "analytics": {
+      "title": "Analytics & Data Processing",
+      "description": "Real-time processing, data lakes, and machine learning",
+      "icon": "presentation-chart-line"
+    },
+    "migration": {
+      "title": "Migration & Modernization",
+      "description": "Assessment tools, migration strategies, and application modernization",
+      "icon": "arrows-right-left"
+    },
+    "cicd": {
+      "title": "CI/CD & DevOps",
+      "description": "Continuous integration, deployment pipelines, and DevOps automation",
+      "icon": "play-circle"
+    },
+    "performance": {
+      "title": "Performance & Optimization",
+      "description": "Caching strategies, CDN optimization, and performance tuning",
+      "icon": "lightning-bolt"
+    },
+    "cost-optimization": {
+      "title": "Cost Optimization",
+      "description": "Cost management, reserved capacity, and resource optimization",
+      "icon": "calculator"
+    },
+    "disaster-recovery": {
+      "title": "Disaster Recovery",
+      "description": "Backup, replication, and business continuity planning",
+      "icon": "shield-exclamation"
+    },
+    "api-management": {
+      "title": "API Management",
+      "description": "API gateways, developer portals, and enterprise API strategies",
+      "icon": "code-bracket"
+    },
+    "communication": {
+      "title": "Communication Services",
+      "description": "Email, SMS, voice communications, and messaging workflows",
+      "icon": "chat-bubble-bottom-center-text"
+    },
+    "media": {
+      "title": "Media & Gaming",
+      "description": "Video processing, gaming backends, streaming, and content delivery",
+      "icon": "play-circle"
+    },
+    "search": {
+      "title": "Search & Content Management",
+      "description": "Intelligent search, content discovery, and knowledge management",
+      "icon": "magnifying-glass"
+    },
+    "virtual-desktop": {
+      "title": "Virtual Desktop Infrastructure",
+      "description": "Remote desktops, application streaming, and VDI management",
+      "icon": "computer-desktop"
+    },
+    "cloud-fundamentals": {
+      "title": "Cloud Fundamentals",
+      "description": "Core cloud concepts, benefits, and foundational knowledge",
+      "icon": "cloud"
+    },
+    "cloud-security-fundamentals": {
+      "title": "Cloud Security Fundamentals",
+      "description": "Basic security concepts, shared responsibility, and compliance",
+      "icon": "shield-check"
+    },
+    "cloud-services-fundamentals": {
+      "title": "Cloud Services Fundamentals",
+      "description": "Core cloud services, service selection, and technology stack",
+      "icon": "server"
+    },
+    "cloud-financial-management": {
+      "title": "Cloud Financial Management",
+      "description": "Billing, pricing, cost management, and support planning",
+      "icon": "calculator"
+    },
+    "security-architecture": {
+      "title": "Security Architecture",
+      "description": "Enterprise security patterns, zero trust, and advanced threat protection",
+      "icon": "shield-check"
+    },
+    "high-performance": {
+      "title": "High Performance Architecture",
+      "description": "Performance optimization, caching strategies, and global distribution",
+      "icon": "lightning-bolt"
+    },
+    "monitoring-automation": {
+      "title": "Monitoring & Automation",
+      "description": "Event-driven monitoring, incident response, and self-healing systems",
+      "icon": "chart-bar"
+    },
+    "governance-automation": {
+      "title": "Governance Automation",
+      "description": "Policy automation, compliance frameworks, and enterprise governance",
+      "icon": "building-office"
+    },
+    "resilience-automation": {
+      "title": "Resilience & Automation",
+      "description": "Fault tolerance, disaster recovery, and automated recovery systems",
+      "icon": "shield-exclamation"
+    },
+    "operations": {
+      "title": "Operations Management",
+      "description": "Configuration management, patch automation, and operational excellence",
+      "icon": "cog"
+    },
+    "governance": {
+      "title": "Enterprise Governance",
+      "description": "Multi-account governance, policy frameworks, and organizational controls",
+      "icon": "building-office"
+    },
+    "networking-security": {
+      "title": "Network Security",
+      "description": "Network protection, zero trust architecture, and advanced security controls",
+      "icon": "shield-check"
+    },
+    "devops-automation": {
+      "title": "DevOps Automation",
+      "description": "CI/CD automation, infrastructure as code, and DevOps best practices",
+      "icon": "play-circle"
+    },
+    "infrastructure": {
+      "title": "Infrastructure as Code",
+      "description": "Template-based infrastructure deployment, automation, and compliance",
+      "icon": "code-bracket"
+    }
+  },
+  "difficulty_levels": {
+    "beginner": {
+      "title": "Beginner",
+      "description": "New to cloud platforms, basic concepts and simple deployments",
+      "estimated_time_range": "30-45 minutes",
+      "prerequisites": "Basic IT knowledge"
+    },
+    "intermediate": {
+      "title": "Intermediate",
+      "description": "Some cloud experience, multi-service integrations",
+      "estimated_time_range": "45-90 minutes",
+      "prerequisites": "Basic AWS or Azure experience"
+    },
+    "advanced": {
+      "title": "Advanced",
+      "description": "Experienced with cloud platforms, enterprise patterns",
+      "estimated_time_range": "90-180 minutes",
+      "prerequisites": "1+ years AWS experience"
+    },
+    "expert": {
+      "title": "Expert",
+      "description": "Deep expertise, complex architectures, advanced patterns",
+      "estimated_time_range": "300-360 minutes",
+      "prerequisites": "Solutions Architect level experience"
+    }
+  },
+  "learning_paths": {
+    "foundations": {
+      "title": "Cloud Foundations",
+      "description": "Start your Azure journey with fundamental services",
+      "labs": ["vm-deployment-lab", "storage-migration-lab", "networking-fundamentals-lab"],
+      "estimated_total_time": "135 minutes"
+    },
+    "application_modernization": {
+      "title": "Application Modernization",
+      "description": "Modernize applications with containers and serverless",
+      "labs": ["container-services-lab", "serverless-functions-lab", "advanced-container-orchestration-lab"],
+      "estimated_total_time": "390 minutes"
+    },
+    "data_and_analytics": {
+      "title": "Data & Analytics",
+      "description": "Migrate and modernize your data platform",
+      "labs": ["database-migration-lab", "data-analytics-realtime-processing-lab"],
+      "estimated_total_time": "390 minutes"
+    },
+    "enterprise_architecture": {
+      "title": "Enterprise Architecture",
+      "description": "Build enterprise-grade cloud foundations",
+      "labs": ["well-architected-framework-lab", "azure-landing-zones-lab", "hub-spoke-architecture-lab", "enterprise-governance-lab"],
+      "estimated_total_time": "570 minutes"
+    },
+    "advanced_migration": {
+      "title": "Advanced Migration Strategies",
+      "description": "Master complex migration and modernization patterns",
+      "labs": ["advanced-migration-modernization-lab", "aws-organizations-advanced-lab"],
+      "estimated_total_time": "720 minutes"
+    },
+    "security_and_governance": {
+      "title": "Security & Governance",
+      "description": "Implement enterprise security and compliance",
+      "labs": ["identity-access-lab", "kms-keyvault-security-lab", "enterprise-governance-lab", "aws-organizations-advanced-lab"],
+      "estimated_total_time": "720 minutes"
+    },
+    "devops_and_automation": {
+      "title": "DevOps & Automation",
+      "description": "Master CI/CD pipelines and infrastructure automation",
+      "labs": ["codepipeline-azuredevops-lab", "monitoring-logging-lab"],
+      "estimated_total_time": "315 minutes"
+    },
+    "performance_optimization": {
+      "title": "Performance Optimization",
+      "description": "Advanced caching, CDN optimization, and performance tuning",
+      "labs": ["elasticache-cloudfront-optimization-lab", "monitoring-logging-lab"],
+      "estimated_total_time": "285 minutes"
+    },
+    "monitoring_and_operations": {
+      "title": "Monitoring & Operations",
+      "description": "Implement comprehensive observability",
+      "labs": ["monitoring-logging-lab"],
+      "estimated_total_time": "75 minutes"
+    },
+    "specialized_workloads": {
+      "title": "Specialized Workloads",
+      "description": "Handle specialized computing and networking requirements",
+      "labs": ["high-performance-computing-lab", "advanced-networking-patterns-lab"],
+      "estimated_total_time": "630 minutes"
+    },
+    "solutions_architect_associate": {
+      "title": "Solutions Architect Associate Track (SAA-C03) - 100% Coverage",
+      "description": "Complete preparation for AWS SAA-C03 certification equivalent skills and knowledge with full domain coverage",
+      "labs": [
+        "vm-deployment-lab",
+        "networking-fundamentals-lab",
+        "identity-access-lab",
+        "sqs-sns-servicebus-eventgrid-lab",
+        "dynamodb-cosmosdb-migration-lab",
+        "kms-keyvault-security-lab",
+        "database-migration-lab",
+        "storage-migration-lab",
+        "monitoring-logging-lab",
+        "serverless-functions-lab",
+        "container-services-lab",
+        "well-architected-framework-lab",
+        "cost-optimization-management-lab",
+        "disaster-recovery-business-continuity-lab",
+        "advanced-security-monitoring-lab",
+        "api-gateway-management-lab"
+      ],
+      "estimated_total_time": "1560 minutes"
+    },
+    "solutions_architect_professional": {
+      "title": "Solutions Architect Professional Track (SAP-C02) - 100% Coverage",
+      "description": "Complete preparation for advanced enterprise scenarios equivalent to AWS SAP-C02 with full domain coverage",
+      "labs": [
+        "sqs-sns-servicebus-eventgrid-lab",
+        "dynamodb-cosmosdb-migration-lab",
+        "kms-keyvault-security-lab",
+        "codepipeline-azuredevops-lab",
+        "elasticache-cloudfront-optimization-lab",
+        "aws-organizations-advanced-lab",
+        "advanced-container-orchestration-lab",
+        "data-analytics-realtime-processing-lab",
+        "advanced-migration-modernization-lab",
+        "high-performance-computing-lab",
+        "advanced-networking-patterns-lab",
+        "cost-optimization-management-lab",
+        "disaster-recovery-business-continuity-lab",
+        "advanced-security-monitoring-lab",
+        "api-gateway-management-lab"
+      ],
+      "estimated_total_time": "3240 minutes"
+    },
+    "clf_c02_track": {
+      "title": "Cloud Practitioner Track (CLF-C02) - 100% Coverage",
+      "description": "Complete foundational cloud knowledge equivalent to AWS Cloud Practitioner certification with full domain coverage",
+      "labs": [
+        "clf-c02-cloud-concepts-lab",
+        "clf-c02-security-compliance-lab",
+        "clf-c02-technology-services-lab",
+        "clf-c02-billing-support-lab"
+      ],
+      "estimated_total_time": "270 minutes"
+    },
+    "dva_c02_track": {
+      "title": "Developer Associate Track (DVA-C02) - 100% Coverage",
+      "description": "Complete AWS Developer Associate equivalent skills with full domain coverage: Development (32%), Security (26%), Deployment (24%), Troubleshooting (18%)",
+      "labs": [
+        "dva-c02-development-services-lab",
+        "dva-c02-security-lab",
+        "dva-c02-deployment-lab",
+        "dva-c02-troubleshooting-optimization-lab"
+      ],
+      "estimated_total_time": "420 minutes"
+    },
+    "soa_c02_track": {
+      "title": "SysOps Administrator Associate Track (SOA-C02) - 100% Coverage",
+      "description": "Complete AWS SysOps Administrator Associate equivalent skills with full domain coverage: Monitoring & Remediation (20%), Reliability & Continuity (16%), Deployment & Automation (18%), Security & Compliance (16%), Networking & Content Delivery (18%), Cost & Performance Optimization (12%)",
+      "labs": [
+        "soa-c02-monitoring-logging-remediation-lab",
+        "soa-c02-reliability-business-continuity-lab",
+        "soa-c02-deployment-provisioning-automation-lab",
+        "soa-c02-security-compliance-lab",
+        "soa-c02-networking-content-delivery-lab",
+        "soa-c02-cost-performance-optimization-lab"
+      ],
+      "estimated_total_time": "690 minutes"
+    },
+    "dea_c01_track": {
+      "title": "Data Engineer Associate Track (DEA-C01) - 100% Coverage",
+      "description": "Complete AWS Data Engineer Associate equivalent skills with full domain coverage: Data Ingestion & Transformation (34%), Data Store Management (26%), Data Operations & Support (22%), Data Security & Governance (18%)",
+      "labs": [
+        "dea-c01-data-ingestion-transformation-lab",
+        "dea-c01-data-store-management-lab",
+        "dea-c01-data-operations-support-lab",
+        "dea-c01-data-security-governance-lab"
+      ],
+      "estimated_total_time": "540 minutes"
+    },
+    "mla_c01_track": {
+      "title": "Machine Learning Engineer Associate Track (MLA-C01) - 100% Coverage",
+      "description": "Complete AWS Machine Learning Engineer Associate equivalent skills with full domain coverage: Model Development (26%), Model Deployment & Maintenance (22%), Data Engineering for ML (20%), Exploratory Data Analysis (16%), ML Operations & MLOps (16%)",
+      "labs": [
+        "mla-c01-data-engineering-ml-lab",
+        "mla-c01-exploratory-data-analysis-lab",
+        "mla-c01-model-development-lab",
+        "mla-c01-model-deployment-maintenance-lab",
+        "mla-c01-ml-operations-mlops-lab"
+      ],
+      "estimated_total_time": "670 minutes"
+    },
+    "ans_c01_track": {
+      "title": "Advanced Networking Specialty Track (ANS-C01) - 100% Coverage",
+      "description": "Complete AWS Advanced Networking Specialty equivalent skills with full domain coverage: Network Design (30%), Network Implementation (26%), Network Security, Compliance & Governance (24%), Network Management & Operations (20%)",
+      "labs": [
+        "ans-c01-network-design-lab",
+        "ans-c01-network-implementation-lab",
+        "ans-c01-network-management-operations-lab",
+        "ans-c01-network-security-compliance-governance-lab"
+      ],
+      "estimated_total_time": "600 minutes"
+    },
+    "mls_c01_track": {
+      "title": "Machine Learning Specialty Track (MLS-C01) - 100% Coverage",
+      "description": "Complete AWS Machine Learning Specialty equivalent skills with full domain coverage: Modeling (36%), Exploratory Data Analysis (24%), Data Engineering (20%), ML Implementation & Operations (20%)",
+      "labs": [
+        "mls-c01-data-engineering-lab",
+        "mls-c01-exploratory-data-analysis-lab",
+        "mls-c01-modeling-lab",
+        "mls-c01-ml-implementation-operations-lab"
+      ],
+      "estimated_total_time": "580 minutes"
+    },
+    "scs_c02_track": {
+      "title": "Security Specialty Track (SCS-C02) - 100% Coverage",
+      "description": "Complete AWS Security Specialty equivalent skills with full domain coverage: Infrastructure Security (20%), Security Logging & Monitoring (18%), Data Protection (18%), Identity & Access Management (16%), Threat Detection & Incident Response (14%), Governance & Security Management (14%)",
+      "labs": [
+        "scs-c02-infrastructure-security-lab",
+        "scs-c02-security-logging-monitoring-lab",
+        "scs-c02-data-protection-lab",
+        "scs-c02-identity-access-management-lab",
+        "scs-c02-threat-detection-incident-response-lab",
+        "scs-c02-governance-security-management-lab"
+      ],
+      "estimated_total_time": "860 minutes"
+    },
+    "dbs_c01_track": {
+      "title": "Database Specialty Track (DBS-C01) - 100% Coverage",
+      "description": "Complete AWS Database Specialty equivalent skills with full domain coverage: Workload-Specific Database Design (26%), Deployment and Migration (20%), Management and Operations (18%), Monitoring and Troubleshooting (18%), Database Security (18%)",
+      "labs": [
+        "dbs-c01-workload-specific-database-design-lab",
+        "dbs-c01-deployment-migration-lab",
+        "dbs-c01-management-operations-lab",
+        "dbs-c01-monitoring-troubleshooting-lab",
+        "dbs-c01-database-security-lab"
+      ],
+      "estimated_total_time": "760 minutes"
+    },
+    "dop_c02_track": {
+      "title": "DevOps Engineer Professional Track (DOP-C02) - 100% Coverage",
+      "description": "Complete DevOps automation and infrastructure management equivalent to AWS DOP-C02 certification with full domain coverage",
+      "labs": [
+        "cicd-automation-lab",
+        "infrastructure-as-code-lab",
+        "governance-automation-lab",
+        "codepipeline-azuredevops-lab",
+        "systems-manager-advanced-lab",
+        "dop-c02-monitoring-incident-response-lab",
+        "dop-c02-policies-standards-automation-lab",
+        "dop-c02-resilient-cloud-solutions-lab",
+        "devops-automation-advanced-lab",
+        "aws-organizations-advanced-lab",
+        "advanced-security-monitoring-lab"
+      ],
+      "estimated_total_time": "2115 minutes"
+    }
+  },
+  "tags": {
+    "saa-c03": {
+      "title": "SAA-C03 Equivalent",
+      "description": "Topics equivalent to AWS Solutions Architect Associate certification requirements"
+    },
+    "saa-c03-critical": {
+      "title": "SAA-C03 Critical",
+      "description": "Essential topics for AWS Solutions Architect Associate certification preparation"
+    },
+    "sap-c02": {
+      "title": "SAP-C02 Equivalent",
+      "description": "Advanced topics equivalent to AWS Solutions Architect Professional certification requirements"
+    },
+    "enterprise": {
+      "title": "Enterprise Ready",
+      "description": "Production-ready patterns for enterprise environments"
+    },
+    "expert": {
+      "title": "Expert Level",
+      "description": "Advanced scenarios requiring deep expertise"
+    },
+    "sap-c02-critical": {
+      "title": "SAP-C02 Critical",
+      "description": "Essential topics for AWS Solutions Architect Professional certification preparation"
+    },
+    "dop-c02": {
+      "title": "DOP-C02 Equivalent",
+      "description": "Topics equivalent to AWS DevOps Engineer Professional certification requirements"
+    },
+    "dop-c02-critical": {
+      "title": "DOP-C02 Critical",
+      "description": "Essential topics for AWS DevOps Engineer Professional certification preparation"
+    },
+    "clf-c02": {
+      "title": "CLF-C02 Equivalent",
+      "description": "Topics equivalent to AWS Cloud Practitioner certification requirements"
+    },
+    "clf-c02-critical": {
+      "title": "CLF-C02 Critical",
+      "description": "Essential topics for AWS Cloud Practitioner certification preparation"
+    },
+    "dva-c02": {
+      "title": "DVA-C02 Equivalent",
+      "description": "Topics equivalent to AWS Developer Associate certification requirements"
+    },
+    "dva-c02-critical": {
+      "title": "DVA-C02 Critical",
+      "description": "Essential topics for AWS Developer Associate certification preparation"
+    },
+    "soa-c02": {
+      "title": "SOA-C02 Equivalent",
+      "description": "Topics equivalent to AWS SysOps Administrator Associate certification requirements"
+    },
+    "soa-c02-critical": {
+      "title": "SOA-C02 Critical",
+      "description": "Essential topics for AWS SysOps Administrator Associate certification preparation"
+    },
+    "dea-c01": {
+      "title": "DEA-C01 Equivalent",
+      "description": "Topics equivalent to AWS Data Engineer Associate certification requirements"
+    },
+    "dea-c01-critical": {
+      "title": "DEA-C01 Critical",
+      "description": "Essential topics for AWS Data Engineer Associate certification preparation"
+    },
+    "mla-c01": {
+      "title": "MLA-C01 Equivalent",
+      "description": "Topics equivalent to AWS Machine Learning Engineer Associate certification requirements"
+    },
+    "mla-c01-high": {
+      "title": "MLA-C01 High Priority",
+      "description": "High priority topics for AWS Machine Learning Engineer Associate certification preparation"
+    },
+    "ans-c01": {
+      "title": "ANS-C01 Equivalent",
+      "description": "Topics equivalent to AWS Advanced Networking Specialty certification requirements"
+    },
+    "ans-c01-specialty": {
+      "title": "ANS-C01 Specialty",
+      "description": "Specialty topics for AWS Advanced Networking certification preparation"
+    },
+    "mls-c01": {
+      "title": "MLS-C01 Equivalent",
+      "description": "Topics equivalent to AWS Machine Learning Specialty certification requirements"
+    },
+    "mls-c01-specialty": {
+      "title": "MLS-C01 Specialty",
+      "description": "Specialty topics for AWS Machine Learning certification preparation"
+    },
+    "foundational": {
+      "title": "Foundational Level",
+      "description": "Entry-level cloud concepts and fundamental knowledge"
+    },
+    "scs-c02": {
+      "title": "SCS-C02 Equivalent",
+      "description": "Topics equivalent to AWS Security Specialty certification requirements"
+    },
+    "scs-c02-specialty": {
+      "title": "SCS-C02 Specialty",
+      "description": "Specialty topics for AWS Security certification preparation"
+    },
+    "dbs-c01": {
+      "title": "DBS-C01 Equivalent",
+      "description": "Topics equivalent to AWS Database Specialty certification requirements"
+    },
+    "dbs-c01-specialty": {
+      "title": "DBS-C01 Specialty",
+      "description": "Specialty topics for AWS Database certification preparation"
+    }
+  }
+}

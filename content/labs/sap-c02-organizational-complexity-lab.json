@@ -1,0 +1,232 @@
+{
+  "id": "sap-c02-organizational-complexity-lab",
+  "title": "AWS Enterprise Multi-Account Architecture to Azure: Organizational Complexity and Enterprise Governance at Scale",
+  "category": "enterprise-architecture",
+  "difficulty": "expert",
+  "estimatedTime": "240 minutes",
+  "description": "Master enterprise-scale organizational complexity by designing and implementing sophisticated AWS multi-account architectures with Organizations, Control Tower, and Service Catalog, then migrating to Azure with Management Groups, Blueprints, and enterprise governance frameworks for complex organizational structures.",
+  "awsCertification": "SAP-C02",
+  "certificationWeight": "26% - Design Solutions for Organizational Complexity Domain",
+  "awsServices": [
+    "AWS Organizations",
+    "AWS Control Tower",
+    "AWS Service Catalog",
+    "AWS Config",
+    "AWS CloudFormation StackSets",
+    "AWS Directory Service",
+    "AWS Single Sign-On",
+    "AWS RAM",
+    "AWS Transit Gateway",
+    "AWS Cost Explorer",
+    "AWS Budgets",
+    "AWS CloudTrail"
+  ],
+  "azureServices": [
+    "Management Groups",
+    "Azure Blueprints",
+    "Azure Policy",
+    "Azure Resource Manager",
+    "Azure AD",
+    "Azure AD B2B",
+    "Azure Lighthouse",
+    "Virtual WAN",
+    "Cost Management",
+    "Azure Budgets",
+    "Activity Log",
+    "Azure Arc"
+  ],
+  "prerequisites": [
+    "Advanced understanding of enterprise architecture patterns",
+    "Experience with multi-account/subscription management",
+    "Knowledge of enterprise governance and compliance requirements",
+    "Understanding of large-scale networking and security architectures",
+    "Familiarity with organizational change management"
+  ],
+  "learningObjectives": [
+    "Design complex multi-account organizational structures",
+    "Implement enterprise-grade governance and compliance frameworks",
+    "Configure centralized identity and access management",
+    "Set up automated account provisioning and management",
+    "Design cross-account networking and resource sharing",
+    "Implement enterprise cost management and chargeback",
+    "Configure enterprise-wide monitoring and auditing"
+  ],
+  "businessScenario": {
+    "description": "MegaCorp International, a Fortune 100 company with 50,000 employees across 25 countries, needs to migrate their complex IT infrastructure to the cloud while maintaining strict governance, compliance, and security requirements across 200+ business units.",
+    "requirements": [
+      "Support for 200+ separate business units with varying compliance needs",
+      "Centralized governance with delegated administration",
+      "Cross-border data residency and sovereignty compliance",
+      "Enterprise-wide cost visibility and chargeback",
+      "Automated compliance monitoring and reporting",
+      "Scalable identity federation across multiple domains"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Enterprise Multi-Account Architecture Design",
+      "content": "Design and implement sophisticated organizational unit structures for complex enterprise requirements.",
+      "hands-on": {
+        "aws": "1. Design OU structure for business units, environments, and compliance zones\n2. Set up AWS Organizations with nested OUs\n3. Configure Control Tower for automated account provisioning\n4. Implement Service Control Policies (SCPs) for governance\n5. Set up account factory with custom configurations\n6. Configure cross-account IAM roles and permissions\n7. Implement automated account lifecycle management",
+        "azure": "1. Design Management Group hierarchy for enterprise structure\n2. Set up Azure AD tenant and subscription organization\n3. Configure Azure Blueprints for standardized deployments\n4. Implement Azure Policy for governance enforcement\n5. Set up subscription factory with ARM templates\n6. Configure cross-subscription RBAC and resource access\n7. Implement automated subscription management"
+      }
+    },
+    {
+      "title": "Enterprise Identity and Access Management",
+      "content": "Implement sophisticated identity federation and access management for complex organizational structures.",
+      "hands-on": {
+        "aws": "1. Set up AWS SSO with multiple identity sources\n2. Configure SAML federation with corporate directories\n3. Implement permission sets and access management\n4. Set up cross-account access with federated identities\n5. Configure privilege escalation and temporary access\n6. Implement identity governance and compliance\n7. Set up automated access reviews and certifications",
+        "azure": "1. Configure Azure AD with hybrid identity integration\n2. Set up Azure AD B2B for external collaboration\n3. Implement Conditional Access policies\n4. Configure Privileged Identity Management (PIM)\n5. Set up cross-tenant access management\n6. Implement identity protection and risk management\n7. Configure access reviews and entitlement management"
+      }
+    },
+    {
+      "title": "Enterprise Networking and Connectivity",
+      "content": "Design complex enterprise networking architectures with hybrid and multi-cloud connectivity.",
+      "hands-on": {
+        "aws": "1. Design hub-and-spoke architecture with Transit Gateway\n2. Set up cross-account VPC peering and sharing\n3. Configure AWS Direct Connect with multiple VIFs\n4. Implement Network ACLs and security groups at scale\n5. Set up DNS resolution across accounts and on-premises\n6. Configure centralized network monitoring\n7. Implement network segmentation for compliance",
+        "azure": "1. Design Virtual WAN architecture for global connectivity\n2. Set up cross-subscription VNet peering and sharing\n3. Configure ExpressRoute with multiple circuits\n4. Implement NSGs and Azure Firewall policies\n5. Set up Azure DNS and private DNS zones\n6. Configure Network Watcher for monitoring\n7. Implement network micro-segmentation"
+      }
+    },
+    {
+      "title": "Enterprise Governance and Compliance",
+      "content": "Implement comprehensive governance frameworks meeting complex regulatory requirements.",
+      "hands-on": {
+        "aws": "1. Set up AWS Config for compliance monitoring\n2. Configure AWS CloudTrail for audit logging\n3. Implement AWS Security Hub for security posture\n4. Set up AWS GuardDuty for threat detection\n5. Configure compliance reporting and dashboards\n6. Implement automated remediation workflows\n7. Set up multi-region compliance replication",
+        "azure": "1. Configure Azure Policy for compliance enforcement\n2. Set up Azure Security Center for security management\n3. Implement Azure Sentinel for threat detection\n4. Configure Azure Monitor for audit logging\n5. Set up compliance dashboards and reporting\n6. Implement automated policy remediation\n7. Configure cross-region compliance monitoring"
+      }
+    },
+    {
+      "title": "Enterprise Cost Management and FinOps",
+      "content": "Implement sophisticated cost management and financial operations for complex organizations.",
+      "hands-on": {
+        "aws": "1. Set up Cost and Usage Reports with custom dimensions\n2. Configure detailed billing with cost allocation tags\n3. Implement chargeback and showback mechanisms\n4. Set up enterprise budgets and cost controls\n5. Configure cost anomaly detection and alerts\n6. Implement Reserved Instance management at scale\n7. Set up cost optimization automation",
+        "azure": "1. Configure Cost Management with custom scopes\n2. Set up detailed billing with resource tagging\n3. Implement cost allocation and chargeback\n4. Configure enterprise budgets and spending limits\n5. Set up cost anomaly detection and notifications\n6. Implement reservation management at scale\n7. Configure automated cost optimization"
+      }
+    },
+    {
+      "title": "Enterprise Resource Sharing and Collaboration",
+      "content": "Implement secure resource sharing and collaboration across complex organizational boundaries.",
+      "hands-on": {
+        "aws": "1. Set up AWS Resource Access Manager (RAM)\n2. Configure cross-account resource sharing\n3. Implement Service Catalog for standardized resources\n4. Set up centralized logging and monitoring\n5. Configure shared services architecture\n6. Implement data sharing with appropriate controls\n7. Set up collaboration workflows and approvals",
+        "azure": "1. Configure Azure Lighthouse for service provider access\n2. Set up cross-subscription resource sharing\n3. Implement Azure Managed Applications\n4. Configure centralized monitoring with Azure Monitor\n5. Set up shared services architecture\n6. Implement secure data sharing mechanisms\n7. Configure workflow automation and approvals"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Design Complete Enterprise Architecture",
+      "description": "Create a comprehensive enterprise architecture supporting 200+ business units with complex compliance requirements.",
+      "tasks": [
+        "Design organizational hierarchy and account structure",
+        "Implement centralized governance and policy enforcement",
+        "Set up enterprise identity federation and SSO",
+        "Configure cross-account networking and connectivity",
+        "Implement comprehensive cost management and chargeback",
+        "Set up enterprise-wide monitoring and compliance",
+        "Configure automated provisioning and lifecycle management"
+      ],
+      "validation": [
+        "Support for 200+ accounts/subscriptions",
+        "Automated compliance monitoring across all environments",
+        "Centralized cost visibility with department-level chargeback",
+        "Enterprise SSO with <2 second authentication",
+        "Automated policy enforcement with 100% compliance"
+      ]
+    },
+    {
+      "title": "Implement Multi-Region Disaster Recovery",
+      "description": "Design and implement enterprise-grade disaster recovery across multiple regions and compliance zones.",
+      "tasks": [
+        "Design cross-region architecture",
+        "Implement automated failover mechanisms",
+        "Set up data replication and synchronization",
+        "Configure cross-region network connectivity",
+        "Implement disaster recovery testing automation",
+        "Set up compliance validation across regions"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "Complex inter-account networking causing connectivity issues",
+        "solution": "Implement proper routing tables and security group configurations with network segmentation"
+      },
+      {
+        "issue": "Policy conflicts causing resource access failures",
+        "solution": "Implement policy hierarchy with explicit allow/deny rules and proper inheritance"
+      },
+      {
+        "issue": "Cost allocation inaccuracies across business units",
+        "solution": "Implement comprehensive tagging strategy with automated enforcement and validation"
+      },
+      {
+        "issue": "Compliance violations due to resource drift",
+        "solution": "Implement automated drift detection and remediation with immutable infrastructure patterns"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can design complex enterprise multi-account architectures",
+      "Can implement enterprise governance and compliance frameworks",
+      "Can configure sophisticated identity and access management",
+      "Can design enterprise networking and connectivity solutions",
+      "Can implement enterprise cost management and FinOps",
+      "Can set up automated provisioning and lifecycle management"
+    ],
+    "certificationAlignment": {
+      "SAP-C02": {
+        "domain": "Design Solutions for Organizational Complexity",
+        "weight": "26%",
+        "keyTopics": [
+          "Multi-account strategies",
+          "Organizational units and governance",
+          "Cross-account networking and resource sharing",
+          "Enterprise identity and access management",
+          "Large-scale cost management",
+          "Enterprise compliance and auditing"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "Organizational structure mapping between platforms",
+      "Identity federation and SSO integration differences",
+      "Network architecture and connectivity variations",
+      "Policy and governance framework translations",
+      "Cost management and billing model differences",
+      "Compliance and audit trail requirements"
+    ],
+    "tools": [
+      "Azure Migrate for enterprise assessment",
+      "Azure AD Connect for identity migration",
+      "Azure Site Recovery for workload migration",
+      "Azure Cost Management for financial migration"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "Support for 200+ accounts/subscriptions",
+      "Automated provisioning time < 15 minutes",
+      "100% policy compliance across all environments",
+      "Cross-account network latency < 50ms",
+      "Identity federation authentication time < 2 seconds",
+      "Cost allocation accuracy > 99%"
+    ],
+    "business": [
+      "Reduced administrative overhead by 60%",
+      "Improved compliance posture with automated monitoring",
+      "Enhanced security with centralized governance",
+      "Accelerated business unit onboarding by 80%",
+      "Comprehensive cost visibility and chargeback accuracy"
+    ]
+  },
+  "nextSteps": [
+    "Explore advanced enterprise patterns and architectures",
+    "Study multi-cloud enterprise governance strategies",
+    "Implement advanced automation and orchestration",
+    "Practice with real-world enterprise scenarios"
+  ]
+}

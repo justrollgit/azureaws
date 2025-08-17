@@ -1,0 +1,314 @@
+{
+  "id": "soa-c02-reliability-business-continuity-lab",
+  "title": "AWS High Availability to Azure Resilience: Reliability and Business Continuity Planning",
+  "category": "reliability-engineering",
+  "difficulty": "intermediate",
+  "estimatedTime": "120 minutes",
+  "awsCertification": "SOA-C02",
+  "certificationWeight": "16% - Reliability & Business Continuity Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master enterprise reliability engineering by implementing AWS high availability and disaster recovery solutions, then migrating to Azure resilience equivalents with backup strategies, failover automation, and comprehensive business continuity planning.",
+  
+  "learningObjectives": [
+    "Design high availability architectures using AWS Multi-AZ and Azure Availability Zones",
+    "Implement comprehensive backup and recovery strategies across both platforms",
+    "Build automated failover and disaster recovery solutions",
+    "Create business continuity plans with RTO/RPO requirements",
+    "Design fault-tolerant systems with graceful degradation patterns",
+    "Implement chaos engineering and resilience testing methodologies"
+  ],
+
+  "prerequisites": [
+    "Completion of SOA-C02 Monitoring, Logging, and Remediation Lab",
+    "Understanding of networking and infrastructure concepts",
+    "Basic knowledge of database replication and backup concepts",
+    "Familiarity with load balancing and traffic distribution"
+  ],
+
+  "awsServices": [
+    "Amazon RDS Multi-AZ and Read Replicas",
+    "AWS Auto Scaling Groups",
+    "Elastic Load Balancing (ALB, NLB)",
+    "Amazon Route 53 Health Checks",
+    "AWS Backup Service",
+    "AWS Site Recovery",
+    "Amazon S3 Cross-Region Replication",
+    "AWS CloudFormation StackSets",
+    "AWS Systems Manager",
+    "Amazon CloudWatch"
+  ],
+
+  "azureServices": [
+    "Azure SQL Database with Geo-Replication",
+    "Virtual Machine Scale Sets",
+    "Azure Load Balancer and Application Gateway",
+    "Azure Traffic Manager",
+    "Azure Backup Service",
+    "Azure Site Recovery",
+    "Azure Storage Account Replication",
+    "Azure Resource Manager Templates",
+    "Azure Automation",
+    "Azure Monitor"
+  ],
+
+  "businessScenario": "ReliableCorp operates mission-critical financial services applications that require 99.9% uptime with strict RTO (Recovery Time Objective) of 15 minutes and RPO (Recovery Point Objective) of 5 minutes. They need to implement comprehensive reliability and business continuity solutions across AWS and Azure platforms, including automated failover, disaster recovery, and backup strategies while ensuring regulatory compliance and cost optimization.",
+
+  "sections": [
+    {
+      "title": "High Availability Architecture Design",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS Multi-AZ deployments and availability zone distribution",
+        "Azure Availability Zones and fault domain configuration",
+        "Load balancing strategies and health check implementation",
+        "Auto-scaling policies for high availability",
+        "Database high availability and read replica configuration"
+      ],
+      "tasks": [
+        {
+          "title": "Design Multi-Zone High Availability Architecture",
+          "description": "Implement highly available infrastructure across multiple availability zones",
+          "steps": [
+            "Design AWS Multi-AZ architecture with proper zone distribution",
+            "Create equivalent Azure Availability Zone deployment",
+            "Configure load balancers with health checks and failover capabilities",
+            "Implement auto-scaling groups with cross-zone distribution",
+            "Setup database high availability with Multi-AZ and read replicas",
+            "Configure automated failover testing and validation procedures"
+          ],
+          "deliverables": [
+            "Multi-AZ architecture design with zone distribution",
+            "Load balancer configuration with health checks",
+            "Auto-scaling policies for high availability",
+            "Database high availability implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Backup and Recovery Strategies",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS Backup service and cross-region backup strategies",
+        "Azure Backup service and geo-redundant backup implementation",
+        "Database backup automation and point-in-time recovery",
+        "Application-consistent backup procedures",
+        "Backup retention policies and compliance requirements"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Backup Strategy",
+          "description": "Design and implement enterprise backup and recovery solutions",
+          "steps": [
+            "Configure AWS Backup service with cross-region backup policies",
+            "Setup Azure Backup service with geo-redundant backup storage",
+            "Implement automated database backup with point-in-time recovery",
+            "Create application-consistent backup procedures for complex workloads",
+            "Configure backup retention policies meeting compliance requirements",
+            "Setup backup monitoring and alerting for backup failures"
+          ],
+          "deliverables": [
+            "AWS Backup service configuration with cross-region replication",
+            "Azure Backup service setup with geo-redundancy",
+            "Database backup automation with point-in-time recovery",
+            "Backup monitoring and compliance reporting framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Disaster Recovery and Failover Automation",
+      "duration": "35 minutes",
+      "topics": [
+        "AWS Site Recovery and cross-region disaster recovery",
+        "Azure Site Recovery and automated failover procedures",
+        "RTO/RPO planning and disaster recovery testing",
+        "Data replication strategies and consistency management",
+        "Automated disaster recovery orchestration and runbooks"
+      ],
+      "tasks": [
+        {
+          "title": "Build Automated Disaster Recovery Solution",
+          "description": "Implement comprehensive disaster recovery with automated failover",
+          "steps": [
+            "Design AWS cross-region disaster recovery architecture",
+            "Configure Azure Site Recovery with automated failover capabilities",
+            "Implement data replication strategies for different RTO/RPO requirements",
+            "Create automated disaster recovery orchestration workflows",
+            "Setup disaster recovery testing and validation procedures",
+            "Configure automated failback procedures and data synchronization"
+          ],
+          "deliverables": [
+            "Cross-region disaster recovery architecture",
+            "Automated failover and failback procedures",
+            "Disaster recovery testing and validation framework",
+            "RTO/RPO compliance monitoring and reporting"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Business Continuity Planning and Testing",
+      "duration": "25 minutes",
+      "topics": [
+        "Business impact analysis and continuity requirements",
+        "Incident response procedures and escalation workflows",
+        "Chaos engineering and resilience testing methodologies",
+        "Business continuity plan documentation and maintenance",
+        "Regulatory compliance and audit preparation"
+      ],
+      "tasks": [
+        {
+          "title": "Develop Comprehensive Business Continuity Plan",
+          "description": "Create and implement enterprise business continuity framework",
+          "steps": [
+            "Conduct business impact analysis and define continuity requirements",
+            "Create incident response procedures with clear escalation workflows",
+            "Implement chaos engineering testing for system resilience validation",
+            "Develop business continuity plan documentation and runbooks",
+            "Setup regular disaster recovery drills and testing schedules",
+            "Configure compliance monitoring and audit trail documentation"
+          ],
+          "deliverables": [
+            "Business impact analysis and continuity requirements",
+            "Incident response procedures and escalation workflows",
+            "Chaos engineering testing framework",
+            "Business continuity plan documentation and audit compliance"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Multi-Region Disaster Recovery Implementation",
+      "description": "Build complete disaster recovery solution spanning multiple regions",
+      "steps": [
+        "Design primary and secondary region architecture",
+        "Implement data replication across regions with appropriate consistency models",
+        "Configure automated health monitoring and failover triggers",
+        "Create disaster recovery orchestration workflows",
+        "Test end-to-end disaster recovery scenarios",
+        "Validate RTO/RPO compliance and document lessons learned"
+      ],
+      "expectedOutcome": "Production-ready disaster recovery solution meeting strict RTO/RPO requirements"
+    },
+    {
+      "title": "Chaos Engineering Resilience Testing",
+      "description": "Implement chaos engineering practices to validate system resilience",
+      "steps": [
+        "Design chaos engineering experiments for different failure scenarios",
+        "Implement automated chaos testing using AWS Fault Injection Simulator",
+        "Create equivalent chaos testing scenarios in Azure using chaos engineering tools",
+        "Monitor system behavior during chaos experiments",
+        "Identify and remediate resilience gaps discovered during testing",
+        "Create resilience testing playbook and regular testing schedule"
+      ],
+      "expectedOutcome": "Validated system resilience with documented improvement recommendations"
+    },
+    {
+      "title": "Enterprise Backup and Recovery Validation",
+      "description": "Validate backup and recovery procedures for enterprise workloads",
+      "steps": [
+        "Create comprehensive backup strategy for multi-tier application",
+        "Implement automated backup testing and validation procedures",
+        "Perform full disaster recovery simulation from backup",
+        "Test point-in-time recovery scenarios for different failure modes",
+        "Validate backup compliance with regulatory requirements",
+        "Document recovery procedures and create operational runbooks"
+      ],
+      "expectedOutcome": "Validated backup and recovery solution with documented procedures and compliance evidence"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex failover procedures causing extended downtime during disasters",
+      "solution": "Implement automated failover orchestration, practice regular disaster recovery drills, simplify failover procedures, and implement automated health checks and failover triggers"
+    },
+    {
+      "issue": "Data consistency issues during cross-region replication and failover",
+      "solution": "Choose appropriate consistency models for different data types, implement proper synchronization mechanisms, test data consistency during failover scenarios, and monitor replication lag"
+    },
+    {
+      "issue": "High costs associated with disaster recovery infrastructure and backup storage",
+      "solution": "Implement tiered disaster recovery strategies, use appropriate storage classes for backups, optimize replication strategies, and implement cost monitoring and optimization"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "High Availability Design",
+      "criteria": [
+        "Can design multi-zone high availability architectures",
+        "Understands load balancing and health check implementation",
+        "Can configure auto-scaling for high availability",
+        "Demonstrates database high availability best practices"
+      ]
+    },
+    {
+      "category": "Backup and Recovery Implementation",
+      "criteria": [
+        "Can implement comprehensive backup strategies",
+        "Understands cross-region backup and geo-redundancy",
+        "Can configure automated backup monitoring and alerting",
+        "Demonstrates backup compliance and retention management"
+      ]
+    },
+    {
+      "category": "Disaster Recovery Planning",
+      "criteria": [
+        "Can design and implement disaster recovery solutions",
+        "Understands RTO/RPO requirements and implementation",
+        "Can create automated failover and failback procedures",
+        "Demonstrates disaster recovery testing and validation"
+      ]
+    },
+    {
+      "category": "Business Continuity Management",
+      "criteria": [
+        "Can develop comprehensive business continuity plans",
+        "Understands incident response and escalation procedures",
+        "Can implement chaos engineering and resilience testing",
+        "Demonstrates compliance and audit preparation capabilities"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SOA-C02": {
+      "domain": "Reliability & Business Continuity",
+      "weight": "16%",
+      "coverage": [
+        "Implement scalability and elasticity",
+        "Implement high availability",
+        "Implement backup and recovery strategies",
+        "Implement disaster recovery solutions",
+        "Troubleshoot and resolve availability issues"
+      ],
+      "examTopics": [
+        "Multi-AZ deployments and availability zone strategies",
+        "Auto Scaling Groups and Elastic Load Balancing configuration",
+        "AWS Backup service and cross-region backup strategies",
+        "Route 53 health checks and DNS failover",
+        "RDS Multi-AZ and read replica management"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can design and implement high availability architectures across multiple zones",
+    "Demonstrates ability to create comprehensive backup and recovery strategies",
+    "Shows understanding of disaster recovery planning and automation",
+    "Can implement business continuity plans with proper testing procedures",
+    "Understands resilience engineering and chaos testing methodologies"
+  ],
+
+  "nextSteps": [
+    "Proceed to SOA-C02 Deployment, Provisioning & Automation Lab (18% domain weight)",
+    "Gain hands-on experience with advanced disaster recovery scenarios",
+    "Practice implementing resilience patterns in production environments",
+    "Explore advanced chaos engineering and fault injection techniques"
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "id": "governance-automation-lab",
+  "title": "AWS Config to Azure Policy: Automated Governance and Compliance",
+  "difficulty": "expert",
+  "estimated_time": "90 minutes",
+  "aws_prerequisite": "Experience with AWS Config, Systems Manager, tagging strategies, and organizational governance",
+  "azure_target": "Master Azure Policy, Management Groups, and automated governance at scale",
+  "learning_objectives": [
+    "Migrate from AWS Config rules to Azure Policy",
+    "Implement automated tagging and resource governance",
+    "Configure multi-account/subscription compliance monitoring",
+    "Set up automated remediation for non-compliant resources",
+    "Implement cost governance and budget automation"
+  ],
+  "aws_context": {
+    "equivalent_service": "AWS Config, AWS Organizations, AWS Systems Manager",
+    "key_concepts": [
+      "AWS Config Rules → Azure Policy Definitions",
+      "AWS Organizations → Azure Management Groups",
+      "Service Control Policies → Azure Policy Assignments",
+      "AWS Config Remediation → Azure Policy Remediation",
+      "Tagging Policies → Azure Tag Governance",
+      "AWS Systems Manager → Azure Automation"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Governance Service Architecture",
+      "content": "Understanding governance and compliance automation services mapping.",
+      "comparison_table": {
+        "compliance_rules": {
+          "aws": "AWS Config Rules",
+          "azure": "Azure Policy Definitions",
+          "use_case": "Define compliance requirements and standards"
+        },
+        "organizational_structure": {
+          "aws": "AWS Organizations with OUs",
+          "azure": "Management Groups hierarchy",
+          "use_case": "Hierarchical resource organization"
+        },
+        "policy_enforcement": {
+          "aws": "Service Control Policies (SCPs)",
+          "azure": "Azure Policy Assignments",
+          "use_case": "Enforce governance at scale"
+        },
+        "automated_remediation": {
+          "aws": "Config Remediation Actions",
+          "azure": "Policy Remediation Tasks",
+          "use_case": "Automatic compliance correction"
+        },
+        "resource_tagging": {
+          "aws": "AWS Organizations Tag Policies",
+          "azure": "Azure Policy Tag Governance",
+          "use_case": "Enforce consistent tagging"
+        }
+      }
+    },
+    {
+      "title": "Implement Azure Policy for Compliance",
+      "content": "Create and deploy Azure Policies equivalent to AWS Config rules for automated compliance checking.",
+      "exercise": {
+        "scenario": "Implement comprehensive compliance policies including resource tagging, security baselines, and cost controls.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Create Custom Policy Definition",
+            "aws_equivalent": "Create AWS Config custom rule",
+            "instructions": "Define a custom policy for enforcing encryption on storage accounts.",
+            "code": {
+              "cli": "az policy definition create --name 'enforce-storage-encryption' \\\n  --display-name 'Enforce Storage Encryption' \\\n  --description 'Ensures all storage accounts have encryption enabled' \\\n  --rules '{\n    \"if\": {\n      \"allOf\": [{\n        \"field\": \"type\",\n        \"equals\": \"Microsoft.Storage/storageAccounts\"\n      },{\n        \"field\": \"Microsoft.Storage/storageAccounts/encryption.services.blob.enabled\",\n        \"notEquals\": \"true\"\n      }]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  }'",
+              "portal": "Policy → Definitions → Create → Define rule logic and effects"
+            },
+            "explanation": "Azure Policy definitions work like AWS Config rules to enforce compliance requirements."
+          },
+          {
+            "step": 2,
+            "title": "Implement Tag Governance",
+            "aws_equivalent": "AWS Organizations tag policies",
+            "instructions": "Create policies to enforce required tags on all resources.",
+            "code": {
+              "cli": "az policy definition create --name 'require-tags' \\\n  --rules '{\n    \"if\": {\n      \"field\": \"tags\",\n      \"exists\": \"false\"\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  }' \\\n  --params '{\n    \"tagName\": {\n      \"type\": \"String\",\n      \"metadata\": {\n        \"displayName\": \"Tag Name\",\n        \"description\": \"Name of the required tag\"\n      }\n    }\n  }'",
+              "portal": "Create tag governance policy with required tag names"
+            },
+            "explanation": "Tag governance ensures consistent resource organization and cost tracking."
+          },
+          {
+            "step": 3,
+            "title": "Configure Policy Initiative",
+            "aws_equivalent": "AWS Config conformance pack",
+            "instructions": "Bundle multiple policies into an initiative for comprehensive governance.",
+            "code": {
+              "cli": "az policy set-definition create --name 'security-baseline' \\\n  --definitions '[\n    {\"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/enforce-storage-encryption\"},\n    {\"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/require-tags\"},\n    {\"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/allowed-locations\"}\n  ]'",
+              "portal": "Policy → Initiatives → Create → Add multiple policy definitions"
+            },
+            "explanation": "Policy initiatives group related policies similar to AWS Config conformance packs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Management Group Governance",
+      "content": "Implement hierarchical governance across multiple subscriptions using Management Groups.",
+      "exercise": {
+        "scenario": "Set up enterprise-scale governance with Management Groups and inherited policies.",
+        "steps": [
+          {
+            "step": 4,
+            "title": "Create Management Group Hierarchy",
+            "aws_equivalent": "AWS Organizations with OUs",
+            "instructions": "Establish management group structure for enterprise governance.",
+            "code": {
+              "cli": "# Create root management group\naz account management-group create --name 'Contoso' --display-name 'Contoso Corp'\n\n# Create child management groups\naz account management-group create --name 'Production' --parent 'Contoso'\naz account management-group create --name 'Development' --parent 'Contoso'\naz account management-group create --name 'Sandbox' --parent 'Contoso'",
+              "portal": "Management Groups → Create → Define hierarchy structure"
+            },
+            "explanation": "Management Groups provide hierarchical organization like AWS Organizations OUs."
+          },
+          {
+            "step": 5,
+            "title": "Assign Policies at Scale",
+            "aws_equivalent": "Apply SCPs to OUs",
+            "instructions": "Assign policies to management groups for inherited governance.",
+            "code": {
+              "cli": "# Assign security baseline to production\naz policy assignment create \\\n  --name 'prod-security-baseline' \\\n  --policy-set-definition 'security-baseline' \\\n  --scope '/providers/Microsoft.Management/managementGroups/Production' \\\n  --params '{\"allowedLocations\": {\"value\": [\"eastus\", \"westus\"]}}'",
+              "portal": "Management Group → Assign Policy → Select initiative and parameters"
+            },
+            "explanation": "Policy assignments at management group level cascade to all child subscriptions."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Automated Remediation and Compliance",
+      "content": "Configure automated remediation for non-compliant resources.",
+      "exercise": {
+        "scenario": "Set up automated remediation tasks to fix non-compliant resources automatically.",
+        "steps": [
+          {
+            "step": 6,
+            "title": "Configure Remediation Tasks",
+            "aws_equivalent": "AWS Config auto-remediation",
+            "instructions": "Create remediation tasks for policy violations.",
+            "code": {
+              "cli": "# Create remediation task for missing tags\naz policy remediation create \\\n  --name 'add-required-tags' \\\n  --policy-assignment 'require-tags' \\\n  --resource-discovery-mode 'ExistingNonCompliant' \\\n  --resource-group 'production-rg'",
+              "portal": "Policy → Remediation → Create remediation task"
+            },
+            "explanation": "Remediation tasks automatically fix non-compliant resources like AWS Config remediation."
+          },
+          {
+            "step": 7,
+            "title": "Monitor Compliance Dashboard",
+            "aws_equivalent": "AWS Config compliance dashboard",
+            "instructions": "View and monitor compliance status across the organization.",
+            "code": {
+              "cli": "# Get compliance summary\naz policy state summarize \\\n  --management-group 'Contoso' \\\n  --query \"results[0].policyAssignments[*].{Assignment:policyAssignmentName,Compliance:complianceState,NonCompliant:nonCompliantResourceCount}\" \\\n  --output table",
+              "portal": "Policy → Compliance → View compliance dashboard"
+            },
+            "explanation": "Azure Policy compliance dashboard provides visibility similar to AWS Config dashboard."
+          }
+        ]
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Verify Policy Definitions",
+      "command": "az policy definition list --query \"[?policyType=='Custom'].displayName\" --output table",
+      "expected": "Custom policies are listed"
+    },
+    {
+      "step": "Check Compliance Status",
+      "command": "az policy state summarize --query \"results[0].complianceState\"",
+      "expected": "Compliance state shows 'Compliant' or details of violations"
+    },
+    {
+      "step": "Validate Tag Enforcement",
+      "command": "az resource list --query \"[?tags==null].name\" --output table",
+      "expected": "No resources without required tags"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove policy assignments and custom definitions",
+    "command": "az policy assignment delete --name 'prod-security-baseline' && az policy definition delete --name 'enforce-storage-encryption'"
+  },
+  "key_takeaways": [
+    "Azure Policy provides comprehensive governance similar to AWS Config",
+    "Management Groups enable hierarchical governance like AWS Organizations",
+    "Policy initiatives bundle compliance requirements like conformance packs",
+    "Automated remediation ensures continuous compliance",
+    "Tag governance enables consistent resource organization and cost tracking"
+  ],
+  "next_steps": [
+    "Explore Azure Blueprints for environment provisioning",
+    "Learn about Azure Cost Management for budget automation",
+    "Study Azure Lighthouse for multi-tenant governance"
+  ]
+}

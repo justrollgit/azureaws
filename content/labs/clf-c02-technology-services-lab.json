@@ -1,0 +1,320 @@
+{
+  "id": "clf-c02-technology-services-lab",
+  "title": "AWS Core Services to Azure Services: Technology Stack and Service Selection",
+  "category": "cloud-services-fundamentals",
+  "difficulty": "beginner", 
+  "estimatedTime": "90 minutes",
+  "awsCertification": "CLF-C02",
+  "certificationWeight": "34% - Cloud Technology and Services Domain (Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master core cloud services by understanding AWS technology stack and migrating to Azure equivalents with service selection guidance, use case mapping, and hands-on service identification across compute, storage, database, and networking categories.",
+  
+  "learningObjectives": [
+    "Identify core AWS compute services and their Azure equivalents",
+    "Understand AWS storage services and migrate to Azure storage options", 
+    "Learn AWS database services and compare with Azure database offerings",
+    "Explore AWS networking services and their Azure counterparts",
+    "Understand service selection criteria and use case mapping",
+    "Learn how to choose appropriate services for different scenarios"
+  ],
+
+  "prerequisites": [
+    "Completion of CLF-C02 Cloud Concepts Lab",
+    "Completion of CLF-C02 Security and Compliance Lab",
+    "Basic understanding of IT infrastructure components",
+    "Familiarity with servers, storage, and networking concepts"
+  ],
+
+  "awsServices": [
+    "Amazon EC2 (Elastic Compute Cloud)",
+    "AWS Lambda (Serverless Functions)",
+    "Amazon S3 (Simple Storage Service)",
+    "Amazon EBS (Elastic Block Store)",
+    "Amazon RDS (Relational Database Service)",
+    "Amazon DynamoDB (NoSQL Database)",
+    "Amazon VPC (Virtual Private Cloud)",
+    "Amazon CloudFront (Content Delivery Network)",
+    "Elastic Load Balancing",
+    "Amazon Route 53 (DNS Service)"
+  ],
+
+  "azureServices": [
+    "Azure Virtual Machines",
+    "Azure Functions (Serverless Functions)",
+    "Azure Blob Storage",
+    "Azure Managed Disks",
+    "Azure SQL Database",
+    "Azure Cosmos DB (NoSQL Database)",
+    "Azure Virtual Network (VNet)",
+    "Azure CDN (Content Delivery Network)",
+    "Azure Load Balancer",
+    "Azure DNS"
+  ],
+
+  "businessScenario": "GlobalTech Solutions runs a multi-tier web application that includes web servers, application servers, databases, and file storage. They currently use traditional on-premises infrastructure but want to understand cloud services and create a migration plan. They need to identify the right cloud services for their compute, storage, database, and networking needs while comparing AWS and Azure options for the best fit.",
+
+  "sections": [
+    {
+      "title": "Compute Services and Virtual Infrastructure",
+      "duration": "25 minutes",
+      "topics": [
+        "Amazon EC2 virtual machines and instance types",
+        "Azure Virtual Machines and VM sizes",
+        "AWS Lambda serverless functions",
+        "Azure Functions serverless computing",
+        "Container services: AWS ECS vs Azure Container Instances",
+        "Service selection criteria for different compute needs"
+      ],
+      "tasks": [
+        {
+          "title": "Design Compute Architecture",
+          "description": "Select appropriate compute services for different application requirements",
+          "steps": [
+            "Analyze sample application requirements and compute needs",
+            "Explore Amazon EC2 instance types and their use cases",
+            "Compare with Azure Virtual Machine sizes and pricing tiers",
+            "Evaluate AWS Lambda for serverless use cases",
+            "Compare with Azure Functions for event-driven computing",
+            "Design hybrid compute architecture using both VMs and serverless"
+          ],
+          "deliverables": [
+            "Compute service comparison matrix",
+            "Instance/VM sizing recommendations",
+            "Serverless use case analysis",
+            "Compute architecture design"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Storage Services and Data Management",
+      "duration": "20 minutes",
+      "topics": [
+        "Amazon S3 object storage and storage classes",
+        "Azure Blob Storage and access tiers",
+        "Amazon EBS block storage for virtual machines",
+        "Azure Managed Disks and storage types",
+        "File storage: Amazon EFS vs Azure Files",
+        "Storage selection criteria and cost optimization"
+      ],
+      "tasks": [
+        {
+          "title": "Plan Storage Strategy",
+          "description": "Design comprehensive storage solution for different data types and access patterns",
+          "steps": [
+            "Categorize data types: files, databases, backups, archives",
+            "Map Amazon S3 storage classes to data lifecycle requirements",
+            "Compare with Azure Blob Storage access tiers and pricing",
+            "Design block storage strategy with Amazon EBS",
+            "Compare with Azure Managed Disks performance and costs",
+            "Plan backup and archival strategy across both platforms"
+          ],
+          "deliverables": [
+            "Data classification matrix",
+            "Storage service mapping",
+            "Cost optimization strategy",
+            "Backup and recovery plan"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Database Services and Data Platforms",
+      "duration": "20 minutes", 
+      "topics": [
+        "Amazon RDS managed relational databases",
+        "Azure SQL Database and managed instance",
+        "Amazon DynamoDB NoSQL database",
+        "Azure Cosmos DB globally distributed database",
+        "Database selection criteria: relational vs NoSQL",
+        "Performance, scalability, and cost considerations"
+      ],
+      "tasks": [
+        {
+          "title": "Database Architecture Design",
+          "description": "Select appropriate database services for different application data requirements",
+          "steps": [
+            "Analyze application data requirements and access patterns",
+            "Evaluate Amazon RDS options for relational data",
+            "Compare with Azure SQL Database features and pricing",
+            "Assess Amazon DynamoDB for NoSQL use cases",
+            "Compare with Azure Cosmos DB global distribution capabilities",
+            "Design multi-database architecture for complex applications"
+          ],
+          "deliverables": [
+            "Database requirement analysis",
+            "Service selection justification",
+            "Performance and scalability plan",
+            "Data migration strategy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Networking and Content Delivery",
+      "duration": "25 minutes",
+      "topics": [
+        "Amazon VPC networking and security groups",
+        "Azure Virtual Network and network security groups",
+        "AWS Elastic Load Balancing and traffic distribution",
+        "Azure Load Balancer and Application Gateway",
+        "Amazon CloudFront content delivery network",
+        "Azure CDN and global content acceleration"
+      ],
+      "tasks": [
+        {
+          "title": "Network Architecture Planning",
+          "description": "Design secure and scalable network infrastructure",
+          "steps": [
+            "Design Amazon VPC with proper subnet segmentation",
+            "Compare with Azure Virtual Network architecture",
+            "Implement security groups and network access controls",
+            "Plan load balancing strategy for high availability",
+            "Design content delivery network for global performance",
+            "Configure DNS and domain management approach"
+          ],
+          "deliverables": [
+            "Network architecture diagram",
+            "Security group configuration",
+            "Load balancing strategy",
+            "CDN implementation plan"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Service Selection Workshop",
+      "description": "Complete service selection exercise for different business scenarios",
+      "steps": [
+        "Review three different business scenarios: startup, enterprise, e-commerce",
+        "Identify compute, storage, database, and networking requirements",
+        "Select appropriate AWS services for each scenario",
+        "Map equivalent Azure services with justification",
+        "Calculate basic cost estimates for each solution",
+        "Present recommendations with pros and cons analysis"
+      ],
+      "expectedOutcome": "Comprehensive service selection recommendations for multiple scenarios"
+    },
+    {
+      "title": "Architecture Migration Planning",
+      "description": "Plan migration of existing on-premises architecture to cloud services",
+      "steps": [
+        "Analyze provided on-premises architecture diagram",
+        "Identify current infrastructure components and dependencies",
+        "Map each component to appropriate AWS cloud services",
+        "Create equivalent Azure architecture design",
+        "Plan migration approach and sequence",
+        "Identify potential challenges and mitigation strategies"
+      ],
+      "expectedOutcome": "Complete migration plan with cloud service mapping and implementation strategy"
+    },
+    {
+      "title": "Cost Optimization Challenge",
+      "description": "Optimize cloud service selection for cost efficiency",
+      "steps": [
+        "Review over-provisioned sample architecture",
+        "Identify cost optimization opportunities",
+        "Right-size compute and storage resources",
+        "Evaluate reserved capacity and savings plans",
+        "Compare AWS and Azure pricing for optimized design",
+        "Calculate potential cost savings and ROI"
+      ],
+      "expectedOutcome": "Cost-optimized architecture with measurable savings and efficiency improvements"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Overwhelming number of service options and configurations",
+      "solution": "Start with core services, use decision trees for service selection, and provide clear use case examples for each service"
+    },
+    {
+      "issue": "Difficulty understanding when to use different storage types",
+      "solution": "Create storage decision matrix based on performance, access frequency, and cost requirements with practical examples"
+    },
+    {
+      "issue": "Confusion between similar services on AWS and Azure",
+      "solution": "Provide side-by-side comparison tables, highlight key differences, and explain unique capabilities of each platform"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Compute Services Knowledge",
+      "criteria": [
+        "Can identify appropriate compute services for different use cases",
+        "Understands difference between VMs and serverless functions",
+        "Can compare AWS EC2 and Azure VM capabilities",
+        "Demonstrates knowledge of container services basics"
+      ]
+    },
+    {
+      "category": "Storage Services Understanding", 
+      "criteria": [
+        "Can select appropriate storage services for different data types",
+        "Understands storage tiers and lifecycle management",
+        "Can compare object, block, and file storage use cases",
+        "Demonstrates cost optimization awareness for storage"
+      ]
+    },
+    {
+      "category": "Database Services Selection",
+      "criteria": [
+        "Can choose between relational and NoSQL databases",
+        "Understands managed database service benefits",
+        "Can compare AWS RDS and Azure SQL Database",
+        "Demonstrates awareness of global distribution capabilities"
+      ]
+    },
+    {
+      "category": "Networking Services Design",
+      "criteria": [
+        "Can design basic VPC/VNet architecture",
+        "Understands load balancing and high availability concepts",
+        "Can plan CDN implementation for global performance",
+        "Demonstrates security-aware network design"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "CLF-C02": {
+      "domain": "Cloud Technology and Services",
+      "weight": "34%",
+      "coverage": [
+        "Define methods of deploying and operating in the AWS Cloud",
+        "Define the AWS global infrastructure",
+        "Identify AWS compute services",
+        "Identify AWS database services", 
+        "Identify AWS network services",
+        "Identify AWS storage services",
+        "Identify AWS artificial intelligence and machine learning services"
+      ],
+      "examTopics": [
+        "Core AWS services across compute, storage, database, networking",
+        "Service selection criteria and use case mapping",
+        "AWS global infrastructure and service availability",
+        "Deployment models and operational considerations",
+        "Integration between different service categories"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can identify core services across all major categories",
+    "Demonstrates ability to select appropriate services for given requirements",
+    "Shows understanding of service integration and architecture design",
+    "Can compare AWS and Azure services with clear justification",
+    "Understands cost and performance implications of service choices"
+  ],
+
+  "nextSteps": [
+    "Proceed to CLF-C02 Billing, Pricing, and Support Lab (12% domain)",
+    "Begin hands-on exploration of AWS and Azure service consoles",
+    "Practice service selection with real-world scenarios",
+    "Study for CLF-C02 certification with focus on service use cases"
+  ]
+}

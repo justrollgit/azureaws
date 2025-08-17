@@ -1,0 +1,345 @@
+{
+  "id": "api-gateway-management-lab",
+  "title": "API Gateway to API Management: Enterprise API Strategies",
+  "category": "api-management",
+  "difficulty": "intermediate",
+  "estimated_time": "90 minutes",
+  "description": "Master API management patterns with comprehensive gateway migration and policy implementation from AWS to Azure",
+  "aws_services": [
+    "API Gateway",
+    "Lambda",
+    "Cognito",
+    "WAF",
+    "CloudWatch",
+    "Route 53"
+  ],
+  "azure_services": [
+    "API Management",
+    "Functions",
+    "Azure AD",
+    "Web Application Firewall",
+    "Monitor",
+    "DNS"
+  ],
+  "learning_objectives": [
+    "Compare AWS API Gateway and Azure API Management architectures",
+    "Migrate API definitions and policies from API Gateway to API Management",
+    "Transform Lambda integrations to Azure Functions",
+    "Implement authentication and authorization patterns",
+    "Configure API security policies and rate limiting",
+    "Design API versioning and lifecycle management",
+    "Implement API analytics and monitoring",
+    "Build developer portal and API documentation"
+  ],
+  "aws_context": {
+    "equivalent_service": "API Gateway, Lambda",
+    "key_concepts": [
+      "API Gateway → API Management",
+      "Lambda integration → Azure Functions backend",
+      "Cognito User Pools → Azure AD integration",
+      "API Gateway stages → API Management revisions",
+      "Usage plans → API Management products",
+      "API keys → API Management subscriptions",
+      "Custom domain → API Management custom domain"
+    ]
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "API Management Fundamentals",
+      "estimated_time": "20 minutes",
+      "description": "Understanding API management principles and comparing AWS vs Azure API strategies",
+      "learning_outcomes": [
+        "Understand enterprise API management requirements",
+        "Compare AWS and Azure API management capabilities",
+        "Design appropriate API management strategies"
+      ],
+      "content": {
+        "theory": {
+          "api_management_principles": {
+            "api_gateway_pattern": "Centralized entry point for all client requests with cross-cutting concerns",
+            "microservices_integration": "API gateway as facade for microservices architectures",
+            "security_enforcement": "Authentication, authorization, and threat protection",
+            "traffic_management": "Rate limiting, throttling, and load balancing"
+          },
+          "enterprise_requirements": [
+            "Developer experience with self-service portal",
+            "API lifecycle management and versioning",
+            "Analytics and monitoring for business insights",
+            "Security policies and compliance enforcement",
+            "Monetization and usage tracking"
+          ],
+          "aws_vs_azure_comparison": {
+            "gateway_types": {
+              "aws": "REST API, HTTP API, and WebSocket API with different feature sets",
+              "azure": "Unified API Management service with consumption and dedicated tiers"
+            },
+            "integration_patterns": {
+              "aws": "Lambda proxy, HTTP, AWS service integrations",
+              "azure": "Function app, Logic Apps, Service Fabric, HTTP backends"
+            },
+            "developer_experience": {
+              "aws": "API Gateway console and AWS documentation",
+              "azure": "Developer portal with interactive documentation and try-it functionality"
+            }
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "API Strategy Assessment",
+            "description": "Assess API requirements and design management strategy",
+            "steps": [
+              "Evaluate existing API Gateway configuration",
+              "Identify API management requirements for Azure",
+              "Design API Management service topology"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-2",
+      "title": "API Management Service Configuration",
+      "estimated_time": "25 minutes",
+      "description": "Setting up Azure API Management and migrating API definitions",
+      "learning_outcomes": [
+        "Configure Azure API Management service",
+        "Import API definitions from API Gateway",
+        "Set up API Management policies and transformations"
+      ],
+      "content": {
+        "theory": {
+          "apim_architecture": {
+            "service_tiers": {
+              "consumption": "Serverless, pay-per-request model for lightweight scenarios",
+              "developer": "Non-production use with full feature set",
+              "basic": "Production use with SLA and basic features",
+              "standard": "Standard production tier with enhanced features",
+              "premium": "Enterprise tier with VNet integration and multi-region"
+            },
+            "components": [
+              "API gateway for request processing",
+              "Management plane for configuration",
+              "Developer portal for API discovery",
+              "Analytics for usage insights"
+            ]
+          },
+          "migration_considerations": [
+            "API definition import from OpenAPI/Swagger",
+            "Policy transformation from API Gateway to APIM",
+            "Authentication mechanism migration",
+            "Backend service integration updates"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "API Management Service Setup",
+            "description": "Create and configure Azure API Management service",
+            "steps": [
+              "Create API Management service instance",
+              "Configure custom domain and SSL certificates",
+              "Set up developer portal branding"
+            ]
+          },
+          {
+            "title": "API Import and Configuration",
+            "description": "Import APIs and configure basic settings",
+            "steps": [
+              "Import OpenAPI definition from API Gateway",
+              "Configure backend service endpoints",
+              "Set up API operations and request/response schemas"
+            ]
+          },
+          {
+            "title": "Policy Configuration",
+            "description": "Implement API policies for transformation and security",
+            "steps": [
+              "Configure inbound processing policies",
+              "Set up backend request transformation",
+              "Implement outbound response policies"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-3",
+      "title": "Authentication and Authorization Migration",
+      "estimated_time": "20 minutes",
+      "description": "Migrating authentication patterns from Cognito to Azure AD",
+      "learning_outcomes": [
+        "Configure Azure AD authentication for APIs",
+        "Implement OAuth 2.0 and OpenID Connect flows",
+        "Set up API key and subscription management"
+      ],
+      "content": {
+        "theory": {
+          "authentication_patterns": {
+            "cognito_user_pools": "User authentication and management in AWS",
+            "azure_ad_integration": "Enterprise identity integration with Azure AD",
+            "oauth_flows": "Authorization Code, Client Credentials, and Implicit flows",
+            "api_key_management": "Subscription-based API access control"
+          },
+          "authorization_strategies": [
+            "Role-based access control (RBAC)",
+            "Scope-based authorization",
+            "Custom authorization policies",
+            "JWT token validation"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Azure AD Integration",
+            "description": "Configure Azure AD authentication for APIs",
+            "steps": [
+              "Register application in Azure AD",
+              "Configure OAuth 2.0 authentication policies",
+              "Set up JWT token validation"
+            ]
+          },
+          {
+            "title": "Subscription Management",
+            "description": "Implement API key and subscription management",
+            "steps": [
+              "Create API Management products",
+              "Configure subscription approval workflows",
+              "Set up usage quotas and rate limits"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-4",
+      "title": "Backend Integration and Functions",
+      "estimated_time": "15 minutes",
+      "description": "Integrating Azure Functions as API backends",
+      "learning_outcomes": [
+        "Configure Azure Functions as API backends",
+        "Implement function app integration patterns",
+        "Set up backend load balancing and failover"
+      ],
+      "content": {
+        "theory": {
+          "backend_integration": {
+            "function_apps": "Serverless compute backend for APIs",
+            "service_fabric": "Microservices platform integration",
+            "logic_apps": "Workflow and integration backend",
+            "http_backends": "External API and service integration"
+          },
+          "integration_patterns": [
+            "Request/response transformation",
+            "Backend request routing",
+            "Circuit breaker and retry policies",
+            "Load balancing across multiple backends"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Function App Integration",
+            "description": "Configure Azure Functions as API backend",
+            "steps": [
+              "Deploy Azure Functions for API backend",
+              "Configure function app backend in API Management",
+              "Set up request/response transformation"
+            ]
+          },
+          {
+            "title": "Backend Policies",
+            "description": "Implement backend integration policies",
+            "steps": [
+              "Configure backend request transformation",
+              "Set up circuit breaker and retry policies",
+              "Implement backend load balancing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-5",
+      "title": "Developer Portal and Analytics",
+      "estimated_time": "10 minutes",
+      "description": "Configuring developer portal and implementing API analytics",
+      "learning_outcomes": [
+        "Configure developer portal for API discovery",
+        "Implement API analytics and monitoring",
+        "Set up custom reporting and dashboards"
+      ],
+      "content": {
+        "theory": {
+          "developer_portal": [
+            "API documentation and interactive testing",
+            "Self-service subscription management",
+            "Code samples and SDKs",
+            "Community features and forums"
+          ],
+          "analytics_capabilities": [
+            "API usage analytics and trends",
+            "Performance monitoring and alerting",
+            "Custom reporting and dashboards",
+            "Integration with Azure Monitor"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Developer Portal Configuration",
+            "description": "Set up developer portal for API consumers",
+            "steps": [
+              "Customize developer portal appearance",
+              "Configure API documentation",
+              "Set up self-service subscription workflows"
+            ]
+          },
+          {
+            "title": "Analytics and Monitoring",
+            "description": "Implement API analytics and monitoring",
+            "steps": [
+              "Configure API usage analytics",
+              "Set up performance monitoring alerts",
+              "Create custom analytics dashboards"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "assessment": {
+    "quiz_questions": [
+      {
+        "question": "What is the main advantage of Azure API Management over AWS API Gateway?",
+        "options": [
+          "Lower pricing for API calls",
+          "Better Lambda integration",
+          "Unified developer portal experience",
+          "Faster request processing"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure API Management provides a comprehensive developer portal with interactive documentation and self-service capabilities."
+      },
+      {
+        "question": "How do Azure API Management products compare to AWS API Gateway usage plans?",
+        "options": [
+          "Products offer more granular control",
+          "Usage plans have better analytics",
+          "Products support multiple APIs per product",
+          "Usage plans are more cost-effective"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure API Management products can include multiple APIs and provide more flexible subscription management."
+      }
+    ]
+  },
+  "next_steps": {
+    "recommended_follow_up": [
+      "serverless-functions-lab",
+      "advanced-security-monitoring-lab",
+      "well-architected-framework-lab"
+    ],
+    "additional_resources": [
+      "Azure API Management documentation",
+      "API design best practices",
+      "Azure Functions integration guide"
+    ]
+  }
+}

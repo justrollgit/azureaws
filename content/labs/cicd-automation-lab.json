@@ -1,0 +1,196 @@
+{
+  "id": "cicd-automation-lab",
+  "title": "CodePipeline to Azure DevOps: Complete CI/CD Automation",
+  "difficulty": "advanced",
+  "estimated_time": "150 minutes",
+  "aws_prerequisite": "Experience with CodePipeline, CodeBuild, CodeDeploy, and CI/CD practices",
+  "azure_target": "Master Azure DevOps pipelines, automated testing, and deployment strategies",
+  "learning_objectives": [
+    "Migrate from AWS CodePipeline to Azure DevOps Pipelines",
+    "Implement automated testing in CI/CD pipelines",
+    "Configure artifact management and versioning",
+    "Set up multi-stage deployments with approvals",
+    "Implement blue-green and canary deployment strategies"
+  ],
+  "aws_context": {
+    "equivalent_service": "AWS CodePipeline, CodeBuild, CodeDeploy, CodeCommit",
+    "key_concepts": [
+      "CodePipeline → Azure Pipelines",
+      "CodeBuild → Azure Pipeline Build Agents",
+      "CodeDeploy → Azure Pipeline Release",
+      "CodeCommit → Azure Repos",
+      "CodeArtifact → Azure Artifacts",
+      "CloudWatch Events → Azure Pipeline Triggers"
+    ]
+  },
+  "sections": [
+    {
+      "title": "CI/CD Service Architecture Comparison",
+      "content": "Understanding the complete CI/CD ecosystem mapping between AWS and Azure.",
+      "comparison_table": {
+        "source_control": {
+          "aws": "CodeCommit",
+          "azure": "Azure Repos",
+          "use_case": "Version control and source management"
+        },
+        "build_service": {
+          "aws": "CodeBuild",
+          "azure": "Azure Pipelines (Build)",
+          "use_case": "Compilation, testing, and artifact creation"
+        },
+        "release_service": {
+          "aws": "CodeDeploy",
+          "azure": "Azure Pipelines (Release)",
+          "use_case": "Deployment orchestration and strategies"
+        },
+        "artifact_management": {
+          "aws": "CodeArtifact",
+          "azure": "Azure Artifacts",
+          "use_case": "Package management and versioning"
+        },
+        "pipeline_orchestration": {
+          "aws": "CodePipeline",
+          "azure": "Azure Pipelines",
+          "use_case": "End-to-end workflow automation"
+        }
+      }
+    },
+    {
+      "title": "Build Pipeline with Automated Testing",
+      "content": "Create a comprehensive build pipeline with unit tests, integration tests, and security scanning.",
+      "exercise": {
+        "scenario": "Set up a complete build pipeline that includes automated testing, code coverage, and security scanning - equivalent to CodeBuild with testing stages.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Create Azure DevOps Project",
+            "aws_equivalent": "Create CodeCommit repository and CodePipeline",
+            "instructions": "Initialize Azure DevOps project with repository and pipeline setup.",
+            "code": {
+              "cli": "az devops project create --name 'cicd-lab' --org https://dev.azure.com/yourorg",
+              "portal": "Navigate to Azure DevOps → New Project → Configure repository and pipelines"
+            },
+            "explanation": "Azure DevOps provides integrated source control and pipeline management similar to AWS Code services."
+          },
+          {
+            "step": 2,
+            "title": "Configure Build Pipeline with Testing",
+            "aws_equivalent": "Configure CodeBuild buildspec.yml with test phases",
+            "instructions": "Create a multi-stage build pipeline with automated testing phases.",
+            "code": {
+              "cli": "# azure-pipelines.yml\ntrigger:\n  - main\n\nstages:\n- stage: Build\n  jobs:\n  - job: BuildAndTest\n    pool:\n      vmImage: 'ubuntu-latest'\n    steps:\n    - task: DotNetCoreCLI@2\n      inputs:\n        command: 'build'\n    - task: DotNetCoreCLI@2\n      inputs:\n        command: 'test'\n        arguments: '--collect:\"Code Coverage\"'\n    - task: PublishCodeCoverageResults@1\n      inputs:\n        codeCoverageTool: 'Cobertura'",
+              "portal": "Pipeline → Edit → Add tasks for build, test, and coverage"
+            },
+            "explanation": "This provides comprehensive testing similar to CodeBuild's test phases with coverage reporting."
+          },
+          {
+            "step": 3,
+            "title": "Implement Security Scanning",
+            "aws_equivalent": "CodeBuild with security scanning tools",
+            "instructions": "Add security scanning and dependency checking to the pipeline.",
+            "code": {
+              "cli": "- task: WhiteSource@21\n  inputs:\n    cwd: '$(System.DefaultWorkingDirectory)'\n- task: SonarQubePrepare@5\n  inputs:\n    SonarQube: 'SonarQubeConnection'\n    scannerMode: 'MSBuild'",
+              "portal": "Add WhiteSource and SonarQube tasks for security analysis"
+            },
+            "explanation": "Integrated security scanning provides vulnerability detection similar to AWS security tools."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multi-Stage Release Pipeline",
+      "content": "Implement sophisticated deployment strategies with approvals and gates.",
+      "exercise": {
+        "scenario": "Create a multi-stage release pipeline with dev, staging, and production environments, including manual approvals and automated gates.",
+        "steps": [
+          {
+            "step": 4,
+            "title": "Configure Release Pipeline",
+            "aws_equivalent": "CodeDeploy deployment groups and configurations",
+            "instructions": "Set up multi-stage release pipeline with environment-specific configurations.",
+            "code": {
+              "cli": "# release-pipeline.yml\nstages:\n- stage: Dev\n  jobs:\n  - deployment: DeployDev\n    environment: 'Development'\n    strategy:\n      runOnce:\n        deploy:\n          steps:\n          - script: echo Deploying to Dev\n- stage: Staging\n  dependsOn: Dev\n  condition: succeeded()\n  jobs:\n  - deployment: DeployStaging\n    environment: 'Staging'\n- stage: Production\n  dependsOn: Staging\n  jobs:\n  - deployment: DeployProd\n    environment: 'Production'",
+              "portal": "Releases → New Pipeline → Add stages for Dev, Staging, Production"
+            },
+            "explanation": "Multi-stage deployments provide controlled rollout similar to CodeDeploy deployment groups."
+          },
+          {
+            "step": 5,
+            "title": "Implement Blue-Green Deployment",
+            "aws_equivalent": "CodeDeploy blue-green deployment configuration",
+            "instructions": "Configure blue-green deployment strategy for zero-downtime updates.",
+            "code": {
+              "cli": "strategy:\n  blueGreen:\n    activeService: 'app-prod'\n    greenService: 'app-staging'\n    preDeployApprovals:\n      approvals:\n      - approver: 'release-managers'\n    routeTraffic:\n      steps:\n      - percentage: 10\n        wait: '5m'\n      - percentage: 50\n        wait: '5m'\n      - percentage: 100",
+              "portal": "Configure deployment strategy → Blue-Green → Set traffic routing"
+            },
+            "explanation": "Blue-green deployments ensure zero downtime similar to CodeDeploy's deployment configurations."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Artifact Management and Versioning",
+      "content": "Implement comprehensive artifact management with versioning and retention policies.",
+      "exercise": {
+        "scenario": "Set up artifact feeds for different package types with versioning and retention policies.",
+        "steps": [
+          {
+            "step": 6,
+            "title": "Configure Azure Artifacts",
+            "aws_equivalent": "Set up CodeArtifact repositories",
+            "instructions": "Create artifact feeds for NuGet, npm, and Maven packages.",
+            "code": {
+              "cli": "az artifacts feed create --name 'myapp-feed' --org https://dev.azure.com/yourorg",
+              "portal": "Artifacts → Create Feed → Configure upstream sources and permissions"
+            },
+            "explanation": "Azure Artifacts provides package management similar to CodeArtifact with multiple package type support."
+          },
+          {
+            "step": 7,
+            "title": "Implement Semantic Versioning",
+            "aws_equivalent": "CodeArtifact versioning policies",
+            "instructions": "Configure automatic versioning with semantic versioning rules.",
+            "code": {
+              "cli": "- task: DotNetCoreCLI@2\n  inputs:\n    command: 'pack'\n    versioningScheme: 'byBuildNumber'\n    buildProperties: 'Version=$(Build.BuildNumber)'",
+              "portal": "Pipeline → Pack task → Configure versioning scheme"
+            },
+            "explanation": "Automated versioning ensures consistent package versions across environments."
+          }
+        ]
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Verify Pipeline Execution",
+      "command": "az pipelines run --name 'cicd-pipeline' --org https://dev.azure.com/yourorg",
+      "expected": "Pipeline completes all stages successfully"
+    },
+    {
+      "step": "Check Test Coverage",
+      "command": "az pipelines build show --id $(Build.BuildId) --query 'coverage'",
+      "expected": "Code coverage > 80%"
+    },
+    {
+      "step": "Validate Artifact Publishing",
+      "command": "az artifacts package show --feed 'myapp-feed' --name 'myapp' --version '1.0.0'",
+      "expected": "Package successfully published and accessible"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove Azure DevOps resources to avoid charges",
+    "command": "az devops project delete --id 'cicd-lab' --yes"
+  },
+  "key_takeaways": [
+    "Azure Pipelines provides unified CI/CD similar to CodePipeline ecosystem",
+    "Built-in testing and security scanning capabilities exceed CodeBuild features",
+    "Azure Artifacts offers comprehensive package management like CodeArtifact",
+    "Deployment strategies in Azure Pipelines match CodeDeploy capabilities",
+    "Environment approvals and gates provide enterprise-grade release control"
+  ],
+  "next_steps": [
+    "Explore Azure Pipeline templates and reusable components",
+    "Learn about Azure DevOps integration with GitHub",
+    "Study advanced deployment patterns like feature flags and A/B testing"
+  ]
+}

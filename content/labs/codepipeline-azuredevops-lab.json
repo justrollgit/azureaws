@@ -1,0 +1,401 @@
+{
+  "id": "codepipeline-azuredevops-lab",
+  "title": "CodePipeline to Azure DevOps: Enterprise CI/CD and Infrastructure as Code",
+  "category": "cicd",
+  "difficulty": "expert",
+  "estimated_time": "240 minutes",
+  "description": "Master enterprise CI/CD pipeline migration from AWS CodePipeline to Azure DevOps with advanced deployment strategies, Infrastructure as Code, and security integration",
+  "aws_services": [
+    "CodePipeline",
+    "CodeBuild",
+    "CodeDeploy",
+    "CodeCommit",
+    "CloudFormation",
+    "Systems Manager",
+    "IAM"
+  ],
+  "azure_services": [
+    "Azure DevOps",
+    "Azure Pipelines",
+    "Azure Repos",
+    "Azure Artifacts",
+    "ARM Templates",
+    "Bicep",
+    "Azure Key Vault",
+    "Azure Monitor"
+  ],
+  "learning_objectives": [
+    "Migrate AWS CodePipeline workflows to Azure DevOps pipelines",
+    "Convert CodeBuild projects to Azure Pipeline build stages",
+    "Transform CloudFormation templates to ARM Templates and Bicep",
+    "Implement Blue/Green and Canary deployment strategies",
+    "Integrate security scanning and compliance validation",
+    "Configure cross-environment promotion workflows",
+    "Set up automated testing and quality gates",
+    "Implement secret management and secure variable handling"
+  ],
+  "prerequisites": [
+    "AWS CodePipeline experience",
+    "Understanding of CI/CD concepts",
+    "Basic knowledge of Infrastructure as Code",
+    "Familiarity with Git workflows"
+  ],
+  "lab_overview": {
+    "scenario": "Migrate a complete enterprise CI/CD pipeline from AWS to Azure, including source control, build automation, testing, security scanning, and multi-environment deployments.",
+    "business_case": "Organization needs to consolidate development tools and leverage Azure's integrated DevOps capabilities while maintaining enterprise security and compliance standards.",
+    "migration_scope": "Complete CI/CD pipeline including source control, artifact management, build automation, testing, security scanning, and deployment automation across multiple environments."
+  },
+  "service_comparison": {
+    "pipeline_orchestration": {
+      "aws": {
+        "service": "CodePipeline",
+        "description": "Workflow automation service with stages and actions",
+        "key_features": [
+          "Visual pipeline designer",
+          "Stage-based execution",
+          "Cross-region deployments",
+          "Third-party integrations",
+          "Parallel and sequential actions"
+        ]
+      },
+      "azure": {
+        "service": "Azure Pipelines",
+        "description": "CI/CD service with YAML-based and visual pipeline definitions",
+        "key_features": [
+          "Multi-platform support",
+          "YAML pipeline as code",
+          "Parallel job execution",
+          "Extensive marketplace",
+          "Multi-cloud deployments"
+        ]
+      },
+      "migration_considerations": [
+        "Convert stage-action model to job-step model",
+        "Migrate approval processes to environment gates",
+        "Transform pipeline triggers and schedules",
+        "Adapt artifact passing between stages"
+      ]
+    },
+    "build_automation": {
+      "aws": {
+        "service": "CodeBuild",
+        "description": "Managed build service with customizable environments",
+        "key_features": [
+          "Multiple runtime environments",
+          "Build specification files",
+          "Docker support",
+          "Artifact caching",
+          "Parallel builds"
+        ]
+      },
+      "azure": {
+        "service": "Azure Pipelines (Build)",
+        "description": "Integrated build capabilities within Azure Pipelines",
+        "key_features": [
+          "Self-hosted and Microsoft-hosted agents",
+          "Extensive pre-built tasks",
+          "Container job support",
+          "Build caching",
+          "Matrix builds"
+        ]
+      },
+      "migration_considerations": [
+        "Convert buildspec.yml to azure-pipelines.yml",
+        "Migrate build environments and dependencies",
+        "Transform caching strategies",
+        "Adapt artifact publishing patterns"
+      ]
+    },
+    "source_control": {
+      "aws": {
+        "service": "CodeCommit",
+        "description": "Managed Git repository service",
+        "key_features": [
+          "Git-based repositories",
+          "IAM integration",
+          "Encryption at rest",
+          "Cross-region replication",
+          "Pull request workflows"
+        ]
+      },
+      "azure": {
+        "service": "Azure Repos",
+        "description": "Git repositories with advanced collaboration features",
+        "key_features": [
+          "Git and TFVC support",
+          "Branch policies",
+          "Pull request workflows",
+          "Code search",
+          "Integration with work items"
+        ]
+      },
+      "migration_considerations": [
+        "Repository migration with history preservation",
+        "Branch protection rule mapping",
+        "Webhook and trigger configuration",
+        "Access control and permissions mapping"
+      ]
+    },
+    "deployment_automation": {
+      "aws": {
+        "service": "CodeDeploy",
+        "description": "Application deployment service with multiple strategies",
+        "key_features": [
+          "Blue/Green deployments",
+          "Rolling deployments",
+          "Lambda deployments",
+          "Auto-scaling integration",
+          "Rollback capabilities"
+        ]
+      },
+      "azure": {
+        "service": "Azure Pipelines (Release)",
+        "description": "Release management with environment-based deployments",
+        "key_features": [
+          "Environment-based releases",
+          "Deployment strategies",
+          "Approval workflows",
+          "Gate conditions",
+          "Deployment history"
+        ]
+      },
+      "migration_considerations": [
+        "Map deployment strategies to release strategies",
+        "Convert deployment groups to deployment targets",
+        "Transform rollback procedures",
+        "Migrate approval workflows"
+      ]
+    }
+  },
+  "hands_on_sections": [
+    {
+      "section_id": "setup",
+      "title": "Environment Setup and Project Initialization",
+      "estimated_time": "30 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Create Azure DevOps Organization and Project",
+          "instructions": [
+            "Navigate to https://dev.azure.com and create a new organization",
+            "Create a new project named 'Enterprise-Migration-Demo'",
+            "Enable all services: Boards, Repos, Pipelines, Test Plans, Artifacts"
+          ],
+          "code_example": {
+            "language": "bash",
+            "code": "# Azure CLI setup for DevOps\naz extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/YourOrganization\naz devops project create --name \"Enterprise-Migration-Demo\" --description \"CI/CD Migration Lab\""
+          }
+        },
+        {
+          "step": 2,
+          "title": "Initialize Repository with Sample Application",
+          "instructions": [
+            "Clone the repository and set up the sample application",
+            "Create initial folder structure for Infrastructure as Code",
+            "Set up environment-specific configuration files"
+          ],
+          "code_example": {
+            "language": "bash",
+            "code": "# Initialize repository structure\nmkdir -p {\nsrc/app,\ninfrastructure/{arm-templates,bicep,scripts},\ntests/{unit,integration,e2e},\n.azure-pipelines,\nscripts/{build,deploy,test}\n}\n\n# Create sample application\ncat > src/app/app.js << 'EOF'\nconst express = require('express');\nconst app = express();\nconst port = process.env.PORT || 3000;\n\napp.get('/', (req, res) => {\n  res.json({\n    message: 'Enterprise Migration Demo',\n    version: process.env.APP_VERSION || '1.0.0',\n    environment: process.env.ENVIRONMENT || 'development'\n  });\n});\n\napp.listen(port, () => {\n  console.log(`App listening on port ${port}`);\n});\n\nmodule.exports = app;\nEOF"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "pipeline_migration",
+      "title": "CodePipeline to Azure Pipelines Migration",
+      "estimated_time": "60 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Analyze Existing AWS CodePipeline Structure",
+          "instructions": [
+            "Document the current AWS CodePipeline stages and actions",
+            "Identify dependencies and artifact flows",
+            "Map approval processes and deployment strategies"
+          ],
+          "aws_example": {
+            "language": "yaml",
+            "code": "# AWS CodePipeline structure (reference)\nPipeline:\n  Stages:\n    - Name: Source\n      Actions:\n        - Name: SourceAction\n          ActionTypeId:\n            Category: Source\n            Owner: AWS\n            Provider: CodeCommit\n    - Name: Build\n      Actions:\n        - Name: BuildAction\n          ActionTypeId:\n            Category: Build\n            Owner: AWS\n            Provider: CodeBuild\n    - Name: Deploy-Dev\n      Actions:\n        - Name: DeployDev\n          ActionTypeId:\n            Category: Deploy\n            Owner: AWS\n            Provider: CodeDeploy\n    - Name: Deploy-Prod\n      Actions:\n        - Name: ManualApproval\n          ActionTypeId:\n            Category: Approval\n            Owner: AWS\n            Provider: Manual\n        - Name: DeployProd\n          ActionTypeId:\n            Category: Deploy\n            Owner: AWS\n            Provider: CodeDeploy"
+          }
+        },
+        {
+          "step": 2,
+          "title": "Create Azure Pipeline YAML Definition",
+          "instructions": [
+            "Create the main pipeline YAML file",
+            "Define stages, jobs, and steps mapping from AWS structure",
+            "Configure triggers and variables"
+          ],
+          "code_example": {
+            "language": "yaml",
+            "code": "# azure-pipelines.yml\ntrigger:\n  branches:\n    include:\n      - main\n      - develop\n  paths:\n    include:\n      - src/*\n      - infrastructure/*\n\nvariables:\n  - group: 'Enterprise-Variables'\n  - name: buildConfiguration\n    value: 'Release'\n  - name: vmImageName\n    value: 'ubuntu-latest'\n\nstages:\n- stage: Build\n  displayName: 'Build and Test'\n  jobs:\n  - job: Build\n    displayName: 'Build Application'\n    pool:\n      vmImage: $(vmImageName)\n    steps:\n    - task: NodeTool@0\n      inputs:\n        versionSpec: '18.x'\n      displayName: 'Install Node.js'\n    \n    - script: |\n        npm ci\n        npm run build\n        npm run test:unit\n      displayName: 'npm install, build and test'\n    \n    - task: PublishTestResults@2\n      inputs:\n        testResultsFormat: 'JUnit'\n        testResultsFiles: '**/test-results.xml'\n        mergeTestResults: true\n      displayName: 'Publish test results'\n    \n    - task: PublishCodeCoverageResults@1\n      inputs:\n        codeCoverageTool: 'Cobertura'\n        summaryFileLocation: '**/coverage/cobertura-coverage.xml'\n      displayName: 'Publish code coverage'\n    \n    - task: Docker@2\n      inputs:\n        command: 'buildAndPush'\n        repository: 'enterprise-app'\n        dockerfile: '**/Dockerfile'\n        tags: |\n          $(Build.BuildId)\n          latest\n      displayName: 'Build and Push Docker Image'\n    \n    - publish: $(System.DefaultWorkingDirectory)/infrastructure\n      artifact: infrastructure\n      displayName: 'Publish Infrastructure Artifacts'\n\n- stage: SecurityScan\n  displayName: 'Security and Quality Gates'\n  dependsOn: Build\n  jobs:\n  - job: SecurityScan\n    displayName: 'Security Scanning'\n    pool:\n      vmImage: $(vmImageName)\n    steps:\n    - download: current\n      artifact: infrastructure\n    \n    - task: DotNetCoreCLI@2\n      inputs:\n        command: 'custom'\n        custom: 'tool'\n        arguments: 'install --global Microsoft.CST.DevSkim.CLI'\n      displayName: 'Install DevSkim'\n    \n    - script: |\n        devskim analyze --source-code-root $(System.DefaultWorkingDirectory)\n      displayName: 'Static Analysis Security Testing'\n    \n    - task: AzureKeyVault@2\n      inputs:\n        azureSubscription: 'Azure-Service-Connection'\n        KeyVaultName: 'enterprise-keyvault'\n        SecretsFilter: '*'\n      displayName: 'Retrieve secrets from Key Vault'\n\n- stage: DeployDev\n  displayName: 'Deploy to Development'\n  dependsOn: SecurityScan\n  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))\n  jobs:\n  - deployment: DeployDev\n    displayName: 'Deploy to Development Environment'\n    pool:\n      vmImage: $(vmImageName)\n    environment: 'development'\n    strategy:\n      runOnce:\n        deploy:\n          steps:\n          - download: current\n            artifact: infrastructure\n          \n          - task: AzureResourceManagerTemplateDeployment@3\n            inputs:\n              deploymentScope: 'Resource Group'\n              azureResourceManagerConnection: 'Azure-Service-Connection'\n              subscriptionId: '$(subscriptionId)'\n              action: 'Create Or Update Resource Group'\n              resourceGroupName: 'rg-enterprise-dev'\n              location: 'East US'\n              templateLocation: 'Linked artifact'\n              csmFile: '$(Pipeline.Workspace)/infrastructure/arm-templates/main.json'\n              csmParametersFile: '$(Pipeline.Workspace)/infrastructure/arm-templates/parameters.dev.json'\n              overrideParameters: '-appVersion $(Build.BuildId)'\n            displayName: 'Deploy Infrastructure'\n          \n          - task: AzureWebApp@1\n            inputs:\n              azureSubscription: 'Azure-Service-Connection'\n              appType: 'webAppContainer'\n              appName: 'enterprise-app-dev'\n              deployToSlotOrASE: true\n              resourceGroupName: 'rg-enterprise-dev'\n              slotName: 'staging'\n              imageName: 'enterprise-app:$(Build.BuildId)'\n            displayName: 'Deploy to Staging Slot'\n          \n          - task: AzureAppServiceManage@0\n            inputs:\n              azureSubscription: 'Azure-Service-Connection'\n              action: 'Swap Slots'\n              webAppName: 'enterprise-app-dev'\n              resourceGroupName: 'rg-enterprise-dev'\n              sourceSlot: 'staging'\n              targetSlot: 'production'\n            displayName: 'Swap Staging to Production'\n\n- stage: DeployProd\n  displayName: 'Deploy to Production'\n  dependsOn: DeployDev\n  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))\n  jobs:\n  - deployment: DeployProd\n    displayName: 'Deploy to Production Environment'\n    pool:\n      vmImage: $(vmImageName)\n    environment: 'production'\n    strategy:\n      canary:\n        increments: [25, 50, 100]\n        preDeploy:\n          steps:\n          - script: echo 'Pre-deployment validation'\n        deploy:\n          steps:\n          - download: current\n            artifact: infrastructure\n          \n          - task: AzureResourceManagerTemplateDeployment@3\n            inputs:\n              deploymentScope: 'Resource Group'\n              azureResourceManagerConnection: 'Azure-Service-Connection'\n              subscriptionId: '$(subscriptionId)'\n              action: 'Create Or Update Resource Group'\n              resourceGroupName: 'rg-enterprise-prod'\n              location: 'East US'\n              templateLocation: 'Linked artifact'\n              csmFile: '$(Pipeline.Workspace)/infrastructure/arm-templates/main.json'\n              csmParametersFile: '$(Pipeline.Workspace)/infrastructure/arm-templates/parameters.prod.json'\n              overrideParameters: '-appVersion $(Build.BuildId)'\n            displayName: 'Deploy Infrastructure'\n        postRouteTraffic:\n          steps:\n          - script: |\n              echo 'Running health checks...'\n              curl -f https://enterprise-app-prod.azurewebsites.net/health\n            displayName: 'Health Check'\n        on:\n          failure:\n            steps:\n            - script: echo 'Rolling back deployment'\n          success:\n            steps:\n            - script: echo 'Deployment successful'"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "infrastructure_as_code",
+      "title": "CloudFormation to ARM Templates/Bicep Migration",
+      "estimated_time": "45 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Convert CloudFormation to ARM Templates",
+          "instructions": [
+            "Analyze existing CloudFormation templates",
+            "Map AWS resources to Azure equivalents",
+            "Create ARM template with similar structure"
+          ],
+          "aws_example": {
+            "language": "yaml",
+            "code": "# CloudFormation template (reference)\nAWSTemplateFormatVersion: '2010-09-09'\nDescription: 'Enterprise Application Infrastructure'\n\nParameters:\n  EnvironmentName:\n    Type: String\n    Default: 'dev'\n  AppVersion:\n    Type: String\n    Default: 'latest'\n\nResources:\n  ApplicationLoadBalancer:\n    Type: AWS::ElasticLoadBalancingV2::LoadBalancer\n    Properties:\n      Name: !Sub '${EnvironmentName}-alb'\n      Type: application\n      Scheme: internet-facing\n      \n  ECSCluster:\n    Type: AWS::ECS::Cluster\n    Properties:\n      ClusterName: !Sub '${EnvironmentName}-cluster'\n      \n  ECSService:\n    Type: AWS::ECS::Service\n    Properties:\n      Cluster: !Ref ECSCluster\n      ServiceName: !Sub '${EnvironmentName}-service'\n      TaskDefinition: !Ref TaskDefinition\n      \n  RDSInstance:\n    Type: AWS::RDS::DBInstance\n    Properties:\n      DBInstanceIdentifier: !Sub '${EnvironmentName}-database'\n      Engine: postgres\n      DBInstanceClass: db.t3.micro"
+          },
+          "code_example": {
+            "language": "json",
+            "code": "{\n  \"$schema\": \"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#\",\n  \"contentVersion\": \"1.0.0.0\",\n  \"parameters\": {\n    \"environmentName\": {\n      \"type\": \"string\",\n      \"defaultValue\": \"dev\",\n      \"metadata\": {\n        \"description\": \"Environment name for resource naming\"\n      }\n    },\n    \"appVersion\": {\n      \"type\": \"string\",\n      \"defaultValue\": \"latest\",\n      \"metadata\": {\n        \"description\": \"Application version for deployment\"\n      }\n    },\n    \"location\": {\n      \"type\": \"string\",\n      \"defaultValue\": \"[resourceGroup().location]\",\n      \"metadata\": {\n        \"description\": \"Location for all resources\"\n      }\n    }\n  },\n  \"variables\": {\n    \"appServicePlanName\": \"[concat(parameters('environmentName'), '-asp')]\",\n    \"webAppName\": \"[concat('enterprise-app-', parameters('environmentName'))]\",\n    \"applicationGatewayName\": \"[concat(parameters('environmentName'), '-agw')]\",\n    \"postgreSQLServerName\": \"[concat(parameters('environmentName'), '-psql')]\",\n    \"keyVaultName\": \"[concat('kv-', parameters('environmentName'), '-', uniqueString(resourceGroup().id))]\"\n  },\n  \"resources\": [\n    {\n      \"type\": \"Microsoft.Web/serverfarms\",\n      \"apiVersion\": \"2021-02-01\",\n      \"name\": \"[variables('appServicePlanName')]\",\n      \"location\": \"[parameters('location')]\",\n      \"sku\": {\n        \"name\": \"P1v2\",\n        \"tier\": \"PremiumV2\",\n        \"size\": \"P1v2\",\n        \"family\": \"Pv2\",\n        \"capacity\": 1\n      },\n      \"kind\": \"linux\",\n      \"properties\": {\n        \"perSiteScaling\": false,\n        \"elasticScaleEnabled\": false,\n        \"maximumElasticWorkerCount\": 1,\n        \"isSpot\": false,\n        \"reserved\": true,\n        \"isXenon\": false,\n        \"hyperV\": false,\n        \"targetWorkerCount\": 0,\n        \"targetWorkerSizeId\": 0\n      }\n    },\n    {\n      \"type\": \"Microsoft.Web/sites\",\n      \"apiVersion\": \"2021-02-01\",\n      \"name\": \"[variables('webAppName')]\",\n      \"location\": \"[parameters('location')]\",\n      \"dependsOn\": [\n        \"[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]\"\n      ],\n      \"kind\": \"app,linux,container\",\n      \"properties\": {\n        \"enabled\": true,\n        \"hostNameSslStates\": [],\n        \"serverFarmId\": \"[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]\",\n        \"reserved\": true,\n        \"isXenon\": false,\n        \"hyperV\": false,\n        \"siteConfig\": {\n          \"numberOfWorkers\": 1,\n          \"linuxFxVersion\": \"[concat('DOCKER|enterprise-app:', parameters('appVersion'))]\",\n          \"acrUseManagedIdentityCreds\": false,\n          \"alwaysOn\": true,\n          \"httpLoggingEnabled\": false,\n          \"ftpsState\": \"Disabled\",\n          \"appSettings\": [\n            {\n              \"name\": \"ENVIRONMENT\",\n              \"value\": \"[parameters('environmentName')]\"\n            },\n            {\n              \"name\": \"APP_VERSION\",\n              \"value\": \"[parameters('appVersion')]\"\n            }\n          ]\n        },\n        \"scmSiteAlsoStopped\": false,\n        \"clientAffinityEnabled\": false,\n        \"clientCertEnabled\": false,\n        \"hostNamesDisabled\": false,\n        \"containerSize\": 0,\n        \"dailyMemoryTimeQuota\": 0,\n        \"httpsOnly\": true,\n        \"redundancyMode\": \"None\"\n      }\n    },\n    {\n      \"type\": \"Microsoft.DBforPostgreSQL/servers\",\n      \"apiVersion\": \"2017-12-01\",\n      \"name\": \"[variables('postgreSQLServerName')]\",\n      \"location\": \"[parameters('location')]\",\n      \"sku\": {\n        \"name\": \"GP_Gen5_2\",\n        \"tier\": \"GeneralPurpose\",\n        \"family\": \"Gen5\",\n        \"capacity\": 2\n      },\n      \"properties\": {\n        \"storageProfile\": {\n          \"storageMB\": 51200,\n          \"backupRetentionDays\": 7,\n          \"geoRedundantBackup\": \"Disabled\",\n          \"storageAutogrow\": \"Enabled\"\n        },\n        \"version\": \"11\",\n        \"sslEnforcement\": \"Enabled\",\n        \"minimalTlsVersion\": \"TLS1_2\",\n        \"infrastructureEncryption\": \"Disabled\",\n        \"publicNetworkAccess\": \"Enabled\"\n      }\n    }\n  ],\n  \"outputs\": {\n    \"webAppUrl\": {\n      \"type\": \"string\",\n      \"value\": \"[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('webAppName'))).defaultHostName)]\"\n    },\n    \"databaseConnectionString\": {\n      \"type\": \"string\",\n      \"value\": \"[concat('Host=', reference(resourceId('Microsoft.DBforPostgreSQL/servers', variables('postgreSQLServerName'))).fullyQualifiedDomainName, ';Database=postgres;Username=adminuser@', variables('postgreSQLServerName'), ';Password={password};SslMode=Require;')]\"\n    }\n  }\n}"
+          }
+        },
+        {
+          "step": 2,
+          "title": "Create Modern Bicep Templates",
+          "instructions": [
+            "Convert ARM templates to Bicep for better readability",
+            "Use Bicep modules for reusable components",
+            "Implement parameter files for different environments"
+          ],
+          "code_example": {
+            "language": "bicep",
+            "code": "// main.bicep - Modern Infrastructure as Code\n@description('Environment name for resource naming')\nparam environmentName string = 'dev'\n\n@description('Application version for deployment')\nparam appVersion string = 'latest'\n\n@description('Location for all resources')\nparam location string = resourceGroup().location\n\n@description('PostgreSQL administrator username')\nparam postgresAdminUsername string\n\n@description('PostgreSQL administrator password')\n@secure()\nparam postgresAdminPassword string\n\n// Variables\nvar appServicePlanName = '${environmentName}-asp'\nvar webAppName = 'enterprise-app-${environmentName}'\nvar postgreSQLServerName = '${environmentName}-psql'\nvar keyVaultName = 'kv-${environmentName}-${uniqueString(resourceGroup().id)}'\nvar logAnalyticsWorkspaceName = '${environmentName}-law'\nvar applicationInsightsName = '${environmentName}-ai'\n\n// Log Analytics Workspace\nresource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {\n  name: logAnalyticsWorkspaceName\n  location: location\n  properties: {\n    sku: {\n      name: 'PerGB2018'\n    }\n    retentionInDays: 30\n    features: {\n      searchVersion: 1\n      legacy: 0\n      enableLogAccessUsingOnlyResourcePermissions: true\n    }\n  }\n}\n\n// Application Insights\nresource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {\n  name: applicationInsightsName\n  location: location\n  kind: 'web'\n  properties: {\n    Application_Type: 'web'\n    WorkspaceResourceId: logAnalyticsWorkspace.id\n  }\n}\n\n// Key Vault\nresource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {\n  name: keyVaultName\n  location: location\n  properties: {\n    enabledForDeployment: false\n    enabledForTemplateDeployment: true\n    enabledForDiskEncryption: false\n    tenantId: subscription().tenantId\n    accessPolicies: []\n    sku: {\n      name: 'standard'\n      family: 'A'\n    }\n    networkAcls: {\n      defaultAction: 'Allow'\n      bypass: 'AzureServices'\n    }\n  }\n}\n\n// App Service Plan\nresource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {\n  name: appServicePlanName\n  location: location\n  sku: {\n    name: 'P1v2'\n    tier: 'PremiumV2'\n    size: 'P1v2'\n    family: 'Pv2'\n    capacity: 1\n  }\n  kind: 'linux'\n  properties: {\n    perSiteScaling: false\n    elasticScaleEnabled: false\n    maximumElasticWorkerCount: 1\n    isSpot: false\n    reserved: true\n    isXenon: false\n    hyperV: false\n    targetWorkerCount: 0\n    targetWorkerSizeId: 0\n  }\n}\n\n// Web App\nresource webApp 'Microsoft.Web/sites@2021-02-01' = {\n  name: webAppName\n  location: location\n  kind: 'app,linux,container'\n  identity: {\n    type: 'SystemAssigned'\n  }\n  properties: {\n    enabled: true\n    serverFarmId: appServicePlan.id\n    reserved: true\n    isXenon: false\n    hyperV: false\n    siteConfig: {\n      numberOfWorkers: 1\n      linuxFxVersion: 'DOCKER|enterprise-app:${appVersion}'\n      acrUseManagedIdentityCreds: false\n      alwaysOn: true\n      httpLoggingEnabled: true\n      logsDirectorySizeLimit: 35\n      detailedErrorLoggingEnabled: true\n      ftpsState: 'Disabled'\n      minTlsVersion: '1.2'\n      appSettings: [\n        {\n          name: 'ENVIRONMENT'\n          value: environmentName\n        }\n        {\n          name: 'APP_VERSION'\n          value: appVersion\n        }\n        {\n          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'\n          value: applicationInsights.properties.InstrumentationKey\n        }\n        {\n          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'\n          value: applicationInsights.properties.ConnectionString\n        }\n      ]\n    }\n    scmSiteAlsoStopped: false\n    clientAffinityEnabled: false\n    clientCertEnabled: false\n    hostNamesDisabled: false\n    containerSize: 0\n    dailyMemoryTimeQuota: 0\n    httpsOnly: true\n    redundancyMode: 'None'\n  }\n}\n\n// Web App Staging Slot\nresource webAppStagingSlot 'Microsoft.Web/sites/slots@2021-02-01' = {\n  parent: webApp\n  name: 'staging'\n  location: location\n  kind: 'app,linux,container'\n  properties: {\n    enabled: true\n    serverFarmId: appServicePlan.id\n    reserved: true\n    siteConfig: {\n      numberOfWorkers: 1\n      linuxFxVersion: 'DOCKER|enterprise-app:${appVersion}'\n      alwaysOn: true\n      ftpsState: 'Disabled'\n      minTlsVersion: '1.2'\n      appSettings: [\n        {\n          name: 'ENVIRONMENT'\n          value: '${environmentName}-staging'\n        }\n        {\n          name: 'APP_VERSION'\n          value: appVersion\n        }\n      ]\n    }\n    httpsOnly: true\n  }\n}\n\n// PostgreSQL Server\nresource postgreSQLServer 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {\n  name: postgreSQLServerName\n  location: location\n  sku: {\n    name: 'GP_Gen5_2'\n    tier: 'GeneralPurpose'\n    family: 'Gen5'\n    capacity: 2\n  }\n  properties: {\n    storageProfile: {\n      storageMB: 51200\n      backupRetentionDays: 7\n      geoRedundantBackup: 'Disabled'\n      storageAutogrow: 'Enabled'\n    }\n    version: '11'\n    sslEnforcement: 'Enabled'\n    minimalTlsVersion: 'TLS1_2'\n    infrastructureEncryption: 'Disabled'\n    publicNetworkAccess: 'Enabled'\n    administratorLogin: postgresAdminUsername\n    administratorLoginPassword: postgresAdminPassword\n  }\n}\n\n// PostgreSQL Database\nresource postgreSQLDatabase 'Microsoft.DBforPostgreSQL/servers/databases@2017-12-01' = {\n  parent: postgreSQLServer\n  name: 'enterprisedb'\n  properties: {\n    charset: 'utf8'\n    collation: 'en_US.utf8'\n  }\n}\n\n// Grant Key Vault access to Web App\nresource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-preview' = {\n  parent: keyVault\n  name: 'add'\n  properties: {\n    accessPolicies: [\n      {\n        tenantId: subscription().tenantId\n        objectId: webApp.identity.principalId\n        permissions: {\n          secrets: [\n            'get'\n            'list'\n          ]\n        }\n      }\n    ]\n  }\n}\n\n// Store database connection string in Key Vault\nresource dbConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {\n  parent: keyVault\n  name: 'DatabaseConnectionString'\n  properties: {\n    value: 'Host=${postgreSQLServer.properties.fullyQualifiedDomainName};Database=enterprisedb;Username=${postgresAdminUsername}@${postgreSQLServerName};Password=${postgresAdminPassword};SslMode=Require;'\n  }\n}\n\n// Outputs\noutput webAppUrl string = 'https://${webApp.properties.defaultHostName}'\noutput webAppStagingUrl string = 'https://${webAppStagingSlot.properties.defaultHostName}'\noutput keyVaultName string = keyVault.name\noutput applicationInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey\noutput logAnalyticsWorkspaceId string = logAnalyticsWorkspace.id"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "deployment_strategies",
+      "title": "Advanced Deployment Strategies",
+      "estimated_time": "60 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Implement Blue/Green Deployment Strategy",
+          "instructions": [
+            "Configure deployment slots for zero-downtime deployments",
+            "Set up traffic routing and gradual rollout",
+            "Implement automated rollback on health check failures"
+          ],
+          "code_example": {
+            "language": "yaml",
+            "code": "# Blue/Green Deployment Pipeline Stage\n- stage: BlueGreenDeploy\n  displayName: 'Blue/Green Deployment'\n  dependsOn: SecurityScan\n  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))\n  variables:\n    - name: slotName\n      value: 'staging'\n  jobs:\n  - deployment: BlueGreenDeployment\n    displayName: 'Blue/Green Deployment'\n    pool:\n      vmImage: $(vmImageName)\n    environment: 'production'\n    strategy:\n      runOnce:\n        deploy:\n          steps:\n          # Deploy to staging slot (Blue environment)\n          - task: AzureWebApp@1\n            inputs:\n              azureSubscription: 'Azure-Service-Connection'\n              appType: 'webAppContainer'\n              appName: 'enterprise-app-prod'\n              deployToSlotOrASE: true\n              resourceGroupName: 'rg-enterprise-prod'\n              slotName: '$(slotName)'\n              imageName: 'enterprise-app:$(Build.BuildId)'\n            displayName: 'Deploy to Blue Environment (Staging Slot)'\n          \n          # Warm up the staging slot\n          - task: PowerShell@2\n            inputs:\n              targetType: 'inline'\n              script: |\n                $stagingUrl = \"https://enterprise-app-prod-staging.azurewebsites.net\"\n                Write-Host \"Warming up staging slot: $stagingUrl\"\n                \n                for ($i = 1; $i -le 5; $i++) {\n                  try {\n                    $response = Invoke-WebRequest -Uri \"$stagingUrl/health\" -UseBasicParsing\n                    Write-Host \"Warmup request $i completed with status: $($response.StatusCode)\"\n                    Start-Sleep -Seconds 10\n                  }\n                  catch {\n                    Write-Warning \"Warmup request $i failed: $($_.Exception.Message)\"\n                  }\n                }\n            displayName: 'Warm up Blue Environment'\n          \n          # Run health checks on staging slot\n          - task: PowerShell@2\n            inputs:\n              targetType: 'inline'\n              script: |\n                $stagingUrl = \"https://enterprise-app-prod-staging.azurewebsites.net\"\n                $healthCheckUrl = \"$stagingUrl/health\"\n                $maxAttempts = 10\n                $attempt = 1\n                $healthCheckPassed = $false\n                \n                while ($attempt -le $maxAttempts -and -not $healthCheckPassed) {\n                  try {\n                    Write-Host \"Health check attempt $attempt of $maxAttempts\"\n                    $response = Invoke-RestMethod -Uri $healthCheckUrl -Method Get -TimeoutSec 30\n                    \n                    if ($response.status -eq \"healthy\") {\n                      Write-Host \"Health check passed: Application is healthy\"\n                      $healthCheckPassed = $true\n                    } else {\n                      Write-Warning \"Health check failed: $($response.status)\"\n                    }\n                  }\n                  catch {\n                    Write-Warning \"Health check attempt $attempt failed: $($_.Exception.Message)\"\n                  }\n                  \n                  if (-not $healthCheckPassed) {\n                    Start-Sleep -Seconds 30\n                    $attempt++\n                  }\n                }\n                \n                if (-not $healthCheckPassed) {\n                  Write-Error \"Health checks failed after $maxAttempts attempts\"\n                  exit 1\n                }\n            displayName: 'Health Check Blue Environment'\n          \n          # Swap slots (Blue to Green)\n          - task: AzureAppServiceManage@0\n            inputs:\n              azureSubscription: 'Azure-Service-Connection'\n              action: 'Swap Slots'\n              webAppName: 'enterprise-app-prod'\n              resourceGroupName: 'rg-enterprise-prod'\n              sourceSlot: '$(slotName)'\n              targetSlot: 'production'\n            displayName: 'Swap Blue to Green (Go Live)'\n          \n          # Post-deployment validation\n          - task: PowerShell@2\n            inputs:\n              targetType: 'inline'\n              script: |\n                $productionUrl = \"https://enterprise-app-prod.azurewebsites.net\"\n                $healthCheckUrl = \"$productionUrl/health\"\n                $maxAttempts = 5\n                $attempt = 1\n                $validationPassed = $false\n                \n                while ($attempt -le $maxAttempts -and -not $validationPassed) {\n                  try {\n                    Write-Host \"Post-deployment validation attempt $attempt of $maxAttempts\"\n                    $response = Invoke-RestMethod -Uri $healthCheckUrl -Method Get -TimeoutSec 30\n                    \n                    if ($response.status -eq \"healthy\" -and $response.version -eq \"$(Build.BuildId)\") {\n                      Write-Host \"Post-deployment validation passed: New version is live and healthy\"\n                      $validationPassed = $true\n                    } else {\n                      Write-Warning \"Post-deployment validation failed: Expected version $(Build.BuildId), got $($response.version)\"\n                    }\n                  }\n                  catch {\n                    Write-Warning \"Post-deployment validation attempt $attempt failed: $($_.Exception.Message)\"\n                  }\n                  \n                  if (-not $validationPassed) {\n                    Start-Sleep -Seconds 30\n                    $attempt++\n                  }\n                }\n                \n                if (-not $validationPassed) {\n                  Write-Error \"Post-deployment validation failed. Consider manual rollback.\"\n                  # Note: In a real scenario, you might trigger automatic rollback here\n                  exit 1\n                }\n            displayName: 'Post-Deployment Validation'\n        \n        on:\n          failure:\n            steps:\n            - task: PowerShell@2\n              inputs:\n                targetType: 'inline'\n                script: |\n                  Write-Host \"Deployment failed. Staging slot contains the failed deployment.\"\n                  Write-Host \"Production slot remains unchanged with previous version.\"\n                  Write-Host \"Manual investigation required before retry.\"\n              displayName: 'Deployment Failure Notification'"
+          }
+        },
+        {
+          "step": 2,
+          "title": "Implement Canary Deployment with Traffic Management",
+          "instructions": [
+            "Configure Azure Traffic Manager for gradual traffic routing",
+            "Set up monitoring and automated rollback triggers",
+            "Implement progressive traffic increase based on health metrics"
+          ],
+          "code_example": {
+            "language": "yaml",
+            "code": "# Canary Deployment with Traffic Management\n- stage: CanaryDeploy\n  displayName: 'Canary Deployment'\n  dependsOn: SecurityScan\n  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))\n  jobs:\n  - deployment: CanaryDeployment\n    displayName: 'Canary Deployment with Traffic Splitting'\n    pool:\n      vmImage: $(vmImageName)\n    environment: 'production'\n    strategy:\n      canary:\n        increments: [10, 25, 50, 100]\n        preDeploy:\n          steps:\n          - download: current\n            artifact: infrastructure\n          \n          - task: AzureResourceManagerTemplateDeployment@3\n            inputs:\n              deploymentScope: 'Resource Group'\n              azureResourceManagerConnection: 'Azure-Service-Connection'\n              subscriptionId: '$(subscriptionId)'\n              action: 'Create Or Update Resource Group'\n              resourceGroupName: 'rg-enterprise-prod'\n              location: 'East US'\n              templateLocation: 'Linked artifact'\n              csmFile: '$(Pipeline.Workspace)/infrastructure/traffic-manager.json'\n              overrideParameters: '-canaryWeight $(strategy.canary.increment)'\n            displayName: 'Update Traffic Manager Configuration'\n        \n        deploy:\n          steps:\n          - task: AzureWebApp@1\n            inputs:\n              azureSubscription: 'Azure-Service-Connection'\n              appType: 'webAppContainer'\n              appName: 'enterprise-app-canary'\n              resourceGroupName: 'rg-enterprise-prod'\n              imageName: 'enterprise-app:$(Build.BuildId)'\n            displayName: 'Deploy to Canary Environment'\n        \n        routeTraffic:\n          steps:\n          - task: PowerShell@2\n            inputs:\n              targetType: 'inline'\n              script: |\n                $canaryWeight = $(strategy.canary.increment)\n                Write-Host \"Routing $canaryWeight% of traffic to canary deployment\"\n                \n                # Update Traffic Manager endpoints\n                az network traffic-manager endpoint update \\\n                  --resource-group rg-enterprise-prod \\\n                  --profile-name enterprise-traffic-manager \\\n                  --name canary-endpoint \\\n                  --type azureEndpoints \\\n                  --weight $canaryWeight\n                  \n                az network traffic-manager endpoint update \\\n                  --resource-group rg-enterprise-prod \\\n                  --profile-name enterprise-traffic-manager \\\n                  --name production-endpoint \\\n                  --type azureEndpoints \\\n                  --weight (100 - $canaryWeight)\n                  \n                Write-Host \"Traffic routing updated successfully\"\n            displayName: 'Route Traffic to Canary'\n        \n        postRouteTraffic:\n          steps:\n          - task: PowerShell@2\n            inputs:\n              targetType: 'inline'\n              script: |\n                $canaryWeight = $(strategy.canary.increment)\n                Write-Host \"Monitoring canary deployment with $canaryWeight% traffic\"\n                \n                # Monitor for 5 minutes\n                $monitoringDuration = 300 # 5 minutes\n                $checkInterval = 30 # 30 seconds\n                $checks = $monitoringDuration / $checkInterval\n                \n                $errorThreshold = 0.05 # 5% error rate threshold\n                $latencyThreshold = 2000 # 2 second latency threshold\n                \n                for ($i = 1; $i -le $checks; $i++) {\n                  Write-Host \"Monitoring check $i of $checks\"\n                  \n                  # Get Application Insights metrics\n                  $query = @\"\n                  requests\n                  | where timestamp > ago(1m)\n                  | where cloud_RoleName == \"enterprise-app-canary\"\n                  | summarize \n                      TotalRequests = count(),\n                      FailedRequests = countif(success == false),\n                      AvgDuration = avg(duration)\n\"@\n                  \n                  try {\n                    $metrics = az monitor app-insights query \\\n                      --app enterprise-app-insights \\\n                      --analytics-query $query \\\n                      --output json | ConvertFrom-Json\n                    \n                    if ($metrics.tables[0].rows.Count -gt 0) {\n                      $row = $metrics.tables[0].rows[0]\n                      $totalRequests = $row[0]\n                      $failedRequests = $row[1]\n                      $avgDuration = $row[2]\n                      \n                      $errorRate = if ($totalRequests -gt 0) { $failedRequests / $totalRequests } else { 0 }\n                      \n                      Write-Host \"Metrics - Total: $totalRequests, Failed: $failedRequests, Error Rate: $($errorRate * 100)%, Avg Duration: $avgDuration ms\"\n                      \n                      if ($errorRate -gt $errorThreshold) {\n                        Write-Error \"Error rate $($errorRate * 100)% exceeds threshold $($errorThreshold * 100)%\"\n                        exit 1\n                      }\n                      \n                      if ($avgDuration -gt $latencyThreshold) {\n                        Write-Error \"Average latency $avgDuration ms exceeds threshold $latencyThreshold ms\"\n                        exit 1\n                      }\n                    }\n                  }\n                  catch {\n                    Write-Warning \"Failed to retrieve metrics: $($_.Exception.Message)\"\n                  }\n                  \n                  Start-Sleep -Seconds $checkInterval\n                }\n                \n                Write-Host \"Canary monitoring completed successfully for $canaryWeight% traffic\"\n            displayName: 'Monitor Canary Health'\n        \n        on:\n          failure:\n            steps:\n            - task: PowerShell@2\n              inputs:\n                targetType: 'inline'\n                script: |\n                  Write-Host \"Canary deployment failed. Rolling back traffic routing.\"\n                  \n                  # Route all traffic back to production\n                  az network traffic-manager endpoint update \\\n                    --resource-group rg-enterprise-prod \\\n                    --profile-name enterprise-traffic-manager \\\n                    --name production-endpoint \\\n                    --type azureEndpoints \\\n                    --weight 100\n                    \n                  az network traffic-manager endpoint update \\\n                    --resource-group rg-enterprise-prod \\\n                    --profile-name enterprise-traffic-manager \\\n                    --name canary-endpoint \\\n                    --type azureEndpoints \\\n                    --weight 0\n                    \n                  Write-Host \"Traffic routing rolled back to production endpoint\"\n              displayName: 'Rollback Traffic Routing'\n          \n          success:\n            steps:\n            - task: PowerShell@2\n              inputs:\n                targetType: 'inline'\n                script: |\n                  Write-Host \"Canary deployment successful at $(strategy.canary.increment)% traffic\"\n                  \n                  # If this is 100%, promote canary to production\n                  if ($(strategy.canary.increment) -eq 100) {\n                    Write-Host \"Promoting canary to production\"\n                    \n                    # Swap the endpoints or update production deployment\n                    # This is a simplified example - in practice, you might swap slots or update DNS\n                    Write-Host \"Canary promotion completed\"\n                  }\n              displayName: 'Canary Success Actions'"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "security_integration",
+      "title": "Security Integration and Compliance",
+      "estimated_time": "45 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Implement Security Scanning Pipeline",
+          "instructions": [
+            "Add static application security testing (SAST)",
+            "Configure dependency vulnerability scanning",
+            "Integrate infrastructure security validation"
+          ],
+          "code_example": {
+            "language": "yaml",
+            "code": "# Security Pipeline Stage\n- stage: SecurityValidation\n  displayName: 'Security Validation and Compliance'\n  dependsOn: Build\n  jobs:\n  - job: StaticAnalysis\n    displayName: 'Static Application Security Testing'\n    pool:\n      vmImage: $(vmImageName)\n    steps:\n    - checkout: self\n      fetchDepth: 1\n    \n    # Install security scanning tools\n    - task: DotNetCoreCLI@2\n      inputs:\n        command: 'custom'\n        custom: 'tool'\n        arguments: 'install --global Microsoft.CST.DevSkim.CLI'\n      displayName: 'Install DevSkim SAST Tool'\n    \n    - script: |\n        npm install -g audit-ci\n        npm install -g retire\n      displayName: 'Install Node.js Security Tools'\n    \n    # Static code analysis\n    - script: |\n        devskim analyze --source-code-root $(System.DefaultWorkingDirectory) \\\n          --output-format json \\\n          --output-file $(Agent.TempDirectory)/devskim-results.json\n      displayName: 'Run Static Application Security Testing'\n      continueOnError: true\n    \n    # Dependency vulnerability scanning\n    - script: |\n        npm audit --audit-level moderate\n      displayName: 'NPM Audit - Dependency Vulnerability Scan'\n      continueOnError: true\n    \n    - script: |\n        retire --path $(System.DefaultWorkingDirectory) \\\n          --outputformat json \\\n          --outputpath $(Agent.TempDirectory)/retire-results.json\n      displayName: 'Retire.js - JavaScript Vulnerability Scan'\n      continueOnError: true\n    \n    # Docker image security scanning\n    - task: Docker@2\n      inputs:\n        command: 'build'\n        repository: 'enterprise-app-security-scan'\n        dockerfile: '**/Dockerfile'\n        tags: 'security-scan'\n        arguments: '--target security-scan'\n      displayName: 'Build Image for Security Scanning'\n    \n    - script: |\n        # Install Trivy for container scanning\n        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -\n        echo \"deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main\" | sudo tee -a /etc/apt/sources.list.d/trivy.list\n        sudo apt-get update\n        sudo apt-get install trivy\n        \n        # Scan the Docker image\n        trivy image --format json --output $(Agent.TempDirectory)/trivy-results.json enterprise-app-security-scan:security-scan\n      displayName: 'Container Security Scanning with Trivy'\n      continueOnError: true\n    \n    # Infrastructure security validation\n    - download: current\n      artifact: infrastructure\n    \n    - script: |\n        # Install Checkov for Infrastructure as Code scanning\n        pip3 install checkov\n        \n        # Scan ARM templates and Bicep files\n        checkov --framework arm --file $(Pipeline.Workspace)/infrastructure/arm-templates/ \\\n          --output json --output-file $(Agent.TempDirectory)/checkov-arm-results.json\n        \n        checkov --framework bicep --file $(Pipeline.Workspace)/infrastructure/bicep/ \\\n          --output json --output-file $(Agent.TempDirectory)/checkov-bicep-results.json\n      displayName: 'Infrastructure Security Scanning with Checkov'\n      continueOnError: true\n    \n    # Aggregate and publish security results\n    - task: PowerShell@2\n      inputs:\n        targetType: 'inline'\n        script: |\n          $securityReport = @{\n            timestamp = Get-Date -Format \"yyyy-MM-ddTHH:mm:ssZ\"\n            buildId = \"$(Build.BuildId)\"\n            sourceVersion = \"$(Build.SourceVersion)\"\n            results = @{}\n          }\n          \n          # Process DevSkim results\n          if (Test-Path \"$(Agent.TempDirectory)/devskim-results.json\") {\n            $devskimResults = Get-Content \"$(Agent.TempDirectory)/devskim-results.json\" | ConvertFrom-Json\n            $securityReport.results.devskim = @{\n              totalIssues = $devskimResults.Count\n              criticalIssues = ($devskimResults | Where-Object { $_.severity -eq \"Critical\" }).Count\n              highIssues = ($devskimResults | Where-Object { $_.severity -eq \"Important\" }).Count\n            }\n          }\n          \n          # Process Trivy results\n          if (Test-Path \"$(Agent.TempDirectory)/trivy-results.json\") {\n            $trivyResults = Get-Content \"$(Agent.TempDirectory)/trivy-results.json\" | ConvertFrom-Json\n            $totalVulnerabilities = 0\n            $criticalVulns = 0\n            $highVulns = 0\n            \n            foreach ($result in $trivyResults.Results) {\n              if ($result.Vulnerabilities) {\n                $totalVulnerabilities += $result.Vulnerabilities.Count\n                $criticalVulns += ($result.Vulnerabilities | Where-Object { $_.Severity -eq \"CRITICAL\" }).Count\n                $highVulns += ($result.Vulnerabilities | Where-Object { $_.Severity -eq \"HIGH\" }).Count\n              }\n            }\n            \n            $securityReport.results.trivy = @{\n              totalVulnerabilities = $totalVulnerabilities\n              criticalVulnerabilities = $criticalVulns\n              highVulnerabilities = $highVulns\n            }\n          }\n          \n          # Set security gate status\n          $securityGatePassed = $true\n          $failureReasons = @()\n          \n          if ($securityReport.results.devskim.criticalIssues -gt 0) {\n            $securityGatePassed = $false\n            $failureReasons += \"Critical SAST issues found: $($securityReport.results.devskim.criticalIssues)\"\n          }\n          \n          if ($securityReport.results.trivy.criticalVulnerabilities -gt 0) {\n            $securityGatePassed = $false\n            $failureReasons += \"Critical container vulnerabilities found: $($securityReport.results.trivy.criticalVulnerabilities)\"\n          }\n          \n          $securityReport.gatePassed = $securityGatePassed\n          $securityReport.failureReasons = $failureReasons\n          \n          # Save security report\n          $securityReport | ConvertTo-Json -Depth 10 | Out-File \"$(Agent.TempDirectory)/security-report.json\"\n          \n          # Output summary\n          Write-Host \"=== Security Validation Summary ===\"\n          Write-Host \"Security Gate Status: $(if ($securityGatePassed) { 'PASSED' } else { 'FAILED' })\"\n          Write-Host \"DevSkim Critical Issues: $($securityReport.results.devskim.criticalIssues)\"\n          Write-Host \"Trivy Critical Vulnerabilities: $($securityReport.results.trivy.criticalVulnerabilities)\"\n          \n          if (-not $securityGatePassed) {\n            Write-Host \"Failure Reasons:\"\n            foreach ($reason in $failureReasons) {\n              Write-Host \"  - $reason\"\n            }\n            Write-Error \"Security gate failed. Blocking deployment.\"\n            exit 1\n          }\n      displayName: 'Security Gate Validation'\n    \n    - task: PublishTestResults@2\n      inputs:\n        testResultsFormat: 'JUnit'\n        testResultsFiles: '$(Agent.TempDirectory)/*-results.json'\n        mergeTestResults: true\n        testRunTitle: 'Security Scan Results'\n      displayName: 'Publish Security Scan Results'\n      condition: always()\n    \n    - publish: $(Agent.TempDirectory)/security-report.json\n      artifact: security-report\n      displayName: 'Publish Security Report'\n      condition: always()"
+          }
+        }
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "common_issues": [
+      {
+        "issue": "Pipeline fails with authentication errors",
+        "cause": "Service connection not properly configured",
+        "solution": "Verify Azure service connection has correct permissions and credentials"
+      },
+      {
+        "issue": "ARM template deployment fails",
+        "cause": "Resource naming conflicts or insufficient permissions",
+        "solution": "Check resource naming uniqueness and ensure service principal has Contributor role"
+      },
+      {
+        "issue": "Container deployment fails",
+        "cause": "Image not found or registry authentication issues",
+        "solution": "Verify container registry connection and image build process"
+      },
+      {
+        "issue": "Health checks fail after deployment",
+        "cause": "Application startup issues or configuration problems",
+        "solution": "Check application logs and environment variable configuration"
+      },
+      {
+        "issue": "Security scanning blocks deployment",
+        "cause": "Critical vulnerabilities or security policy violations",
+        "solution": "Address security issues or update security policies as appropriate"
+      }
+    ]
+  },
+  "best_practices": [
+    "Use YAML pipelines for version control and repeatability",
+    "Implement proper secret management with Azure Key Vault",
+    "Set up comprehensive monitoring and alerting",
+    "Use deployment slots for zero-downtime deployments",
+    "Implement security scanning at multiple stages",
+    "Configure proper RBAC and access controls",
+    "Use Infrastructure as Code for all environments",
+    "Implement automated rollback mechanisms",
+    "Set up proper logging and observability",
+    "Use environment-specific configuration management"
+  ],
+  "next_steps": [
+    "Implement multi-region deployment strategies",
+    "Add chaos engineering and resilience testing",
+    "Set up automated performance testing",
+    "Implement GitOps workflows with Azure Arc",
+    "Add compliance scanning and reporting",
+    "Integrate with Azure Monitor and Application Insights",
+    "Implement progressive delivery with feature flags",
+    "Set up disaster recovery automation"
+  ],
+  "additional_resources": [
+    {
+      "title": "Azure DevOps Pipeline Documentation",
+      "url": "https://docs.microsoft.com/en-us/azure/devops/pipelines/",
+      "description": "Official Azure DevOps pipeline documentation"
+    },
+    {
+      "title": "Azure ARM Template Reference",
+      "url": "https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/",
+      "description": "Complete ARM template reference and examples"
+    },
+    {
+      "title": "Bicep Documentation",
+      "url": "https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/",
+      "description": "Domain-specific language for deploying Azure resources"
+    },
+    {
+      "title": "Azure Security Best Practices",
+      "url": "https://docs.microsoft.com/en-us/azure/security/",
+      "description": "Security guidelines and best practices for Azure"
+    }
+  ]
+}

@@ -1,0 +1,270 @@
+{
+  "id": "identity-access-lab",
+  "title": "AWS IAM to Azure Active Directory: Identity Migration Lab",
+  "difficulty": "advanced",
+  "estimated_time": "120 minutes", 
+  "aws_prerequisite": "Experience with IAM users, roles, policies, and AWS Organizations",
+  "azure_target": "Implement Azure AD, RBAC, Conditional Access, and identity governance",
+  "learning_objectives": [
+    "Understand Azure AD vs AWS IAM architecture differences",
+    "Migrate IAM users and groups to Azure AD",
+    "Convert IAM roles to Azure RBAC and Managed Identity",
+    "Implement Conditional Access policies equivalent to IAM policies",
+    "Set up Azure AD Connect for hybrid identity",
+    "Configure Privileged Identity Management (PIM)",
+    "Implement Zero Trust security model"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "iam": "Azure Active Directory + RBAC",
+      "iam_roles": "Managed Identity + Azure RBAC",
+      "iam_policies": "Azure RBAC + Conditional Access",
+      "organizations": "Azure AD Tenants + Management Groups",
+      "cognito": "Azure AD B2C",
+      "directory_service": "Azure AD Domain Services"
+    },
+    "key_concepts": [
+      "IAM Users → Azure AD Users",
+      "IAM Groups → Azure AD Groups + Security Groups",
+      "IAM Roles → Managed Identity + Custom Roles",
+      "IAM Policies → RBAC Role Assignments",
+      "Resource-based Policies → Resource-specific RBAC",
+      "Cross-account Roles → Cross-tenant Access",
+      "MFA → Conditional Access Policies",
+      "AWS SSO → Azure AD SSO"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Identity Architecture Comparison",
+      "content": "Understanding fundamental differences between AWS IAM and Azure AD.",
+      "comparison_table": {
+        "identity_model": {
+          "aws": "Resource-centric, separate IAM service",
+          "azure": "Identity-centric, integrated across all services",
+          "impact": "Azure provides more unified identity experience"
+        },
+        "authentication": {
+          "aws": "Access keys, temporary tokens, MFA devices",
+          "azure": "Modern authentication, Conditional Access, passwordless",
+          "impact": "Azure supports more modern authentication methods"
+        },
+        "authorization": {
+          "aws": "JSON policies, resource-based and identity-based",
+          "azure": "RBAC with role definitions and scope assignments",
+          "impact": "Azure RBAC is more structured and easier to manage"
+        },
+        "service_integration": {
+          "aws": "Each service handles identity separately",
+          "azure": "Unified identity across all Azure services",
+          "impact": "Consistent identity experience across Azure platform"
+        },
+        "external_identity": {
+          "aws": "Federation through SAML/OIDC",
+          "azure": "Native hybrid identity with AD Connect, B2B collaboration",
+          "impact": "Azure provides richer hybrid and external identity features"
+        }
+      }
+    },
+    {
+      "title": "Azure AD Tenant Setup and Configuration",
+      "content": "Create and configure Azure AD tenant as the foundation for identity management.",
+      "code_examples": {
+        "check_current_tenant": {
+          "language": "bash",
+          "title": "Verify Current Azure AD Tenant",
+          "code": "# Check current tenant information\naz account show --query '{subscriptionId:id, tenantId:tenantId, name:name}' --output table\n\n# Get current user information\naz ad signed-in-user show --query '{userPrincipalName:userPrincipalName, displayName:displayName, objectId:objectId}'\n\n# List available tenants if you have access to multiple\naz account tenant list --query '[].{TenantId:tenantId, Name:displayName, Domain:defaultDomain}' --output table"
+        },
+        "configure_tenant_settings": {
+          "language": "bash",
+          "title": "Configure Tenant Security Settings",
+          "code": "# Install Azure AD PowerShell module (if using PowerShell)\n# Install-Module AzureAD\n\n# Enable Security Defaults (equivalent to AWS account-level MFA enforcement)\necho \"To enable Security Defaults:\"\necho \"1. Go to Azure AD portal > Properties\"\necho \"2. Click 'Manage Security defaults'\"\necho \"3. Enable Security defaults\"\necho \"This enforces MFA for all users, blocks legacy authentication\"\n\n# Alternative: Configure via Microsoft Graph API\nTENANT_ID=$(az account show --query tenantId -o tsv)\necho \"Tenant ID: $TENANT_ID\"\n\n# Get access token for Microsoft Graph\nTOKEN=$(az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv)\necho \"Retrieved access token for Graph API operations\""
+        }
+      }
+    },
+    {
+      "title": "User and Group Management",
+      "content": "Create users and groups equivalent to IAM users and groups.",
+      "code_examples": {
+        "create_users": {
+          "language": "bash",
+          "title": "Create Azure AD Users (Equivalent to IAM Users)",
+          "code": "# Create Azure AD users\naz ad user create \\\n  --display-name \"John Developer\" \\\n  --user-principal-name john.developer@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com \\\n  --password 'TempPassword123!' \\\n  --force-change-password-next-login true\n\naz ad user create \\\n  --display-name \"Jane Admin\" \\\n  --user-principal-name jane.admin@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com \\\n  --password 'TempPassword123!' \\\n  --force-change-password-next-login true\n\naz ad user create \\\n  --display-name \"Bob Analyst\" \\\n  --user-principal-name bob.analyst@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com \\\n  --password 'TempPassword123!' \\\n  --force-change-password-next-login true\n\n# List created users\naz ad user list --query '[].{DisplayName:displayName, UserPrincipalName:userPrincipalName, ObjectId:objectId}' --output table"
+        },
+        "create_groups": {
+          "language": "bash", 
+          "title": "Create Security Groups (Equivalent to IAM Groups)",
+          "code": "# Create security groups\naz ad group create \\\n  --display-name \"Developers\" \\\n  --mail-nickname \"developers\" \\\n  --description \"Development team with read/write access to development resources\"\n\naz ad group create \\\n  --display-name \"Administrators\" \\\n  --mail-nickname \"administrators\" \\\n  --description \"Full administrative access to all resources\"\n\naz ad group create \\\n  --display-name \"Analysts\" \\\n  --mail-nickname \"analysts\" \\\n  --description \"Read-only access to analytics and reporting resources\"\n\n# Get group object IDs\nDEV_GROUP_ID=$(az ad group show --group \"Developers\" --query objectId -o tsv)\nADMIN_GROUP_ID=$(az ad group show --group \"Administrators\" --query objectId -o tsv)\nANALYST_GROUP_ID=$(az ad group show --group \"Analysts\" --query objectId -o tsv)\n\necho \"Developers Group ID: $DEV_GROUP_ID\"\necho \"Administrators Group ID: $ADMIN_GROUP_ID\"\necho \"Analysts Group ID: $ANALYST_GROUP_ID\""
+        },
+        "assign_users_to_groups": {
+          "language": "bash",\n          \"title\": \"Add Users to Groups\",\n          \"code\": \"# Get user object IDs\nJOHN_USER_ID=$(az ad user show --id john.developer@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com --query objectId -o tsv)\nJANE_USER_ID=$(az ad user show --id jane.admin@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com --query objectId -o tsv)\nBOB_USER_ID=$(az ad user show --id bob.analyst@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com --query objectId -o tsv)\n\n# Add users to appropriate groups\naz ad group member add --group $DEV_GROUP_ID --member-id $JOHN_USER_ID\naz ad group member add --group $ADMIN_GROUP_ID --member-id $JANE_USER_ID\naz ad group member add --group $ANALYST_GROUP_ID --member-id $BOB_USER_ID\n\n# Verify group memberships\naz ad group member list --group $DEV_GROUP_ID --query '[].displayName'\naz ad group member list --group $ADMIN_GROUP_ID --query '[].displayName'\naz ad group member list --group $ANALYST_GROUP_ID --query '[].displayName'\""
+        }
+      }
+    },
+    {
+      "title": "Azure RBAC Implementation",
+      "content": "Create custom roles and assign permissions equivalent to IAM policies.",
+      "code_examples": {
+        "create_custom_roles": {
+          "language": "bash",
+          "title": "Create Custom RBAC Roles (Equivalent to IAM Policies)",
+          "code": "# Create a custom Developer role\ncat > developer-role.json << 'EOF'\n{\n  \"Name\": \"Custom Developer Role\",\n  \"Description\": \"Can manage development resources but not production\",\n  \"Actions\": [\n    \"Microsoft.Resources/subscriptions/resources/read\",\n    \"Microsoft.Resources/subscriptions/resourceGroups/read\",\n    \"Microsoft.Resources/subscriptions/resourceGroups/write\",\n    \"Microsoft.Compute/virtualMachines/*\",\n    \"Microsoft.Storage/storageAccounts/*\",\n    \"Microsoft.Web/sites/*\",\n    \"Microsoft.Sql/servers/databases/read\",\n    \"Microsoft.Sql/servers/databases/write\"\n  ],\n  \"NotActions\": [\n    \"Microsoft.Compute/virtualMachines/delete\",\n    \"Microsoft.Storage/storageAccounts/delete\"\n  ],\n  \"DataActions\": [\n    \"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read\",\n    \"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write\"\n  ],\n  \"NotDataActions\": [],\n  \"AssignableScopes\": [\n    \"/subscriptions/$(az account show --query id -o tsv)\"\n  ]\n}\nEOF\n\n# Create the custom role\naz role definition create --role-definition developer-role.json\n\n# Create a custom Analyst role\ncat > analyst-role.json << 'EOF'\n{\n  \"Name\": \"Custom Analyst Role\",\n  \"Description\": \"Read-only access to analytics and monitoring resources\",\n  \"Actions\": [\n    \"Microsoft.Resources/*/read\",\n    \"Microsoft.Monitor/*/read\",\n    \"Microsoft.Insights/*/read\",\n    \"Microsoft.Storage/storageAccounts/listKeys/action\",\n    \"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read\"\n  ],\n  \"NotActions\": [],\n  \"DataActions\": [\n    \"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read\"\n  ],\n  \"NotDataActions\": [],\n  \"AssignableScopes\": [\n    \"/subscriptions/$(az account show --query id -o tsv)\"\n  ]\n}\nEOF\n\n# Create the custom role\naz role definition create --role-definition analyst-role.json"
+        },
+        "assign_rbac_roles": {
+          "language": "bash",\n          \"title\": \"Assign RBAC Roles to Groups\",\n          \"code\": \"# Create resource group for testing\naz group create --name identity-lab-rg --location eastus\n\n# Assign built-in roles to groups at subscription level\naz role assignment create \\\n  --assignee $ADMIN_GROUP_ID \\\n  --role \\\"Contributor\\\" \\\n  --scope \\\"/subscriptions/$(az account show --query id -o tsv)\\\"\n\n# Assign custom Developer role to Developers group at resource group level\naz role assignment create \\\n  --assignee $DEV_GROUP_ID \\\n  --role \\\"Custom Developer Role\\\" \\\n  --scope \\\"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/identity-lab-rg\\\"\n\n# Assign custom Analyst role to Analysts group\naz role assignment create \\\n  --assignee $ANALYST_GROUP_ID \\\n  --role \\\"Custom Analyst Role\\\" \\\n  --scope \\\"/subscriptions/$(az account show --query id -o tsv)\\\"\n\n# List role assignments\naz role assignment list --all --query '[].{PrincipalName:principalName, RoleDefinitionName:roleDefinitionName, Scope:scope}' --output table\""
+        }
+      }
+    },
+    {
+      "title": "Managed Identity Configuration",
+      "content": "Set up Managed Identity equivalent to IAM roles for Azure resources.",
+      "code_examples": {
+        "create_vm_with_managed_identity": {
+          "language": "bash",
+          "title": "Create VM with System-Assigned Managed Identity",
+          "code": "# Create VM with system-assigned managed identity\naz vm create \\\n  --resource-group identity-lab-rg \\\n  --name test-vm \\\n  --image Ubuntu2204 \\\n  --admin-username azureuser \\\n  --generate-ssh-keys \\\n  --assign-identity \\\n  --size Standard_B1s\n\n# Get the managed identity principal ID\nVM_IDENTITY_ID=$(az vm identity show --resource-group identity-lab-rg --name test-vm --query principalId -o tsv)\necho \"VM Managed Identity ID: $VM_IDENTITY_ID\"\n\n# Assign Storage Blob Data Contributor role to VM's managed identity\naz role assignment create \\\n  --assignee $VM_IDENTITY_ID \\\n  --role \"Storage Blob Data Contributor\" \\\n  --scope \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/identity-lab-rg\""
+        },
+        "create_user_assigned_identity": {
+          "language": "bash",
+          "title": "Create User-Assigned Managed Identity",
+          "code": "# Create user-assigned managed identity\naz identity create \\\n  --resource-group identity-lab-rg \\\n  --name app-identity\n\n# Get identity details\nUSER_IDENTITY_ID=$(az identity show --resource-group identity-lab-rg --name app-identity --query principalId -o tsv)\nUSER_IDENTITY_CLIENT_ID=$(az identity show --resource-group identity-lab-rg --name app-identity --query clientId -o tsv)\nUSER_IDENTITY_RESOURCE_ID=$(az identity show --resource-group identity-lab-rg --name app-identity --query id -o tsv)\n\necho \"User Identity Principal ID: $USER_IDENTITY_ID\"\necho \"User Identity Client ID: $USER_IDENTITY_CLIENT_ID\"\n\n# Assign roles to user-assigned identity\naz role assignment create \\\n  --assignee $USER_IDENTITY_ID \\\n  --role \"Key Vault Secrets User\" \\\n  --scope \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/identity-lab-rg\"\n\n# Create another VM and assign the user-assigned identity\naz vm create \\\n  --resource-group identity-lab-rg \\\n  --name app-vm \\\n  --image Ubuntu2204 \\\n  --admin-username azureuser \\\n  --generate-ssh-keys \\\n  --assign-identity $USER_IDENTITY_RESOURCE_ID \\\n  --size Standard_B1s"
+        }
+      }
+    },
+    {
+      "title": "Conditional Access Policies",
+      "content": "Create Conditional Access policies equivalent to IAM policy conditions.",
+      "code_examples": {
+        "conditional_access_concepts": {
+          "language": "bash",
+          "title": "Conditional Access Policy Concepts",
+          "code": "# Conditional Access policies must be created through Azure portal or Microsoft Graph API\n# Here are the key concepts and example policy configurations:\n\necho \"Conditional Access Policy Examples:\"\necho \"========================================\"\necho \"\"\necho \"1. Require MFA for Administrators Group:\"\necho \"   - Users/Groups: Administrators\"\necho \"   - Cloud apps: All cloud apps\"\necho \"   - Conditions: Any location\"\necho \"   - Grant: Require MFA\"\necho \"\"\necho \"2. Block Access from Untrusted Locations:\"\necho \"   - Users/Groups: All users\"\necho \"   - Cloud apps: All cloud apps\"\necho \"   - Conditions: All locations except trusted IPs\"\necho \"   - Grant: Block access\"\necho \"\"\necho \"3. Require Compliant Device for Sensitive Apps:\"\necho \"   - Users/Groups: All users\"\necho \"   - Cloud apps: Azure management, Office 365\"\necho \"   - Conditions: All locations\"\necho \"   - Grant: Require compliant device + MFA\"\n\n# Create a trusted IP location via Microsoft Graph\necho \"\"\necho \"To create these policies, use:\"\necho \"1. Azure AD portal > Security > Conditional Access\"\necho \"2. Microsoft Graph API\"\necho \"3. PowerShell with AzureAD module\""
+        },
+        "graph_api_example": {
+          "language": "bash",
+          "title": "Create Conditional Access Policy via Graph API",
+          "code": "# Example of creating a Conditional Access policy via Graph API\n# This requires appropriate permissions and should be used carefully\n\n# Get Microsoft Graph access token\nGRAPH_TOKEN=$(az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv)\n\n# Example policy JSON (for reference - modify as needed)\ncat > mfa-policy.json << 'EOF'\n{\n  \"displayName\": \"Require MFA for Administrators\",\n  \"state\": \"enabledForReportingButNotEnforced\",\n  \"conditions\": {\n    \"users\": {\n      \"includeGroups\": [\"$ADMIN_GROUP_ID\"]\n    },\n    \"applications\": {\n      \"includeApplications\": [\"All\"]\n    },\n    \"locations\": {\n      \"includeLocations\": [\"All\"]\n    }\n  },\n  \"grantControls\": {\n    \"operator\": \"OR\",\n    \"builtInControls\": [\"mfa\"]\n  }\n}\nEOF\n\necho \"Policy template created. Use Azure portal or proper Graph API calls to create policies.\"\necho \"WARNING: Only create conditional access policies in test environments initially.\""
+        }
+      }
+    },
+    {
+      "title": "Privileged Identity Management (PIM)",
+      "content": "Set up PIM for just-in-time privileged access equivalent to AWS temporary elevated access.",
+      "code_examples": {
+        "pim_concepts": {
+          "language": "bash",
+          "title": "Privileged Identity Management Setup",
+          "code": "# PIM requires Azure AD Premium P2 license\n# PIM must be configured through Azure portal\n\necho \"Privileged Identity Management (PIM) Setup:\"\necho \"============================================\"\necho \"\"\necho \"1. Enable PIM in Azure AD:\"\necho \"   - Go to Azure AD > Privileged Identity Management\"\necho \"   - Complete initial setup\"\necho \"\"\necho \"2. Configure Eligible Assignments:\"\necho \"   - Assign users as 'eligible' for roles instead of 'active'\"\necho \"   - Set activation requirements (MFA, justification, approval)\"\necho \"   - Configure maximum activation duration\"\necho \"\"\necho \"3. Access Reviews:\"\necho \"   - Set up periodic access reviews for privileged roles\"\necho \"   - Configure automatic removal of unused assignments\"\necho \"\"\necho \"4. Alerts and Monitoring:\"\necho \"   - Configure alerts for suspicious privileged access\"\necho \"   - Monitor privileged role assignments and activations\"\n\n# Example: Make Jane eligible for Global Administrator instead of permanent assignment\necho \"\"\necho \"Example PIM Configuration:\"\necho \"- Remove permanent Global Administrator assignment from Jane\"\necho \"- Add Jane as eligible for Global Administrator role\"\necho \"- Require MFA + justification + approval for activation\"\necho \"- Limit activation duration to 4 hours\"\necho \"- Send notifications to security team\""
+        }
+      }
+    },
+    {
+      "title": "Azure AD Connect for Hybrid Identity",
+      "content": "Set up hybrid identity equivalent to AWS Directory Service integration.",
+      "code_examples": {
+        "ad_connect_concepts": {
+          "language": "bash",
+          "title": "Azure AD Connect Configuration",
+          "code": "# Azure AD Connect must be installed on on-premises Windows Server\n# This is conceptual guidance for the lab\n\necho \"Azure AD Connect Setup (On-premises integration):\"\necho \"===============================================\"\necho \"\"\necho \"1. Prerequisites:\"\necho \"   - Windows Server 2012 R2 or later\"\necho \"   - On-premises Active Directory\"\necho \"   - Global Administrator permissions in Azure AD\"\necho \"   - Enterprise Administrator permissions on-premises\"\necho \"\"\necho \"2. Installation Options:\"\necho \"   - Express Settings: Password hash sync + SSO\"\necho \"   - Custom Settings: Federation with AD FS, pass-through auth\"\necho \"\"\necho \"3. Synchronization Features:\"\necho \"   - User and group synchronization\"\necho \"   - Password hash synchronization\"\necho \"   - Password writeback (Premium feature)\"\necho \"   - Device writeback for hybrid Azure AD join\"\necho \"\"\necho \"4. Monitoring:\"\necho \"   - Azure AD Connect Health (requires agents)\"\necho \"   - Sync error reporting\"\necho \"   - Directory synchronization alerts\"\n\n# For this lab, we'll simulate hybrid users\necho \"\"\necho \"Simulating Hybrid Users (for lab purposes):\"\necho \"Creating users that would typically come from on-premises AD\"\n\n# Create users that simulate on-premises synchronized users\naz ad user create \\\n  --display-name \"Alice OnPrem User\" \\\n  --user-principal-name alice.onprem@$(az account show --query tenantId -o tsv | cut -c1-8).onmicrosoft.com \\\n  --password 'HybridUser123!' \\\n  --force-change-password-next-login false"
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Migrate a complete IAM setup from AWS to Azure AD with proper governance",
+    "requirements": [
+      "Create Azure AD tenant with proper security configuration",
+      "Migrate IAM users and groups to Azure AD",
+      "Convert IAM policies to Azure RBAC custom roles",
+      "Set up Managed Identity for applications (equivalent to IAM roles)",
+      "Implement Conditional Access policies",
+      "Configure privileged access management"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify user creation",
+        "command": "az ad user list --query 'length(@)'",
+        "expected": "Should return count of created users"
+      },
+      {
+        "step": "Verify group memberships",
+        "command": "az ad group member list --group $DEV_GROUP_ID --query 'length(@)'",
+        "expected": "Should return 1 (John as member)"
+      },
+      {
+        "step": "Verify custom role creation",
+        "command": "az role definition list --custom-role-only --query '[].roleName'",
+        "expected": "Should show Custom Developer Role and Custom Analyst Role"
+      },
+      {
+        "step": "Verify role assignments",
+        "command": "az role assignment list --assignee $DEV_GROUP_ID --query 'length(@)'",
+        "expected": "Should return 1 (Custom Developer Role assignment)"
+      },
+      {
+        "step": "Verify managed identity",
+        "command": "az vm identity show --resource-group identity-lab-rg --name test-vm --query principalId",
+        "expected": "Should return managed identity principal ID"
+      }
+    ]
+  },
+  "security_comparison": {
+    "authentication": {
+      "aws": "Access keys, MFA devices, temporary tokens",
+      "azure": "Modern authentication, passwordless, biometrics, FIDO2",
+      "advantage": "Azure supports more modern authentication methods"
+    },
+    "authorization": {
+      "aws": "JSON policies, complex condition logic",
+      "azure": "Structured RBAC, easier to understand and manage",
+      "advantage": "Azure RBAC is more intuitive and manageable"
+    },
+    "privileged_access": {
+      "aws": "Manual processes, AWS Organizations SCPs",
+      "azure": "Built-in PIM, just-in-time access, automatic reviews",
+      "advantage": "Azure provides comprehensive privileged access management"
+    },
+    "compliance": {
+      "aws": "CloudTrail, Config, manual compliance checking",
+      "azure": "Integrated compliance center, automatic policy enforcement",
+      "advantage": "Azure provides more integrated compliance tooling"
+    }
+  },
+  "migration_strategy": [
+    "Assess current IAM structure and identify Azure AD equivalents",
+    "Create Azure AD tenant and configure security defaults",
+    "Migrate users and groups, starting with non-privileged accounts",
+    "Convert IAM policies to Azure RBAC custom roles",
+    "Implement Conditional Access policies to replace IAM conditions",
+    "Set up Managed Identity for applications and services",
+    "Configure PIM for privileged accounts",
+    "Implement monitoring and governance"
+  ],
+  "cleanup": {
+    "instructions": "Remove test resources to avoid ongoing charges",
+    "commands": [
+      "az vm delete --resource-group identity-lab-rg --name test-vm --yes",
+      "az vm delete --resource-group identity-lab-rg --name app-vm --yes", 
+      "az identity delete --resource-group identity-lab-rg --name app-identity",
+      "az role definition delete --name \"Custom Developer Role\"",
+      "az role definition delete --name \"Custom Analyst Role\"",
+      "az group delete --name identity-lab-rg --yes --no-wait",
+      "# Manually remove test users and groups from Azure AD portal"
+    ]
+  },
+  "key_takeaways": [
+    "Azure AD provides more unified identity management than AWS IAM",
+    "RBAC is more structured and manageable than IAM policies",
+    "Managed Identity eliminates the need for stored credentials",
+    "Conditional Access provides more sophisticated access control",
+    "PIM enables proper privileged access governance",
+    "Azure AD supports modern authentication methods natively"
+  ],
+  "next_steps": [
+    "Learn about Azure AD B2B for external collaboration",
+    "Study Azure AD B2C for customer identity management",
+    "Explore Azure AD Application Proxy for legacy app integration",
+    "Practice with Microsoft Identity Platform for application development",
+    "Learn about Azure Sentinel for identity-focused security monitoring"
+  ]
+}

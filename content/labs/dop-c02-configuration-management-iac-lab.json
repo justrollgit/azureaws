@@ -1,0 +1,240 @@
+{
+  "id": "dop-c02-configuration-management-iac-lab",
+  "title": "AWS Infrastructure as Code to Azure ARM: Advanced Configuration Management, IaC Patterns, and Automated Provisioning",
+  "category": "infrastructure-as-code",
+  "difficulty": "expert", 
+  "estimatedTime": "170 minutes",
+  "description": "Master advanced Infrastructure as Code and configuration management by implementing sophisticated AWS CloudFormation, CDK, and Systems Manager solutions, then migrating to Azure ARM Templates, Bicep, and Automation with equivalent provisioning and configuration capabilities.",
+  "awsCertification": "DOP-C02",
+  "certificationWeight": "17% - Configuration Management and IaC Domain",
+  "awsServices": [
+    "CloudFormation",
+    "AWS CDK", 
+    "Systems Manager",
+    "Parameter Store",
+    "Secrets Manager",
+    "Config",
+    "CloudTrail",
+    "Service Catalog",
+    "Organizations",
+    "Control Tower",
+    "Lambda",
+    "EventBridge",
+    "SNS",
+    "CloudWatch",
+    "IAM"
+  ],
+  "azureServices": [
+    "ARM Templates",
+    "Azure Bicep",
+    "Azure Automation",
+    "App Configuration", 
+    "Key Vault",
+    "Azure Policy",
+    "Activity Log",
+    "Azure Blueprints",
+    "Management Groups",
+    "Azure Functions",
+    "Event Grid",
+    "Azure Monitor",
+    "Azure AD"
+  ],
+  "prerequisites": [
+    "Advanced understanding of infrastructure as code concepts",
+    "Experience with CloudFormation and ARM Templates",
+    "Knowledge of configuration management principles", 
+    "Understanding of DevOps and automation practices",
+    "Familiarity with scripting and programming languages"
+  ],
+  "learningObjectives": [
+    "Design comprehensive IaC architectures and patterns",
+    "Implement advanced configuration management strategies",
+    "Configure automated infrastructure provisioning workflows",
+    "Establish infrastructure compliance and governance",
+    "Implement infrastructure testing and validation",
+    "Design infrastructure lifecycle management processes",
+    "Configure monitoring and observability for infrastructure"
+  ],
+  "businessScenario": {
+    "description": "CloudFirstCorp needs to implement enterprise-grade Infrastructure as Code supporting 500+ environments across multiple accounts/subscriptions, with automated provisioning, configuration drift detection, and compliance enforcement achieving 99.9% infrastructure consistency.",
+    "requirements": [
+      "Multi-account/subscription IaC deployment",
+      "Automated configuration management and drift detection",
+      "Infrastructure compliance and policy enforcement",
+      "Automated testing and validation of infrastructure",
+      "Secrets and configuration management at scale",
+      "Infrastructure lifecycle automation",
+      "Comprehensive audit and change tracking"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Advanced IaC Architecture and Patterns",
+      "content": "Design and implement sophisticated Infrastructure as Code architectures with modular, reusable, and scalable patterns.",
+      "hands-on": {
+        "aws": "1. Design CDK constructs and patterns\\n2. Implement CloudFormation nested stacks\\n3. Set up cross-stack references and dependencies\\n4. Configure StackSets for multi-account deployment\\n5. Implement infrastructure composition patterns\\n6. Set up IaC testing with CDK unit tests\\n7. Configure infrastructure pipeline automation",
+        "azure": "1. Design Bicep modules and patterns\\n2. Implement ARM linked templates\\n3. Set up template dependencies and outputs\\n4. Configure deployment across subscriptions\\n5. Implement modular infrastructure patterns\\n6. Set up infrastructure testing with Pester\\n7. Configure ARM template pipeline automation"
+      }
+    },
+    {
+      "title": "Configuration Management at Scale",
+      "content": "Implement comprehensive configuration management with automated drift detection, remediation, and compliance enforcement.",
+      "hands-on": {
+        "aws": "1. Configure Systems Manager State Manager\\n2. Implement Parameter Store hierarchies\\n3. Set up Config rules and remediation\\n4. Configure drift detection automation\\n5. Implement configuration compliance monitoring\\n6. Set up automated patch management\\n7. Configure configuration change tracking",
+        "azure": "1. Configure Azure Automation State Configuration\\n2. Implement App Configuration hierarchies\\n3. Set up Azure Policy with remediation\\n4. Configure drift detection and correction\\n5. Implement compliance monitoring\\n6. Set up automated update management\\n7. Configure change tracking and inventory"
+      }
+    },
+    {
+      "title": "Secrets and Parameter Management",
+      "content": "Implement secure secrets management with automated rotation, hierarchical parameters, and access control.",
+      "hands-on": {
+        "aws": "1. Configure Secrets Manager with rotation\\n2. Implement Parameter Store hierarchies\\n3. Set up cross-account parameter sharing\\n4. Configure secrets encryption with KMS\\n5. Implement automated secrets rotation\\n6. Set up parameter versioning and rollback\\n7. Configure secrets access monitoring",
+        "azure": "1. Configure Key Vault with rotation\\n2. Implement App Configuration references\\n3. Set up cross-subscription secret sharing\\n4. Configure encryption with managed HSM\\n5. Implement automated key rotation\\n6. Set up configuration versioning\\n7. Configure access monitoring and alerting"
+      }
+    },
+    {
+      "title": "Infrastructure Testing and Validation",
+      "content": "Implement comprehensive infrastructure testing with unit tests, integration tests, and compliance validation.",
+      "hands-on": {
+        "aws": "1. Implement CDK unit testing\\n2. Set up CloudFormation drift detection\\n3. Configure infrastructure integration tests\\n4. Implement compliance testing with Config\\n5. Set up infrastructure security scanning\\n6. Configure automated validation pipelines\\n7. Implement infrastructure chaos testing",
+        "azure": "1. Implement Bicep unit testing\\n2. Set up ARM template validation\\n3. Configure infrastructure integration tests\\n4. Implement compliance testing with Policy\\n5. Set up security scanning with Defender\\n6. Configure automated validation pipelines\\n7. Implement infrastructure resilience testing"
+      }
+    },
+    {
+      "title": "Infrastructure Lifecycle Management",
+      "content": "Implement automated infrastructure lifecycle management with provisioning, updates, scaling, and decommissioning.",
+      "hands-on": {
+        "aws": "1. Configure automated stack lifecycle\\n2. Implement blue-green infrastructure deployment\\n3. Set up infrastructure scaling automation\\n4. Configure automated backup and disaster recovery\\n5. Implement infrastructure cost optimization\\n6. Set up automated cleanup and decommissioning\\n7. Configure infrastructure governance policies",
+        "azure": "1. Configure automated resource lifecycle\\n2. Implement blue-green infrastructure patterns\\n3. Set up automated scaling policies\\n4. Configure backup and site recovery\\n5. Implement cost optimization automation\\n6. Set up automated resource cleanup\\n7. Configure governance and compliance policies"
+      }
+    },
+    {
+      "title": "Infrastructure Governance and Compliance",
+      "content": "Establish comprehensive infrastructure governance with policy enforcement, compliance monitoring, and audit trails.",
+      "hands-on": {
+        "aws": "1. Configure Service Catalog portfolios\\n2. Implement Organizations SCPs\\n3. Set up Control Tower guardrails\\n4. Configure compliance monitoring\\n5. Implement automated policy enforcement\\n6. Set up infrastructure audit trails\\n7. Configure governance dashboards",
+        "azure": "1. Configure Azure Blueprints\\n2. Implement Management Group policies\\n3. Set up governance guardrails\\n4. Configure compliance monitoring\\n5. Implement automated policy enforcement\\n6. Set up comprehensive audit logging\\n7. Configure governance reporting"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Build Enterprise IaC Platform",
+      "description": "Implement complete Infrastructure as Code platform supporting 500+ environments with automated provisioning, testing, and governance.",
+      "tasks": [
+        "Design modular IaC architecture",
+        "Implement comprehensive configuration management",
+        "Set up secure secrets and parameter management",
+        "Configure infrastructure testing and validation",
+        "Implement lifecycle management automation", 
+        "Establish governance and compliance frameworks",
+        "Validate scalability and reliability targets"
+      ],
+      "validation": [
+        "99.9% infrastructure consistency achieved",
+        "Automated provisioning for 500+ environments",
+        "Zero configuration drift in production",
+        "100% compliance with governance policies",
+        "Automated testing covering all infrastructure",
+        "Complete audit trail and traceability"
+      ]
+    },
+    {
+      "title": "Implement GitOps Infrastructure Workflow",
+      "description": "Create GitOps-based infrastructure workflow with automated provisioning, testing, and deployment.",
+      "tasks": [
+        "Set up GitOps repository structure",
+        "Implement automated infrastructure testing",
+        "Configure infrastructure promotion pipelines",
+        "Set up automated compliance validation",
+        "Implement infrastructure monitoring",
+        "Configure automated rollback mechanisms"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "Infrastructure drift causing environment inconsistencies",
+        "solution": "Implement automated drift detection, compliance monitoring, and remediation workflows"
+      },
+      {
+        "issue": "Complex dependencies causing deployment failures",
+        "solution": "Use proper dependency management, implement incremental deployments, and add validation gates"
+      },
+      {
+        "issue": "Secrets management complexity across environments",
+        "solution": "Implement hierarchical parameter organization, automated rotation, and centralized management"
+      },
+      {
+        "issue": "Infrastructure testing bottlenecks in CI/CD",
+        "solution": "Implement parallel testing, test optimization, and risk-based validation strategies"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can design comprehensive IaC architectures",
+      "Can implement advanced configuration management",
+      "Can configure secure secrets and parameter management",
+      "Can establish infrastructure testing and validation",
+      "Can implement infrastructure lifecycle management",
+      "Can configure governance and compliance frameworks"
+    ],
+    "certificationAlignment": {
+      "DOP-C02": {
+        "domain": "Configuration Management and IaC",
+        "weight": "17%",
+        "keyTopics": [
+          "Infrastructure as Code design and implementation",
+          "Configuration management at scale",
+          "Secrets and parameter management",
+          "Infrastructure testing and validation",
+          "Infrastructure lifecycle management",
+          "Governance and compliance automation",
+          "Infrastructure monitoring and observability"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "IaC platform capabilities and template languages",
+      "Configuration management tool differences",
+      "Secrets management service variations",
+      "Testing framework and validation approaches",
+      "Governance and policy enforcement mechanisms",
+      "Monitoring and observability capabilities"
+    ],
+    "tools": [
+      "ARM Template migration utilities",
+      "Infrastructure conversion tools",
+      "Configuration management migration assistants",
+      "Policy migration tools"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "99.9% infrastructure consistency maintained",
+      "Zero unplanned configuration drift",
+      "100% automated infrastructure provisioning",
+      "90%+ infrastructure test coverage",
+      "Sub-30-minute infrastructure deployment",
+      "100% compliance with governance policies"
+    ],
+    "business": [
+      "70% reduction in infrastructure provisioning time",
+      "90% reduction in configuration-related incidents",
+      "60% improvement in infrastructure reliability",
+      "80% reduction in manual infrastructure tasks",
+      "100% compliance with security policies",
+      "Enhanced audit and governance capabilities"
+    ]
+  },
+  "nextSteps": [
+    "Explore advanced infrastructure patterns and practices",
+    "Study infrastructure optimization and cost management",
+    "Implement infrastructure security and compliance automation",
+    "Practice with complex enterprise infrastructure scenarios"
+  ]
+}

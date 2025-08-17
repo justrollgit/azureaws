@@ -1,0 +1,313 @@
+{
+  "id": "advanced-container-orchestration-lab",
+  "title": "AWS ECS/EKS to Azure AKS: Advanced Container Orchestration Migration",
+  "difficulty": "expert",
+  "estimated_time": "300 minutes",
+  "aws_prerequisite": "Advanced experience with Amazon ECS, EKS, Fargate, container networking, service mesh, and enterprise container deployment patterns",
+  "azure_target": "Master Azure Kubernetes Service (AKS), Azure Container Instances, advanced networking, service mesh integration, and enterprise container governance",
+  "learning_objectives": [
+    "Design sophisticated container orchestration architectures equivalent to AWS ECS/EKS",
+    "Implement advanced AKS networking with Azure CNI and network policies",
+    "Master service mesh integration with Istio and Linkerd on AKS",
+    "Set up enterprise container security and governance frameworks",
+    "Implement advanced container CI/CD with GitOps and Azure DevOps",
+    "Configure container monitoring, logging, and observability at scale",
+    "Design multi-cluster and multi-region container deployment strategies",
+    "Implement container cost optimization and resource governance"
+  ],
+  "aws_context": {
+    "container_services_mapping": {
+      "amazon_ecs": "Azure Container Instances + Azure Container Apps",
+      "amazon_eks": "Azure Kubernetes Service (AKS)",
+      "aws_fargate": "Azure Container Instances + AKS Virtual Nodes",
+      "elastic_load_balancer": "Azure Load Balancer + Application Gateway",
+      "aws_app_mesh": "Istio/Linkerd Service Mesh on AKS",
+      "ecr": "Azure Container Registry (ACR)",
+      "cloudwatch_container_insights": "Azure Monitor for Containers",
+      "aws_copilot": "Azure Container Apps + Azure DevOps"
+    },
+    "enterprise_patterns": {
+      "ecs_service_discovery": "AKS Service Discovery + Azure DNS Private Zones",
+      "ecs_secrets_management": "Azure Key Vault + CSI Secret Store Driver",
+      "ecs_capacity_providers": "AKS Cluster Autoscaler + Virtual Node Autoscaling",
+      "eks_managed_node_groups": "AKS System and User Node Pools",
+      "eks_addons": "AKS Add-ons (Azure Monitor, Azure Policy, etc.)",
+      "fargate_profiles": "AKS Virtual Nodes + Azure Container Instances"
+    }
+  },
+  "sections": [
+    {
+      "title": "Advanced AKS Cluster Architecture and Design",
+      "content": "Design enterprise-grade AKS clusters with advanced networking, security, and multi-tenancy capabilities equivalent to AWS EKS.",
+      "cluster_design_patterns": {
+        "enterprise_cluster_topology": {
+          "production_cluster": {
+            "node_pools": [
+              {
+                "name": "system-pool",
+                "purpose": "System components, monitoring, ingress controllers",
+                "vm_size": "Standard_DS3_v2",
+                "node_count": "3-5 nodes",
+                "auto_scaling": "Enabled (3-10 nodes)",
+                "taints": "CriticalAddonsOnly=true:NoSchedule"
+              },
+              {
+                "name": "app-pool-general",
+                "purpose": "General application workloads",
+                "vm_size": "Standard_DS4_v2",
+                "node_count": "5-20 nodes",
+                "auto_scaling": "Enabled (5-50 nodes)",
+                "labels": "workload-type=general"
+              },
+              {
+                "name": "app-pool-memory",
+                "purpose": "Memory-intensive applications",
+                "vm_size": "Standard_E8s_v3",
+                "node_count": "2-10 nodes",
+                "auto_scaling": "Enabled (2-20 nodes)",
+                "labels": "workload-type=memory-intensive"
+              },
+              {
+                "name": "app-pool-gpu",
+                "purpose": "GPU workloads for ML/AI",
+                "vm_size": "Standard_NC6s_v3",
+                "node_count": "1-5 nodes",
+                "auto_scaling": "Enabled (0-10 nodes)",
+                "labels": "workload-type=gpu"
+              }
+            ],
+            "networking": {
+              "cni": "Azure CNI",
+              "network_policy": "Calico",
+              "service_cidr": "10.100.0.0/16",
+              "dns_service_ip": "10.100.0.10",
+              "docker_bridge_cidr": "172.17.0.1/16"
+            },
+            "security": {
+              "rbac_enabled": true,
+              "azure_ad_integration": true,
+              "pod_security_policy": true,
+              "network_policies": true,
+              "private_cluster": true
+            }
+          }
+        }
+      },
+      "code_examples": {
+        "create_enterprise_aks_cluster": {
+          "language": "bash",
+          "title": "Create Enterprise AKS Cluster with Advanced Configuration",
+          "code": "# Create enterprise AKS cluster with advanced configuration\n\necho \"Creating enterprise AKS cluster architecture...\"\n\n# Create resource group for AKS cluster\naz group create \\\n  --name aks-enterprise-rg \\\n  --location eastus \\\n  --tags Environment=Production BusinessUnit=SharedServices CostCenter=IT001\n\n# Create virtual network for AKS\necho \"Creating AKS virtual network...\"\naz network vnet create \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-vnet \\\n  --address-prefixes 10.0.0.0/8 \\\n  --subnet-name aks-subnet \\\n  --subnet-prefixes 10.240.0.0/16\n\n# Create additional subnets for different purposes\naz network vnet subnet create \\\n  --resource-group aks-enterprise-rg \\\n  --vnet-name aks-enterprise-vnet \\\n  --name aks-virtual-nodes-subnet \\\n  --address-prefixes 10.241.0.0/16\n\naz network vnet subnet create \\\n  --resource-group aks-enterprise-rg \\\n  --vnet-name aks-enterprise-vnet \\\n  --name application-gateway-subnet \\\n  --address-prefixes 10.242.0.0/24\n\n# Get subnet ID for AKS\nAKS_SUBNET_ID=$(az network vnet subnet show \\\n  --resource-group aks-enterprise-rg \\\n  --vnet-name aks-enterprise-vnet \\\n  --name aks-subnet \\\n  --query id -o tsv)\n\nVIRTUAL_NODES_SUBNET_ID=$(az network vnet subnet show \\\n  --resource-group aks-enterprise-rg \\\n  --vnet-name aks-enterprise-vnet \\\n  --name aks-virtual-nodes-subnet \\\n  --query id -o tsv)\n\n# Create Azure Container Registry\necho \"Creating Azure Container Registry...\"\nACR_NAME=\"acrenterpriseaks$(openssl rand -hex 3)\"\naz acr create \\\n  --resource-group aks-enterprise-rg \\\n  --name $ACR_NAME \\\n  --sku Premium \\\n  --admin-enabled false\n\n# Create Log Analytics workspace for monitoring\necho \"Creating Log Analytics workspace...\"\naz monitor log-analytics workspace create \\\n  --resource-group aks-enterprise-rg \\\n  --workspace-name aks-enterprise-logs \\\n  --location eastus \\\n  --sku pergb2018\n\nLOG_ANALYTICS_WORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group aks-enterprise-rg \\\n  --workspace-name aks-enterprise-logs \\\n  --query id -o tsv)\n\n# Create managed identity for AKS\necho \"Creating managed identity for AKS...\"\naz identity create \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-identity\n\nAKS_IDENTITY_ID=$(az identity show \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-identity \\\n  --query id -o tsv)\n\nAKS_IDENTITY_CLIENT_ID=$(az identity show \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-identity \\\n  --query clientId -o tsv)\n\n# Assign permissions to managed identity\naz role assignment create \\\n  --assignee $AKS_IDENTITY_CLIENT_ID \\\n  --scope $AKS_SUBNET_ID \\\n  --role \"Network Contributor\"\n\naz role assignment create \\\n  --assignee $AKS_IDENTITY_CLIENT_ID \\\n  --scope $(az acr show --name $ACR_NAME --query id -o tsv) \\\n  --role \"AcrPull\"\n\n# Create enterprise AKS cluster\necho \"Creating enterprise AKS cluster...\"\naz aks create \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-cluster \\\n  --location eastus \\\n  --kubernetes-version 1.25.6 \\\n  --node-count 3 \\\n  --min-count 3 \\\n  --max-count 10 \\\n  --enable-cluster-autoscaler \\\n  --node-vm-size Standard_DS3_v2 \\\n  --nodepool-name systempool \\\n  --nodepool-labels pool=system \\\n  --nodepool-taints CriticalAddonsOnly=true:NoSchedule \\\n  --vnet-subnet-id $AKS_SUBNET_ID \\\n  --network-plugin azure \\\n  --network-policy calico \\\n  --service-cidr 10.100.0.0/16 \\\n  --dns-service-ip 10.100.0.10 \\\n  --docker-bridge-address 172.17.0.1/16 \\\n  --enable-private-cluster \\\n  --private-dns-zone system \\\n  --enable-managed-identity \\\n  --assign-identity $AKS_IDENTITY_ID \\\n  --attach-acr $ACR_NAME \\\n  --enable-addons monitoring \\\n  --workspace-resource-id $LOG_ANALYTICS_WORKSPACE_ID \\\n  --enable-aad \\\n  --enable-azure-rbac \\\n  --tags Environment=Production BusinessUnit=SharedServices CostCenter=IT001\n\necho \"Enterprise AKS cluster created successfully.\""
+        },
+        "create_multiple_node_pools": {
+          "language": "bash",
+          "title": "Create Multiple Specialized Node Pools",
+          "code": "# Create specialized node pools for different workload types\n\necho \"Creating specialized node pools...\"\n\n# General application workload pool\necho \"Creating general application node pool...\"\naz aks nodepool add \\\n  --resource-group aks-enterprise-rg \\\n  --cluster-name aks-enterprise-cluster \\\n  --name appgeneral \\\n  --node-count 5 \\\n  --min-count 5 \\\n  --max-count 50 \\\n  --enable-cluster-autoscaler \\\n  --node-vm-size Standard_DS4_v2 \\\n  --node-osdisk-size 128 \\\n  --node-osdisk-type Premium_LRS \\\n  --labels workload-type=general pool=application \\\n  --tags Environment=Production WorkloadType=General\n\n# Memory-intensive application pool\necho \"Creating memory-intensive node pool...\"\naz aks nodepool add \\\n  --resource-group aks-enterprise-rg \\\n  --cluster-name aks-enterprise-cluster \\\n  --name appmemory \\\n  --node-count 2 \\\n  --min-count 2 \\\n  --max-count 20 \\\n  --enable-cluster-autoscaler \\\n  --node-vm-size Standard_E8s_v3 \\\n  --node-osdisk-size 256 \\\n  --node-osdisk-type Premium_LRS \\\n  --labels workload-type=memory-intensive pool=application \\\n  --tags Environment=Production WorkloadType=MemoryIntensive\n\n# GPU workload pool\necho \"Creating GPU node pool...\"\naz aks nodepool add \\\n  --resource-group aks-enterprise-rg \\\n  --cluster-name aks-enterprise-cluster \\\n  --name appgpu \\\n  --node-count 0 \\\n  --min-count 0 \\\n  --max-count 10 \\\n  --enable-cluster-autoscaler \\\n  --node-vm-size Standard_NC6s_v3 \\\n  --node-osdisk-size 512 \\\n  --node-osdisk-type Premium_LRS \\\n  --labels workload-type=gpu pool=application accelerator=nvidia \\\n  --tags Environment=Production WorkloadType=GPU\n\n# Spot instance pool for batch workloads\necho \"Creating spot instance node pool...\"\naz aks nodepool add \\\n  --resource-group aks-enterprise-rg \\\n  --cluster-name aks-enterprise-cluster \\\n  --name spotpool \\\n  --priority Spot \\\n  --eviction-policy Delete \\\n  --spot-max-price -1 \\\n  --node-count 3 \\\n  --min-count 0 \\\n  --max-count 20 \\\n  --enable-cluster-autoscaler \\\n  --node-vm-size Standard_DS3_v2 \\\n  --labels workload-type=batch pool=spot \\\n  --node-taints kubernetes.azure.com/scalesetpriority=spot:NoSchedule \\\n  --tags Environment=Production WorkloadType=Batch CostOptimization=Spot\n\n# Enable virtual nodes for serverless containers\necho \"Enabling virtual nodes...\"\naz aks enable-addons \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-cluster \\\n  --addons virtual-node \\\n  --subnet-name aks-virtual-nodes-subnet\n\n# List all node pools\necho \"\\nNode pools created:\"\naz aks nodepool list \\\n  --resource-group aks-enterprise-rg \\\n  --cluster-name aks-enterprise-cluster \\\n  --output table\n\necho \"Specialized node pools created successfully.\""
+        }
+      }
+    },
+    {
+      "title": "Advanced Service Mesh Integration",
+      "content": "Implement enterprise service mesh capabilities with Istio and Linkerd, equivalent to AWS App Mesh functionality.",
+      "service_mesh_patterns": {
+        "istio_enterprise_setup": {
+          "control_plane": {
+            "components": ["istiod", "istio-proxy", "istio-gateway"],
+            "features": ["Traffic Management", "Security", "Observability", "Policy Enforcement"],
+            "high_availability": "Multi-zone deployment with leader election"
+          },
+          "data_plane": {
+            "sidecar_injection": "Automatic injection with namespace labeling",
+            "proxy_configuration": "Envoy proxy with custom configurations",
+            "security_policies": "mTLS by default, RBAC for service-to-service"
+          }
+        },
+        "linkerd_lightweight_setup": {
+          "control_plane": {
+            "components": ["linkerd-controller", "linkerd-proxy", "linkerd-viz"],
+            "features": ["Automatic mTLS", "Traffic Splitting", "Real-time Metrics"],
+            "resource_efficiency": "Lower resource overhead compared to Istio"
+          }
+        }
+      },
+      "code_examples": {
+        "install_istio_service_mesh": {
+          "language": "bash",
+          "title": "Install and Configure Istio Service Mesh on AKS",
+          "code": "# Install and configure Istio service mesh on AKS\n\necho \"Installing Istio service mesh...\"\n\n# Get AKS credentials\naz aks get-credentials \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-enterprise-cluster \\\n  --overwrite-existing\n\n# Download and install Istio\necho \"Downloading Istio...\"\ncurl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.17.2 sh -\ncd istio-1.17.2\nexport PATH=$PWD/bin:$PATH\n\n# Pre-check cluster readiness\necho \"Checking cluster readiness for Istio...\"\nistioctl x precheck\n\n# Install Istio with enterprise configuration\necho \"Installing Istio control plane...\"\ncat > istio-enterprise-config.yaml << 'EOF'\napiVersion: install.istio.io/v1alpha1\nkind: IstioOperator\nmetadata:\n  name: enterprise-istio\nspec:\n  values:\n    pilot:\n      traceSampling: 1.0\n    global:\n      meshID: mesh1\n      multiCluster:\n        clusterName: aks-enterprise-cluster\n      network: network1\n  components:\n    pilot:\n      k8s:\n        resources:\n          requests:\n            cpu: 200m\n            memory: 256Mi\n          limits:\n            cpu: 1000m\n            memory: 1Gi\n        hpaSpec:\n          minReplicas: 3\n          maxReplicas: 10\n          metrics:\n          - type: Resource\n            resource:\n              name: cpu\n              target:\n                type: Utilization\n                averageUtilization: 80\n    ingressGateways:\n    - name: istio-ingressgateway\n      enabled: true\n      k8s:\n        service:\n          type: LoadBalancer\n          annotations:\n            service.beta.kubernetes.io/azure-load-balancer-internal: \"false\"\n        resources:\n          requests:\n            cpu: 100m\n            memory: 128Mi\n          limits:\n            cpu: 2000m\n            memory: 1Gi\n        hpaSpec:\n          minReplicas: 3\n          maxReplicas: 10\n    egressGateways:\n    - name: istio-egressgateway\n      enabled: true\n      k8s:\n        resources:\n          requests:\n            cpu: 100m\n            memory: 128Mi\n          limits:\n            cpu: 2000m\n            memory: 1Gi\nEOF\n\nistioctl install -f istio-enterprise-config.yaml -y\n\n# Install Istio addons for observability\necho \"Installing Istio observability addons...\"\nkubectl apply -f samples/addons/\n\n# Wait for deployments to be ready\nkubectl wait --for=condition=available --timeout=600s deployment/istiod -n istio-system\nkubectl wait --for=condition=available --timeout=600s deployment/istio-ingressgateway -n istio-system\n\n# Enable automatic sidecar injection for namespaces\necho \"Configuring automatic sidecar injection...\"\nkubectl create namespace production\nkubectl label namespace production istio-injection=enabled\n\nkubectl create namespace staging\nkubectl label namespace staging istio-injection=enabled\n\nkubectl create namespace development\nkubectl label namespace development istio-injection=enabled\n\n# Create peer authentication policy for mTLS\ncat > mtls-policy.yaml << 'EOF'\napiVersion: security.istio.io/v1beta1\nkind: PeerAuthentication\nmetadata:\n  name: default\n  namespace: istio-system\nspec:\n  mtls:\n    mode: STRICT\nEOF\n\nkubectl apply -f mtls-policy.yaml\n\n# Verify Istio installation\necho \"Verifying Istio installation...\"\nistioctl verify-install -f istio-enterprise-config.yaml\n\necho \"Istio service mesh installed and configured successfully.\""
+        },
+        "configure_advanced_traffic_management": {
+          "language": "bash",
+          "title": "Configure Advanced Traffic Management with Istio",
+          "code": "# Configure advanced traffic management patterns with Istio\n\necho \"Configuring advanced traffic management...\"\n\n# Create sample microservices application\ncat > bookinfo-services.yaml << 'EOF'\napiVersion: v1\nkind: Service\nmetadata:\n  name: productpage\n  namespace: production\n  labels:\n    app: productpage\n    service: productpage\nspec:\n  ports:\n  - port: 9080\n    name: http\n  selector:\n    app: productpage\n---\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: bookinfo-productpage\n  namespace: production\n  labels:\n    account: productpage\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: productpage-v1\n  namespace: production\n  labels:\n    app: productpage\n    version: v1\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: productpage\n      version: v1\n  template:\n    metadata:\n      labels:\n        app: productpage\n        version: v1\n    spec:\n      serviceAccountName: bookinfo-productpage\n      containers:\n      - name: productpage\n        image: docker.io/istio/examples-bookinfo-productpage-v1:1.17.0\n        imagePullPolicy: IfNotPresent\n        ports:\n        - containerPort: 9080\n        volumeMounts:\n        - name: tmp\n          mountPath: /tmp\n        securityContext:\n          runAsUser: 1000\n      volumes:\n      - name: tmp\n        emptyDir: {}\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: details\n  namespace: production\n  labels:\n    app: details\n    service: details\nspec:\n  ports:\n  - port: 9080\n    name: http\n  selector:\n    app: details\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: details-v1\n  namespace: production\n  labels:\n    app: details\n    version: v1\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: details\n      version: v1\n  template:\n    metadata:\n      labels:\n        app: details\n        version: v1\n    spec:\n      containers:\n      - name: details\n        image: docker.io/istio/examples-bookinfo-details-v1:1.17.0\n        imagePullPolicy: IfNotPresent\n        ports:\n        - containerPort: 9080\n        securityContext:\n          runAsUser: 1000\nEOF\n\nkubectl apply -f bookinfo-services.yaml\n\n# Create Gateway for ingress\ncat > bookinfo-gateway.yaml << 'EOF'\napiVersion: networking.istio.io/v1beta1\nkind: Gateway\nmetadata:\n  name: bookinfo-gateway\n  namespace: production\nspec:\n  selector:\n    istio: ingressgateway\n  servers:\n  - port:\n      number: 80\n      name: http\n      protocol: HTTP\n    hosts:\n    - \"*\"\n  - port:\n      number: 443\n      name: https\n      protocol: HTTPS\n    tls:\n      mode: SIMPLE\n      credentialName: bookinfo-credential\n    hosts:\n    - \"bookinfo.example.com\"\n---\napiVersion: networking.istio.io/v1beta1\nkind: VirtualService\nmetadata:\n  name: bookinfo\n  namespace: production\nspec:\n  hosts:\n  - \"*\"\n  gateways:\n  - bookinfo-gateway\n  http:\n  - match:\n    - uri:\n        exact: /productpage\n    - uri:\n        prefix: /static\n    - uri:\n        exact: /login\n    - uri:\n        exact: /logout\n    - uri:\n        prefix: /api/v1/products\n    route:\n    - destination:\n        host: productpage\n        port:\n          number: 9080\nEOF\n\nkubectl apply -f bookinfo-gateway.yaml\n\n# Configure advanced traffic policies\ncat > traffic-policies.yaml << 'EOF'\n# Circuit breaker configuration\napiVersion: networking.istio.io/v1beta1\nkind: DestinationRule\nmetadata:\n  name: productpage\n  namespace: production\nspec:\n  host: productpage\n  trafficPolicy:\n    connectionPool:\n      tcp:\n        maxConnections: 10\n      http:\n        http1MaxPendingRequests: 5\n        http2MaxRequests: 10\n        maxRequestsPerConnection: 5\n        maxRetries: 3\n        consecutiveGatewayErrors: 5\n        interval: 30s\n        baseEjectionTime: 30s\n        maxEjectionPercent: 50\n    outlierDetection:\n      consecutive5xxErrors: 3\n      consecutiveGatewayErrors: 3\n      interval: 30s\n      baseEjectionTime: 30s\n      maxEjectionPercent: 50\n      minHealthPercent: 50\n---\n# Retry policy configuration\napiVersion: networking.istio.io/v1beta1\nkind: VirtualService\nmetadata:\n  name: details-retry\n  namespace: production\nspec:\n  hosts:\n  - details\n  http:\n  - route:\n    - destination:\n        host: details\n    retries:\n      attempts: 3\n      perTryTimeout: 2s\n      retryOn: 5xx,reset,connect-failure,refused-stream\n    timeout: 10s\n---\n# Rate limiting configuration\napiVersion: networking.istio.io/v1beta1\nkind: EnvoyFilter\nmetadata:\n  name: filter-ratelimit\n  namespace: istio-system\nspec:\n  workloadSelector:\n    labels:\n      app: productpage\n  configPatches:\n  - applyTo: HTTP_FILTER\n    match:\n      context: SIDECAR_INBOUND\n      listener:\n        filterChain:\n          filter:\n            name: envoy.filters.network.http_connection_manager\n    patch:\n      operation: INSERT_BEFORE\n      value:\n        name: envoy.filters.http.local_ratelimit\n        typed_config:\n          \"@type\": type.googleapis.com/udpa.type.v1.TypedStruct\n          type_url: type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit\n          value:\n            stat_prefix: local_rate_limiter\n            token_bucket:\n              max_tokens: 100\n              tokens_per_fill: 100\n              fill_interval: 60s\n            filter_enabled:\n              runtime_key: local_rate_limit_enabled\n              default_value:\n                numerator: 100\n                denominator: HUNDRED\n            filter_enforced:\n              runtime_key: local_rate_limit_enforced\n              default_value:\n                numerator: 100\n                denominator: HUNDRED\n            response_headers_to_add:\n            - append: false\n              header:\n                key: x-local-rate-limit\n                value: 'true'\nEOF\n\nkubectl apply -f traffic-policies.yaml\n\necho \"Advanced traffic management configured successfully.\""
+        },
+        "setup_service_mesh_observability": {
+          "language": "bash",
+          "title": "Setup Service Mesh Observability and Monitoring",
+          "code": "# Setup comprehensive observability for service mesh\n\necho \"Setting up service mesh observability...\"\n\n# Deploy Jaeger for distributed tracing\necho \"Deploying Jaeger for distributed tracing...\"\nkubectl apply -f - <<EOF\napiVersion: v1\nkind: Namespace\nmetadata:\n  name: jaeger-system\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: jaeger\n  namespace: jaeger-system\n  labels:\n    app: jaeger\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: jaeger\n  template:\n    metadata:\n      labels:\n        app: jaeger\n    spec:\n      containers:\n      - name: jaeger\n        image: jaegertracing/all-in-one:1.42\n        env:\n        - name: COLLECTOR_ZIPKIN_HOST_PORT\n          value: \":9411\"\n        ports:\n        - containerPort: 16686\n          protocol: TCP\n        - containerPort: 14268\n          protocol: TCP\n        - containerPort: 9411\n          protocol: TCP\n        resources:\n          requests:\n            cpu: 100m\n            memory: 256Mi\n          limits:\n            cpu: 500m\n            memory: 512Mi\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: jaeger-collector\n  namespace: jaeger-system\n  labels:\n    app: jaeger\nspec:\n  ports:\n  - name: jaeger-collector-http\n    port: 14268\n    targetPort: 14268\n    protocol: TCP\n  - name: jaeger-collector-zipkin\n    port: 9411\n    targetPort: 9411\n    protocol: TCP\n  selector:\n    app: jaeger\n  type: ClusterIP\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: jaeger-query\n  namespace: jaeger-system\n  labels:\n    app: jaeger\nspec:\n  ports:\n  - name: query-http\n    port: 16686\n    targetPort: 16686\n    protocol: TCP\n  selector:\n    app: jaeger\n  type: LoadBalancer\nEOF\n\n# Configure Istio to use Jaeger\necho \"Configuring Istio tracing with Jaeger...\"\nkubectl apply -f - <<EOF\napiVersion: install.istio.io/v1alpha1\nkind: IstioOperator\nmetadata:\n  name: tracing-config\n  namespace: istio-system\nspec:\n  meshConfig:\n    extensionProviders:\n    - name: jaeger\n      zipkin:\n        service: jaeger-collector.jaeger-system.svc.cluster.local\n        port: 9411\n  values:\n    pilot:\n      traceSampling: 100.0\nEOF\n\n# Apply tracing configuration\nkubectl apply -f - <<EOF\napiVersion: telemetry.istio.io/v1alpha1\nkind: Telemetry\nmetadata:\n  name: default\n  namespace: istio-system\nspec:\n  tracing:\n  - providers:\n    - name: jaeger\nEOF\n\n# Deploy Prometheus for metrics collection\necho \"Configuring enhanced Prometheus monitoring...\"\nkubectl apply -f - <<EOF\napiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: prometheus-config\n  namespace: istio-system\ndata:\n  prometheus.yml: |\n    global:\n      scrape_interval: 15s\n    scrape_configs:\n    - job_name: 'istio-mesh'\n      kubernetes_sd_configs:\n      - role: endpoints\n        namespaces:\n          names:\n          - istio-system\n          - production\n          - staging\n          - development\n      relabel_configs:\n      - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]\n        action: keep\n        regex: istio-proxy;http-monitoring\n      - source_labels: [__address__, __meta_kubernetes_endpoint_port_port]\n        action: replace\n        regex: ([^:]+)(?::\\\\d+)?;(\\\\d+)\n        replacement: ${1}:15090\n        target_label: __address__\n      - action: labelmap\n        regex: __meta_kubernetes_service_label_(.+)\n      - source_labels: [__meta_kubernetes_namespace]\n        action: replace\n        target_label: namespace\n      - source_labels: [__meta_kubernetes_service_name]\n        action: replace\n        target_label: service_name\n    - job_name: 'envoy-stats'\n      metrics_path: /stats/prometheus\n      kubernetes_sd_configs:\n      - role: pod\n      relabel_configs:\n      - source_labels: [__meta_kubernetes_pod_container_port_name]\n        action: keep\n        regex: '.*-envoy-prom'\n      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]\n        action: replace\n        regex: ([^:]+)(?::\\\\d+)?;(\\\\d+)\n        replacement: ${1}:15090\n        target_label: __address__\n      - action: labelmap\n        regex: __meta_kubernetes_pod_label_(.+)\n      - source_labels: [__meta_kubernetes_namespace]\n        action: replace\n        target_label: namespace\nEOF\n\n# Deploy Grafana with Istio dashboards\necho \"Deploying Grafana with service mesh dashboards...\"\nkubectl apply -f - <<EOF\napiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: grafana-pvc\n  namespace: istio-system\nspec:\n  accessModes:\n  - ReadWriteOnce\n  resources:\n    requests:\n      storage: 10Gi\n  storageClassName: managed-premium\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: grafana\n  namespace: istio-system\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: grafana\n  template:\n    metadata:\n      labels:\n        app: grafana\n    spec:\n      containers:\n      - name: grafana\n        image: grafana/grafana:9.4.3\n        ports:\n        - containerPort: 3000\n        env:\n        - name: GF_SECURITY_ADMIN_PASSWORD\n          value: admin\n        - name: GF_INSTALL_PLUGINS\n          value: grafana-kubernetes-app\n        volumeMounts:\n        - name: grafana-storage\n          mountPath: /var/lib/grafana\n        resources:\n          requests:\n            cpu: 200m\n            memory: 256Mi\n          limits:\n            cpu: 500m\n            memory: 512Mi\n      volumes:\n      - name: grafana-storage\n        persistentVolumeClaim:\n          claimName: grafana-pvc\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: grafana\n  namespace: istio-system\nspec:\n  ports:\n  - port: 3000\n    targetPort: 3000\n  selector:\n    app: grafana\n  type: LoadBalancer\nEOF\n\n# Wait for services to be ready\necho \"Waiting for observability services to be ready...\"\nkubectl wait --for=condition=available --timeout=300s deployment/jaeger -n jaeger-system\nkubectl wait --for=condition=available --timeout=300s deployment/grafana -n istio-system\n\n# Get service endpoints\necho \"\\nService mesh observability endpoints:\"\necho \"Jaeger UI: http://$(kubectl get svc jaeger-query -n jaeger-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):16686\"\necho \"Grafana UI: http://$(kubectl get svc grafana -n istio-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):3000\"\necho \"Kiali UI: http://$(kubectl get svc kiali -n istio-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):20001\"\n\necho \"Service mesh observability setup completed successfully.\""
+        }
+      }
+    },
+    {
+      "title": "Enterprise Container Security and Compliance",
+      "content": "Implement comprehensive container security equivalent to AWS container security best practices with Azure-native security services.",
+      "code_examples": {
+        "implement_container_security_policies": {
+          "language": "bash",
+          "title": "Implement Comprehensive Container Security Policies",
+          "code": "# Implement enterprise container security policies\n\necho \"Implementing comprehensive container security framework...\"\n\n# Enable Azure Defender for Kubernetes\necho \"Enabling Azure Defender for Kubernetes...\"\naz security pricing create \\\n  --name KubernetesService \\\n  --tier Standard\n\n# Install Azure Policy Add-on for AKS\necho \"Installing Azure Policy Add-on...\"\naz aks enable-addons \\\n  --addons azure-policy \\\n  --name aks-enterprise-cluster \\\n  --resource-group aks-enterprise-rg\n\n# Create Pod Security Standards policies\necho \"Creating Pod Security Standards policies...\"\ncat > pod-security-baseline.yaml << 'EOF'\napiVersion: v1\nkind: Namespace\nmetadata:\n  name: secure-workloads\n  labels:\n    pod-security.kubernetes.io/enforce: baseline\n    pod-security.kubernetes.io/audit: restricted\n    pod-security.kubernetes.io/warn: restricted\n    istio-injection: enabled\n---\napiVersion: v1\nkind: LimitRange\nmetadata:\n  name: resource-limits\n  namespace: secure-workloads\nspec:\n  limits:\n  - default:\n      cpu: \"1\"\n      memory: \"1Gi\"\n    defaultRequest:\n      cpu: \"100m\"\n      memory: \"128Mi\"\n    type: Container\n  - max:\n      cpu: \"4\"\n      memory: \"8Gi\"\n    min:\n      cpu: \"50m\"\n      memory: \"64Mi\"\n    type: Container\n---\napiVersion: v1\nkind: ResourceQuota\nmetadata:\n  name: namespace-quota\n  namespace: secure-workloads\nspec:\n  hard:\n    requests.cpu: \"10\"\n    requests.memory: \"20Gi\"\n    limits.cpu: \"20\"\n    limits.memory: \"40Gi\"\n    pods: \"50\"\n    services: \"10\"\n    secrets: \"20\"\n    persistentvolumeclaims: \"10\"\nEOF\n\nkubectl apply -f pod-security-baseline.yaml\n\n# Create Network Policies for micro-segmentation\necho \"Creating network policies for micro-segmentation...\"\ncat > network-policies.yaml << 'EOF'\n# Default deny all policy\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: default-deny-all\n  namespace: secure-workloads\nspec:\n  podSelector: {}\n  policyTypes:\n  - Ingress\n  - Egress\n---\n# Allow ingress from istio-system namespace\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: allow-istio-system\n  namespace: secure-workloads\nspec:\n  podSelector: {}\n  policyTypes:\n  - Ingress\n  ingress:\n  - from:\n    - namespaceSelector:\n        matchLabels:\n          name: istio-system\n---\n# Allow DNS resolution\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: allow-dns\n  namespace: secure-workloads\nspec:\n  podSelector: {}\n  policyTypes:\n  - Egress\n  egress:\n  - to: []\n    ports:\n    - protocol: UDP\n      port: 53\n    - protocol: TCP\n      port: 53\n---\n# Allow HTTPS outbound for specific applications\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: allow-https-outbound\n  namespace: secure-workloads\nspec:\n  podSelector:\n    matchLabels:\n      network-policy: allow-https\n  policyTypes:\n  - Egress\n  egress:\n  - to: []\n    ports:\n    - protocol: TCP\n      port: 443\nEOF\n\nkubectl apply -f network-policies.yaml\n\n# Create RBAC policies for fine-grained access control\necho \"Creating RBAC policies...\"\ncat > rbac-policies.yaml << 'EOF'\n# Service Account for application workloads\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: secure-app-sa\n  namespace: secure-workloads\n---\n# Role with minimal permissions\napiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  namespace: secure-workloads\n  name: secure-app-role\nrules:\n- apiGroups: [\"\"]\n  resources: [\"configmaps\", \"secrets\"]\n  verbs: [\"get\", \"list\"]\n- apiGroups: [\"\"]\n  resources: [\"pods\"]\n  verbs: [\"get\", \"list\"]\n  resourceNames: [] # Restrict to specific resources if needed\n---\n# Role binding\napiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: secure-app-binding\n  namespace: secure-workloads\nsubjects:\n- kind: ServiceAccount\n  name: secure-app-sa\n  namespace: secure-workloads\nroleRef:\n  kind: Role\n  name: secure-app-role\n  apiGroup: rbac.authorization.k8s.io\nEOF\n\nkubectl apply -f rbac-policies.yaml\n\necho \"Container security policies implemented successfully.\""
+        },
+        "setup_secrets_management": {
+          "language": "bash",
+          "title": "Setup Advanced Secrets Management with Azure Key Vault",
+          "code": "# Setup advanced secrets management with Azure Key Vault integration\n\necho \"Setting up advanced secrets management...\"\n\n# Create Azure Key Vault for secrets\necho \"Creating Azure Key Vault...\"\nKEYVAULT_NAME=\"kv-aks-secrets-$(openssl rand -hex 3)\"\naz keyvault create \\\n  --resource-group aks-enterprise-rg \\\n  --name $KEYVAULT_NAME \\\n  --location eastus \\\n  --enable-soft-delete true \\\n  --enable-purge-protection true \\\n  --retention-days 90 \\\n  --sku premium\n\n# Create managed identity for Key Vault access\necho \"Creating managed identity for Key Vault access...\"\naz identity create \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-keyvault-identity\n\nKEYVAULT_IDENTITY_CLIENT_ID=$(az identity show \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-keyvault-identity \\\n  --query clientId -o tsv)\n\nKEYVAULT_IDENTITY_RESOURCE_ID=$(az identity show \\\n  --resource-group aks-enterprise-rg \\\n  --name aks-keyvault-identity \\\n  --query id -o tsv)\n\n# Assign permissions to the managed identity\necho \"Assigning Key Vault permissions...\"\naz keyvault set-policy \\\n  --name $KEYVAULT_NAME \\\n  --object-id $(az identity show --resource-group aks-enterprise-rg --name aks-keyvault-identity --query principalId -o tsv) \\\n  --secret-permissions get list \\\n  --key-permissions get list \\\n  --certificate-permissions get list\n\n# Install CSI Secret Store Driver\necho \"Installing CSI Secret Store Driver...\"\naz aks enable-addons \\\n  --addons azure-keyvault-secrets-provider \\\n  --name aks-enterprise-cluster \\\n  --resource-group aks-enterprise-rg\n\n# Create test secrets in Key Vault\necho \"Creating test secrets in Key Vault...\"\naz keyvault secret set \\\n  --vault-name $KEYVAULT_NAME \\\n  --name database-connection-string \\\n  --value \"Server=prod-db.example.com;Database=AppDB;User Id=appuser;Password=SecureP@ss123;\"\n\naz keyvault secret set \\\n  --vault-name $KEYVAULT_NAME \\\n  --name api-key \\\n  --value \"sk-1234567890abcdef1234567890abcdef\"\n\naz keyvault secret set \\\n  --vault-name $KEYVAULT_NAME \\\n  --name jwt-signing-key \\\n  --value \"-----BEGIN RSA PRIVATE KEY-----\\nMIIEpAIBAAKCAQEA...\\n-----END RSA PRIVATE KEY-----\"\n\n# Create SecretProviderClass for Key Vault integration\necho \"Creating SecretProviderClass for Key Vault integration...\"\ncat > secret-provider-class.yaml << 'EOF'\napiVersion: secrets-store.csi.x-k8s.io/v1\nkind: SecretProviderClass\nmetadata:\n  name: azure-keyvault-secrets\n  namespace: secure-workloads\nspec:\n  provider: azure\n  secretObjects:\n  - secretName: app-secrets\n    type: Opaque\n    data:\n    - objectName: database-connection-string\n      key: db-connection\n    - objectName: api-key\n      key: api-key\n    - objectName: jwt-signing-key\n      key: jwt-key\n  parameters:\n    usePodIdentity: \"false\"\n    useVMManagedIdentity: \"true\"\n    userAssignedIdentityID: KEYVAULT_IDENTITY_CLIENT_ID\n    keyvaultName: KEYVAULT_NAME\n    objects: |\n      array:\n        - |\n          objectName: database-connection-string\n          objectType: secret\n          objectVersion: \"\"\n        - |\n          objectName: api-key\n          objectType: secret\n          objectVersion: \"\"\n        - |\n          objectName: jwt-signing-key\n          objectType: secret\n          objectVersion: \"\"\n    tenantId: TENANT_ID\nEOF\n\n# Replace placeholders\nsed -i \"s/KEYVAULT_IDENTITY_CLIENT_ID/$KEYVAULT_IDENTITY_CLIENT_ID/g\" secret-provider-class.yaml\nsed -i \"s/KEYVAULT_NAME/$KEYVAULT_NAME/g\" secret-provider-class.yaml\nsed -i \"s/TENANT_ID/$(az account show --query tenantId -o tsv)/g\" secret-provider-class.yaml\n\nkubectl apply -f secret-provider-class.yaml\n\n# Create pod identity binding\necho \"Creating Azure AD pod identity binding...\"\ncat > pod-identity.yaml << 'EOF'\napiVersion: aadpodidentity.k8s.io/v1\nkind: AzureIdentity\nmetadata:\n  name: keyvault-identity\n  namespace: secure-workloads\nspec:\n  type: 0\n  resourceID: KEYVAULT_IDENTITY_RESOURCE_ID\n  clientID: KEYVAULT_IDENTITY_CLIENT_ID\n---\napiVersion: aadpodidentity.k8s.io/v1\nkind: AzureIdentityBinding\nmetadata:\n  name: keyvault-identity-binding\n  namespace: secure-workloads\nspec:\n  azureIdentity: keyvault-identity\n  selector: keyvault-identity-selector\nEOF\n\nsed -i \"s/KEYVAULT_IDENTITY_RESOURCE_ID/$(echo $KEYVAULT_IDENTITY_RESOURCE_ID | sed 's/\\//\\\\\\//g')/g\" pod-identity.yaml\nsed -i \"s/KEYVAULT_IDENTITY_CLIENT_ID/$KEYVAULT_IDENTITY_CLIENT_ID/g\" pod-identity.yaml\n\nkubectl apply -f pod-identity.yaml\n\n# Create sample application using secrets from Key Vault\necho \"Creating sample application with Key Vault secrets...\"\ncat > secure-app-deployment.yaml << 'EOF'\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: secure-app\n  namespace: secure-workloads\n  labels:\n    app: secure-app\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: secure-app\n  template:\n    metadata:\n      labels:\n        app: secure-app\n        aadpodidbinding: keyvault-identity-selector\n        network-policy: allow-https\n    spec:\n      serviceAccountName: secure-app-sa\n      containers:\n      - name: secure-app\n        image: nginx:1.24-alpine\n        ports:\n        - containerPort: 80\n        env:\n        - name: DATABASE_CONNECTION_STRING\n          valueFrom:\n            secretKeyRef:\n              name: app-secrets\n              key: db-connection\n        - name: API_KEY\n          valueFrom:\n            secretKeyRef:\n              name: app-secrets\n              key: api-key\n        volumeMounts:\n        - name: secrets-store\n          mountPath: \"/mnt/secrets\"\n          readOnly: true\n        - name: jwt-key\n          mountPath: \"/etc/ssl/certs/jwt\"\n          readOnly: true\n        securityContext:\n          allowPrivilegeEscalation: false\n          runAsNonRoot: true\n          runAsUser: 1000\n          runAsGroup: 3000\n          readOnlyRootFilesystem: true\n          capabilities:\n            drop:\n            - ALL\n        resources:\n          requests:\n            cpu: 100m\n            memory: 128Mi\n          limits:\n            cpu: 500m\n            memory: 512Mi\n        livenessProbe:\n          httpGet:\n            path: /\n            port: 80\n          initialDelaySeconds: 30\n          periodSeconds: 10\n        readinessProbe:\n          httpGet:\n            path: /\n            port: 80\n          initialDelaySeconds: 5\n          periodSeconds: 5\n      volumes:\n      - name: secrets-store\n        csi:\n          driver: secrets-store.csi.k8s.io\n          readOnly: true\n          volumeAttributes:\n            secretProviderClass: azure-keyvault-secrets\n      - name: jwt-key\n        secret:\n          secretName: app-secrets\n          items:\n          - key: jwt-key\n            path: jwt-signing-key.pem\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: secure-app-service\n  namespace: secure-workloads\n  labels:\n    app: secure-app\nspec:\n  selector:\n    app: secure-app\n  ports:\n  - port: 80\n    targetPort: 80\n    name: http\n  type: ClusterIP\nEOF\n\nkubectl apply -f secure-app-deployment.yaml\n\n# Wait for deployment to be ready\necho \"Waiting for secure application to be ready...\"\nkubectl wait --for=condition=available --timeout=300s deployment/secure-app -n secure-workloads\n\necho \"Advanced secrets management with Key Vault integration completed successfully.\"\necho \"Key Vault Name: $KEYVAULT_NAME\"\necho \"Managed Identity Client ID: $KEYVAULT_IDENTITY_CLIENT_ID\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Migrate complex ECS/EKS workloads to enterprise AKS with advanced orchestration",
+    "requirements": [
+      "Create enterprise AKS cluster with multiple specialized node pools",
+      "Implement Istio service mesh with advanced traffic management",
+      "Set up comprehensive container security with Azure Key Vault integration",
+      "Configure advanced monitoring and observability with distributed tracing",
+      "Implement network policies for micro-segmentation",
+      "Set up automated CI/CD with GitOps for container deployments",
+      "Configure cost optimization with spot instances and resource quotas",
+      "Create disaster recovery strategy for containerized workloads"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify AKS cluster creation",
+        "command": "az aks show --resource-group aks-enterprise-rg --name aks-enterprise-cluster --query 'provisioningState'",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Check multiple node pools",
+        "command": "az aks nodepool list --resource-group aks-enterprise-rg --cluster-name aks-enterprise-cluster --query 'length(@)'",
+        "expected": "Should return count of node pools (minimum 4)"
+      },
+      {
+        "step": "Verify Istio service mesh installation",
+        "command": "kubectl get pods -n istio-system --output 'jsonpath={..status.conditions[?(@.type==\"Ready\")].status}' | grep -v False || echo 'All pods ready'",
+        "expected": "Should return 'All pods ready' or only 'True' values"
+      },
+      {
+        "step": "Check Key Vault CSI driver",
+        "command": "kubectl get pods -n kube-system -l app=secrets-store-csi-driver --output 'jsonpath={..status.conditions[?(@.type==\"Ready\")].status}' | grep -v False || echo 'CSI driver ready'",
+        "expected": "Should show CSI driver pods as ready"
+      },
+      {
+        "step": "Verify network policies",
+        "command": "kubectl get networkpolicies -n secure-workloads --output name | wc -l",
+        "expected": "Should return count of network policies (minimum 3)"
+      }
+    ]
+  },
+  "container_migration_patterns": {
+    "ecs_to_aks_patterns": {
+      "ecs_service_migration": {
+        "aws_pattern": "ECS Service with ALB and Service Discovery",
+        "azure_pattern": "AKS Deployment with Service and Ingress",
+        "key_differences": ["Native Kubernetes service discovery", "Ingress controller instead of ALB", "Pod-to-pod communication via service mesh"]
+      },
+      "fargate_to_virtual_nodes": {
+        "aws_pattern": "ECS Fargate with automatic scaling",
+        "azure_pattern": "AKS Virtual Nodes with Azure Container Instances",
+        "key_differences": ["Per-second billing model", "Faster cold start times", "Integrated with AKS scheduler"]
+      },
+      "ecs_capacity_providers": {
+        "aws_pattern": "ECS Capacity Providers with EC2 and Fargate",
+        "azure_pattern": "AKS Node Pools with Virtual Nodes",
+        "key_differences": ["More granular node pool configuration", "Mixed compute types in single cluster", "Advanced auto-scaling policies"]
+      }
+    },
+    "eks_to_aks_patterns": {
+      "managed_node_groups": {
+        "aws_pattern": "EKS Managed Node Groups with auto-scaling",
+        "azure_pattern": "AKS System and User Node Pools",
+        "key_differences": ["Dedicated system node pool", "More VM size options", "Integrated spot instance support"]
+      },
+      "eks_addons": {
+        "aws_pattern": "EKS Add-ons (VPC CNI, CoreDNS, kube-proxy)",
+        "azure_pattern": "AKS Add-ons (Azure CNI, Azure Monitor, Azure Policy)",
+        "key_differences": ["Azure-native integration", "Policy-driven governance", "Enhanced monitoring capabilities"]
+      },
+      "fargate_profiles": {
+        "aws_pattern": "EKS Fargate Profiles for serverless pods",
+        "azure_pattern": "AKS Virtual Nodes for serverless containers",
+        "key_differences": ["Faster scaling", "Better cost optimization", "Integrated with Azure Container Instances"]
+      }
+    }
+  },
+  "cost_optimization_strategies": {
+    "spot_instances": {
+      "implementation": "Mixed node pools with spot instances for batch workloads",
+      "cost_savings": "Up to 80% cost reduction for fault-tolerant workloads",
+      "best_practices": ["Use taints and tolerations", "Implement graceful shutdown", "Design for interruption"]
+    },
+    "resource_quotas": {
+      "namespace_quotas": "CPU, memory, and object count limits per namespace",
+      "resource_limits": "Default and maximum resource limits for containers",
+      "monitoring": "Cost allocation tracking with detailed resource usage metrics"
+    },
+    "right_sizing": {
+      "vertical_pod_autoscaler": "Automatic resource request optimization",
+      "horizontal_pod_autoscaler": "Dynamic scaling based on custom metrics",
+      "cluster_autoscaler": "Node-level scaling with multiple node pools"
+    }
+  },
+  "disaster_recovery_containers": {
+    "multi_region_strategy": {
+      "primary_region": "East US with production workloads",
+      "secondary_region": "West US 2 with standby cluster",
+      "replication": "Container registry geo-replication and cross-region networking"
+    },
+    "backup_strategies": {
+      "persistent_volumes": "Automated backup with Azure Backup for Kubernetes",
+      "application_state": "Stateful application backup with Velero",
+      "configuration_backup": "GitOps-based configuration management"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove container orchestration lab resources in proper order",
+    "commands": [
+      "# Remove applications and workloads",
+      "kubectl delete namespace secure-workloads production staging development",
+      "# Remove Istio service mesh",
+      "istioctl x uninstall --purge -y",
+      "kubectl delete namespace istio-system jaeger-system",
+      "# Remove AKS add-ons",
+      "az aks disable-addons --addons azure-keyvault-secrets-provider,virtual-node,azure-policy,monitoring --name aks-enterprise-cluster --resource-group aks-enterprise-rg",
+      "# Delete AKS cluster",
+      "az aks delete --name aks-enterprise-cluster --resource-group aks-enterprise-rg --yes --no-wait",
+      "# Delete Key Vault",
+      "az keyvault delete --name $KEYVAULT_NAME --resource-group aks-enterprise-rg",
+      "az keyvault purge --name $KEYVAULT_NAME",
+      "# Delete managed identities",
+      "az identity delete --name aks-enterprise-identity --resource-group aks-enterprise-rg",
+      "az identity delete --name aks-keyvault-identity --resource-group aks-enterprise-rg",
+      "# Delete Container Registry",
+      "az acr delete --name $ACR_NAME --resource-group aks-enterprise-rg --yes",
+      "# Delete resource group",
+      "az group delete --name aks-enterprise-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "AKS provides more integrated Azure-native services than EKS with AWS services",
+    "Azure CNI offers better network integration compared to AWS VPC CNI",
+    "Virtual Nodes provide serverless containers with better cost optimization than Fargate",
+    "Istio on AKS offers more comprehensive service mesh capabilities than AWS App Mesh",
+    "Azure Key Vault integration provides superior secrets management to AWS Secrets Manager",
+    "AKS node pools offer more flexibility than EKS managed node groups",
+    "Azure Monitor for Containers provides deeper insights than CloudWatch Container Insights"
+  ],
+  "next_steps": [
+    "Learn Azure Arc for hybrid and multi-cloud Kubernetes management",
+    "Explore Azure Container Apps for serverless container applications",
+    "Study Azure Red Hat OpenShift for enterprise Kubernetes platform",
+    "Practice with Azure DevOps for container CI/CD automation",
+    "Learn Dapr (Distributed Application Runtime) for microservices development"
+  ]
+}

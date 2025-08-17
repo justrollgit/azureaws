@@ -1,0 +1,317 @@
+{
+  "id": "dbs-c01-database-security-lab",
+  "title": "AWS Database Security to Azure Database Protection: Advanced Database Security and Compliance Management",
+  "category": "database-security",
+  "difficulty": "expert",
+  "estimatedTime": "130 minutes",
+  "awsCertification": "DBS-C01",
+  "certificationWeight": "18% - Database Security Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master database security by implementing comprehensive AWS database protection and migrating to Azure database security with advanced encryption, access control, compliance automation, and enterprise-grade database security governance.",
+
+  "learningObjectives": [
+    "Implement comprehensive database encryption and key management strategies",
+    "Build advanced database access control and authentication frameworks",
+    "Create database security monitoring and threat detection systems",
+    "Design compliance automation and regulatory security management",
+    "Implement database audit logging and forensic analysis capabilities",
+    "Build database security governance and risk management frameworks"
+  ],
+
+  "prerequisites": [
+    "Completion of previous DBS-C01 labs or equivalent database experience",
+    "Strong understanding of database security concepts and encryption technologies",
+    "Experience with identity and access management and compliance frameworks",
+    "Familiarity with security monitoring and threat detection principles"
+  ],
+
+  "awsServices": [
+    "AWS KMS",
+    "AWS IAM",
+    "Amazon RDS",
+    "Amazon Aurora",
+    "Amazon DynamoDB",
+    "AWS Secrets Manager",
+    "AWS CloudTrail",
+    "Amazon GuardDuty",
+    "AWS Config",
+    "Amazon VPC",
+    "AWS Certificate Manager",
+    "Amazon CloudWatch"
+  ],
+
+  "azureServices": [
+    "Azure Key Vault",
+    "Azure Active Directory",
+    "Azure SQL Database",
+    "Azure Database for PostgreSQL",
+    "Azure Cosmos DB",
+    "Azure Key Vault HSM",
+    "Azure Activity Log",
+    "Microsoft Defender for Cloud",
+    "Azure Policy",
+    "Azure Virtual Network",
+    "Azure Certificate Service",
+    "Azure Monitor"
+  ],
+
+  "businessScenario": "Database Security Solutions provides comprehensive database security and compliance services for enterprise clients requiring advanced encryption, access control, threat detection, and regulatory compliance. Their database security team needs expertise in encryption management, access control automation, security monitoring, and compliance frameworks. They must master both AWS and Azure database security platforms for comprehensive security excellence.",
+
+  "sections": [
+    {
+      "title": "Advanced Database Encryption and Key Management",
+      "duration": "35 minutes",
+      "topics": [
+        "Database encryption at rest and in transit implementation",
+        "Advanced key management and rotation automation",
+        "Column-level encryption and field-level security",
+        "Transparent data encryption and application-level encryption",
+        "Key management compliance and HSM integration"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Database Encryption and Key Management Platform",
+          "description": "Build comprehensive encryption with advanced key management and HSM protection",
+          "steps": [
+            "Configure database encryption at rest with KMS and Azure Key Vault",
+            "Implement encryption in transit with SSL/TLS and certificate management",
+            "Setup advanced key management and automated rotation policies",
+            "Configure column-level encryption and field-level security controls",
+            "Implement transparent data encryption and application-level encryption",
+            "Setup HSM integration and compliance key management"
+          ],
+          "deliverables": [
+            "Database encryption at rest and in transit with certificate management",
+            "Advanced key management and automated rotation policies",
+            "Column-level encryption and field-level security implementation",
+            "HSM integration and compliance key management framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Database Access Control and Authentication",
+      "duration": "35 minutes",
+      "topics": [
+        "Advanced database authentication and authorization frameworks",
+        "IAM database authentication and federated access control",
+        "Role-based access control and fine-grained permissions",
+        "Database user management and privileged access control",
+        "Network security and VPC-based database isolation"
+      ],
+      "tasks": [
+        {
+          "title": "Build Database Access Control and Authentication Platform",
+          "description": "Implement comprehensive access control with authentication automation",
+          "steps": [
+            "Configure IAM database authentication with RDS and Azure AD integration",
+            "Implement federated access control and single sign-on for databases",
+            "Setup role-based access control and fine-grained permissions",
+            "Configure database user management and privileged access automation",
+            "Implement network security with VPC isolation and security groups",
+            "Setup access control monitoring and compliance reporting"
+          ],
+          "deliverables": [
+            "IAM database authentication and federated access control",
+            "Role-based access control and fine-grained permissions system",
+            "Database user management and privileged access automation",
+            "Network security and access control monitoring with compliance"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Database Security Monitoring and Threat Detection",
+      "duration": "30 minutes",
+      "topics": [
+        "Database activity monitoring and threat detection automation",
+        "Security event correlation and anomaly detection",
+        "Database vulnerability scanning and security assessment",
+        "Threat intelligence integration and automated response",
+        "Security incident response and forensic analysis"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Database Security Monitoring and Threat Detection Platform",
+          "description": "Build comprehensive security monitoring with threat detection automation",
+          "steps": [
+            "Configure database activity monitoring with CloudTrail and Azure Activity Log",
+            "Implement threat detection with GuardDuty and Defender for Cloud",
+            "Setup security event correlation and anomaly detection automation",
+            "Configure database vulnerability scanning and security assessment",
+            "Implement threat intelligence integration and automated response",
+            "Setup security incident response and forensic analysis capabilities"
+          ],
+          "deliverables": [
+            "Database activity monitoring and threat detection automation",
+            "Security event correlation and anomaly detection system",
+            "Database vulnerability scanning and security assessment platform",
+            "Threat intelligence integration and incident response automation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Compliance Automation and Security Governance",
+      "duration": "30 minutes",
+      "topics": [
+        "Database compliance automation and regulatory framework management",
+        "Security policy enforcement and automated compliance checking",
+        "Audit logging and forensic analysis automation",
+        "Data privacy controls and personal data protection",
+        "Security governance and risk management frameworks"
+      ],
+      "tasks": [
+        {
+          "title": "Build Compliance Automation and Security Governance Platform",
+          "description": "Implement comprehensive compliance with security governance automation",
+          "steps": [
+            "Configure database compliance automation with Config and Azure Policy",
+            "Implement security policy enforcement and automated compliance checking",
+            "Setup comprehensive audit logging and forensic analysis automation",
+            "Configure data privacy controls and personal data protection",
+            "Implement security governance and risk management frameworks",
+            "Setup compliance reporting and security governance analytics"
+          ],
+          "deliverables": [
+            "Database compliance automation and regulatory framework management",
+            "Security policy enforcement and automated compliance checking",
+            "Comprehensive audit logging and forensic analysis automation",
+            "Security governance and risk management with compliance reporting"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Financial Services Database Security and PCI DSS Compliance",
+      "description": "Build comprehensive database security for financial services with PCI DSS compliance",
+      "steps": [
+        "Design financial services database security architecture for PCI DSS compliance",
+        "Implement advanced encryption and key management for payment card data",
+        "Build comprehensive access control and authentication for financial systems",
+        "Configure security monitoring and threat detection for financial compliance",
+        "Implement PCI DSS compliance automation and audit trail management",
+        "Test platform with financial security scenarios and compliance validation"
+      ],
+      "expectedOutcome": "Production-ready financial services database security platform with PCI DSS compliance"
+    },
+    {
+      "title": "Healthcare Database Security and HIPAA Privacy Protection",
+      "description": "Implement healthcare database security with HIPAA compliance and patient data protection",
+      "steps": [
+        "Design healthcare database security architecture for HIPAA compliance",
+        "Implement encryption and access control for protected health information (PHI)",
+        "Build healthcare-specific security monitoring and threat detection",
+        "Configure HIPAA compliance automation and privacy controls",
+        "Implement healthcare audit logging and forensic analysis for PHI protection",
+        "Test platform with healthcare security scenarios and HIPAA validation"
+      ],
+      "expectedOutcome": "Healthcare database security platform with HIPAA compliance and patient privacy protection"
+    },
+    {
+      "title": "Multi-Cloud Database Security and Global Compliance",
+      "description": "Build unified database security platform spanning AWS and Azure with global compliance",
+      "steps": [
+        "Design multi-cloud database security architecture with unified encryption management",
+        "Implement cross-platform access control and authentication federation",
+        "Build unified security monitoring and threat detection across clouds",
+        "Configure multi-cloud compliance automation and governance frameworks",
+        "Implement unified audit logging and forensic analysis across platforms",
+        "Test platform with complex multi-cloud security and compliance scenarios"
+      ],
+      "expectedOutcome": "Multi-cloud database security platform with unified compliance and governance"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Encryption performance impact and key management complexity",
+      "solution": "Implement efficient encryption algorithms and hardware acceleration, use envelope encryption for large datasets, optimize key caching and rotation strategies, implement lazy encryption for non-critical data, and use performance monitoring for encryption overhead analysis"
+    },
+    {
+      "issue": "Access control complexity and authentication integration challenges",
+      "solution": "Implement centralized identity and access management, use federated authentication with SSO integration, implement role-based access control with inheritance, use automated user provisioning and deprovisioning, and implement access control testing and validation"
+    },
+    {
+      "issue": "Security monitoring data volume and alert accuracy challenges",
+      "solution": "Implement intelligent filtering and correlation for security events, use machine learning for anomaly detection and false positive reduction, implement risk-based alerting and prioritization, use automated threat intelligence enrichment, and implement security event aggregation and summarization"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Database Encryption Excellence",
+      "criteria": [
+        "Can implement database encryption at rest and in transit with certificate management",
+        "Understands advanced key management and automated rotation policies",
+        "Can configure column-level encryption and field-level security",
+        "Demonstrates HSM integration and compliance key management"
+      ]
+    },
+    {
+      "category": "Access Control Mastery",
+      "criteria": [
+        "Can implement IAM database authentication and federated access control",
+        "Understands role-based access control and fine-grained permissions",
+        "Can configure database user management and privileged access automation",
+        "Demonstrates network security and access control monitoring"
+      ]
+    },
+    {
+      "category": "Security Monitoring Excellence",
+      "criteria": [
+        "Can implement database activity monitoring and threat detection automation",
+        "Understands security event correlation and anomaly detection",
+        "Can configure database vulnerability scanning and security assessment",
+        "Demonstrates threat intelligence integration and incident response"
+      ]
+    },
+    {
+      "category": "Compliance and Governance",
+      "criteria": [
+        "Can implement database compliance automation and regulatory framework management",
+        "Understands security policy enforcement and automated compliance checking",
+        "Can configure comprehensive audit logging and forensic analysis",
+        "Demonstrates security governance and risk management frameworks"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DBS-C01": {
+      "domain": "Database Security",
+      "weight": "18%",
+      "coverage": [
+        "Encryption and data protection",
+        "Access control and authentication",
+        "Compliance and auditing",
+        "Network security"
+      ],
+      "examTopics": [
+        "Advanced database encryption and key management with KMS integration",
+        "Database access control and authentication with IAM and federated access",
+        "Database security monitoring and threat detection automation",
+        "Compliance automation and security governance frameworks",
+        "Cross-platform database security and unified protection strategies"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive database encryption and key management strategies",
+    "Demonstrates ability to build advanced database access control and authentication",
+    "Shows understanding of database security monitoring and threat detection",
+    "Can create compliance automation and security governance frameworks",
+    "Understands cross-platform database security and unified protection strategies"
+  ],
+
+  "nextSteps": [
+    "Complete DBS-C01 certification preparation and practice exams",
+    "Begin exploring remaining AWS certifications or advanced database specializations",
+    "Gain hands-on experience with enterprise database security in production environments",
+    "Explore advanced database security automation and compliance management techniques"
+  ]
+}

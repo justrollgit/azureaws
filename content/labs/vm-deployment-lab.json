@@ -1,0 +1,142 @@
+{
+  "id": "vm-deployment-lab",
+  "title": "EC2 to Azure VM: Your First Virtual Machine",
+  "difficulty": "beginner",
+  "estimated_time": "30 minutes",
+  "aws_prerequisite": "Experience with EC2 instance creation and management",
+  "azure_target": "Deploy and manage Azure Virtual Machines",
+  "learning_objectives": [
+    "Understand Azure VM sizing and series",
+    "Configure networking and security groups equivalent",
+    "Compare AWS and Azure VM management approaches",
+    "Deploy VM using Azure portal and CLI"
+  ],
+  "aws_context": {
+    "equivalent_service": "Amazon EC2",
+    "key_concepts": [
+      "Instance types → VM sizes",
+      "Security groups → Network Security Groups",
+      "Key pairs → SSH keys/passwords",
+      "AMI → VM images",
+      "Availability Zones → Availability Zones"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Understanding Azure VM Sizes",
+      "content": "AWS instance types map to Azure VM series and sizes. Let's compare common configurations:",
+      "comparison_table": {
+        "aws_t3_micro": {
+          "aws": "t3.micro (1 vCPU, 1GB RAM)",
+          "azure": "Standard_B1s (1 vCPU, 1GB RAM)",
+          "use_case": "Low traffic websites, dev/test"
+        },
+        "aws_m5_large": {
+          "aws": "m5.large (2 vCPU, 8GB RAM)",
+          "azure": "Standard_D2s_v3 (2 vCPU, 8GB RAM)",
+          "use_case": "Web servers, small databases"
+        },
+        "aws_c5_xlarge": {
+          "aws": "c5.xlarge (4 vCPU, 8GB RAM)",
+          "azure": "Standard_F4s_v2 (4 vCPU, 8GB RAM)",
+          "use_case": "CPU-intensive applications"
+        }
+      }
+    },
+    {
+      "title": "Network Security: AWS Security Groups vs Azure NSGs",
+      "content": "Security groups in AWS map to Network Security Groups in Azure, but with some key differences:",
+      "code_examples": {
+        "aws_security_group": {
+          "language": "bash",
+          "title": "AWS CLI: Create Security Group",
+          "code": "# Create security group\naws ec2 create-security-group \\\n  --group-name web-server-sg \\\n  --description \"Allow HTTP and SSH\"\n\n# Add SSH rule\naws ec2 authorize-security-group-ingress \\\n  --group-name web-server-sg \\\n  --protocol tcp \\\n  --port 22 \\\n  --cidr 0.0.0.0/0\n\n# Add HTTP rule\naws ec2 authorize-security-group-ingress \\\n  --group-name web-server-sg \\\n  --protocol tcp \\\n  --port 80 \\\n  --cidr 0.0.0.0/0"
+        },
+        "azure_nsg": {
+          "language": "bash",
+          "title": "Azure CLI: Create Network Security Group",
+          "code": "# Create NSG\naz network nsg create \\\n  --resource-group myResourceGroup \\\n  --name web-server-nsg\n\n# Add SSH rule\naz network nsg rule create \\\n  --resource-group myResourceGroup \\\n  --nsg-name web-server-nsg \\\n  --name AllowSSH \\\n  --protocol tcp \\\n  --priority 1001 \\\n  --destination-port-range 22\n\n# Add HTTP rule\naz network nsg rule create \\\n  --resource-group myResourceGroup \\\n  --nsg-name web-server-nsg \\\n  --name AllowHTTP \\\n  --protocol tcp \\\n  --priority 1002 \\\n  --destination-port-range 80"
+        }
+      }
+    },
+    {
+      "title": "Hands-On Exercise: Deploy Your First Azure VM",
+      "content": "Now let's deploy an Azure VM equivalent to a common EC2 setup:",
+      "exercise": {
+        "scenario": "Deploy a Linux web server VM equivalent to an EC2 t3.small instance",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Create Resource Group",
+            "aws_equivalent": "Similar to selecting a VPC/region",
+            "instructions": "Create a resource group to contain your VM resources",
+            "code": {
+              "portal": "Navigate to Resource Groups → Create → Enter name 'vm-lab-rg'",
+              "cli": "az group create --name vm-lab-rg --location eastus"
+            }
+          },
+          {
+            "step": 2,
+            "title": "Create Virtual Network",
+            "aws_equivalent": "Similar to creating a VPC and subnet",
+            "instructions": "Create a virtual network for your VM",
+            "code": {
+              "cli": "az network vnet create \\\n  --resource-group vm-lab-rg \\\n  --name vm-lab-vnet \\\n  --address-prefix 10.0.0.0/16 \\\n  --subnet-name vm-subnet \\\n  --subnet-prefix 10.0.1.0/24"
+            }
+          },
+          {
+            "step": 3,
+            "title": "Create Network Security Group",
+            "aws_equivalent": "Similar to creating and configuring security groups",
+            "instructions": "Create NSG with SSH and HTTP access",
+            "code": {
+              "cli": "az network nsg create \\\n  --resource-group vm-lab-rg \\\n  --name vm-lab-nsg\n\n# Allow SSH\naz network nsg rule create \\\n  --resource-group vm-lab-rg \\\n  --nsg-name vm-lab-nsg \\\n  --name SSH \\\n  --priority 1001 \\\n  --source-address-prefixes '*' \\\n  --destination-port-ranges 22\n\n# Allow HTTP\naz network nsg rule create \\\n  --resource-group vm-lab-rg \\\n  --nsg-name vm-lab-nsg \\\n  --name HTTP \\\n  --priority 1002 \\\n  --destination-port-ranges 80"
+            }
+          },
+          {
+            "step": 4,
+            "title": "Create the Virtual Machine",
+            "aws_equivalent": "Similar to launching an EC2 instance",
+            "instructions": "Deploy Ubuntu VM with Standard_B2s size (2 vCPU, 4GB RAM)",
+            "code": {
+              "cli": "az vm create \\\n  --resource-group vm-lab-rg \\\n  --name web-server-vm \\\n  --image Ubuntu2204 \\\n  --size Standard_B2s \\\n  --admin-username azureuser \\\n  --generate-ssh-keys \\\n  --vnet-name vm-lab-vnet \\\n  --subnet vm-subnet \\\n  --nsg vm-lab-nsg \\\n  --public-ip-sku Standard"
+            },
+            "explanation": "This creates a VM similar to EC2 t3.small with auto-generated SSH keys"
+          }
+        ]
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Connect to VM",
+      "command": "ssh azureuser@<public-ip>",
+      "expected": "Successful SSH connection"
+    },
+    {
+      "step": "Install web server",
+      "command": "sudo apt update && sudo apt install -y nginx",
+      "expected": "Nginx installed successfully"
+    },
+    {
+      "step": "Test web access",
+      "command": "curl http://<public-ip>",
+      "expected": "Default nginx page displayed"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all resources to avoid charges",
+    "command": "az group delete --name vm-lab-rg --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Azure VM sizes map closely to EC2 instance types",
+    "NSGs require priority numbers unlike AWS security groups",
+    "Azure CLI follows a different syntax but similar concepts",
+    "Resource groups provide organization similar to tags in AWS"
+  ],
+  "next_steps": [
+    "Learn about Azure Load Balancers (equivalent to ELB)",
+    "Explore VM Scale Sets (equivalent to Auto Scaling Groups)",
+    "Practice with Azure Storage (equivalent to EBS)"
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "certification_paths": [
+    {
+      "aws_cert": {
+        "name": "AWS Certified Solutions Architect - Associate",
+        "code": "SAA-C03",
+        "level": "Associate",
+        "domains": ["Design Resilient Architectures", "Design High-Performing Architectures", "Design Secure Architectures", "Design Cost-Optimized Architectures"]
+      },
+      "azure_equivalent": {
+        "name": "Microsoft Azure Administrator",
+        "code": "AZ-104",
+        "level": "Associate",
+        "domains": ["Manage Azure identities and governance", "Implement and manage storage", "Deploy and manage Azure compute resources", "Configure and manage virtual networking", "Monitor and back up Azure resources"]
+      },
+      "transition_plan": {
+        "duration_weeks": 8,
+        "prerequisites": ["Basic Azure fundamentals", "Hands-on Azure experience"],
+        "learning_path": [
+          {
+            "week": 1,
+            "topic": "Azure Identity and Governance",
+            "aws_context": "Compare with AWS IAM and Organizations",
+            "resources": ["Azure AD documentation", "Hands-on labs"]
+          },
+          {
+            "week": 2,
+            "topic": "Azure Storage Solutions",
+            "aws_context": "Compare with S3, EBS, and EFS",
+            "resources": ["Storage account types", "Blob storage labs"]
+          },
+          {
+            "week": 3,
+            "topic": "Azure Compute Services",
+            "aws_context": "Compare with EC2, Auto Scaling",
+            "resources": ["VM sizing", "Scale sets", "App Services"]
+          },
+          {
+            "week": 4,
+            "topic": "Azure Networking",
+            "aws_context": "Compare with VPC, Route 53, ELB",
+            "resources": ["VNet configuration", "Load balancer setup"]
+          },
+          {
+            "week": 5,
+            "topic": "Monitoring and Backup",
+            "aws_context": "Compare with CloudWatch, AWS Backup",
+            "resources": ["Azure Monitor", "Backup solutions"]
+          },
+          {
+            "week": 6,
+            "topic": "Practice Exams",
+            "aws_context": "Focus on Azure-specific implementations",
+            "resources": ["Mock exams", "Scenario-based questions"]
+          },
+          {
+            "week": 7,
+            "topic": "Hands-on Projects",
+            "aws_context": "Implement AWS solutions in Azure",
+            "resources": ["Migration scenarios", "Real-world labs"]
+          },
+          {
+            "week": 8,
+            "topic": "Final Review",
+            "aws_context": "Key differences summary",
+            "resources": ["Exam cram", "Last-minute tips"]
+          }
+        ]
+      }
+    },
+    {
+      "aws_cert": {
+        "name": "AWS Certified Solutions Architect - Professional",
+        "code": "SAP-C02",
+        "level": "Professional",
+        "domains": ["Design Solutions for Organizational Complexity", "Design for New Solutions", "Continuous Improvement for Existing Solutions", "Accelerate Workload Migration and Modernization"]
+      },
+      "azure_equivalent": {
+        "name": "Microsoft Azure Solutions Architect Expert",
+        "code": "AZ-305",
+        "level": "Expert",
+        "domains": ["Design identity, governance, and monitor solutions", "Design data storage solutions", "Design business continuity solutions", "Design infrastructure solutions"]
+      },
+      "transition_plan": {
+        "duration_weeks": 12,
+        "prerequisites": ["AZ-104 certification", "Enterprise Azure experience"],
+        "learning_path": [
+          {
+            "week": 1,
+            "topic": "Enterprise Identity Architecture",
+            "aws_context": "Compare with AWS SSO, Directory Service",
+            "resources": ["Azure AD Connect", "Hybrid identity"]
+          },
+          {
+            "week": 2,
+            "topic": "Governance and Compliance",
+            "aws_context": "Compare with AWS Organizations, Config",
+            "resources": ["Azure Policy", "Management groups"]
+          },
+          {
+            "week": 3,
+            "topic": "Data Architecture",
+            "aws_context": "Compare with RDS, DynamoDB, Redshift",
+            "resources": ["SQL Database", "Cosmos DB", "Synapse"]
+          },
+          {
+            "week": 4,
+            "topic": "Business Continuity",
+            "aws_context": "Compare with AWS Backup, DR strategies",
+            "resources": ["Site Recovery", "Backup strategies"]
+          },
+          {
+            "week": 5,
+            "topic": "Network Architecture",
+            "aws_context": "Compare with Transit Gateway, Direct Connect",
+            "resources": ["Hub-spoke topology", "ExpressRoute"]
+          },
+          {
+            "week": 6,
+            "topic": "Compute Solutions",
+            "aws_context": "Compare with ECS, EKS, Fargate",
+            "resources": ["AKS", "Container solutions"]
+          },
+          {
+            "week": 7,
+            "topic": "Monitoring Solutions",
+            "aws_context": "Compare with CloudWatch, X-Ray",
+            "resources": ["Azure Monitor", "Application Insights"]
+          },
+          {
+            "week": 8,
+            "topic": "Security Architecture",
+            "aws_context": "Compare with AWS security services",
+            "resources": ["Key Vault", "Security Center"]
+          },
+          {
+            "week": 9,
+            "topic": "Migration Strategies",
+            "aws_context": "AWS migration patterns to Azure",
+            "resources": ["Migration framework", "Assessment tools"]
+          },
+          {
+            "week": 10,
+            "topic": "Cost Optimization",
+            "aws_context": "Compare with AWS cost management",
+            "resources": ["Cost management", "Reserved instances"]
+          },
+          {
+            "week": 11,
+            "topic": "Case Studies",
+            "aws_context": "Real-world AWS to Azure migrations",
+            "resources": ["Architecture reviews", "Best practices"]
+          },
+          {
+            "week": 12,
+            "topic": "Exam Preparation",
+            "aws_context": "Final review and practice",
+            "resources": ["Mock exams", "Architecture scenarios"]
+          }
+        ]
+      }
+    }
+  ]
+}

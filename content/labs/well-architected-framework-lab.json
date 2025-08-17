@@ -1,0 +1,351 @@
+{
+  "id": "well-architected-framework-lab",
+  "title": "AWS Well-Architected Framework to Azure Well-Architected Framework Migration",
+  "difficulty": "advanced",
+  "estimated_time": "180 minutes",
+  "aws_prerequisite": "Experience with AWS Well-Architected Framework, AWS Trusted Advisor, and enterprise architecture",
+  "azure_target": "Implement Azure Well-Architected Framework with governance, monitoring, and optimization tools",
+  "learning_objectives": [
+    "Understand differences between AWS and Azure Well-Architected Frameworks",
+    "Map AWS WAF pillars to Azure WAF pillars and principles",
+    "Implement Azure Advisor recommendations equivalent to Trusted Advisor",
+    "Set up Azure Architecture Center patterns and guidance",
+    "Create governance frameworks using Azure Policy and Blueprints",
+    "Implement cost optimization strategies with Azure Cost Management",
+    "Set up security and compliance frameworks with Azure Security Center"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "well_architected_tool": "Azure Advisor + Azure Architecture Center",
+      "trusted_advisor": "Azure Advisor + Azure Monitor + Cost Management",
+      "config": "Azure Policy + Azure Resource Graph",
+      "cloudtrail": "Azure Activity Log + Azure Monitor",
+      "organizations": "Azure Management Groups + Subscriptions",
+      "control_tower": "Azure Landing Zones + Azure Blueprints"
+    },
+    "pillar_mapping": {
+      "operational_excellence": "Operational Excellence (Azure)",
+      "security": "Security (Azure)",
+      "reliability": "Reliability (Azure)",
+      "performance_efficiency": "Performance Efficiency (Azure)",
+      "cost_optimization": "Cost Optimization (Azure)",
+      "sustainability": "Sustainability (Azure) - Added in 2021"
+    }
+  },
+  "sections": [
+    {
+      "title": "Well-Architected Framework Comparison",
+      "content": "Detailed comparison between AWS and Azure Well-Architected Framework pillars and principles.",
+      "framework_comparison": {
+        "operational_excellence": {
+          "aws_focus": "Operations as code, small frequent changes, anticipate failure, learn from failures",
+          "azure_focus": "DevOps culture, monitoring and diagnostics, automated deployment, testing strategies",
+          "aws_tools": ["CloudFormation", "CodePipeline", "X-Ray", "CloudWatch"],
+          "azure_tools": ["ARM Templates", "Azure DevOps", "Application Insights", "Azure Monitor"],
+          "key_differences": [
+            "Azure emphasizes DevOps culture more explicitly",
+            "Azure Monitor provides more unified observability",
+            "Azure DevOps integrates better with Microsoft ecosystem",
+            "Azure Resource Manager provides more declarative templates"
+          ]
+        },
+        "security": {
+          "aws_focus": "Identity foundation, defense in depth, security at all layers, automate security",
+          "azure_focus": "Identity as control plane, defense in depth, Zero Trust model, security by default",
+          "aws_tools": ["IAM", "CloudTrail", "Config", "Security Hub", "GuardDuty"],
+          "azure_tools": ["Azure AD", "Azure Security Center", "Azure Sentinel", "Key Vault", "Policy"],
+          "key_differences": [
+            "Azure emphasizes Zero Trust architecture more",
+            "Azure AD provides more comprehensive identity platform",
+            "Azure Security Center offers integrated security management",
+            "Azure has built-in compliance frameworks"
+          ]
+        },
+        "reliability": {
+          "aws_focus": "Test recovery procedures, automatically recover, scale horizontally, stop guessing capacity",
+          "azure_focus": "Design for business requirements, ensure resiliency, design for operations, keep it simple",
+          "aws_tools": ["Auto Scaling", "ELB", "Route 53", "CloudFormation"],
+          "azure_tools": ["Virtual Machine Scale Sets", "Load Balancer", "Traffic Manager", "Availability Zones"],
+          "key_differences": [
+            "Azure Availability Zones are more integrated by default",
+            "Azure provides better SLA transparency",
+            "Azure Site Recovery offers comprehensive DR capabilities",
+            "Azure has more granular reliability options"
+          ]
+        },
+        "performance_efficiency": {
+          "aws_focus": "Democratize advanced technologies, go global in minutes, use serverless, experiment more",
+          "azure_focus": "Scale up and scale out, optimize network performance, optimize storage and data",
+          "aws_tools": ["CloudFront", "Lambda", "DynamoDB", "ElastiCache"],
+          "azure_tools": ["Azure CDN", "Azure Functions", "Cosmos DB", "Azure Cache for Redis"],
+          "key_differences": [
+            "Azure provides more integrated performance monitoring",
+            "Azure Functions offer more hosting plan flexibility",
+            "Azure networking is more software-defined",
+            "Azure storage tiers provide more optimization options"
+          ]
+        },
+        "cost_optimization": {
+          "aws_focus": "Pay for what you use, measure overall efficiency, stop spending on data centers, analyze and attribute",
+          "azure_focus": "Choose the right resources, set up budgets and allocations, continuously optimize",
+          "aws_tools": ["Cost Explorer", "Budgets", "Reserved Instances", "Spot Instances"],
+          "azure_tools": ["Cost Management", "Budgets", "Reserved Instances", "Spot VMs", "Hybrid Benefit"],
+          "key_differences": [
+            "Azure Hybrid Benefit provides unique licensing savings",
+            "Azure Cost Management has better allocation capabilities",
+            "Azure provides more granular resource optimization",
+            "Azure offers better dev/test pricing models"
+          ]
+        },
+        "sustainability": {
+          "aws_focus": "Understand your impact, establish sustainability goals, maximize utilization",
+          "azure_focus": "Carbon efficiency, energy efficiency, hardware efficiency, optimize workload efficiency",
+          "aws_tools": ["Carbon Footprint Tool", "Compute Optimizer", "Trusted Advisor"],
+          "azure_tools": ["Sustainability Dashboard", "Carbon Optimization", "Emissions Impact Dashboard"],
+          "key_differences": [
+            "Azure has committed to carbon negative by 2030",
+            "Azure provides more detailed sustainability reporting",
+            "Azure renewable energy commitment is more comprehensive",
+            "Azure offers better sustainability guidance and tools"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Azure Advisor Implementation",
+      "content": "Set up Azure Advisor as the equivalent to AWS Trusted Advisor for continuous optimization.",
+      "code_examples": {
+        "enable_azure_advisor": {
+          "language": "bash",
+          "title": "Configure Azure Advisor for Well-Architected Reviews",
+          "code": "# Create resource group for Well-Architected lab\naz group create \\\n  --name well-architected-lab-rg \\\n  --location eastus\n\n# Azure Advisor is enabled by default, but let's configure it\n# Get current Advisor recommendations\naz advisor recommendation list \\\n  --output table\n\n# Get specific category recommendations\naz advisor recommendation list \\\n  --category Cost \\\n  --output table\n\naz advisor recommendation list \\\n  --category Security \\\n  --output table\n\naz advisor recommendation list \\\n  --category Reliability \\\n  --output table\n\naz advisor recommendation list \\\n  --category Performance \\\n  --output table\n\naz advisor recommendation list \\\n  --category OperationalExcellence \\\n  --output table"
+        },
+        "configure_advisor_alerts": {
+          "language": "bash",
+          "title": "Set up Advisor Alerts for Proactive Monitoring",
+          "code": "# Create action group for Advisor alerts\naz monitor action-group create \\\n  --resource-group well-architected-lab-rg \\\n  --name advisor-alerts \\\n  --short-name advisor \\\n  --action email admin admin@company.com\n\n# Create alert rule for new high impact recommendations\naz monitor activity-log alert create \\\n  --resource-group well-architected-lab-rg \\\n  --name \"High Impact Advisor Recommendations\" \\\n  --scopes \"/subscriptions/$(az account show --query id -o tsv)\" \\\n  --condition category=Recommendation \\\n  --action-groups advisor-alerts \\\n  --description \"Alert when high impact Advisor recommendations are available\"\n\n# Configure Advisor settings (via REST API example)\ncat > advisor-config.json << 'EOF'\n{\n  \"properties\": {\n    \"cpuThreshold\": \"Low\",\n    \"exclude\": false,\n    \"includeUpsellRecommendations\": true\n  }\n}\nEOF\n\necho \"Advisor configuration template created. Apply via Azure portal or REST API.\""
+        }
+      }
+    },
+    {
+      "title": "Azure Policy and Governance Framework",
+      "content": "Implement governance equivalent to AWS Config and Organizations policies.",
+      "code_examples": {
+        "create_policy_definitions": {
+          "language": "bash",
+          "title": "Create Custom Azure Policy Definitions",
+          "code": "# Create custom policy for required tags (governance pillar)\ncat > require-tags-policy.json << 'EOF'\n{\n  \"mode\": \"Indexed\",\n  \"policyRule\": {\n    \"if\": {\n      \"anyOf\": [\n        {\n          \"field\": \"tags['Environment']\",\n          \"exists\": \"false\"\n        },\n        {\n          \"field\": \"tags['CostCenter']\",\n          \"exists\": \"false\"\n        },\n        {\n          \"field\": \"tags['Owner']\",\n          \"exists\": \"false\"\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"parameters\": {},\n  \"metadata\": {\n    \"displayName\": \"Require specific tags on resources\",\n    \"description\": \"Enforces required tags for governance and cost allocation\"\n  }\n}\nEOF\n\naz policy definition create \\\n  --name require-governance-tags \\\n  --rules require-tags-policy.json \\\n  --display-name \"Require Governance Tags\"\n\n# Create policy for allowed VM sizes (cost optimization)\ncat > allowed-vm-sizes-policy.json << 'EOF'\n{\n  \"mode\": \"Indexed\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"equals\": \"Microsoft.Compute/virtualMachines\"\n        },\n        {\n          \"not\": {\n            \"field\": \"Microsoft.Compute/virtualMachines/vmSize\",\n            \"in\": [\n              \"Standard_B1s\",\n              \"Standard_B1ms\",\n              \"Standard_B2s\",\n              \"Standard_D2s_v3\",\n              \"Standard_D4s_v3\"\n            ]\n          }\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  }\n}\nEOF\n\naz policy definition create \\\n  --name allowed-vm-sizes \\\n  --rules allowed-vm-sizes-policy.json \\\n  --display-name \"Allowed VM Sizes for Cost Control\""
+        },
+        "create_policy_initiative": {
+          "language": "bash",
+          "title": "Create Policy Initiative (Policy Set)",
+          "code": "# Create Well-Architected policy initiative\ncat > well-architected-initiative.json << 'EOF'\n{\n  \"displayName\": \"Well-Architected Framework Policies\",\n  \"description\": \"Policy set implementing Azure Well-Architected Framework principles\",\n  \"metadata\": {\n    \"category\": \"Well-Architected\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/require-governance-tags\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/allowed-vm-sizes\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/0a914e76-4921-4c19-b460-a2d36003525a\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c\",\n      \"parameters\": {}\n    }\n  ]\n}\nEOF\n\n# Replace SUBSCRIPTION_ID with actual subscription ID\nsed -i \"s/SUBSCRIPTION_ID/$(az account show --query id -o tsv)/g\" well-architected-initiative.json\n\n# Create the initiative\naz policy set-definition create \\\n  --name well-architected-framework \\\n  --definitions well-architected-initiative.json\n\n# Assign the initiative to subscription\naz policy assignment create \\\n  --name \"Well-Architected Compliance\" \\\n  --policy-set-definition well-architected-framework \\\n  --scope \"/subscriptions/$(az account show --query id -o tsv)\" \\\n  --display-name \"Well-Architected Framework Compliance\""
+        }
+      ]
+    },
+    {
+      "title": "Azure Blueprints for Repeatable Deployments",
+      "content": "Create Azure Blueprints equivalent to AWS CloudFormation templates with governance.",
+      "code_examples": {
+        "create_blueprint_definition": {
+          "language": "bash",
+          "title": "Create Well-Architected Blueprint",
+          "code": "# Install Azure CLI Blueprint extension\naz extension add --name blueprint\n\n# Create blueprint definition\ncat > well-architected-blueprint.json << 'EOF'\n{\n  \"properties\": {\n    \"displayName\": \"Well-Architected Foundation\",\n    \"description\": \"Blueprint implementing Well-Architected Framework principles\",\n    \"targetScope\": \"subscription\",\n    \"parameters\": {\n      \"environment\": {\n        \"type\": \"string\",\n        \"metadata\": {\n          \"displayName\": \"Environment\",\n          \"description\": \"Environment name (dev, staging, prod)\"\n        }\n      },\n      \"costCenter\": {\n        \"type\": \"string\",\n        \"metadata\": {\n          \"displayName\": \"Cost Center\",\n          \"description\": \"Cost center for billing allocation\"\n        }\n      }\n    }\n  }\n}\nEOF\n\naz blueprint create \\\n  --name well-architected-foundation \\\n  --definition well-architected-blueprint.json\n\n# Add policy assignment artifact\ncat > policy-artifact.json << 'EOF'\n{\n  \"kind\": \"policyAssignment\",\n  \"properties\": {\n    \"displayName\": \"Well-Architected Policies\",\n    \"description\": \"Assigns Well-Architected Framework policies\",\n    \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policySetDefinitions/well-architected-framework\",\n    \"parameters\": {},\n    \"dependsOn\": []\n  }\n}\nEOF\n\nsed -i \"s/SUBSCRIPTION_ID/$(az account show --query id -o tsv)/g\" policy-artifact.json\n\naz blueprint artifact policy create \\\n  --blueprint-name well-architected-foundation \\\n  --artifact-name policy-assignment \\\n  --definition policy-artifact.json"
+        },
+        "add_resource_group_artifact": {
+          "language": "bash",
+          "title": "Add Resource Group and ARM Template Artifacts",
+          "code": "# Add resource group artifact\ncat > rg-artifact.json << 'EOF'\n{\n  \"kind\": \"resourceGroup\",\n  \"properties\": {\n    \"displayName\": \"Well-Architected Resource Group\",\n    \"description\": \"Resource group with proper tagging and governance\",\n    \"resourceGroupName\": \"[concat(parameters('environment'), '-well-architected-rg')]\",\n    \"location\": \"eastus\",\n    \"tags\": {\n      \"Environment\": \"[parameters('environment')]\",\n      \"CostCenter\": \"[parameters('costCenter')]\",\n      \"Purpose\": \"Well-Architected Demo\",\n      \"CreatedBy\": \"Azure Blueprint\"\n    }\n  }\n}\nEOF\n\naz blueprint artifact resource-group create \\\n  --blueprint-name well-architected-foundation \\\n  --artifact-name resource-group \\\n  --definition rg-artifact.json\n\n# Add ARM template artifact for basic infrastructure\ncat > arm-template-artifact.json << 'EOF'\n{\n  \"kind\": \"template\",\n  \"properties\": {\n    \"displayName\": \"Well-Architected Infrastructure\",\n    \"description\": \"Deploys basic infrastructure following Well-Architected principles\",\n    \"template\": {\n      \"$schema\": \"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#\",\n      \"contentVersion\": \"1.0.0.0\",\n      \"parameters\": {\n        \"environment\": {\n          \"type\": \"string\"\n        },\n        \"costCenter\": {\n          \"type\": \"string\"\n        }\n      },\n      \"resources\": [\n        {\n          \"type\": \"Microsoft.Storage/storageAccounts\",\n          \"apiVersion\": \"2021-09-01\",\n          \"name\": \"[concat(parameters('environment'), 'storage', uniqueString(resourceGroup().id))]\",\n          \"location\": \"[resourceGroup().location]\",\n          \"sku\": {\n            \"name\": \"Standard_LRS\"\n          },\n          \"kind\": \"StorageV2\",\n          \"properties\": {\n            \"supportsHttpsTrafficOnly\": true,\n            \"minimumTlsVersion\": \"TLS1_2\"\n          },\n          \"tags\": {\n            \"Environment\": \"[parameters('environment')]\",\n            \"CostCenter\": \"[parameters('costCenter')]\",\n            \"Purpose\": \"Well-Architected Storage\"\n          }\n        }\n      ]\n    },\n    \"resourceGroup\": \"resource-group\",\n    \"dependsOn\": [\"resource-group\"],\n    \"parameters\": {\n      \"environment\": {\n        \"value\": \"[parameters('environment')]\"\n      },\n      \"costCenter\": {\n        \"value\": \"[parameters('costCenter')]\"\n      }\n    }\n  }\n}\nEOF\n\naz blueprint artifact template create \\\n  --blueprint-name well-architected-foundation \\\n  --artifact-name infrastructure-template \\\n  --definition arm-template-artifact.json"
+        }
+      ]
+    },
+    {
+      "title": "Cost Management and Optimization",
+      "content": "Implement cost management equivalent to AWS Cost Explorer and Budgets.",
+      "code_examples": {
+        "setup_cost_management": {
+          "language": "bash",
+          "title": "Configure Azure Cost Management and Budgets",
+          "code": "# Create budget for the subscription\naz consumption budget create \\\n  --budget-name \"Well-Architected-Monthly-Budget\" \\\n  --amount 1000 \\\n  --category Cost \\\n  --time-grain Monthly \\\n  --time-period-start-date $(date -d \"first day of this month\" +%Y-%m-%d) \\\n  --time-period-end-date $(date -d \"first day of next month\" +%Y-%m-%d) \\\n  --notifications '[{\n    \"enabled\": true,\n    \"operator\": \"GreaterThan\",\n    \"threshold\": 80,\n    \"contactEmails\": [\"admin@company.com\"],\n    \"contactRoles\": [\"Owner\"],\n    \"thresholdType\": \"Percentage\"\n  },{\n    \"enabled\": true,\n    \"operator\": \"GreaterThan\",\n    \"threshold\": 100,\n    \"contactEmails\": [\"admin@company.com\"],\n    \"contactRoles\": [\"Owner\"],\n    \"thresholdType\": \"Percentage\"\n  }]'\n\n# Create cost alert rule\ncat > cost-alert.json << 'EOF'\n{\n  \"properties\": {\n    \"displayName\": \"Daily Cost Anomaly Detection\",\n    \"description\": \"Alert when daily costs exceed expected patterns\",\n    \"enabled\": true,\n    \"source\": {\n      \"dataSourceId\": \"/subscriptions/SUBSCRIPTION_ID\",\n      \"queryType\": \"Usage\"\n    },\n    \"schedule\": {\n      \"frequencyInMinutes\": 1440,\n      \"timeWindowInMinutes\": 1440\n    },\n    \"action\": {\n      \"actionGroupId\": \"/subscriptions/SUBSCRIPTION_ID/resourceGroups/well-architected-lab-rg/providers/microsoft.insights/actionGroups/advisor-alerts\"\n    }\n  }\n}\nEOF\n\nsed -i \"s/SUBSCRIPTION_ID/$(az account show --query id -o tsv)/g\" cost-alert.json\necho \"Cost alert template created. Configure through Azure portal or REST API.\""
+        },
+        "cost_analysis_queries": {
+          "language": "bash",
+          "title": "Cost Analysis and Resource Graph Queries",
+          "code": "# Install Resource Graph extension\naz extension add --name resource-graph\n\n# Query resources without required tags\naz graph query -q '\nResources\n| where tags !has \"Environment\" or tags !has \"CostCenter\" or tags !has \"Owner\"\n| project name, type, resourceGroup, tags\n| limit 100'\n\n# Query high-cost resources\naz graph query -q '\nResources\n| join kind=leftouter (\n    ResourceContainers\n    | where type == \"microsoft.resources/subscriptions\"\n    | project subscriptionId, subscriptionName=name\n) on subscriptionId\n| where type has \"microsoft.compute/virtualmachines\"\n| project name, resourceGroup, location, subscriptionName, tags\n| limit 100'\n\n# Query resources by environment\naz graph query -q '\nResources\n| where tags has \"Environment\"\n| summarize ResourceCount=count() by Environment=tostring(tags[\"Environment\"]), ResourceType=type\n| order by Environment, ResourceCount desc'\n\n# Get current month cost data (requires consumption API)\necho \"Getting cost analysis data...\"\naz consumption usage list \\\n  --start-date $(date -d \"first day of this month\" +%Y-%m-%d) \\\n  --end-date $(date +%Y-%m-%d) \\\n  --top 10 \\\n  --output table"
+        }
+      ]
+    },
+    {
+      "title": "Security Center and Compliance",
+      "content": "Implement security monitoring equivalent to AWS Security Hub and Config.",
+      "code_examples": {
+        "enable_security_center": {
+          "language": "bash",
+          "title": "Configure Azure Security Center and Compliance",
+          "code": "# Enable Security Center Standard tier\naz security pricing create \\\n  --name VirtualMachines \\\n  --tier Standard\n\naz security pricing create \\\n  --name SqlServers \\\n  --tier Standard\n\naz security pricing create \\\n  --name AppServices \\\n  --tier Standard\n\naz security pricing create \\\n  --name StorageAccounts \\\n  --tier Standard\n\naz security pricing create \\\n  --name KubernetesService \\\n  --tier Standard\n\n# Configure auto-provisioning\naz security auto-provisioning-setting update \\\n  --name default \\\n  --auto-provision On\n\n# Configure workspace settings\nWORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group well-architected-lab-rg \\\n  --workspace-name container-apps-logs \\\n  --query id -o tsv 2>/dev/null || echo \"\")\n\nif [ ! -z \"$WORKSPACE_ID\" ]; then\n  az security workspace-setting create \\\n    --name default \\\n    --target-workspace $WORKSPACE_ID\nfi\n\n# List security assessments\naz security assessment list \\\n  --query '[].{Name:displayName, Status:status.code, Severity:metadata.severity}' \\\n  --output table\n\n# Get compliance status\naz security regulatory-compliance-standard list \\\n  --query '[].{Standard:displayName, State:state}' \\\n  --output table"
+        },
+        "create_security_policies": {
+          "language": "bash",
+          "title": "Create Custom Security Policies",
+          "code": "# Create custom security policy for encryption\ncat > require-encryption-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"equals\": \"Microsoft.Storage/storageAccounts\"\n        },\n        {\n          \"anyOf\": [\n            {\n              \"field\": \"Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly\",\n              \"equals\": \"false\"\n            },\n            {\n              \"field\": \"Microsoft.Storage/storageAccounts/minimumTlsVersion\",\n              \"notEquals\": \"TLS1_2\"\n            }\n          ]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Storage accounts should use HTTPS and TLS 1.2\",\n    \"description\": \"Ensures storage accounts are secure by default\"\n  }\n}\nEOF\n\naz policy definition create \\\n  --name require-storage-encryption \\\n  --rules require-encryption-policy.json \\\n  --display-name \"Require Storage Account Encryption\"\n\n# Assign security policy\naz policy assignment create \\\n  --name \"Storage Security Requirements\" \\\n  --policy require-storage-encryption \\\n  --scope \"/subscriptions/$(az account show --query id -o tsv)\" \\\n  --display-name \"Storage Security Requirements\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Implement complete Well-Architected Framework governance for enterprise Azure environment",
+    "requirements": [
+      "Set up Azure Advisor with proactive monitoring and alerts",
+      "Create comprehensive governance policies using Azure Policy",
+      "Implement Azure Blueprints for repeatable well-architected deployments",
+      "Configure cost management with budgets and automated optimization",
+      "Enable Security Center with compliance monitoring",
+      "Create resource tagging strategy and enforcement",
+      "Set up monitoring and alerting for all five pillars"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify Azure Advisor recommendations",
+        "command": "az advisor recommendation list --category Cost --query 'length(@)'",
+        "expected": "Should return count of cost optimization recommendations"
+      },
+      {
+        "step": "Check policy compliance",
+        "command": "az policy state list --filter \"PolicyAssignmentName eq 'Well-Architected Compliance'\" --query 'length(@)'",
+        "expected": "Should return policy compliance state count"
+      },
+      {
+        "step": "Verify blueprint definition",
+        "command": "az blueprint list --query '[?name==`well-architected-foundation`].name'",
+        "expected": "Should return well-architected-foundation blueprint"
+      },
+      {
+        "step": "Check budget configuration",
+        "command": "az consumption budget list --query '[?name==`Well-Architected-Monthly-Budget`].name'",
+        "expected": "Should return the configured budget name"
+      },
+      {
+        "step": "Verify security center status",
+        "command": "az security pricing list --query '[?name==`VirtualMachines`].pricingTier'",
+        "expected": "Should return 'Standard' tier for VirtualMachines"
+      }
+    ]
+  },
+  "well_architected_checklist": {
+    "operational_excellence": [
+      "Implement Infrastructure as Code with ARM templates/Bicep",
+      "Set up automated testing and deployment pipelines",
+      "Configure comprehensive monitoring with Azure Monitor",
+      "Implement proper logging and distributed tracing",
+      "Create runbooks and operational procedures",
+      "Set up automated scaling and self-healing capabilities"
+    ],
+    "security": [
+      "Implement Zero Trust network architecture",
+      "Use Azure AD with conditional access policies",
+      "Enable encryption at rest and in transit",
+      "Implement proper secrets management with Key Vault",
+      "Set up security monitoring with Security Center",
+      "Regular security assessments and penetration testing"
+    ],
+    "reliability": [
+      "Design for failure with redundancy and failover",
+      "Implement proper backup and disaster recovery",
+      "Use availability zones and regions appropriately",
+      "Set up health checks and automated recovery",
+      "Implement circuit breaker and retry patterns",
+      "Regular disaster recovery testing"
+    ],
+    "performance_efficiency": [
+      "Right-size resources based on actual usage",
+      "Implement caching strategies appropriately",
+      "Optimize data storage and access patterns",
+      "Use CDN for global content delivery",
+      "Monitor and optimize application performance",
+      "Regular performance testing and optimization"
+    ],
+    "cost_optimization": [
+      "Implement proper resource tagging for cost allocation",
+      "Use reserved instances for predictable workloads",
+      "Implement auto-scaling to match demand",
+      "Regular cost reviews and optimization",
+      "Use appropriate storage tiers and lifecycle policies",
+      "Leverage Azure Hybrid Benefit for licensing savings"
+    ],
+    "sustainability": [
+      "Optimize resource utilization to reduce waste",
+      "Use renewable energy regions when possible",
+      "Implement efficient architectures and algorithms",
+      "Regular sustainability impact assessments",
+      "Choose sustainable hosting options",
+      "Monitor and report on carbon footprint"
+    ]
+  },
+  "migration_roadmap": {
+    "assessment_phase": {
+      "duration": "2-4 weeks",
+      "activities": [
+        "Review current AWS Well-Architected assessment",
+        "Map AWS tools and processes to Azure equivalents",
+        "Assess current governance and compliance requirements",
+        "Identify gaps and improvement opportunities",
+        "Create Azure Well-Architected implementation plan"
+      ]
+    },
+    "foundation_phase": {
+      "duration": "4-6 weeks",
+      "activities": [
+        "Set up Azure governance framework with policies",
+        "Implement Azure Advisor and monitoring",
+        "Create Azure Blueprints for standardized deployments",
+        "Configure cost management and budgets",
+        "Enable Security Center and compliance monitoring"
+      ]
+    },
+    "implementation_phase": {
+      "duration": "8-12 weeks",
+      "activities": [
+        "Apply Well-Architected principles to existing workloads",
+        "Implement automated optimization recommendations",
+        "Set up comprehensive monitoring and alerting",
+        "Create operational runbooks and procedures",
+        "Train teams on Azure Well-Architected practices"
+      ]
+    },
+    "optimization_phase": {
+      "duration": "Ongoing",
+      "activities": [
+        "Regular Well-Architected reviews and assessments",
+        "Continuous cost and performance optimization",
+        "Security posture improvements",
+        "Operational excellence enhancements",
+        "Sustainability improvements and reporting"
+      ]
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove Well-Architected lab resources",
+    "commands": [
+      "az policy assignment delete --name 'Storage Security Requirements'",
+      "az policy assignment delete --name 'Well-Architected Compliance'",
+      "az blueprint delete --name well-architected-foundation",
+      "az consumption budget delete --budget-name 'Well-Architected-Monthly-Budget'",
+      "az group delete --name well-architected-lab-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure Well-Architected Framework has 6 pillars vs AWS's 5 (adds Sustainability)",
+    "Azure Advisor provides more integrated optimization than AWS Trusted Advisor",
+    "Azure Policy and Blueprints offer more comprehensive governance than AWS Config",
+    "Azure Cost Management provides better cost allocation and optimization tools",
+    "Azure Security Center integrates security across all services more effectively",
+    "Azure provides more built-in compliance frameworks and assessments"
+  ],
+  "next_steps": [
+    "Learn about Azure Landing Zones for enterprise-scale deployments",
+    "Explore Azure Architecture Center for reference architectures",
+    "Study Azure Governance and Management best practices",
+    "Practice with Azure Well-Architected Review tool",
+    "Implement continuous compliance monitoring with Azure Policy"
+  ]
+}

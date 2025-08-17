@@ -1,0 +1,239 @@
+{
+  "id": "networking-fundamentals-lab",
+  "title": "AWS VPC to Azure VNet: Networking Migration Lab",
+  "difficulty": "intermediate",
+  "estimated_time": "75 minutes",
+  "aws_prerequisite": "Experience with VPCs, subnets, security groups, and route tables",
+  "azure_target": "Create and configure Azure Virtual Networks with subnets, NSGs, and routing",
+  "learning_objectives": [
+    "Understand Azure networking architecture vs AWS VPC",
+    "Create and configure Azure Virtual Networks and subnets",
+    "Set up Network Security Groups and Application Security Groups",
+    "Configure routing and VNet peering",
+    "Implement VPN connectivity and hybrid scenarios",
+    "Monitor and troubleshoot network connectivity"
+  ],
+  "aws_context": {
+    "equivalent_service": "Amazon VPC",
+    "key_concepts": [
+      "VPC → Virtual Network (VNet)",
+      "Subnets → Subnets (similar concept)",
+      "Security Groups → Network Security Groups",
+      "NACLs → Network Security Groups (subnet-level)",
+      "Route Tables → Route Tables",
+      "Internet Gateway → Internet Gateway (implicit)",
+      "NAT Gateway → NAT Gateway",
+      "VPC Peering → VNet Peering",
+      "Direct Connect → ExpressRoute"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Azure VNet vs AWS VPC Architecture Comparison",
+      "content": "Understanding the fundamental differences between Azure and AWS networking models.",
+      "comparison_table": {
+        "network_scope": {
+          "aws": "VPC is region-specific, spans multiple AZs",
+          "azure": "VNet is region-specific, spans multiple availability zones",
+          "difference": "Similar scope, but Azure has additional network features"
+        },
+        "subnet_configuration": {
+          "aws": "Subnets are AZ-specific",
+          "azure": "Subnets span all AZs in region by default",
+          "difference": "Azure subnets provide better availability by default"
+        },
+        "security_model": {
+          "aws": "Security Groups (stateful) + NACLs (stateless)",
+          "azure": "Network Security Groups (stateful, apply to NICs and subnets)",
+          "difference": "Azure NSGs can apply to both instance and subnet level"
+        },
+        "internet_connectivity": {
+          "aws": "Explicit Internet Gateway attachment",
+          "azure": "Internet connectivity enabled by default",
+          "difference": "Azure provides simpler internet access model"
+        },
+        "dns_resolution": {
+          "aws": "Route 53 resolver or custom DNS",
+          "azure": "Azure-provided DNS or custom DNS",
+          "difference": "Both provide managed DNS services"
+        }
+      }
+    },
+    {
+      "title": "Virtual Network Creation and Configuration",
+      "content": "Step-by-step creation of Azure Virtual Networks with proper subnetting.",
+      "code_examples": {
+        "create_resource_group": {
+          "language": "bash",
+          "title": "Create Resource Group for Networking Lab",
+          "code": "# Create resource group\naz group create \\\n  --name networking-lab-rg \\\n  --location eastus\n\n# Verify resource group creation\naz group show --name networking-lab-rg --output table"
+        },
+        "create_vnet": {
+          "language": "bash", 
+          "title": "Create Virtual Network with Multiple Subnets",
+          "code": "# Create VNet with address space\naz network vnet create \\\n  --resource-group networking-lab-rg \\\n  --name lab-vnet \\\n  --address-prefix 10.0.0.0/16 \\\n  --subnet-name web-subnet \\\n  --subnet-prefix 10.0.1.0/24 \\\n  --location eastus\n\n# Add application subnet\naz network vnet subnet create \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name app-subnet \\\n  --address-prefix 10.0.2.0/24\n\n# Add database subnet\naz network vnet subnet create \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name db-subnet \\\n  --address-prefix 10.0.3.0/24\n\n# Add management subnet\naz network vnet subnet create \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name mgmt-subnet \\\n  --address-prefix 10.0.4.0/24"
+        }
+      }
+    },
+    {
+      "title": "Network Security Groups Configuration",
+      "content": "Create and configure Network Security Groups equivalent to AWS Security Groups and NACLs.",
+      "code_examples": {
+        "create_web_nsg": {
+          "language": "bash",
+          "title": "Create Web Tier NSG (Similar to AWS Web Security Group)",
+          "code": "# Create Web NSG\naz network nsg create \\\n  --resource-group networking-lab-rg \\\n  --name web-nsg \\\n  --location eastus\n\n# Allow HTTP inbound (port 80)\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name web-nsg \\\n  --name Allow-HTTP \\\n  --priority 100 \\\n  --source-address-prefixes '*' \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 80 \\\n  --access Allow \\\n  --protocol Tcp\n\n# Allow HTTPS inbound (port 443)\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name web-nsg \\\n  --name Allow-HTTPS \\\n  --priority 110 \\\n  --source-address-prefixes '*' \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 443 \\\n  --access Allow \\\n  --protocol Tcp\n\n# Allow SSH from management subnet\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name web-nsg \\\n  --name Allow-SSH-from-Mgmt \\\n  --priority 120 \\\n  --source-address-prefixes 10.0.4.0/24 \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 22 \\\n  --access Allow \\\n  --protocol Tcp"
+        },
+        "create_app_nsg": {
+          "language": "bash",
+          "title": "Create Application Tier NSG",
+          "code": "# Create Application NSG\naz network nsg create \\\n  --resource-group networking-lab-rg \\\n  --name app-nsg \\\n  --location eastus\n\n# Allow traffic from web tier on port 8080\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name app-nsg \\\n  --name Allow-Web-to-App \\\n  --priority 100 \\\n  --source-address-prefixes 10.0.1.0/24 \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 8080 \\\n  --access Allow \\\n  --protocol Tcp\n\n# Allow SSH from management subnet\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name app-nsg \\\n  --name Allow-SSH-from-Mgmt \\\n  --priority 110 \\\n  --source-address-prefixes 10.0.4.0/24 \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 22 \\\n  --access Allow \\\n  --protocol Tcp"
+        },
+        "create_db_nsg": {
+          "language": "bash",
+          "title": "Create Database Tier NSG",
+          "code": "# Create Database NSG\naz network nsg create \\\n  --resource-group networking-lab-rg \\\n  --name db-nsg \\\n  --location eastus\n\n# Allow MySQL/PostgreSQL from app tier\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name db-nsg \\\n  --name Allow-App-to-DB-MySQL \\\n  --priority 100 \\\n  --source-address-prefixes 10.0.2.0/24 \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 3306 \\\n  --access Allow \\\n  --protocol Tcp\n\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name db-nsg \\\n  --name Allow-App-to-DB-PostgreSQL \\\n  --priority 110 \\\n  --source-address-prefixes 10.0.2.0/24 \\\n  --source-port-ranges '*' \\\n  --destination-address-prefixes '*' \\\n  --destination-port-ranges 5432 \\\n  --access Allow \\\n  --protocol Tcp"
+        }
+      }
+    },
+    {
+      "title": "Associate NSGs with Subnets",
+      "content": "Associate Network Security Groups with subnets (similar to AWS NACLs).",
+      "code_examples": {
+        "associate_nsgs": {
+          "language": "bash",
+          "title": "Associate NSGs with Respective Subnets",
+          "code": "# Associate Web NSG with web subnet\naz network vnet subnet update \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name web-subnet \\\n  --network-security-group web-nsg\n\n# Associate App NSG with app subnet\naz network vnet subnet update \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name app-subnet \\\n  --network-security-group app-nsg\n\n# Associate DB NSG with db subnet\naz network vnet subnet update \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name db-subnet \\\n  --network-security-group db-nsg\n\n# Verify associations\naz network vnet subnet list \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --output table"
+        }
+      }
+    },
+    {
+      "title": "Application Security Groups (Advanced)",
+      "content": "Create Application Security Groups for more granular security control.",
+      "code_examples": {
+        "create_asgs": {
+          "language": "bash",
+          "title": "Create Application Security Groups",
+          "code": "# Create ASG for web servers\naz network asg create \\\n  --resource-group networking-lab-rg \\\n  --name web-servers-asg \\\n  --location eastus\n\n# Create ASG for app servers\naz network asg create \\\n  --resource-group networking-lab-rg \\\n  --name app-servers-asg \\\n  --location eastus\n\n# Create ASG for database servers\naz network asg create \\\n  --resource-group networking-lab-rg \\\n  --name db-servers-asg \\\n  --location eastus\n\n# Update app NSG to use ASGs\naz network nsg rule create \\\n  --resource-group networking-lab-rg \\\n  --nsg-name app-nsg \\\n  --name Allow-Web-ASG-to-App-ASG \\\n  --priority 200 \\\n  --source-asgs web-servers-asg \\\n  --source-port-ranges '*' \\\n  --destination-asgs app-servers-asg \\\n  --destination-port-ranges 8080 \\\n  --access Allow \\\n  --protocol Tcp"
+        }
+      }
+    },
+    {
+      "title": "Custom Routing Configuration",
+      "content": "Configure custom route tables similar to AWS route tables.",
+      "code_examples": {
+        "create_route_table": {
+          "language": "bash",
+          "title": "Create Custom Route Table",
+          "code": "# Create route table\naz network route-table create \\\n  --resource-group networking-lab-rg \\\n  --name custom-routes \\\n  --location eastus\n\n# Add route to direct traffic through network virtual appliance\naz network route-table route create \\\n  --resource-group networking-lab-rg \\\n  --route-table-name custom-routes \\\n  --name to-on-premises \\\n  --address-prefix 192.168.0.0/16 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address 10.0.4.100\n\n# Associate route table with app subnet\naz network vnet subnet update \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name app-subnet \\\n  --route-table custom-routes"
+        }
+      }
+    },
+    {
+      "title": "VNet Peering Configuration",
+      "content": "Set up VNet peering equivalent to AWS VPC peering.",
+      "code_examples": {
+        "create_second_vnet": {
+          "language": "bash",
+          "title": "Create Second VNet for Peering",
+          "code": "# Create second VNet (e.g., for shared services)\naz network vnet create \\\n  --resource-group networking-lab-rg \\\n  --name shared-services-vnet \\\n  --address-prefix 10.1.0.0/16 \\\n  --subnet-name services-subnet \\\n  --subnet-prefix 10.1.1.0/24 \\\n  --location eastus"
+        },
+        "create_peering": {
+          "language": "bash",
+          "title": "Create Bi-directional VNet Peering",
+          "code": "# Create peering from lab-vnet to shared-services-vnet\naz network vnet peering create \\\n  --resource-group networking-lab-rg \\\n  --name lab-to-shared \\\n  --vnet-name lab-vnet \\\n  --remote-vnet shared-services-vnet \\\n  --allow-vnet-access\n\n# Create peering from shared-services-vnet to lab-vnet\naz network vnet peering create \\\n  --resource-group networking-lab-rg \\\n  --name shared-to-lab \\\n  --vnet-name shared-services-vnet \\\n  --remote-vnet lab-vnet \\\n  --allow-vnet-access\n\n# Verify peering status\naz network vnet peering list \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --output table"
+        }
+      }
+    },
+    {
+      "title": "NAT Gateway Configuration",
+      "content": "Set up NAT Gateway for outbound internet access (similar to AWS NAT Gateway).",
+      "code_examples": {
+        "create_nat_gateway": {
+          "language": "bash",
+          "title": "Create and Configure NAT Gateway",
+          "code": "# Create public IP for NAT Gateway\naz network public-ip create \\\n  --resource-group networking-lab-rg \\\n  --name nat-gateway-ip \\\n  --sku Standard \\\n  --location eastus\n\n# Create NAT Gateway\naz network nat gateway create \\\n  --resource-group networking-lab-rg \\\n  --name lab-nat-gateway \\\n  --public-ip-addresses nat-gateway-ip \\\n  --location eastus\n\n# Associate NAT Gateway with private subnets\naz network vnet subnet update \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name app-subnet \\\n  --nat-gateway lab-nat-gateway\n\naz network vnet subnet update \\\n  --resource-group networking-lab-rg \\\n  --vnet-name lab-vnet \\\n  --name db-subnet \\\n  --nat-gateway lab-nat-gateway"
+        }
+      }
+    },
+    {
+      "title": "Network Monitoring and Diagnostics",
+      "content": "Set up network monitoring equivalent to AWS VPC Flow Logs.",
+      "code_examples": {
+        "enable_flow_logs": {
+          "language": "bash",
+          "title": "Enable NSG Flow Logs and Traffic Analytics",
+          "code": "# Create storage account for flow logs\naz storage account create \\\n  --resource-group networking-lab-rg \\\n  --name flowlogsstorage$RANDOM \\\n  --location eastus \\\n  --sku Standard_LRS\n\n# Create Log Analytics workspace\naz monitor log-analytics workspace create \\\n  --resource-group networking-lab-rg \\\n  --workspace-name network-monitoring-workspace \\\n  --location eastus\n\n# Note: NSG Flow Logs configuration requires additional setup\n# through Azure portal or ARM templates\necho \"NSG Flow Logs need to be configured through Azure portal:\"\necho \"1. Go to Network Watcher in Azure portal\"\necho \"2. Navigate to NSG flow logs\"\necho \"3. Enable flow logs for each NSG\"\necho \"4. Configure storage account and analytics\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Create a multi-tier network architecture migrated from AWS VPC",
+    "requirements": [
+      "3-tier architecture (web, app, database)",
+      "Proper security group configuration",
+      "Network segmentation and routing",
+      "Internet connectivity for web tier",
+      "Outbound internet via NAT Gateway for private tiers"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify VNet and subnet creation",
+        "command": "az network vnet list --resource-group networking-lab-rg --output table",
+        "expected": "Should show lab-vnet with 4 subnets"
+      },
+      {
+        "step": "Verify NSG associations",
+        "command": "az network vnet subnet list --resource-group networking-lab-rg --vnet-name lab-vnet --output table",
+        "expected": "Each subnet should have associated NSG"
+      },
+      {
+        "step": "Test NSG rules",
+        "command": "az network nsg rule list --resource-group networking-lab-rg --nsg-name web-nsg --output table",
+        "expected": "Should show HTTP, HTTPS, and SSH rules"
+      },
+      {
+        "step": "Verify VNet peering",
+        "command": "az network vnet peering list --resource-group networking-lab-rg --vnet-name lab-vnet --output table",
+        "expected": "Should show connected peering status"
+      },
+      {
+        "step": "Check NAT Gateway association",
+        "command": "az network vnet subnet show --resource-group networking-lab-rg --vnet-name lab-vnet --name app-subnet",
+        "expected": "Should show NAT Gateway association"
+      }
+    ]
+  },
+  "cleanup": {
+    "instructions": "Remove all networking resources to avoid ongoing charges",
+    "commands": [
+      "az network nat gateway delete --resource-group networking-lab-rg --name lab-nat-gateway",
+      "az network public-ip delete --resource-group networking-lab-rg --name nat-gateway-ip",
+      "az group delete --name networking-lab-rg --yes --no-wait"
+    ]
+  },
+  "key_differences_aws_azure": [
+    "Azure subnets span all availability zones by default",
+    "NSGs can be applied to both subnets and network interfaces",
+    "Azure provides implicit internet connectivity (no explicit IGW)",
+    "VNet peering works across regions in Azure",
+    "Azure Application Security Groups provide more granular control",
+    "Azure NAT Gateway is zone-redundant by default"
+  ],
+  "key_takeaways": [
+    "Azure networking provides more flexibility in security group application",
+    "VNet peering is more powerful than AWS VPC peering (global, transitive with Virtual WAN)",
+    "Application Security Groups enable micro-segmentation",
+    "Azure networking is more zone-resilient by default", 
+    "Network monitoring requires Network Watcher configuration",
+    "Route tables work similarly but with different next-hop types"
+  ],
+  "next_steps": [
+    "Learn about Azure Virtual WAN for large-scale networking",
+    "Explore Azure Firewall for centralized network security",
+    "Study ExpressRoute for hybrid connectivity",
+    "Practice with Azure Private DNS zones",
+    "Learn about Azure Bastion for secure remote access"
+  ]
+}

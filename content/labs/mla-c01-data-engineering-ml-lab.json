@@ -1,0 +1,314 @@
+{
+  "id": "mla-c01-data-engineering-ml-lab",
+  "title": "AWS ML Data Engineering to Azure ML Data Prep: Machine Learning Data Pipelines",
+  "category": "ml-data-engineering",
+  "difficulty": "advanced",
+  "estimatedTime": "140 minutes",
+  "awsCertification": "MLA-C01",
+  "certificationWeight": "20% - Data Engineering for ML Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master machine learning data engineering by implementing AWS ML data pipelines and migrating to Azure ML data preparation equivalents with feature engineering, data validation, ML-specific ETL, and automated data quality for machine learning workloads.",
+  
+  "learningObjectives": [
+    "Build ML-specific data pipelines using AWS Glue and Azure Data Factory for ML",
+    "Implement feature engineering and transformation workflows for ML datasets",
+    "Create data validation and quality monitoring for machine learning pipelines",
+    "Design feature stores and ML data versioning with SageMaker and Azure ML",
+    "Build automated data preprocessing and feature extraction workflows",
+    "Implement ML data governance and lineage tracking across both platforms"
+  ],
+
+  "prerequisites": [
+    "Completion of DEA-C01 Data Engineer Associate labs or equivalent data engineering experience",
+    "Understanding of machine learning concepts and data science workflows",
+    "Basic knowledge of Python, pandas, and data manipulation libraries",
+    "Familiarity with statistical concepts and data analysis techniques"
+  ],
+
+  "awsServices": [
+    "Amazon SageMaker Data Wrangler",
+    "Amazon SageMaker Feature Store",
+    "AWS Glue (ML Data Processing)",
+    "Amazon S3 (ML Data Lake)",
+    "Amazon Athena (ML Data Queries)",
+    "AWS Lambda (ML Data Processing)",
+    "Amazon Kinesis (ML Streaming Data)",
+    "AWS Step Functions (ML Workflows)",
+    "Amazon EventBridge (ML Automation)",
+    "AWS DataBrew (Data Preparation)"
+  ],
+
+  "azureServices": [
+    "Azure Machine Learning Data Prep",
+    "Azure Machine Learning Feature Store",
+    "Azure Data Factory (ML Pipelines)",
+    "Azure Data Lake Storage (ML Data)",
+    "Azure Synapse Analytics (ML Queries)",
+    "Azure Functions (ML Data Processing)",
+    "Azure Event Hubs (ML Streaming)",
+    "Azure Logic Apps (ML Workflows)",
+    "Azure Event Grid (ML Automation)",
+    "Azure Purview (ML Data Governance)"
+  ],
+
+  "businessScenario": "MLOps Innovations develops machine learning solutions for financial fraud detection, customer recommendation systems, and predictive analytics. They need robust ML data engineering pipelines that ensure data quality, feature consistency, and automated preprocessing. The ML engineering team must master both AWS and Azure ML data platforms to build scalable, reliable data pipelines that support model development, training, and inference while maintaining data governance and compliance.",
+
+  "sections": [
+    {
+      "title": "ML Data Pipeline Architecture and Design",
+      "duration": "35 minutes",
+      "topics": [
+        "ML-specific data pipeline design patterns and requirements",
+        "SageMaker Data Wrangler vs Azure ML Data Prep workflow design",
+        "Data ingestion strategies for ML workloads and training datasets",
+        "ML data versioning and dataset management best practices",
+        "Feature engineering pipeline architecture and automation"
+      ],
+      "tasks": [
+        {
+          "title": "Design ML Data Pipeline Architecture",
+          "description": "Build comprehensive ML data pipeline with automated preprocessing",
+          "steps": [
+            "Design ML data pipeline architecture for training and inference",
+            "Configure SageMaker Data Wrangler for automated data preparation",
+            "Setup Azure ML Data Prep with equivalent data processing workflows",
+            "Implement data versioning and dataset management strategies",
+            "Configure automated data ingestion and validation for ML datasets",
+            "Setup ML data pipeline monitoring and quality assurance"
+          ],
+          "deliverables": [
+            "ML data pipeline architecture design and documentation",
+            "SageMaker Data Wrangler configuration with preprocessing workflows",
+            "Azure ML Data Prep setup with equivalent functionality",
+            "Data versioning and dataset management implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Feature Engineering and Transformation",
+      "duration": "40 minutes",
+      "topics": [
+        "Automated feature engineering and transformation pipelines",
+        "Feature selection and dimensionality reduction techniques",
+        "Data encoding, scaling, and normalization for ML models",
+        "Time series feature engineering and windowing functions",
+        "Feature validation and consistency checking across environments"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Feature Engineering Pipeline",
+          "description": "Build automated feature engineering with validation and monitoring",
+          "steps": [
+            "Design feature engineering pipeline with automated transformations",
+            "Implement feature selection and dimensionality reduction workflows",
+            "Configure data encoding, scaling, and normalization processes",
+            "Build time series feature engineering with windowing functions",
+            "Setup feature validation and consistency checking mechanisms",
+            "Implement feature drift detection and monitoring systems"
+          ],
+          "deliverables": [
+            "Automated feature engineering pipeline implementation",
+            "Feature transformation and validation workflows",
+            "Time series feature engineering with windowing",
+            "Feature drift detection and monitoring system"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Feature Store and ML Data Management",
+      "duration": "35 minutes",
+      "topics": [
+        "SageMaker Feature Store design and implementation",
+        "Azure ML Feature Store configuration and management",
+        "Feature serving for training and inference workloads",
+        "Feature lineage tracking and governance",
+        "Feature sharing and reusability across ML teams"
+      ],
+      "tasks": [
+        {
+          "title": "Build Enterprise Feature Store Platform",
+          "description": "Implement feature store with governance and serving capabilities",
+          "steps": [
+            "Configure SageMaker Feature Store with online and offline stores",
+            "Setup Azure ML Feature Store with equivalent capabilities",
+            "Implement feature serving for both training and inference",
+            "Configure feature lineage tracking and governance controls",
+            "Setup feature sharing and collaboration workflows",
+            "Implement feature store monitoring and performance optimization"
+          ],
+          "deliverables": [
+            "SageMaker Feature Store with online/offline configuration",
+            "Azure ML Feature Store setup with serving capabilities",
+            "Feature lineage tracking and governance implementation",
+            "Feature sharing and collaboration framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ML Data Quality and Validation",
+      "duration": "30 minutes",
+      "topics": [
+        "Automated data quality validation for ML datasets",
+        "Statistical data profiling and anomaly detection",
+        "Schema validation and data contract enforcement",
+        "Data drift detection and model performance monitoring",
+        "Automated data quality reporting and alerting"
+      ],
+      "tasks": [
+        {
+          "title": "Implement ML Data Quality Framework",
+          "description": "Build comprehensive data quality validation for ML pipelines",
+          "steps": [
+            "Configure automated data quality validation for ML datasets",
+            "Implement statistical profiling and anomaly detection systems",
+            "Setup schema validation and data contract enforcement",
+            "Configure data drift detection and performance monitoring",
+            "Implement automated data quality reporting and alerting",
+            "Create data quality dashboards and executive reporting"
+          ],
+          "deliverables": [
+            "Automated data quality validation framework",
+            "Statistical profiling and anomaly detection system",
+            "Schema validation and data contract enforcement",
+            "Data drift detection and quality monitoring dashboards"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "End-to-End ML Data Pipeline for Fraud Detection",
+      "description": "Build complete ML data pipeline for financial fraud detection system",
+      "steps": [
+        "Design ML data architecture for real-time fraud detection",
+        "Implement feature engineering for transaction and user behavior data",
+        "Build feature store with real-time and batch feature serving",
+        "Create data validation and quality monitoring for fraud detection",
+        "Implement automated retraining pipeline with data drift detection",
+        "Test end-to-end pipeline with simulated fraud scenarios"
+      ],
+      "expectedOutcome": "Production-ready ML data pipeline supporting real-time fraud detection with automated retraining"
+    },
+    {
+      "title": "Multi-Modal Feature Engineering Platform",
+      "description": "Build feature engineering platform supporting structured, text, and image data",
+      "steps": [
+        "Design multi-modal data ingestion and preprocessing workflows",
+        "Implement feature extraction for structured, text, and image data",
+        "Build unified feature store supporting different data modalities",
+        "Create feature validation and quality monitoring across modalities",
+        "Implement feature serving for multi-modal ML models",
+        "Test platform with recommendation system use case"
+      ],
+      "expectedOutcome": "Multi-modal feature engineering platform supporting diverse ML use cases"
+    },
+    {
+      "title": "MLOps Data Governance and Lineage Platform",
+      "description": "Implement comprehensive data governance for ML operations",
+      "steps": [
+        "Design data governance framework for ML development lifecycle",
+        "Implement data lineage tracking from raw data to model predictions",
+        "Build automated compliance monitoring for ML data processing",
+        "Create data access controls and audit trails for ML teams",
+        "Implement automated documentation and metadata management",
+        "Test governance platform with regulatory compliance scenarios"
+      ],
+      "expectedOutcome": "Comprehensive MLOps data governance platform with automated compliance"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Feature engineering pipeline performance bottlenecks with large datasets",
+      "solution": "Implement parallel processing, optimize data formats (Parquet, Delta), use distributed computing frameworks, implement intelligent sampling, and optimize feature transformation algorithms"
+    },
+    {
+      "issue": "Data quality issues and feature drift affecting model performance",
+      "solution": "Implement comprehensive data validation, use statistical monitoring, implement automated drift detection, create data quality alerts, and establish data contracts with upstream systems"
+    },
+    {
+      "issue": "Complex feature dependencies and versioning across ML teams",
+      "solution": "Implement feature store with proper versioning, use feature lineage tracking, establish feature governance policies, implement automated testing, and create feature documentation standards"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "ML Data Pipeline Design",
+      "criteria": [
+        "Can design ML-specific data pipeline architectures",
+        "Understands ML data requirements and processing patterns",
+        "Can implement automated data preprocessing workflows",
+        "Demonstrates ML data versioning and dataset management"
+      ]
+    },
+    {
+      "category": "Feature Engineering Implementation",
+      "criteria": [
+        "Can build automated feature engineering pipelines",
+        "Understands feature transformation and validation techniques",
+        "Can implement time series and multi-modal feature engineering",
+        "Demonstrates feature drift detection and monitoring"
+      ]
+    },
+    {
+      "category": "Feature Store Management",
+      "criteria": [
+        "Can implement enterprise feature store platforms",
+        "Understands feature serving for training and inference",
+        "Can configure feature lineage and governance",
+        "Demonstrates feature sharing and collaboration workflows"
+      ]
+    },
+    {
+      "category": "ML Data Quality",
+      "criteria": [
+        "Can implement ML-specific data quality frameworks",
+        "Understands statistical profiling and anomaly detection",
+        "Can configure schema validation and data contracts",
+        "Demonstrates data quality monitoring and alerting"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "MLA-C01": {
+      "domain": "Data Engineering for ML",
+      "weight": "20%",
+      "coverage": [
+        "Implement data preparation and feature engineering",
+        "Select appropriate data sources for machine learning",
+        "Evaluate data quality and perform feature selection",
+        "Create and maintain feature stores",
+        "Handle data versioning and lineage for ML workflows"
+      ],
+      "examTopics": [
+        "SageMaker Data Wrangler and feature engineering workflows",
+        "Feature Store implementation and management",
+        "ML data pipeline design and automation",
+        "Data quality validation and monitoring for ML",
+        "Feature lineage and governance implementation"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can design and implement ML-specific data pipeline architectures",
+    "Demonstrates ability to build automated feature engineering workflows",
+    "Shows understanding of feature store implementation and management",
+    "Can create ML data quality validation and monitoring systems",
+    "Understands ML data governance and lineage tracking practices"
+  ],
+
+  "nextSteps": [
+    "Proceed to MLA-C01 Exploratory Data Analysis Lab (16% domain weight)",
+    "Gain hands-on experience with advanced ML feature engineering techniques",
+    "Practice implementing feature stores in production ML environments",
+    "Explore advanced ML data governance and compliance frameworks"
+  ]
+}

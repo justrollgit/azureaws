@@ -1,0 +1,148 @@
+{
+  "id": "container-services-lab",
+  "title": "ECS to Azure Container Instances: Containerized Applications",
+  "difficulty": "intermediate",
+  "estimated_time": "45 minutes",
+  "aws_prerequisite": "Experience with Docker, ECS, and container orchestration",
+  "azure_target": "Deploy and manage containers using Azure Container Instances and Container Apps",
+  "learning_objectives": [
+    "Understand Azure container service offerings vs AWS",
+    "Migrate from ECS to Azure Container Instances and Container Apps",
+    "Implement container security and networking in Azure",
+    "Configure monitoring and logging for containerized applications"
+  ],
+  "aws_context": {
+    "equivalent_service": "Amazon ECS",
+    "key_concepts": [
+      "ECS Tasks → Container Instances / Container Apps",
+      "ECS Services → Container Apps with scaling", 
+      "Fargate → Serverless containers (ACI/Container Apps)",
+      "ECR → Azure Container Registry (ACR)",
+      "ECS Task Definitions → Container App revisions",
+      "AWS Load Balancer → Azure Load Balancer / Application Gateway"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Container Services Architecture Comparison", 
+      "content": "Understanding the differences between AWS and Azure container service architectures.",
+      "comparison_table": {
+        "simple_containers": {
+          "aws": "ECS with Fargate for serverless containers",
+          "azure": "Container Instances (ACI) + Container Apps for serverless",
+          "use_case": "Web apps, background processing"
+        },
+        "orchestrated_containers": {
+          "aws": "ECS with EC2 or EKS for Kubernetes", 
+          "azure": "AKS (Azure Kubernetes Service)",
+          "use_case": "Complex microservices, enterprise workloads"
+        },
+        "container_registry": {
+          "aws": "ECR with vulnerability scanning", 
+          "azure": "ACR with security scanning and geo-replication",
+          "use_case": "Container image storage and distribution"
+        }
+      }
+    },
+    {
+      "title": "Deploy Azure Container Instances",
+      "content": "Learn how to deploy simple containers using Azure Container Instances, equivalent to ECS Fargate.",
+      "exercise": {
+        "scenario": "Deploy a simple web application container using Azure Container Instances, similar to deploying an ECS task with Fargate.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Create Resource Group",
+            "aws_equivalent": "Create ECS cluster",
+            "instructions": "Create a resource group to organize your container resources.",
+            "code": {
+              "cli": "az group create --name container-lab-rg --location eastus",
+              "portal": "Navigate to Resource Groups → Create → Enter 'container-lab-rg' as name"
+            },
+            "explanation": "Resource groups in Azure provide logical grouping similar to ECS clusters in AWS."
+          },
+          {
+            "step": 2,
+            "title": "Deploy Container Instance",
+            "aws_equivalent": "Create ECS task definition and run task",
+            "instructions": "Deploy a simple nginx web server using Azure Container Instances.",
+            "code": {
+              "cli": "az container create --resource-group container-lab-rg --name mycontainer --image nginx --dns-name-label myapp-unique --ports 80",
+              "portal": "Navigate to Container Instances → Create → Configure container name, image, and networking"
+            },
+            "explanation": "This creates a serverless container similar to ECS Fargate, with automatic DNS name assignment."
+          },
+          {
+            "step": 3,
+            "title": "Verify Container Deployment",
+            "aws_equivalent": "Check ECS task status and access application",
+            "instructions": "Check the container status and access the web application.",
+            "code": {
+              "cli": "az container show --resource-group container-lab-rg --name mycontainer --query 'state'",
+              "portal": "Navigate to Container Instances → Select container → View status and logs"
+            },
+            "explanation": "Container Instances provide built-in monitoring and logging similar to CloudWatch for ECS."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Container Apps for Advanced Scenarios", 
+      "content": "Explore Azure Container Apps for more advanced container workloads with built-in scaling and ingress.",
+      "exercise": {
+        "scenario": "Deploy a scalable web application using Azure Container Apps, equivalent to an ECS service with auto-scaling.",
+        "steps": [
+          {
+            "step": 4,
+            "title": "Create Container Apps Environment",
+            "aws_equivalent": "Create ECS cluster with auto-scaling configuration",
+            "instructions": "Create a Container Apps environment for hosting scalable applications.",
+            "code": {
+              "cli": "az containerapp env create --name mycontainerappenv --resource-group container-lab-rg --location eastus",
+              "portal": "Navigate to Container Apps → Create environment → Configure networking and monitoring"
+            },
+            "explanation": "Container Apps environments provide managed infrastructure similar to ECS clusters but with more built-in features."
+          },
+          {
+            "step": 5,
+            "title": "Deploy Container App",
+            "aws_equivalent": "Create ECS service with load balancer",
+            "instructions": "Deploy a scalable container application with automatic HTTPS and scaling.",
+            "code": {
+              "cli": "az containerapp create --name myapp --resource-group container-lab-rg --environment mycontainerappenv --image nginx --target-port 80 --ingress external",
+              "portal": "Navigate to Container Apps → Create app → Select environment and configure scaling rules"
+            },
+            "explanation": "Container Apps automatically provide HTTPS ingress, scaling, and load balancing without additional configuration."
+          }
+        ]
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Test Container Instance",
+      "command": "curl http://myapp-unique.eastus.azurecontainer.io",
+      "expected": "Nginx welcome page displayed"
+    },
+    {
+      "step": "Test Container App",
+      "command": "curl https://myapp.containerapp.env.com",
+      "expected": "Scalable application responds with HTTPS"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all resources to avoid charges",
+    "command": "az group delete --name container-lab-rg --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Azure Container Instances provide serverless containers similar to ECS Fargate",
+    "Container Apps offer more built-in features than ECS services (auto-scaling, HTTPS, service discovery)",
+    "Azure Container Registry integrates seamlessly with both ACI and Container Apps",
+    "Resource groups provide logical organization similar to ECS clusters"
+  ],
+  "next_steps": [
+    "Learn about Azure Kubernetes Service (AKS) for complex orchestration",
+    "Explore Azure Container Registry for image management",
+    "Study Container Apps scaling and networking features"
+  ]
+}

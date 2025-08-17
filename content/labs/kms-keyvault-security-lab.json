@@ -1,0 +1,329 @@
+{
+  "id": "kms-keyvault-security-lab",
+  "title": "KMS to Key Vault: Advanced Key and Certificate Management",
+  "difficulty": "advanced",
+  "estimated_time": "150 minutes",
+  "aws_prerequisite": "Experience with AWS KMS keys, IAM policies, Certificate Manager, and encryption at rest/transit",
+  "azure_target": "Master Azure Key Vault for secrets, keys, and certificates with advanced security patterns",
+  "learning_objectives": [
+    "Compare AWS KMS and Azure Key Vault architectures and capabilities",
+    "Migrate encryption keys and implement key rotation strategies",
+    "Transform Certificate Manager workflows to Key Vault certificates",
+    "Implement application-level encryption with Key Vault integration",
+    "Configure RBAC and access policies for secrets management",
+    "Design end-to-end encryption workflows for enterprise scenarios",
+    "Implement Hardware Security Module (HSM) backed keys",
+    "Set up automated certificate lifecycle management"
+  ],
+  "aws_context": {
+    "equivalent_service": "KMS, Certificate Manager, CloudHSM, Systems Manager Parameter Store",
+    "key_concepts": [
+      "Customer Managed Keys → Key Vault Keys",
+      "AWS Managed Keys → Service-managed keys in Key Vault",
+      "Key Policies → Key Vault Access Policies + RBAC",
+      "Certificate Manager → Key Vault Certificates",
+      "CloudHSM → Key Vault Dedicated HSM",
+      "Parameter Store → Key Vault Secrets",
+      "Encryption Context → Key Vault Tags",
+      "Key Rotation → Automatic rotation in Key Vault",
+      "Cross-region replication → Key Vault replication",
+      "VPC Endpoints → Private Endpoints"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Key Management Architecture Comparison",
+      "content": "AWS KMS and Azure Key Vault both provide centralized key management, but Key Vault offers integrated secrets and certificate management. Key Vault supports both software-protected and HSM-protected keys, with more granular access control through Azure RBAC.",
+      "comparison_table": {
+        "key_types": {
+          "aws": "Symmetric keys (AES-256), Asymmetric keys (RSA, ECC)",
+          "azure": "Symmetric keys (AES-256), Asymmetric keys (RSA, ECC), HSM-backed keys",
+          "use_case": "Encryption, digital signing, key exchange"
+        },
+        "key_storage": {
+          "aws": "KMS (software), CloudHSM (hardware)",
+          "azure": "Key Vault (software), Key Vault HSM, Dedicated HSM",
+          "use_case": "Compliance requirements and security levels"
+        },
+        "access_control": {
+          "aws": "IAM policies + Key policies",
+          "azure": "RBAC + Key Vault access policies",
+          "use_case": "Granular permission management"
+        },
+        "key_operations": {
+          "aws": "Encrypt, Decrypt, GenerateDataKey, Sign, Verify",
+          "azure": "Encrypt, Decrypt, Wrap, Unwrap, Sign, Verify",
+          "use_case": "Application encryption patterns"
+        },
+        "regional_availability": {
+          "aws": "Regional service with cross-region key replication",
+          "azure": "Regional with optional geo-replication",
+          "use_case": "Multi-region applications"
+        }
+      },
+      "code_examples": {
+        "key_creation_migration": {
+          "language": "python",
+          "title": "Migrating from KMS to Key Vault Key Creation",
+          "code": "# AWS KMS Key Creation\nimport boto3\n\nkms = boto3.client('kms')\n\n# Create customer managed key\naws_key = kms.create_key(\n    Description='Application encryption key',\n    Usage='ENCRYPT_DECRYPT',\n    KeySpec='SYMMETRIC_DEFAULT',\n    Origin='AWS_KMS',\n    Policy=json.dumps({\n        'Version': '2012-10-17',\n        'Statement': [{\n            'Sid': 'Enable IAM policies',\n            'Effect': 'Allow',\n            'Principal': {'AWS': f'arn:aws:iam::{account_id}:root'},\n            'Action': 'kms:*',\n            'Resource': '*'\n        }]\n    }),\n    Tags=[\n        {'TagKey': 'Environment', 'TagValue': 'Production'},\n        {'TagKey': 'Application', 'TagValue': 'WebApp'}\n    ]\n)\n\n# Create alias for easy reference\nkms.create_alias(\n    AliasName='alias/webapp-encryption-key',\n    TargetKeyId=aws_key['KeyMetadata']['KeyId']\n)\n\n# Azure Key Vault Equivalent\nfrom azure.keyvault.keys import KeyClient\nfrom azure.identity import DefaultAzureCredential\nfrom azure.keyvault.keys.models import KeyType, KeyOperation\n\n# Initialize Key Vault client\ncredential = DefaultAzureCredential()\nvault_url = 'https://mykeyvault.vault.azure.net/'\nkey_client = KeyClient(vault_url=vault_url, credential=credential)\n\n# Create key in Azure Key Vault\nazure_key = key_client.create_key(\n    name='webapp-encryption-key',\n    key_type=KeyType.rsa,  # or KeyType.ec for elliptic curve\n    key_size=2048,\n    key_operations=[\n        KeyOperation.encrypt,\n        KeyOperation.decrypt,\n        KeyOperation.sign,\n        KeyOperation.verify,\n        KeyOperation.wrap_key,\n        KeyOperation.unwrap_key\n    ],\n    tags={\n        'Environment': 'Production',\n        'Application': 'WebApp',\n        'MigratedFrom': 'AWS-KMS'\n    },\n    enabled=True,\n    expires_on=None,  # No expiration\n    not_before=None   # Available immediately\n)\n\nprint(f\"Azure Key created: {azure_key.name}\")\nprint(f\"Key ID: {azure_key.id}\")\nprint(f\"Key Type: {azure_key.key_type}\")"
+        },
+        "hsm_key_creation": {
+          "language": "python",
+          "title": "HSM-backed Key Creation",
+          "code": "# AWS CloudHSM Integration (more complex setup required)\n# Note: CloudHSM requires cluster setup and client configuration\n\n# Azure Key Vault HSM (simpler setup)\nfrom azure.keyvault.keys.models import KeyType\n\n# Create HSM-backed key\nhsm_key = key_client.create_key(\n    name='hsm-protected-key',\n    key_type=KeyType.rsa_hsm,  # HSM-backed RSA key\n    key_size=2048,\n    hardware_protected=True,   # Ensures HSM protection\n    key_operations=[\n        KeyOperation.encrypt,\n        KeyOperation.decrypt,\n        KeyOperation.sign,\n        KeyOperation.verify\n    ],\n    tags={\n        'ComplianceLevel': 'FIPS-140-2-Level-3',\n        'HSMProtected': 'true'\n    }\n)\n\n# For dedicated HSM (equivalent to CloudHSM)\n# Use Azure Dedicated HSM service\nfrom azure.mgmt.keyvault.models import VaultCreateOrUpdateParameters\n\n# Create Key Vault with Dedicated HSM\ndedicated_hsm_vault = {\n    'location': 'East US',\n    'properties': {\n        'tenantId': tenant_id,\n        'sku': {\n            'name': 'premium',  # Required for HSM\n            'family': 'A'\n        },\n        'networkAcls': {\n            'defaultAction': 'Deny',\n            'bypass': 'AzureServices'\n        },\n        'enabledForDeployment': False,\n        'enabledForTemplateDeployment': False,\n        'enabledForDiskEncryption': True,\n        'enableSoftDelete': True,\n        'softDeleteRetentionInDays': 90,\n        'enablePurgeProtection': True  # Cannot be disabled once enabled\n    },\n    'tags': {\n        'Environment': 'Production',\n        'ComplianceLevel': 'High'\n    }\n}"
+        }
+      }
+    },
+    {
+      "title": "Encryption Patterns and Application Integration",
+      "content": "Moving from KMS to Key Vault requires understanding different encryption patterns. Key Vault provides more flexibility in key operations and integrates seamlessly with Azure services and applications.",
+      "comparison_table": {
+        "envelope_encryption": {
+          "aws": "GenerateDataKey for data encryption keys (DEK)",
+          "azure": "Key wrapping/unwrapping for data encryption keys",
+          "use_case": "Large data encryption with performance"
+        },
+        "client_side_encryption": {
+          "aws": "AWS Encryption SDK with KMS",
+          "azure": "Azure SDK with Key Vault client-side encryption",
+          "use_case": "Application-level encryption before storage"
+        },
+        "service_integration": {
+          "aws": "Native integration with S3, RDS, Lambda, etc.",
+          "azure": "Native integration with Storage, SQL, Functions, etc.",
+          "use_case": "Transparent service encryption"
+        },
+        "database_encryption": {
+          "aws": "RDS encryption with KMS keys",
+          "azure": "SQL Database TDE with Key Vault keys",
+          "use_case": "Database encryption at rest"
+        }
+      },
+      "code_examples": {
+        "envelope_encryption_pattern": {
+          "language": "python",
+          "title": "Envelope Encryption: KMS vs Key Vault",
+          "code": "# AWS KMS Envelope Encryption\nimport boto3\nimport base64\nfrom cryptography.fernet import Fernet\n\nclass AWSEnvelopeEncryption:\n    def __init__(self, kms_key_id):\n        self.kms = boto3.client('kms')\n        self.kms_key_id = kms_key_id\n    \n    def encrypt_data(self, plaintext_data):\n        # Generate data encryption key\n        response = self.kms.generate_data_key(\n            KeyId=self.kms_key_id,\n            KeySpec='AES_256'\n        )\n        \n        # Use plaintext DEK to encrypt data\n        dek_plaintext = response['Plaintext']\n        dek_encrypted = response['CiphertextBlob']\n        \n        # Encrypt data with DEK\n        key = base64.urlsafe_b64encode(dek_plaintext[:32])  # Fernet requires 32 bytes\n        f = Fernet(key)\n        encrypted_data = f.encrypt(plaintext_data.encode())\n        \n        # Return encrypted data and encrypted DEK\n        return {\n            'encrypted_data': encrypted_data,\n            'encrypted_dek': dek_encrypted\n        }\n    \n    def decrypt_data(self, encrypted_data, encrypted_dek):\n        # Decrypt the DEK\n        response = self.kms.decrypt(CiphertextBlob=encrypted_dek)\n        dek_plaintext = response['Plaintext']\n        \n        # Use DEK to decrypt data\n        key = base64.urlsafe_b64encode(dek_plaintext[:32])\n        f = Fernet(key)\n        decrypted_data = f.decrypt(encrypted_data)\n        \n        return decrypted_data.decode()\n\n# Azure Key Vault Envelope Encryption\nfrom azure.keyvault.keys import KeyClient\nfrom azure.keyvault.keys.crypto import CryptographyClient\nimport os\nfrom cryptography.fernet import Fernet\n\nclass AzureEnvelopeEncryption:\n    def __init__(self, vault_url, key_name):\n        credential = DefaultAzureCredential()\n        self.key_client = KeyClient(vault_url=vault_url, credential=credential)\n        self.key_name = key_name\n        \n        # Get the key for encryption operations\n        self.key = self.key_client.get_key(key_name)\n        self.crypto_client = CryptographyClient(self.key, credential)\n    \n    def encrypt_data(self, plaintext_data):\n        # Generate data encryption key (DEK)\n        dek = os.urandom(32)  # 256-bit key\n        \n        # Wrap DEK with Key Vault key\n        wrap_result = self.crypto_client.wrap_key(\n            algorithm='RSA-OAEP',\n            key=dek\n        )\n        wrapped_dek = wrap_result.encrypted_key\n        \n        # Encrypt data with DEK\n        key = base64.urlsafe_b64encode(dek)\n        f = Fernet(key)\n        encrypted_data = f.encrypt(plaintext_data.encode())\n        \n        return {\n            'encrypted_data': encrypted_data,\n            'wrapped_dek': wrapped_dek\n        }\n    \n    def decrypt_data(self, encrypted_data, wrapped_dek):\n        # Unwrap DEK with Key Vault key\n        unwrap_result = self.crypto_client.unwrap_key(\n            algorithm='RSA-OAEP',\n            encrypted_key=wrapped_dek\n        )\n        dek = unwrap_result.key\n        \n        # Decrypt data with DEK\n        key = base64.urlsafe_b64encode(dek)\n        f = Fernet(key)\n        decrypted_data = f.decrypt(encrypted_data)\n        \n        return decrypted_data.decode()\n\n# Usage comparison\naws_encryption = AWSEnvelopeEncryption('arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012')\nazure_encryption = AzureEnvelopeEncryption('https://mykeyvault.vault.azure.net/', 'webapp-encryption-key')\n\n# Both provide same functionality with similar patterns\ndata = \"Sensitive customer information\"\n\naws_result = aws_encryption.encrypt_data(data)\nazure_result = azure_encryption.encrypt_data(data)\n\nprint(\"Both systems provide equivalent envelope encryption capabilities\")"
+        },
+        "application_integration": {
+          "language": "python",
+          "title": "Application-Level Encryption Integration",
+          "code": "# Comprehensive application encryption wrapper\nfrom azure.keyvault.secrets import SecretClient\nfrom azure.keyvault.keys import KeyClient\nfrom azure.keyvault.keys.crypto import CryptographyClient, EncryptionAlgorithm\nfrom azure.identity import DefaultAzureCredential\nimport json\nimport logging\n\nclass KeyVaultEncryptionService:\n    def __init__(self, vault_url):\n        self.credential = DefaultAzureCredential()\n        self.vault_url = vault_url\n        self.key_client = KeyClient(vault_url=vault_url, credential=self.credential)\n        self.secret_client = SecretClient(vault_url=vault_url, credential=self.credential)\n        self.crypto_clients = {}  # Cache crypto clients\n    \n    def get_crypto_client(self, key_name):\n        \"\"\"Get or create crypto client for a key\"\"\"\n        if key_name not in self.crypto_clients:\n            key = self.key_client.get_key(key_name)\n            self.crypto_clients[key_name] = CryptographyClient(key, self.credential)\n        return self.crypto_clients[key_name]\n    \n    def encrypt_field(self, data, key_name, algorithm='RSA-OAEP'):\n        \"\"\"Encrypt a single field\"\"\"\n        try:\n            crypto_client = self.get_crypto_client(key_name)\n            \n            # Convert data to bytes if string\n            if isinstance(data, str):\n                data_bytes = data.encode('utf-8')\n            else:\n                data_bytes = data\n            \n            # Encrypt with specified algorithm\n            result = crypto_client.encrypt(algorithm, data_bytes)\n            \n            return {\n                'encrypted_data': result.ciphertext,\n                'key_id': result.key_id,\n                'algorithm': algorithm\n            }\n        \n        except Exception as e:\n            logging.error(f\"Encryption failed: {e}\")\n            raise\n    \n    def decrypt_field(self, encrypted_data, key_name, algorithm='RSA-OAEP'):\n        \"\"\"Decrypt a single field\"\"\"\n        try:\n            crypto_client = self.get_crypto_client(key_name)\n            \n            # Decrypt\n            result = crypto_client.decrypt(algorithm, encrypted_data)\n            \n            # Return as string\n            return result.plaintext.decode('utf-8')\n        \n        except Exception as e:\n            logging.error(f\"Decryption failed: {e}\")\n            raise\n    \n    def encrypt_pii_data(self, user_data, key_name):\n        \"\"\"Encrypt personally identifiable information\"\"\"\n        encrypted_data = user_data.copy()\n        \n        # Define PII fields to encrypt\n        pii_fields = ['ssn', 'credit_card', 'email', 'phone', 'address']\n        \n        for field in pii_fields:\n            if field in user_data:\n                encrypted_field = self.encrypt_field(\n                    user_data[field],\n                    key_name\n                )\n                encrypted_data[f\"{field}_encrypted\"] = encrypted_field\n                # Remove plaintext\n                del encrypted_data[field]\n        \n        # Add metadata\n        encrypted_data['encryption_metadata'] = {\n            'encrypted_fields': pii_fields,\n            'key_name': key_name,\n            'encrypted_at': datetime.utcnow().isoformat()\n        }\n        \n        return encrypted_data\n    \n    def decrypt_pii_data(self, encrypted_data, key_name):\n        \"\"\"Decrypt PII data\"\"\"\n        decrypted_data = encrypted_data.copy()\n        \n        if 'encryption_metadata' in encrypted_data:\n            encrypted_fields = encrypted_data['encryption_metadata']['encrypted_fields']\n            \n            for field in encrypted_fields:\n                encrypted_field_key = f\"{field}_encrypted\"\n                if encrypted_field_key in encrypted_data:\n                    decrypted_value = self.decrypt_field(\n                        encrypted_data[encrypted_field_key]['encrypted_data'],\n                        key_name,\n                        encrypted_data[encrypted_field_key]['algorithm']\n                    )\n                    decrypted_data[field] = decrypted_value\n                    # Remove encrypted version\n                    del decrypted_data[encrypted_field_key]\n            \n            # Remove metadata\n            del decrypted_data['encryption_metadata']\n        \n        return decrypted_data\n    \n    def store_encrypted_secret(self, secret_name, secret_value, key_name):\n        \"\"\"Store secret encrypted with specific key\"\"\"\n        # Encrypt the secret value\n        encrypted = self.encrypt_field(secret_value, key_name)\n        \n        # Store encrypted data as secret\n        secret_metadata = {\n            'encrypted_data': base64.b64encode(encrypted['encrypted_data']).decode(),\n            'key_id': encrypted['key_id'],\n            'algorithm': encrypted['algorithm']\n        }\n        \n        self.secret_client.set_secret(\n            name=secret_name,\n            value=json.dumps(secret_metadata),\n            tags={\n                'encrypted_with_key': key_name,\n                'type': 'encrypted_secret'\n            }\n        )\n    \n    def retrieve_encrypted_secret(self, secret_name, key_name):\n        \"\"\"Retrieve and decrypt secret\"\"\"\n        # Get encrypted secret\n        secret = self.secret_client.get_secret(secret_name)\n        secret_metadata = json.loads(secret.value)\n        \n        # Decrypt\n        encrypted_data = base64.b64decode(secret_metadata['encrypted_data'])\n        decrypted_value = self.decrypt_field(\n            encrypted_data,\n            key_name,\n            secret_metadata['algorithm']\n        )\n        \n        return decrypted_value\n\n# Usage example\nencryption_service = KeyVaultEncryptionService('https://mykeyvault.vault.azure.net/')\n\n# Example: Encrypt user PII data\nuser_data = {\n    'user_id': '12345',\n    'name': 'John Doe',\n    'email': 'john.doe@example.com',\n    'ssn': '123-45-6789',\n    'credit_card': '4111-1111-1111-1111',\n    'address': '123 Main St, Anytown, USA'\n}\n\n# Encrypt PII fields\nencrypted_user = encryption_service.encrypt_pii_data(user_data, 'pii-encryption-key')\nprint(\"Encrypted user data:\", encrypted_user)\n\n# Decrypt when needed\ndecrypted_user = encryption_service.decrypt_pii_data(encrypted_user, 'pii-encryption-key')\nprint(\"Decrypted user data:\", decrypted_user)"
+        }
+      }
+    },
+    {
+      "title": "Certificate Management: Certificate Manager to Key Vault",
+      "content": "Azure Key Vault provides integrated certificate management similar to AWS Certificate Manager but with more flexibility for custom certificates and advanced lifecycle management.",
+      "comparison_table": {
+        "certificate_types": {
+          "aws": "Public SSL/TLS certificates (Let's Encrypt, Amazon CA)",
+          "azure": "Public certificates (DigiCert) + Custom CA certificates",
+          "use_case": "Web applications, load balancers, custom PKI"
+        },
+        "lifecycle_management": {
+          "aws": "Automatic renewal for Amazon-issued certificates",
+          "azure": "Automatic renewal + custom renewal policies",
+          "use_case": "Zero-downtime certificate updates"
+        },
+        "integration": {
+          "aws": "ALB, CloudFront, API Gateway",
+          "azure": "Application Gateway, Front Door, API Management, App Service",
+          "use_case": "Service integration for SSL termination"
+        },
+        "certificate_formats": {
+          "aws": "Limited export options",
+          "azure": "Full certificate export (PFX, PEM, CER)",
+          "use_case": "Certificate portability and backup"
+        }
+      },
+      "code_examples": {
+        "certificate_creation": {
+          "language": "python",
+          "title": "Certificate Management Migration",
+          "code": "# AWS Certificate Manager approach (CLI-based, limited programmatic control)\n# aws acm request-certificate --domain-name example.com --validation-method DNS\n\n# Azure Key Vault Certificate Management\nfrom azure.keyvault.certificates import CertificateClient, CertificatePolicy\nfrom azure.keyvault.certificates.models import LifetimeAction, CertificatePolicyAction\nfrom azure.identity import DefaultAzureCredential\n\nclass KeyVaultCertificateManager:\n    def __init__(self, vault_url):\n        credential = DefaultAzureCredential()\n        self.cert_client = CertificateClient(vault_url=vault_url, credential=credential)\n    \n    def create_self_signed_certificate(self, cert_name, subject, san_list=None):\n        \"\"\"Create a self-signed certificate\"\"\"\n        # Define certificate policy\n        policy = CertificatePolicy(\n            issuer_name=\"Self\",\n            subject=subject,\n            san_dns_names=san_list or [],\n            exportable=True,\n            key_type=\"RSA\",\n            key_size=2048,\n            reuse_key=False,\n            content_type=\"application/x-pkcs12\",\n            validity_in_months=12,\n            lifetime_actions=[\n                LifetimeAction(\n                    lifetime_percentage=80,\n                    action=CertificatePolicyAction.auto_renew\n                )\n            ]\n        )\n        \n        # Create certificate\n        cert_operation = self.cert_client.begin_create_certificate(\n            certificate_name=cert_name,\n            policy=policy,\n            tags={\n                'Environment': 'Production',\n                'AutoRenew': 'true',\n                'Created': datetime.utcnow().isoformat()\n            }\n        )\n        \n        # Wait for completion\n        certificate = cert_operation.result()\n        return certificate\n    \n    def create_ca_signed_certificate(self, cert_name, subject, issuer_name=\"DigiCert\"):\n        \"\"\"Create certificate signed by external CA\"\"\"\n        policy = CertificatePolicy(\n            issuer_name=issuer_name,  # External CA\n            subject=subject,\n            san_dns_names=[\"www.example.com\", \"api.example.com\"],\n            exportable=True,\n            key_type=\"RSA\",\n            key_size=2048,\n            content_type=\"application/x-pkcs12\",\n            validity_in_months=12,\n            lifetime_actions=[\n                LifetimeAction(\n                    lifetime_percentage=75,\n                    action=CertificatePolicyAction.email_contacts\n                ),\n                LifetimeAction(\n                    lifetime_percentage=90,\n                    action=CertificatePolicyAction.auto_renew\n                )\n            ]\n        )\n        \n        # Set certificate contacts for notifications\n        contacts = [\n            {\n                'email': 'admin@example.com',\n                'name': 'Certificate Administrator',\n                'phone': '+1-555-123-4567'\n            }\n        ]\n        self.cert_client.set_contacts(contacts)\n        \n        cert_operation = self.cert_client.begin_create_certificate(\n            certificate_name=cert_name,\n            policy=policy\n        )\n        \n        return cert_operation.result()\n    \n    def import_existing_certificate(self, cert_name, cert_bytes, password=None):\n        \"\"\"Import existing certificate (from AWS Certificate Manager export)\"\"\"\n        certificate = self.cert_client.import_certificate(\n            certificate_name=cert_name,\n            certificate_bytes=cert_bytes,\n            password=password,\n            policy=CertificatePolicy(\n                exportable=True,\n                content_type=\"application/x-pkcs12\"\n            ),\n            tags={\n                'ImportedFrom': 'AWS-ACM',\n                'ImportDate': datetime.utcnow().isoformat()\n            }\n        )\n        return certificate\n    \n    def setup_automatic_renewal(self, cert_name):\n        \"\"\"Configure automatic certificate renewal\"\"\"\n        # Get current policy\n        policy = self.cert_client.get_certificate_policy(cert_name)\n        \n        # Update with auto-renewal\n        policy.lifetime_actions = [\n            LifetimeAction(\n                lifetime_percentage=80,\n                action=CertificatePolicyAction.auto_renew\n            ),\n            LifetimeAction(\n                lifetime_percentage=70,\n                action=CertificatePolicyAction.email_contacts\n            )\n        ]\n        \n        # Update policy\n        updated_policy = self.cert_client.update_certificate_policy(\n            cert_name,\n            policy\n        )\n        \n        return updated_policy\n    \n    def export_certificate(self, cert_name, include_private_key=False):\n        \"\"\"Export certificate in various formats\"\"\"\n        # Get certificate\n        certificate = self.cert_client.get_certificate(cert_name)\n        \n        if include_private_key:\n            # Get certificate with private key (requires permissions)\n            secret = self.cert_client.get_certificate_version(\n                cert_name,\n                certificate.properties.version\n            )\n            \n            # Secret contains the full certificate with private key\n            return {\n                'certificate_with_key': secret.value,  # Base64 encoded PKCS#12\n                'public_certificate': certificate.cer,\n                'format': 'PKCS#12'\n            }\n        else:\n            return {\n                'public_certificate': certificate.cer,\n                'format': 'X.509'\n            }\n    \n    def monitor_certificate_expiry(self):\n        \"\"\"Monitor certificates approaching expiry\"\"\"\n        from datetime import datetime, timedelta\n        \n        expiring_soon = []\n        \n        # List all certificates\n        certificates = self.cert_client.list_properties_of_certificates()\n        \n        for cert_props in certificates:\n            # Check expiry date\n            if cert_props.expires_on:\n                days_until_expiry = (cert_props.expires_on - datetime.now()).days\n                \n                if days_until_expiry <= 30:  # Expiring within 30 days\n                    expiring_soon.append({\n                        'name': cert_props.name,\n                        'expires_on': cert_props.expires_on,\n                        'days_remaining': days_until_expiry,\n                        'auto_renew_enabled': any(\n                            action.action == CertificatePolicyAction.auto_renew\n                            for action in self.cert_client.get_certificate_policy(cert_props.name).lifetime_actions\n                        )\n                    })\n        \n        return expiring_soon\n\n# Usage example\ncert_manager = KeyVaultCertificateManager('https://mykeyvault.vault.azure.net/')\n\n# Create self-signed certificate for development\ndev_cert = cert_manager.create_self_signed_certificate(\n    cert_name='dev-webapp-cert',\n    subject='CN=dev.webapp.com',\n    san_list=['dev.webapp.com', 'api-dev.webapp.com']\n)\n\n# Create production certificate with external CA\nprod_cert = cert_manager.create_ca_signed_certificate(\n    cert_name='prod-webapp-cert',\n    subject='CN=webapp.com'\n)\n\n# Monitor expiring certificates\nexpiring_certs = cert_manager.monitor_certificate_expiry()\nfor cert in expiring_certs:\n    print(f\"Certificate {cert['name']} expires in {cert['days_remaining']} days\")"
+        }
+      }
+    },
+    {
+      "title": "Access Control and RBAC Configuration",
+      "content": "Azure Key Vault provides more granular access control than AWS KMS through Azure RBAC and Key Vault access policies. This enables fine-grained permissions for different types of secrets, keys, and certificates.",
+      "comparison_table": {
+        "permission_model": {
+          "aws": "IAM policies + Key policies",
+          "azure": "Azure RBAC + Key Vault access policies (legacy)",
+          "use_case": "Granular permission management"
+        },
+        "built_in_roles": {
+          "aws": "Custom IAM policies required",
+          "azure": "Key Vault Administrator, Officer, Reader, User roles",
+          "use_case": "Quick role assignment"
+        },
+        "application_access": {
+          "aws": "IAM roles for EC2/Lambda",
+          "azure": "Managed identities for Azure resources",
+          "use_case": "Service-to-service authentication"
+        },
+        "audit_logging": {
+          "aws": "CloudTrail for all KMS operations",
+          "azure": "Azure Monitor logs for Key Vault operations",
+          "use_case": "Compliance and security monitoring"
+        }
+      },
+      "code_examples": {
+        "rbac_configuration": {
+          "language": "python",
+          "title": "Configuring RBAC and Access Policies",
+          "code": "# Azure RBAC for Key Vault (modern approach)\nfrom azure.mgmt.authorization import AuthorizationManagementClient\nfrom azure.mgmt.keyvault import KeyVaultManagementClient\nfrom azure.identity import DefaultAzureCredential\nimport uuid\n\nclass KeyVaultAccessManager:\n    def __init__(self, subscription_id):\n        self.credential = DefaultAzureCredential()\n        self.auth_client = AuthorizationManagementClient(\n            credential=self.credential,\n            subscription_id=subscription_id\n        )\n        self.kv_mgmt_client = KeyVaultManagementClient(\n            credential=self.credential,\n            subscription_id=subscription_id\n        )\n        self.subscription_id = subscription_id\n    \n    def assign_key_vault_role(self, vault_name, resource_group, principal_id, role_name):\n        \"\"\"Assign Azure RBAC role for Key Vault\"\"\"\n        \n        # Define role definitions (built-in roles)\n        role_definitions = {\n            'Key Vault Administrator': '/subscriptions/{}/providers/Microsoft.Authorization/roleDefinitions/00482a5a-887f-4fb3-b363-3b7fe8e74483',\n            'Key Vault Officer': '/subscriptions/{}/providers/Microsoft.Authorization/roleDefinitions/12338af0-0e69-4776-bea7-57ae8d297424',\n            'Key Vault Reader': '/subscriptions/{}/providers/Microsoft.Authorization/roleDefinitions/21090545-7ca7-4776-b22c-e363652d74d2',\n            'Key Vault Secrets User': '/subscriptions/{}/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6',\n            'Key Vault Crypto User': '/subscriptions/{}/providers/Microsoft.Authorization/roleDefinitions/12338af0-0e69-4776-bea7-57ae8d297424',\n            'Key Vault Certificates Officer': '/subscriptions/{}/providers/Microsoft.Authorization/roleDefinitions/a4417e6f-fecd-4de8-b567-7b0420556985'\n        }\n        \n        role_definition_id = role_definitions.get(role_name)\n        if not role_definition_id:\n            raise ValueError(f\"Unknown role: {role_name}\")\n        \n        role_definition_id = role_definition_id.format(self.subscription_id)\n        \n        # Scope to the Key Vault\n        scope = f'/subscriptions/{self.subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.KeyVault/vaults/{vault_name}'\n        \n        # Create role assignment\n        assignment_name = str(uuid.uuid4())\n        \n        role_assignment = self.auth_client.role_assignments.create(\n            scope=scope,\n            role_assignment_name=assignment_name,\n            parameters={\n                'role_definition_id': role_definition_id,\n                'principal_id': principal_id,\n                'principal_type': 'User'  # or 'ServicePrincipal'\n            }\n        )\n        \n        return role_assignment\n    \n    def create_custom_role(self, role_name, permissions):\n        \"\"\"Create custom role for specific Key Vault operations\"\"\"\n        \n        custom_role_definition = {\n            'role_name': role_name,\n            'description': f'Custom role for {role_name}',\n            'type': 'CustomRole',\n            'permissions': [{\n                'actions': permissions.get('actions', []),\n                'not_actions': permissions.get('not_actions', []),\n                'data_actions': permissions.get('data_actions', []),\n                'not_data_actions': permissions.get('not_data_actions', [])\n            }],\n            'assignable_scopes': [f'/subscriptions/{self.subscription_id}']\n        }\n        \n        role_definition = self.auth_client.role_definitions.create_or_update(\n            scope=f'/subscriptions/{self.subscription_id}',\n            role_definition_id=str(uuid.uuid4()),\n            role_definition=custom_role_definition\n        )\n        \n        return role_definition\n    \n    def configure_managed_identity_access(self, vault_name, resource_group, \n                                        managed_identity_id, permissions):\n        \"\"\"Configure managed identity access to Key Vault\"\"\"\n        \n        # Method 1: Using RBAC (recommended)\n        role_assignment = self.assign_key_vault_role(\n            vault_name=vault_name,\n            resource_group=resource_group,\n            principal_id=managed_identity_id,\n            role_name='Key Vault Secrets User'\n        )\n        \n        # Method 2: Using access policies (legacy, but still supported)\n        access_policy = {\n            'tenant_id': self.credential.get_token('https://management.azure.com/.default').tenant_id,\n            'object_id': managed_identity_id,\n            'permissions': {\n                'keys': permissions.get('keys', ['get', 'list']),\n                'secrets': permissions.get('secrets', ['get', 'list']),\n                'certificates': permissions.get('certificates', ['get', 'list'])\n            }\n        }\n        \n        # Update vault access policies\n        vault_update = {\n            'properties': {\n                'access_policies': [access_policy]\n            }\n        }\n        \n        updated_vault = self.kv_mgmt_client.vaults.update(\n            resource_group_name=resource_group,\n            vault_name=vault_name,\n            parameters=vault_update\n        )\n        \n        return updated_vault\n    \n    def setup_network_access_control(self, vault_name, resource_group, \n                                   allowed_ips=None, allowed_vnets=None):\n        \"\"\"Configure network access controls\"\"\"\n        \n        network_acls = {\n            'default_action': 'Deny',  # Deny all by default\n            'bypass': 'AzureServices',  # Allow Azure services\n            'ip_rules': [],\n            'virtual_network_rules': []\n        }\n        \n        # Add allowed IP addresses\n        if allowed_ips:\n            for ip in allowed_ips:\n                network_acls['ip_rules'].append({\n                    'value': ip\n                })\n        \n        # Add allowed VNets\n        if allowed_vnets:\n            for vnet in allowed_vnets:\n                network_acls['virtual_network_rules'].append({\n                    'id': vnet\n                })\n        \n        # Update vault with network ACLs\n        vault_update = {\n            'properties': {\n                'network_acls': network_acls\n            }\n        }\n        \n        updated_vault = self.kv_mgmt_client.vaults.update(\n            resource_group_name=resource_group,\n            vault_name=vault_name,\n            parameters=vault_update\n        )\n        \n        return updated_vault\n    \n    def audit_key_vault_access(self, vault_name):\n        \"\"\"Get audit information for Key Vault access\"\"\"\n        # This would typically integrate with Azure Monitor\n        # Here's a simplified example of what you'd track\n        \n        audit_data = {\n            'vault_name': vault_name,\n            'access_policies': [],\n            'rbac_assignments': [],\n            'network_restrictions': {},\n            'recent_access_logs': []\n        }\n        \n        # Get current access policies\n        vault = self.kv_mgmt_client.vaults.get(\n            resource_group_name='your-resource-group',\n            vault_name=vault_name\n        )\n        \n        if vault.properties.access_policies:\n            for policy in vault.properties.access_policies:\n                audit_data['access_policies'].append({\n                    'object_id': policy.object_id,\n                    'permissions': {\n                        'keys': policy.permissions.keys,\n                        'secrets': policy.permissions.secrets,\n                        'certificates': policy.permissions.certificates\n                    }\n                })\n        \n        # Network ACLs\n        if vault.properties.network_acls:\n            audit_data['network_restrictions'] = {\n                'default_action': vault.properties.network_acls.default_action,\n                'ip_rules': [rule.value for rule in vault.properties.network_acls.ip_rules or []],\n                'vnet_rules': [rule.id for rule in vault.properties.network_acls.virtual_network_rules or []]\n            }\n        \n        return audit_data\n\n# Example: Set up secure access for a web application\naccess_manager = KeyVaultAccessManager('your-subscription-id')\n\n# 1. Create custom role for application\napp_permissions = {\n    'data_actions': [\n        'Microsoft.KeyVault/vaults/secrets/getSecret/action',\n        'Microsoft.KeyVault/vaults/secrets/readMetadata/action',\n        'Microsoft.KeyVault/vaults/keys/read/action',\n        'Microsoft.KeyVault/vaults/keys/encrypt/action',\n        'Microsoft.KeyVault/vaults/keys/decrypt/action'\n    ]\n}\n\ncustom_role = access_manager.create_custom_role(\n    role_name='WebApp Key Vault User',\n    permissions=app_permissions\n)\n\n# 2. Assign role to managed identity\nrole_assignment = access_manager.assign_key_vault_role(\n    vault_name='myapp-keyvault',\n    resource_group='myapp-rg',\n    principal_id='managed-identity-object-id',\n    role_name='Key Vault Secrets User'\n)\n\n# 3. Configure network restrictions\nnetwork_config = access_manager.setup_network_access_control(\n    vault_name='myapp-keyvault',\n    resource_group='myapp-rg',\n    allowed_ips=['203.0.113.0/24'],  # Office IP range\n    allowed_vnets=['/subscriptions/.../virtualNetworks/app-vnet/subnets/app-subnet']\n)\n\nprint(\"Key Vault access configured securely\")"
+        }
+      }
+    },
+    {
+      "title": "Enterprise Security Patterns and Best Practices",
+      "content": "Implementing enterprise-grade security requires understanding advanced patterns like key rotation, backup/restore, disaster recovery, and compliance requirements.",
+      "comparison_table": {
+        "key_rotation": {
+          "aws": "Manual or automatic rotation with Lambda",
+          "azure": "Automatic key rotation with configurable periods",
+          "use_case": "Security compliance and key lifecycle"
+        },
+        "backup_restore": {
+          "aws": "No built-in backup, manual export/import",
+          "azure": "Built-in backup/restore capabilities",
+          "use_case": "Disaster recovery and migration"
+        },
+        "compliance": {
+          "aws": "FIPS 140-2 Level 2 (KMS), Level 3 (CloudHSM)",
+          "azure": "FIPS 140-2 Level 2 (Standard), Level 3 (HSM/Dedicated HSM)",
+          "use_case": "Regulatory compliance requirements"
+        },
+        "monitoring": {
+          "aws": "CloudTrail + CloudWatch",
+          "azure": "Azure Monitor + Log Analytics",
+          "use_case": "Security monitoring and alerting"
+        }
+      },
+      "code_examples": {
+        "enterprise_patterns": {
+          "language": "python",
+          "title": "Enterprise Security Implementation",
+          "code": "from azure.keyvault.keys import KeyClient\nfrom azure.keyvault.secrets import SecretClient\nfrom azure.keyvault.administration import KeyVaultBackupClient\nfrom azure.identity import DefaultAzureCredential\nfrom azure.monitor.query import LogsQueryClient\nfrom datetime import datetime, timedelta\nimport json\n\nclass EnterpriseKeyVaultManager:\n    def __init__(self, vault_url, backup_storage_url=None):\n        self.credential = DefaultAzureCredential()\n        self.vault_url = vault_url\n        self.key_client = KeyClient(vault_url=vault_url, credential=self.credential)\n        self.secret_client = SecretClient(vault_url=vault_url, credential=self.credential)\n        \n        # For HSM-backed vaults only\n        if backup_storage_url:\n            self.backup_client = KeyVaultBackupClient(\n                vault_url=vault_url,\n                credential=self.credential\n            )\n            self.backup_storage_url = backup_storage_url\n    \n    def implement_key_rotation_strategy(self, key_name, rotation_period_days=90):\n        \"\"\"Implement automated key rotation\"\"\"\n        \n        # Get current key\n        current_key = self.key_client.get_key(key_name)\n        \n        # Check if rotation is needed\n        created_date = current_key.properties.created_on\n        days_since_creation = (datetime.now() - created_date).days\n        \n        if days_since_creation >= rotation_period_days:\n            print(f\"Key {key_name} needs rotation (created {days_since_creation} days ago)\")\n            \n            # Create new key version\n            new_key = self.key_client.create_key(\n                name=key_name,\n                key_type=current_key.key_type,\n                key_size=current_key.key_size,\n                tags={\n                    **current_key.properties.tags,\n                    'rotated_on': datetime.now().isoformat(),\n                    'previous_version': current_key.properties.version\n                }\n            )\n            \n            print(f\"New key version created: {new_key.properties.version}\")\n            \n            # Schedule old key for deletion (after grace period)\n            grace_period = timedelta(days=30)\n            scheduled_deletion = datetime.now() + grace_period\n            \n            # Update old key with deletion schedule\n            self.key_client.update_key_properties(\n                name=key_name,\n                version=current_key.properties.version,\n                tags={\n                    **current_key.properties.tags,\n                    'scheduled_deletion': scheduled_deletion.isoformat(),\n                    'superseded_by': new_key.properties.version\n                },\n                enabled=False  # Disable old key\n            )\n            \n            return new_key\n        else:\n            print(f\"Key {key_name} does not need rotation yet ({days_since_creation} days old)\")\n            return current_key\n    \n    def backup_key_vault(self, backup_name=None):\n        \"\"\"Create full backup of Key Vault (HSM-backed vaults only)\"\"\"\n        if not hasattr(self, 'backup_client'):\n            raise ValueError(\"Backup requires HSM-backed Key Vault and storage URL\")\n        \n        if not backup_name:\n            backup_name = f\"keyvault-backup-{datetime.now().strftime('%Y%m%d-%H%M%S')}\"\n        \n        # Start backup operation\n        backup_operation = self.backup_client.begin_backup(\n            blob_storage_url=self.backup_storage_url,\n            folder_name=backup_name\n        )\n        \n        # Wait for completion\n        backup_result = backup_operation.result()\n        \n        return {\n            'backup_name': backup_name,\n            'start_time': backup_result.start_time,\n            'end_time': backup_result.end_time,\n            'folder_url': backup_result.folder_url\n        }\n    \n    def restore_key_vault(self, backup_folder_url):\n        \"\"\"Restore Key Vault from backup\"\"\"\n        if not hasattr(self, 'backup_client'):\n            raise ValueError(\"Restore requires HSM-backed Key Vault\")\n        \n        # Start restore operation\n        restore_operation = self.backup_client.begin_restore(\n            folder_url=backup_folder_url\n        )\n        \n        # Wait for completion\n        restore_result = restore_operation.result()\n        \n        return {\n            'start_time': restore_result.start_time,\n            'end_time': restore_result.end_time,\n            'restored_from': backup_folder_url\n        }\n    \n    def implement_compliance_monitoring(self):\n        \"\"\"Set up compliance monitoring and alerting\"\"\"\n        \n        # Define compliance rules\n        compliance_rules = {\n            'key_rotation_max_days': 90,\n            'certificate_expiry_warning_days': 30,\n            'required_tags': ['Environment', 'Owner', 'CostCenter'],\n            'forbidden_operations': ['purge'],\n            'minimum_key_size': 2048\n        }\n        \n        violations = []\n        \n        # Check key rotation compliance\n        for key_properties in self.key_client.list_properties_of_keys():\n            if key_properties.created_on:\n                days_old = (datetime.now() - key_properties.created_on).days\n                if days_old > compliance_rules['key_rotation_max_days']:\n                    violations.append({\n                        'type': 'key_rotation_overdue',\n                        'resource': key_properties.name,\n                        'days_overdue': days_old - compliance_rules['key_rotation_max_days']\n                    })\n            \n            # Check required tags\n            missing_tags = []\n            for required_tag in compliance_rules['required_tags']:\n                if not key_properties.tags or required_tag not in key_properties.tags:\n                    missing_tags.append(required_tag)\n            \n            if missing_tags:\n                violations.append({\n                    'type': 'missing_required_tags',\n                    'resource': key_properties.name,\n                    'missing_tags': missing_tags\n                })\n        \n        return violations\n    \n    def setup_security_monitoring(self):\n        \"\"\"Configure security monitoring and alerting\"\"\"\n        \n        # Example monitoring configuration\n        monitoring_config = {\n            'alert_rules': [\n                {\n                    'name': 'High-Risk Key Vault Operations',\n                    'condition': 'operation in (\"delete\", \"purge\", \"recover\")',\n                    'severity': 'High',\n                    'action': 'email_security_team'\n                },\n                {\n                    'name': 'Unusual Access Patterns',\n                    'condition': 'failed_authentications > 5 in 5 minutes',\n                    'severity': 'Medium',\n                    'action': 'create_incident'\n                },\n                {\n                    'name': 'Key Vault Access from Unknown IPs',\n                    'condition': 'source_ip not in allowed_ip_ranges',\n                    'severity': 'High',\n                    'action': 'block_and_alert'\n                }\n            ],\n            'metrics_to_track': [\n                'ServiceApiResult',\n                'ServiceApiLatency',\n                'ServiceApiHit',\n                'TotalServiceApiResults'\n            ],\n            'log_retention_days': 365\n        }\n        \n        return monitoring_config\n    \n    def generate_security_report(self):\n        \"\"\"Generate comprehensive security report\"\"\"\n        \n        report = {\n            'generated_at': datetime.now().isoformat(),\n            'vault_url': self.vault_url,\n            'summary': {\n                'total_keys': 0,\n                'total_secrets': 0,\n                'total_certificates': 0,\n                'compliance_violations': 0,\n                'security_score': 0\n            },\n            'details': {\n                'keys': [],\n                'secrets': [],\n                'certificates': [],\n                'compliance_issues': [],\n                'recommendations': []\n            }\n        }\n        \n        # Analyze keys\n        for key_props in self.key_client.list_properties_of_keys():\n            report['summary']['total_keys'] += 1\n            \n            key_info = {\n                'name': key_props.name,\n                'created_on': key_props.created_on.isoformat() if key_props.created_on else None,\n                'enabled': key_props.enabled,\n                'tags': key_props.tags or {},\n                'age_days': (datetime.now() - key_props.created_on).days if key_props.created_on else None\n            }\n            \n            # Check for issues\n            if key_info['age_days'] and key_info['age_days'] > 90:\n                report['details']['compliance_issues'].append({\n                    'type': 'Key rotation overdue',\n                    'resource': key_props.name,\n                    'age_days': key_info['age_days']\n                })\n            \n            report['details']['keys'].append(key_info)\n        \n        # Analyze secrets\n        for secret_props in self.secret_client.list_properties_of_secrets():\n            report['summary']['total_secrets'] += 1\n            \n            secret_info = {\n                'name': secret_props.name,\n                'created_on': secret_props.created_on.isoformat() if secret_props.created_on else None,\n                'enabled': secret_props.enabled,\n                'expires_on': secret_props.expires_on.isoformat() if secret_props.expires_on else None\n            }\n            \n            # Check for expiring secrets\n            if secret_props.expires_on:\n                days_until_expiry = (secret_props.expires_on - datetime.now()).days\n                if days_until_expiry <= 30:\n                    report['details']['compliance_issues'].append({\n                        'type': 'Secret expiring soon',\n                        'resource': secret_props.name,\n                        'days_until_expiry': days_until_expiry\n                    })\n            \n            report['details']['secrets'].append(secret_info)\n        \n        # Count violations\n        report['summary']['compliance_violations'] = len(report['details']['compliance_issues'])\n        \n        # Calculate security score (0-100)\n        total_resources = report['summary']['total_keys'] + report['summary']['total_secrets']\n        if total_resources > 0:\n            score = max(0, 100 - (report['summary']['compliance_violations'] * 10))\n            report['summary']['security_score'] = min(100, score)\n        \n        # Add recommendations\n        if report['summary']['compliance_violations'] > 0:\n            report['details']['recommendations'].extend([\n                'Implement automated key rotation policies',\n                'Set up monitoring alerts for compliance violations',\n                'Review and update access policies regularly',\n                'Enable audit logging and review logs monthly'\n            ])\n        \n        return report\n\n# Usage example\nenterprise_kv = EnterpriseKeyVaultManager(\n    vault_url='https://mykeyvault.vault.azure.net/',\n    backup_storage_url='https://mystorageaccount.blob.core.windows.net/backups'\n)\n\n# Implement key rotation\nrotated_key = enterprise_kv.implement_key_rotation_strategy(\n    key_name='webapp-encryption-key',\n    rotation_period_days=90\n)\n\n# Check compliance\nviolations = enterprise_kv.implement_compliance_monitoring()\nif violations:\n    print(f\"Found {len(violations)} compliance violations:\")\n    for violation in violations:\n        print(f\"- {violation['type']}: {violation['resource']}\")\n\n# Generate security report\nsecurity_report = enterprise_kv.generate_security_report()\nprint(f\"Security Score: {security_report['summary']['security_score']}/100\")\nprint(f\"Total Resources: {security_report['summary']['total_keys']} keys, {security_report['summary']['total_secrets']} secrets\")\nprint(f\"Compliance Issues: {security_report['summary']['compliance_violations']}\")"
+        }
+      }
+    }
+  ],
+  "exercise": {
+    "scenario": "Your company is migrating a multi-tier application from AWS to Azure. The application uses KMS for data encryption, Certificate Manager for SSL certificates, and Systems Manager Parameter Store for configuration secrets. You need to implement equivalent security in Azure with enhanced compliance and monitoring.",
+    "steps": [
+      {
+        "step": 1,
+        "title": "Create Key Vault with HSM Protection",
+        "aws_equivalent": "Creating KMS keys and CloudHSM cluster",
+        "instructions": "Set up Premium Key Vault with HSM-backed keys for production workloads",
+        "code": {
+          "cli": "# Create resource group\naz group create --name SecurityLabRG --location eastus\n\n# Create Premium Key Vault (required for HSM)\naz keyvault create \\\n  --resource-group SecurityLabRG \\\n  --name enterprisekv$RANDOM \\\n  --location eastus \\\n  --sku Premium \\\n  --enable-soft-delete true \\\n  --enable-purge-protection true \\\n  --retention-days 90\n\n# Enable RBAC authorization (modern approach)\naz keyvault update \\\n  --resource-group SecurityLabRG \\\n  --name enterprisekv \\\n  --enable-rbac-authorization true",
+          "portal": "Azure Portal → Key Vault → Create → Premium tier → Enable soft delete and purge protection"
+        },
+        "explanation": "Premium tier is required for HSM-backed keys. Soft delete and purge protection provide additional security against accidental deletion."
+      },
+      {
+        "step": 2,
+        "title": "Create HSM-backed Encryption Keys",
+        "aws_equivalent": "Creating customer-managed KMS keys",
+        "instructions": "Create RSA and AES keys with HSM protection for different encryption scenarios",
+        "code": {
+          "cli": "# Create HSM-backed RSA key for asymmetric encryption\naz keyvault key create \\\n  --vault-name enterprisekv \\\n  --name app-asymmetric-key \\\n  --kty RSA-HSM \\\n  --size 2048 \\\n  --ops encrypt decrypt sign verify \\\n  --tags Environment=Production KeyType=Asymmetric\n\n# Create HSM-backed key for symmetric encryption\naz keyvault key create \\\n  --vault-name enterprisekv \\\n  --name app-symmetric-key \\\n  --kty oct-HSM \\\n  --size 256 \\\n  --ops encrypt decrypt wrapKey unwrapKey \\\n  --tags Environment=Production KeyType=Symmetric",
+          "portal": "Key Vault → Keys → Generate/Import → Select RSA or AES → Enable HSM protection"
+        }
+      },
+      {
+        "step": 3,
+        "title": "Migrate Application Secrets",
+        "aws_equivalent": "Migrating from Systems Manager Parameter Store",
+        "instructions": "Store application secrets with proper access controls and rotation policies",
+        "code": {
+          "cli": "# Store database connection string\naz keyvault secret set \\\n  --vault-name enterprisekv \\\n  --name 'database-connection-string' \\\n  --value 'Server=myserver;Database=mydb;...' \\\n  --tags Environment=Production Type=ConnectionString\n\n# Store API keys with expiration\naz keyvault secret set \\\n  --vault-name enterprisekv \\\n  --name 'external-api-key' \\\n  --value 'your-api-key-here' \\\n  --expires '2024-12-31T23:59:59Z' \\\n  --tags Environment=Production Type=APIKey AutoRotate=true",
+          "portal": "Key Vault → Secrets → Create → Set expiration dates and tags"
+        }
+      },
+      {
+        "step": 4,
+        "title": "Configure SSL Certificate Management",
+        "aws_equivalent": "AWS Certificate Manager certificate creation",
+        "instructions": "Create and configure automatic certificate lifecycle management",
+        "code": {
+          "cli": "# Create self-signed certificate for development\naz keyvault certificate create \\\n  --vault-name enterprisekv \\\n  --name 'dev-webapp-cert' \\\n  --policy @- <<EOF\n{\n  \"issuerParameters\": {\n    \"name\": \"Self\"\n  },\n  \"x509CertificateProperties\": {\n    \"subject\": \"CN=dev.webapp.com\",\n    \"validityInMonths\": 12,\n    \"subjectAlternativeNames\": {\n      \"dnsNames\": [\"dev.webapp.com\", \"api-dev.webapp.com\"]\n    }\n  },\n  \"lifetimeActions\": [\n    {\n      \"trigger\": {\n        \"lifetimePercentage\": 80\n      },\n      \"action\": {\n        \"actionType\": \"AutoRenew\"\n      }\n    }\n  ]\n}\nEOF",
+          "portal": "Key Vault → Certificates → Generate/Import → Configure policy with auto-renewal"
+        }
+      },
+      {
+        "step": 5,
+        "title": "Set Up RBAC and Access Controls",
+        "aws_equivalent": "IAM policies and KMS key policies",
+        "instructions": "Configure role-based access control for different application components",
+        "code": {
+          "cli": "# Assign Key Vault Secrets User role to application managed identity\naz role assignment create \\\n  --role \"Key Vault Secrets User\" \\\n  --assignee <managed-identity-object-id> \\\n  --scope /subscriptions/<subscription-id>/resourceGroups/SecurityLabRG/providers/Microsoft.KeyVault/vaults/enterprisekv\n\n# Assign Key Vault Crypto User role for encryption operations\naz role assignment create \\\n  --role \"Key Vault Crypto User\" \\\n  --assignee <managed-identity-object-id> \\\n  --scope /subscriptions/<subscription-id>/resourceGroups/SecurityLabRG/providers/Microsoft.KeyVault/vaults/enterprisekv\n\n# Configure network access restrictions\naz keyvault network-rule add \\\n  --resource-group SecurityLabRG \\\n  --name enterprisekv \\\n  --ip-address '203.0.113.0/24'",
+          "portal": "Key Vault → Access control (IAM) → Add role assignments → Configure network restrictions"
+        }
+      },
+      {
+        "step": 6,
+        "title": "Enable Monitoring and Alerting",
+        "aws_equivalent": "CloudTrail and CloudWatch monitoring",
+        "instructions": "Configure comprehensive logging and alerting for security events",
+        "code": {
+          "cli": "# Enable diagnostic settings\naz monitor diagnostic-settings create \\\n  --resource /subscriptions/<subscription-id>/resourceGroups/SecurityLabRG/providers/Microsoft.KeyVault/vaults/enterprisekv \\\n  --name 'KeyVaultDiagnostics' \\\n  --logs '[{\"category\": \"AuditEvent\", \"enabled\": true, \"retentionPolicy\": {\"enabled\": true, \"days\": 365}}]' \\\n  --metrics '[{\"category\": \"AllMetrics\", \"enabled\": true, \"retentionPolicy\": {\"enabled\": true, \"days\": 365}}]' \\\n  --workspace /subscriptions/<subscription-id>/resourceGroups/SecurityLabRG/providers/Microsoft.OperationalInsights/workspaces/security-workspace",
+          "portal": "Key Vault → Diagnostic settings → Add diagnostic setting → Send to Log Analytics"
+        }
+      }
+    ]
+  },
+  "validation_steps": [
+    {
+      "step": "Verify HSM-backed key creation",
+      "command": "az keyvault key show --vault-name enterprisekv --name app-asymmetric-key --query key.kty",
+      "expected": "Key type should be 'RSA-HSM' indicating HSM protection"
+    },
+    {
+      "step": "Test encryption and decryption operations",
+      "command": "az keyvault key encrypt --vault-name enterprisekv --name app-asymmetric-key --algorithm RSA-OAEP --value 'test-data'",
+      "expected": "Successful encryption with returned ciphertext"
+    },
+    {
+      "step": "Verify certificate auto-renewal configuration",
+      "command": "az keyvault certificate show --vault-name enterprisekv --name dev-webapp-cert --query policy.lifetimeActions",
+      "expected": "Auto-renewal action configured at 80% lifetime"
+    },
+    {
+      "step": "Check RBAC role assignments",
+      "command": "az role assignment list --scope /subscriptions/.../providers/Microsoft.KeyVault/vaults/enterprisekv",
+      "expected": "Proper role assignments for managed identities"
+    },
+    {
+      "step": "Verify monitoring configuration",
+      "command": "az monitor diagnostic-settings show --resource /subscriptions/.../providers/Microsoft.KeyVault/vaults/enterprisekv --name KeyVaultDiagnostics",
+      "expected": "Diagnostic settings configured with audit logs enabled"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all resources to avoid charges",
+    "command": "az group delete --name SecurityLabRG --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Azure Key Vault provides integrated key, secret, and certificate management unlike AWS's separate services",
+    "HSM-backed keys in Key Vault offer FIPS 140-2 Level 3 compliance similar to CloudHSM",
+    "Azure RBAC provides more granular access control than AWS IAM + key policies",
+    "Key Vault's automatic rotation and lifecycle management reduces operational overhead",
+    "Soft delete and purge protection provide additional safeguards against accidental deletion",
+    "Network access controls and private endpoints enhance security posture",
+    "Integrated monitoring with Azure Monitor provides comprehensive audit trails",
+    "Certificate management in Key Vault supports both self-signed and CA-issued certificates"
+  ],
+  "next_steps": [
+    "Explore Azure Key Vault Managed HSM for dedicated HSM instances",
+    "Learn about cross-region Key Vault replication for disaster recovery",
+    "Study integration with Azure services like App Service, Function Apps, and AKS",
+    "Implement automated key rotation using Azure Functions",
+    "Explore Azure Confidential Computing integration with Key Vault"
+  ]
+}

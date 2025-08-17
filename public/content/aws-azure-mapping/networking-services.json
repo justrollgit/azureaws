@@ -1,0 +1,110 @@
+{
+  "category": "Networking Services",
+  "description": "Virtual networks, load balancers, and content delivery",
+  "services": [
+    {
+      "aws": {
+        "name": "Amazon VPC",
+        "description": "Isolated virtual network in the AWS cloud",
+        "use_cases": ["Network isolation", "Hybrid connectivity", "Multi-tier applications", "Compliance requirements"],
+        "pricing_model": "No charge for VPC itself, pay for NAT Gateways and VPN connections"
+      },
+      "azure": {
+        "name": "Azure Virtual Network",
+        "description": "Isolated network in Azure for your resources",
+        "use_cases": ["Network isolation", "Hybrid connectivity", "Multi-tier applications", "Compliance requirements"],
+        "pricing_model": "No charge for VNet itself, pay for VPN Gateway and traffic"
+      },
+      "migration_notes": [
+        "Azure subnets can contain both IPv4 and IPv6 addresses",
+        "Network Security Groups (NSGs) can be applied to subnets or individual NICs",
+        "Azure has built-in DDoS protection (Basic is free, Standard is paid)",
+        "VNet peering is similar to VPC peering but with different pricing model",
+        "Azure ExpressRoute is equivalent to AWS Direct Connect"
+      ],
+      "learning_resources": [
+        "Azure Virtual Network planning guide",
+        "VPC to VNet migration checklist",
+        "Network security best practices"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Elastic Load Balancer",
+        "description": "Distribute incoming traffic across multiple targets",
+        "use_cases": ["High availability", "Auto scaling", "SSL termination", "Health checks"],
+        "pricing_model": "Pay per hour and per processed GB"
+      },
+      "azure": {
+        "name": "Azure Load Balancer",
+        "description": "High-performance, low-latency layer 4 load balancer",
+        "use_cases": ["High availability", "Auto scaling", "Health checks", "Outbound connectivity"],
+        "pricing_model": "Pay per rule and processed data"
+      },
+      "migration_notes": [
+        "Azure Load Balancer is Layer 4 (TCP/UDP) - use Application Gateway for Layer 7",
+        "Basic Load Balancer is free with limitations, Standard has more features",
+        "Azure Front Door provides global load balancing similar to ALB + CloudFront",
+        "Health probes configuration differs from AWS health checks",
+        "Azure supports both internal and public load balancers"
+      ],
+      "learning_resources": [
+        "Azure Load Balancer concepts",
+        "Load balancer migration strategies",
+        "Application Gateway for Layer 7 routing"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon Route 53",
+        "description": "Scalable DNS and domain name registration",
+        "use_cases": ["Domain registration", "DNS routing", "Health checking", "Traffic policy"],
+        "pricing_model": "Pay per hosted zone and DNS queries"
+      },
+      "azure": {
+        "name": "Azure DNS",
+        "description": "Reliable and secure DNS hosting service",
+        "use_cases": ["DNS hosting", "Domain delegation", "Record management", "Private DNS"],
+        "pricing_model": "Pay per hosted zone and DNS queries"
+      },
+      "migration_notes": [
+        "Azure DNS doesn't provide domain registration - use third-party registrars",
+        "Private DNS zones for internal name resolution (similar to Route 53 private zones)",
+        "Azure Traffic Manager provides geographic and performance-based routing",
+        "DNS zone delegation process is similar but Azure-specific",
+        "Integration with Azure resources for automatic record management"
+      ],
+      "learning_resources": [
+        "Azure DNS zone management",
+        "DNS migration from Route 53",
+        "Traffic Manager configuration guide"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon CloudFront",
+        "description": "Global content delivery network (CDN)",
+        "use_cases": ["Static content delivery", "Video streaming", "API acceleration", "DDoS protection"],
+        "pricing_model": "Pay per data transfer and requests by region"
+      },
+      "azure": {
+        "name": "Azure CDN",
+        "description": "Global CDN with multiple providers",
+        "use_cases": ["Static content delivery", "Video streaming", "API acceleration", "Web app acceleration"],
+        "pricing_model": "Pay per data transfer with different provider tiers"
+      },
+      "migration_notes": [
+        "Azure CDN offers multiple providers: Microsoft, Verizon, Akamai",
+        "Azure Front Door combines CDN with global load balancing and WAF",
+        "Caching rules and TTL configuration syntax differs from CloudFront",
+        "Origin shield available for reduced origin load",
+        "Integration with Azure services for seamless content delivery"
+      ],
+      "learning_resources": [
+        "Azure CDN provider comparison",
+        "CDN migration strategies",
+        "Front Door vs CDN decision guide"
+      ]
+    }
+  ]
+}

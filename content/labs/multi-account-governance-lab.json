@@ -1,0 +1,1471 @@
+{
+  "lab_metadata": {
+    "id": "multi-account-governance-lab",
+    "title": "AWS Organizations to Azure Management Groups: Enterprise Multi-Account Governance and Compliance",
+    "category": "governance",
+    "difficulty": "expert",
+    "estimated_time": "200 minutes",
+    "description": "Master enterprise-scale governance and compliance by migrating from AWS Organizations multi-account strategies to Azure Management Groups with advanced policy enforcement, billing management, and organizational controls",
+    "aws_services": ["AWS Organizations", "Service Control Policies", "AWS Config", "AWS CloudTrail", "Consolidated Billing", "AWS Control Tower", "AWS Landing Zone"],
+    "azure_services": ["Management Groups", "Azure Policy", "Azure Blueprints", "Resource Graph", "Cost Management", "Azure Landing Zones", "Activity Log"],
+    "tags": ["governance", "compliance", "multi-account", "enterprise", "policies", "sap-c02-critical", "landing-zones"],
+    "prerequisites": [
+      "Understanding of enterprise governance frameworks and compliance requirements",
+      "Knowledge of multi-account/subscription architecture patterns",
+      "Familiarity with policy management and enforcement mechanisms",
+      "Experience with organizational structures and access management",
+      "Understanding of billing and cost management at enterprise scale"
+    ],
+    "learning_objectives": [
+      "Migrate AWS Organizations structure to Azure Management Groups hierarchy",
+      "Transform Service Control Policies to Azure Policy with advanced governance",
+      "Implement AWS Control Tower equivalent using Azure Landing Zones",
+      "Establish enterprise-scale billing and cost management frameworks",
+      "Configure advanced compliance monitoring and reporting",
+      "Design organizational security and access governance patterns",
+      "Implement automated governance workflows and remediation"
+    ]
+  },
+  "scenario": {
+    "title": "Global Enterprise Governance Migration with Advanced Compliance",
+    "description": "MegaEnterprise operates across 50+ business units with 200+ AWS accounts requiring migration to Azure with enhanced governance, compliance (SOC 2, ISO 27001, PCI DSS), and operational efficiency. They need enterprise-scale management with automated compliance, cost optimization, and security governance.",
+    "business_requirements": [
+      "Hierarchical governance structure supporting 50+ business units and 200+ subscriptions",
+      "Automated compliance monitoring across SOC 2, ISO 27001, PCI DSS, and GDPR frameworks",
+      "Centralized billing management with cost allocation and chargeback capabilities",
+      "Enterprise security policies with automated enforcement and remediation",
+      "Standardized landing zones for consistent deployment patterns",
+      "Comprehensive audit trails and governance reporting for regulatory compliance",
+      "Multi-region deployment with consistent governance across global operations"
+    ],
+    "current_aws_architecture": [
+      "AWS Organizations with hierarchical organizational units (OUs)",
+      "Service Control Policies (SCPs) for account-level governance",
+      "AWS Control Tower for standardized account provisioning",
+      "Consolidated billing with cost allocation tags",
+      "AWS Config for compliance monitoring across accounts",
+      "CloudTrail organization trail for centralized audit logging"
+    ],
+    "target_azure_architecture": [
+      "Management Groups hierarchy with enterprise organizational structure",
+      "Azure Policy framework with initiative-based governance",
+      "Azure Landing Zones for standardized subscription deployment",
+      "Cost Management with enterprise billing and allocation",
+      "Azure Blueprints for repeatable governance patterns",
+      "Activity Log and Azure Monitor for comprehensive audit and monitoring"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Enterprise Management Groups: Organizations to Management Groups Migration",
+      "estimated_time": "50 minutes",
+      "description": "Design and implement hierarchical enterprise governance structure",
+      "aws_context": {
+        "service": "AWS Organizations",
+        "description": "Hierarchical account management with organizational units and policies",
+        "key_features": [
+          "Organizational Units (OUs) for logical account grouping",
+          "Service Control Policies (SCPs) for account-level permissions",
+          "Consolidated billing and account management",
+          "Cross-account access and resource sharing",
+          "Integration with AWS Control Tower for governance automation"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Management Groups",
+        "description": "Hierarchical subscription and resource group management with policy inheritance",
+        "key_features": [
+          "Management group hierarchy with policy and access inheritance",
+          "Azure Policy assignments at management group level",
+          "Cost aggregation and reporting across subscriptions",
+          "Enterprise-scale access management with Azure RBAC",
+          "Integration with Azure Landing Zones for governance automation"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Design Enterprise Management Group Hierarchy",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create comprehensive management group structure",
+              "aws_context": "Similar to organizational units with hierarchical policies",
+              "management_group_design": {
+                "hierarchy_structure": {
+                  "root_management_group": {
+                    "name": "MegaEnterprise",
+                    "id": "mg-megaenterprise-root",
+                    "description": "Root management group for enterprise governance",
+                    "children": [
+                      {
+                        "name": "Platform",
+                        "id": "mg-platform",
+                        "description": "Platform services and shared infrastructure",
+                        "children": [
+                          {
+                            "name": "Management",
+                            "id": "mg-platform-management",
+                            "description": "Management and monitoring services"
+                          },
+                          {
+                            "name": "Connectivity",
+                            "id": "mg-platform-connectivity", 
+                            "description": "Networking and connectivity services"
+                          },
+                          {
+                            "name": "Identity",
+                            "id": "mg-platform-identity",
+                            "description": "Identity and access management services"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Landing-Zones",
+                        "id": "mg-landing-zones",
+                        "description": "Application and workload landing zones",
+                        "children": [
+                          {
+                            "name": "Corp",
+                            "id": "mg-landing-zones-corp",
+                            "description": "Corporate applications with connectivity to on-premises"
+                          },
+                          {
+                            "name": "Online",
+                            "id": "mg-landing-zones-online",
+                            "description": "Internet-facing applications and services"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Sandbox",
+                        "id": "mg-sandbox",
+                        "description": "Development and testing environments"
+                      },
+                      {
+                        "name": "Decommissioned",
+                        "id": "mg-decommissioned",
+                        "description": "Resources scheduled for decommissioning"
+                      }
+                    ]
+                  }
+                },
+                "subscription_placement": {
+                  "platform_management": [
+                    "sub-monitoring-prod",
+                    "sub-security-prod",
+                    "sub-automation-prod"
+                  ],
+                  "platform_connectivity": [
+                    "sub-connectivity-prod",
+                    "sub-dns-prod"
+                  ],
+                  "platform_identity": [
+                    "sub-identity-prod"
+                  ],
+                  "corp_landing_zones": [
+                    "sub-finance-prod",
+                    "sub-hr-prod",
+                    "sub-operations-prod"
+                  ],
+                  "online_landing_zones": [
+                    "sub-ecommerce-prod",
+                    "sub-marketing-prod",
+                    "sub-customerportal-prod"
+                  ]
+                },
+                "azure_cli_creation": "az account management-group create --name MegaEnterprise --display-name 'MegaEnterprise Root' && az account management-group create --name mg-platform --display-name 'Platform' --parent MegaEnterprise"
+              },
+              "explanation": "Creates enterprise-scale hierarchical governance structure aligned with Azure Landing Zone principles"
+            },
+            {
+              "step": 2,
+              "description": "Configure advanced access management and delegation",
+              "access_management": {
+                "rbac_assignments": [
+                  {
+                    "scope": "Root Management Group",
+                    "assignments": [
+                      {
+                        "principal": "Enterprise-Admins",
+                        "role": "Management Group Contributor",
+                        "description": "Full access to all management groups and subscriptions"
+                      },
+                      {
+                        "principal": "Security-Team",
+                        "role": "Security Admin",
+                        "description": "Security management across all subscriptions"
+                      },
+                      {
+                        "principal": "Finance-Team",
+                        "role": "Cost Management Reader",
+                        "description": "Cost visibility across all subscriptions"
+                      }
+                    ]
+                  },
+                  {
+                    "scope": "Platform Management Group",
+                    "assignments": [
+                      {
+                        "principal": "Platform-Team",
+                        "role": "Contributor",
+                        "description": "Platform services management"
+                      },
+                      {
+                        "principal": "Monitoring-Operators",
+                        "role": "Monitoring Contributor",
+                        "description": "Monitoring and alerting management"
+                      }
+                    ]
+                  },
+                  {
+                    "scope": "Landing Zones Management Group",
+                    "assignments": [
+                      {
+                        "principal": "Application-Teams",
+                        "role": "Contributor",
+                        "description": "Application workload management",
+                        "conditions": {
+                          "scope_restriction": "Assigned subscriptions only",
+                          "resource_restrictions": "Cannot modify networking or security policies"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "custom_roles": [
+                  {
+                    "role_name": "Landing Zone Administrator",
+                    "description": "Custom role for landing zone management with restricted permissions",
+                    "permissions": {
+                      "actions": [
+                        "*/read",
+                        "Microsoft.Resources/deployments/*",
+                        "Microsoft.Resources/subscriptions/resourceGroups/*",
+                        "Microsoft.Authorization/roleAssignments/read"
+                      ],
+                      "not_actions": [
+                        "Microsoft.Authorization/*/write",
+                        "Microsoft.Network/virtualNetworks/delete",
+                        "Microsoft.KeyVault/vaults/delete"
+                      ],
+                      "data_actions": [],
+                      "not_data_actions": []
+                    }
+                  }
+                ],
+                "privileged_identity_management": {
+                  "enabled": true,
+                  "just_in_time_access": [
+                    {
+                      "role": "Management Group Contributor",
+                      "activation_duration": "8 hours",
+                      "approval_required": true,
+                      "approvers": ["Enterprise-Security-Team"]
+                    },
+                    {
+                      "role": "Security Admin",
+                      "activation_duration": "4 hours",
+                      "approval_required": false,
+                      "justification_required": true
+                    }
+                  ]
+                }
+              },
+              "explanation": "Implements enterprise-grade access management with delegation and privilege management"
+            },
+            {
+              "step": 3,
+              "description": "Configure governance automation and monitoring",
+              "governance_automation": {
+                "automated_subscription_management": {
+                  "subscription_provisioning": {
+                    "template": "Enterprise Landing Zone Blueprint",
+                    "approval_workflow": {
+                      "requester_validation": "Must be member of approved teams",
+                      "business_justification": "Required with budget approval",
+                      "technical_review": "Platform team approval for production subscriptions",
+                      "approval_timeout": "48 hours"
+                    },
+                    "automated_configuration": [
+                      "Apply enterprise policies",
+                      "Configure monitoring and security",
+                      "Set up cost management and budgets",
+                      "Enable audit logging and compliance monitoring"
+                    ]
+                  },
+                  "lifecycle_management": {
+                    "subscription_aging": {
+                      "unused_subscription_detection": "90 days no activity",
+                      "notification_schedule": ["60 days", "30 days", "7 days"],
+                      "automatic_actions": [
+                        "Move to decommissioned management group",
+                        "Apply restrictive policies",
+                        "Schedule for deletion after approval"
+                      ]
+                    }
+                  }
+                },
+                "compliance_monitoring": {
+                  "continuous_compliance": {
+                    "assessment_frequency": "Daily",
+                    "compliance_frameworks": ["SOC 2", "ISO 27001", "PCI DSS", "GDPR"],
+                    "automated_remediation": {
+                      "enabled": true,
+                      "automatic_fix_categories": ["Security", "Cost optimization", "Resource tagging"],
+                      "approval_required_for": ["Production changes", "Policy modifications"]
+                    }
+                  },
+                  "reporting_automation": {
+                    "executive_dashboard": {
+                      "frequency": "Weekly",
+                      "recipients": ["C-Suite", "Board-Members"],
+                      "metrics": [
+                        "Overall compliance score",
+                        "Security posture summary",
+                        "Cost optimization opportunities",
+                        "Risk assessment summary"
+                      ]
+                    },
+                    "operational_reports": {
+                      "frequency": "Daily",
+                      "recipients": ["Platform-Team", "Security-Team"],
+                      "content": [
+                        "Policy compliance violations",
+                        "New subscription activities",
+                        "Security incidents and responses",
+                        "Cost anomalies and optimizations"
+                      ]
+                    }
+                  }
+                }
+              },
+              "explanation": "Enables enterprise automation with comprehensive governance and compliance monitoring"
+            }
+          ],
+          "validation": [
+            "Verify management group hierarchy properly inherits policies and access",
+            "Test subscription placement and governance policy application",
+            "Confirm access delegation works according to enterprise requirements",
+            "Validate automation workflows for subscription lifecycle management"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Advanced Policy Governance: SCPs to Azure Policy Framework",
+      "estimated_time": "60 minutes",
+      "description": "Transform Service Control Policies to comprehensive Azure Policy governance",
+      "aws_context": {
+        "service": "AWS Service Control Policies (SCPs)",
+        "description": "Account-level permission guardrails and compliance enforcement",
+        "key_features": [
+          "Account-level deny policies for service and action restrictions",
+          "Inheritance through organizational unit hierarchy",
+          "Integration with AWS Config for compliance monitoring",
+          "Support for condition-based policy logic",
+          "Cross-account policy enforcement and reporting"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Policy",
+        "description": "Resource-level governance with advanced compliance and remediation",
+        "key_features": [
+          "Resource-level policy enforcement with deny, audit, and modify effects",
+          "Policy initiatives for grouped compliance requirements",
+          "Automated remediation with deployIfNotExists and modify policies",
+          "Advanced compliance reporting and regulatory mapping",
+          "Integration with Azure Blueprints for repeatable governance patterns"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Implement Comprehensive Enterprise Policy Framework",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create enterprise security and compliance policies",
+              "policy_framework": {
+                "security_policies": [
+                  {
+                    "policy_name": "Enforce-Encryption-In-Transit",
+                    "description": "Ensure all resources use encryption in transit",
+                    "effect": "Deny",
+                    "scope": "All Management Groups",
+                    "policy_rule": {
+                      "if": {
+                        "allOf": [
+                          {
+                            "field": "type",
+                            "in": ["Microsoft.Storage/storageAccounts", "Microsoft.Sql/servers", "Microsoft.DBforMySQL/servers"]
+                          },
+                          {
+                            "anyOf": [
+                              {
+                                "field": "Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly",
+                                "equals": false
+                              },
+                              {
+                                "field": "Microsoft.Sql/servers/minimalTlsVersion",
+                                "less": "1.2"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "then": {
+                        "effect": "deny"
+                      }
+                    },
+                    "parameters": {
+                      "minimumTlsVersion": {
+                        "type": "string",
+                        "defaultValue": "1.2",
+                        "allowedValues": ["1.0", "1.1", "1.2"]
+                      }
+                    }
+                  },
+                  {
+                    "policy_name": "Require-Resource-Tags",
+                    "description": "Enforce mandatory resource tagging for cost allocation and governance",
+                    "effect": "Deny",
+                    "scope": "All Management Groups",
+                    "policy_rule": {
+                      "if": {
+                        "allOf": [
+                          {
+                            "field": "type",
+                            "notIn": ["Microsoft.Resources/resourceGroups", "Microsoft.Resources/subscriptions"]
+                          },
+                          {
+                            "anyOf": [
+                              {
+                                "field": "tags['Environment']",
+                                "exists": false
+                              },
+                              {
+                                "field": "tags['CostCenter']",
+                                "exists": false
+                              },
+                              {
+                                "field": "tags['Owner']",
+                                "exists": false
+                              },
+                              {
+                                "field": "tags['BusinessUnit']",
+                                "exists": false
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "then": {
+                        "effect": "deny"
+                      }
+                    },
+                    "required_tags": ["Environment", "CostCenter", "Owner", "BusinessUnit"]
+                  },
+                  {
+                    "policy_name": "Restrict-VM-SKUs-by-Environment",
+                    "description": "Restrict VM SKUs based on environment classification",
+                    "effect": "Deny",
+                    "scope": "Landing Zones Management Groups",
+                    "policy_rule": {
+                      "if": {
+                        "allOf": [
+                          {
+                            "field": "type",
+                            "equals": "Microsoft.Compute/virtualMachines"
+                          },
+                          {
+                            "field": "tags['Environment']",
+                            "in": ["Development", "Testing"]
+                          },
+                          {
+                            "field": "Microsoft.Compute/virtualMachines/sku.name",
+                            "in": ["Standard_D64s_v3", "Standard_E64s_v3", "Standard_M128s"]
+                          }
+                        ]
+                      },
+                      "then": {
+                        "effect": "deny"
+                      }
+                    }
+                  }
+                ],
+                "compliance_policies": [
+                  {
+                    "policy_name": "Audit-Key-Vault-Secrets-Expiration",
+                    "description": "Audit Key Vault secrets without expiration dates",
+                    "effect": "AuditIfNotExists",
+                    "compliance_framework": "SOC 2",
+                    "policy_rule": {
+                      "if": {
+                        "field": "type",
+                        "equals": "Microsoft.KeyVault/vaults"
+                      },
+                      "then": {
+                        "effect": "auditIfNotExists",
+                        "details": {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "existenceCondition": {
+                            "field": "Microsoft.KeyVault/vaults/secrets/attributes.exp",
+                            "exists": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "policy_name": "Deploy-Diagnostic-Settings",
+                    "description": "Automatically deploy diagnostic settings for audit logging",
+                    "effect": "DeployIfNotExists",
+                    "compliance_framework": "ISO 27001",
+                    "policy_rule": {
+                      "if": {
+                        "field": "type",
+                        "in": ["Microsoft.Storage/storageAccounts", "Microsoft.Sql/servers", "Microsoft.KeyVault/vaults"]
+                      },
+                      "then": {
+                        "effect": "deployIfNotExists",
+                        "details": {
+                          "type": "Microsoft.Insights/diagnosticSettings",
+                          "roleDefinitionIds": ["/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"],
+                          "deployment": {
+                            "properties": {
+                              "mode": "incremental",
+                              "template": "..." // ARM template for diagnostic settings
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "cost_optimization_policies": [
+                  {
+                    "policy_name": "Enforce-Resource-Deletion-Lock",
+                    "description": "Require deletion locks on production resources",
+                    "effect": "DeployIfNotExists",
+                    "scope": "Production subscriptions only",
+                    "policy_rule": {
+                      "if": {
+                        "allOf": [
+                          {
+                            "field": "tags['Environment']",
+                            "equals": "Production"
+                          },
+                          {
+                            "field": "type",
+                            "in": ["Microsoft.Storage/storageAccounts", "Microsoft.Sql/servers", "Microsoft.DBforMySQL/servers"]
+                          }
+                        ]
+                      },
+                      "then": {
+                        "effect": "deployIfNotExists",
+                        "details": {
+                          "type": "Microsoft.Authorization/locks",
+                          "name": "DeletionLock"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "explanation": "Creates comprehensive policy framework addressing security, compliance, and cost optimization"
+            },
+            {
+              "step": 2,
+              "description": "Configure policy initiatives and compliance frameworks",
+              "policy_initiatives": {
+                "regulatory_compliance": [
+                  {
+                    "initiative_name": "SOC-2-Compliance",
+                    "description": "SOC 2 Type II compliance requirements",
+                    "category": "Regulatory Compliance",
+                    "included_policies": [
+                      "Enforce-Encryption-In-Transit",
+                      "Audit-Key-Vault-Secrets-Expiration",
+                      "Deploy-Diagnostic-Settings",
+                      "Require-Multi-Factor-Authentication",
+                      "Audit-Network-Security-Groups"
+                    ],
+                    "compliance_controls": [
+                      {
+                        "control_id": "CC6.1",
+                        "control_description": "Logical and physical access controls",
+                        "mapped_policies": ["Require-Multi-Factor-Authentication", "Audit-Network-Security-Groups"]
+                      },
+                      {
+                        "control_id": "CC6.7",
+                        "control_description": "Data transmission and disposal",
+                        "mapped_policies": ["Enforce-Encryption-In-Transit", "Deploy-Diagnostic-Settings"]
+                      }
+                    ]
+                  },
+                  {
+                    "initiative_name": "ISO-27001-Compliance",
+                    "description": "ISO 27001 information security management",
+                    "category": "Regulatory Compliance",
+                    "included_policies": [
+                      "Enforce-Encryption-At-Rest",
+                      "Require-Network-Segmentation",
+                      "Deploy-Security-Monitoring",
+                      "Audit-Privileged-Access"
+                    ],
+                    "compliance_controls": [
+                      {
+                        "control_id": "A.10.1.1",
+                        "control_description": "Cryptographic controls",
+                        "mapped_policies": ["Enforce-Encryption-At-Rest", "Enforce-Encryption-In-Transit"]
+                      }
+                    ]
+                  }
+                ],
+                "security_baselines": [
+                  {
+                    "initiative_name": "Enterprise-Security-Baseline",
+                    "description": "Enterprise security baseline for all resources",
+                    "category": "Security",
+                    "enforcement_mode": "Default",
+                    "included_policies": [
+                      "Enforce-Encryption-In-Transit",
+                      "Require-Resource-Tags",
+                      "Restrict-Public-IP-Addresses",
+                      "Enable-Network-Security-Groups",
+                      "Deploy-Azure-Defender"
+                    ],
+                    "exceptions": {
+                      "sandbox_environments": {
+                        "exempted_policies": ["Require-Resource-Tags"],
+                        "justification": "Development flexibility for sandbox environments"
+                      }
+                    }
+                  }
+                ],
+                "cost_governance": [
+                  {
+                    "initiative_name": "Cost-Optimization-Governance",
+                    "description": "Cost optimization and resource governance",
+                    "category": "Cost Management",
+                    "included_policies": [
+                      "Restrict-VM-SKUs-by-Environment",
+                      "Require-Auto-Shutdown-Dev-VMs",
+                      "Audit-Unused-Resources",
+                      "Enforce-Resource-Deletion-Lock"
+                    ],
+                    "cost_thresholds": {
+                      "development": "$5,000/month",
+                      "testing": "$15,000/month",
+                      "staging": "$25,000/month",
+                      "production": "No limit"
+                    }
+                  }
+                ]
+              },
+              "explanation": "Organizes policies into compliance frameworks and governance initiatives"
+            },
+            {
+              "step": 3,
+              "description": "Implement automated remediation and compliance monitoring",
+              "remediation_framework": {
+                "automated_remediation": {
+                  "remediation_tasks": [
+                    {
+                      "task_name": "Auto-Enable-Diagnostic-Settings",
+                      "trigger_policy": "Deploy-Diagnostic-Settings",
+                      "remediation_scope": "All non-compliant resources",
+                      "execution_schedule": "Immediate",
+                      "approval_required": false,
+                      "rollback_capability": true
+                    },
+                    {
+                      "task_name": "Auto-Apply-Security-Tags",
+                      "trigger_policy": "Require-Resource-Tags",
+                      "remediation_scope": "Resources missing mandatory tags",
+                      "execution_schedule": "Daily at 2:00 AM",
+                      "approval_required": true,
+                      "approvers": ["Resource owners", "Platform team"]
+                    },
+                    {
+                      "task_name": "Auto-Configure-Network-Security",
+                      "trigger_policy": "Enable-Network-Security-Groups",
+                      "remediation_scope": "Virtual networks without NSGs",
+                      "execution_schedule": "Within 1 hour of detection",
+                      "approval_required": false,
+                      "notification_channels": ["Security team", "Network administrators"]
+                    }
+                  ],
+                  "remediation_monitoring": {
+                    "success_rate_tracking": true,
+                    "failure_analysis": "Automated with root cause identification",
+                    "performance_metrics": [
+                      "Time to remediation",
+                      "Success rate by policy type",
+                      "Cost impact of remediation"
+                    ]
+                  }
+                },
+                "compliance_dashboard": {
+                  "real_time_monitoring": {
+                    "compliance_score_calculation": "Weighted by policy severity and business impact",
+                    "trending_analysis": "30-day rolling compliance trends",
+                    "predictive_analytics": "ML-based compliance risk prediction"
+                  },
+                  "stakeholder_views": [
+                    {
+                      "view_name": "Executive Dashboard",
+                      "audience": "C-Suite and Board Members",
+                      "metrics": [
+                        "Overall compliance percentage",
+                        "Critical security violations",
+                        "Regulatory compliance status",
+                        "Cost optimization opportunities"
+                      ],
+                      "update_frequency": "Daily"
+                    },
+                    {
+                      "view_name": "Operational Dashboard",
+                      "audience": "Platform and Security Teams",
+                      "metrics": [
+                        "Policy violations by category",
+                        "Remediation queue status",
+                        "Resource compliance details",
+                        "Exception tracking and approval status"
+                      ],
+                      "update_frequency": "Real-time"
+                    }
+                  ]
+                },
+                "exception_management": {
+                  "exception_workflow": {
+                    "request_process": [
+                      "Business justification required",
+                      "Risk assessment and mitigation plan",
+                      "Time-bound approval with expiration",
+                      "Regular review and revalidation"
+                    ],
+                    "approval_matrix": [
+                      {
+                        "exception_type": "Security policy",
+                        "approvers": ["Security Lead", "Risk Manager"],
+                        "maximum_duration": "90 days"
+                      },
+                      {
+                        "exception_type": "Cost policy",
+                        "approvers": ["Finance Manager", "Business Unit Lead"],
+                        "maximum_duration": "180 days"
+                      }
+                    ]
+                  },
+                  "audit_trail": {
+                    "complete_history": "All exception requests, approvals, and reviews",
+                    "automated_reporting": "Monthly exception usage and compliance impact",
+                    "risk_tracking": "Exception-related security and compliance risks"
+                  }
+                }
+              },
+              "explanation": "Implements intelligent automation with comprehensive compliance monitoring and exception management"
+            }
+          ],
+          "validation": [
+            "Verify policy assignments properly inherit through management group hierarchy",
+            "Test automated remediation works correctly without impacting operations",
+            "Confirm compliance monitoring accurately reflects organizational requirements",
+            "Validate exception management workflow provides proper governance controls"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Landing Zone Automation: Control Tower to Azure Landing Zones",
+      "estimated_time": "55 minutes",
+      "description": "Implement standardized subscription provisioning and governance automation",
+      "aws_context": {
+        "service": "AWS Control Tower",
+        "description": "Automated multi-account setup with guardrails and compliance",
+        "key_features": [
+          "Automated account provisioning with standardized configurations",
+          "Pre-configured guardrails and compliance monitoring",
+          "Centralized logging and audit trail management",
+          "Integration with AWS Organizations and Service Catalog",
+          "Account Factory for self-service account creation"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Landing Zones",
+        "description": "Enterprise-scale reference architecture with automated deployment",
+        "key_features": [
+          "Standardized subscription deployment with enterprise patterns",
+          "Built-in governance and security configurations",
+          "Integration with Management Groups and Azure Policy",
+          "Automated networking and connectivity setup",
+          "Self-service subscription provisioning with approval workflows"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise Landing Zone with Advanced Automation",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure Landing Zone foundation",
+              "landing_zone_foundation": {
+                "core_platform_deployment": {
+                  "management_subscription": {
+                    "name": "sub-management-prod",
+                    "services": [
+                      "Log Analytics Workspace (enterprise-scale)",
+                      "Azure Automation Account",
+                      "Azure Monitor (centralized)",
+                      "Azure Security Center (enterprise tier)",
+                      "Azure Backup (Recovery Services Vault)"
+                    ],
+                    "configuration": {
+                      "log_analytics": {
+                        "retention_days": 730,
+                        "daily_quota_gb": 100,
+                        "solutions": ["Security", "Updates", "ChangeTracking", "VMInsights"]
+                      },
+                      "security_center": {
+                        "tier": "Standard",
+                        "auto_provisioning": "On",
+                        "email_notifications": "SecurityTeam@megaenterprise.com",
+                        "phone_notifications": "+1-555-0123"
+                      }
+                    }
+                  },
+                  "connectivity_subscription": {
+                    "name": "sub-connectivity-prod",
+                    "services": [
+                      "Hub Virtual Network",
+                      "Azure Firewall Premium",
+                      "VPN Gateway (HighPerformance)",
+                      "ExpressRoute Gateway",
+                      "Azure DNS Private Zones"
+                    ],
+                    "networking_configuration": {
+                      "hub_vnet": {
+                        "address_space": "10.0.0.0/16",
+                        "subnets": {
+                          "GatewaySubnet": "10.0.0.0/24",
+                          "AzureFirewallSubnet": "10.0.1.0/24",
+                          "AzureBastionSubnet": "10.0.2.0/24"
+                        }
+                      },
+                      "connectivity_models": [
+                        "Hub-and-spoke with Azure Firewall",
+                        "Virtual WAN with secured hubs",
+                        "ExpressRoute for hybrid connectivity"
+                      ]
+                    }
+                  },
+                  "identity_subscription": {
+                    "name": "sub-identity-prod",
+                    "services": [
+                      "Azure AD Domain Services",
+                      "Azure AD Connect (sync servers)",
+                      "Azure Key Vault (enterprise)",
+                      "Certificate Authority services"
+                    ]
+                  }
+                },
+                "landing_zone_blueprints": [
+                  {
+                    "blueprint_name": "Corp-Landing-Zone",
+                    "description": "Corporate applications with on-premises connectivity",
+                    "target_management_group": "mg-landing-zones-corp",
+                    "included_artifacts": [
+                      {
+                        "type": "Resource Group",
+                        "name": "rg-networking",
+                        "location": "East US"
+                      },
+                      {
+                        "type": "ARM Template",
+                        "name": "spoke-vnet-template",
+                        "parameters": {
+                          "vnetAddressSpace": "10.1.0.0/16",
+                          "hubVnetId": "/subscriptions/.../virtualNetworks/hub-vnet"
+                        }
+                      },
+                      {
+                        "type": "Policy Assignment",
+                        "name": "Corp-Security-Baseline",
+                        "initiative": "Enterprise-Security-Baseline"
+                      },
+                      {
+                        "type": "RBAC Assignment",
+                        "role": "Network Contributor",
+                        "principal": "Corp-Network-Admins"
+                      }
+                    ]
+                  },
+                  {
+                    "blueprint_name": "Online-Landing-Zone", 
+                    "description": "Internet-facing applications without on-premises connectivity",
+                    "target_management_group": "mg-landing-zones-online",
+                    "included_artifacts": [
+                      {
+                        "type": "Resource Group",
+                        "name": "rg-app-services",
+                        "location": "East US"
+                      },
+                      {
+                        "type": "ARM Template",
+                        "name": "app-service-plan-template",
+                        "parameters": {
+                          "skuName": "P1v3",
+                          "skuCapacity": 3
+                        }
+                      },
+                      {
+                        "type": "Policy Assignment",
+                        "name": "Online-Security-Baseline",
+                        "initiative": "Internet-Facing-Security-Controls"
+                      }
+                    ]
+                  }
+                ],
+                "azure_cli_deployment": "az deployment mg create --management-group-id mg-megaenterprise-root --location eastus --template-file enterprise-scale-template.json --parameters enterpriseScaleCompanyPrefix=megaent"
+              },
+              "explanation": "Establishes enterprise-scale foundation with standardized landing zone patterns"
+            },
+            {
+              "step": 2,
+              "description": "Implement self-service subscription provisioning",
+              "subscription_factory": {
+                "provisioning_workflow": {
+                  "request_portal": {
+                    "interface": "Azure Service Catalog",
+                    "available_landing_zones": [
+                      {
+                        "name": "Corporate Application",
+                        "description": "For internal business applications requiring on-premises connectivity",
+                        "estimated_monthly_cost": "$5,000 - $25,000",
+                        "deployment_time": "2-4 hours",
+                        "requirements": [
+                          "Business justification and budget approval",
+                          "Technical architecture review",
+                          "Security and compliance assessment"
+                        ]
+                      },
+                      {
+                        "name": "Online Application",
+                        "description": "For customer-facing web applications and APIs",
+                        "estimated_monthly_cost": "$2,000 - $15,000",
+                        "deployment_time": "1-2 hours",
+                        "requirements": [
+                          "Business justification",
+                          "Data classification review",
+                          "Performance and scaling requirements"
+                        ]
+                      },
+                      {
+                        "name": "Development/Testing",
+                        "description": "For development and testing environments",
+                        "estimated_monthly_cost": "$500 - $5,000",
+                        "deployment_time": "30 minutes",
+                        "requirements": [
+                          "Project identification",
+                          "Resource budget limits",
+                          "Auto-shutdown policies"
+                        ]
+                      }
+                    ]
+                  },
+                  "approval_process": {
+                    "automated_approvals": [
+                      {
+                        "condition": "Development subscriptions < $1,000/month",
+                        "approval": "Automatic with manager notification"
+                      }
+                    ],
+                    "manual_approvals": [
+                      {
+                        "condition": "Production subscriptions",
+                        "approvers": ["Technical Architect", "Security Lead", "Finance Manager"],
+                        "sla": "48 hours"
+                      },
+                      {
+                        "condition": "Subscriptions > $10,000/month",
+                        "approvers": ["VP Engineering", "CFO"],
+                        "sla": "72 hours"
+                      }
+                    ]
+                  },
+                  "automated_deployment": {
+                    "deployment_pipeline": [
+                      {
+                        "stage": "Subscription Creation",
+                        "actions": [
+                          "Create Azure subscription",
+                          "Move to appropriate management group",
+                          "Apply naming convention",
+                          "Set initial budget and alerts"
+                        ]
+                      },
+                      {
+                        "stage": "Blueprint Deployment",
+                        "actions": [
+                          "Deploy landing zone blueprint",
+                          "Configure networking and connectivity",
+                          "Apply security and compliance policies",
+                          "Set up monitoring and logging"
+                        ]
+                      },
+                      {
+                        "stage": "Access Configuration",
+                        "actions": [
+                          "Assign subscription owners and contributors",
+                          "Configure just-in-time access",
+                          "Set up service principal for automation",
+                          "Enable conditional access policies"
+                        ]
+                      },
+                      {
+                        "stage": "Validation and Handover",
+                        "actions": [
+                          "Run compliance and security validation",
+                          "Perform connectivity and functionality tests",
+                          "Generate subscription documentation",
+                          "Notify requestor and stakeholders"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "governance_automation": {
+                  "continuous_compliance": {
+                    "daily_assessments": [
+                      "Policy compliance validation",
+                      "Security configuration drift detection",
+                      "Cost anomaly detection",
+                      "Resource utilization analysis"
+                    ],
+                    "weekly_reviews": [
+                      "Subscription health scoring",
+                      "Governance policy effectiveness",
+                      "Cost optimization opportunities",
+                      "Security posture assessment"
+                    ]
+                  },
+                  "lifecycle_management": {
+                    "subscription_health_monitoring": {
+                      "health_checks": [
+                        "Resource utilization patterns",
+                        "Security compliance status",
+                        "Cost efficiency metrics",
+                        "Operational excellence indicators"
+                      ],
+                      "automated_actions": [
+                        "Scale recommendations based on usage",
+                        "Security remediation for critical findings",
+                        "Cost optimization suggestions",
+                        "Performance optimization recommendations"
+                      ]
+                    },
+                    "retirement_workflow": {
+                      "retirement_triggers": [
+                        "90 days of inactivity",
+                        "Project completion notification",
+                        "Budget exhaustion without renewal"
+                      ],
+                      "retirement_process": [
+                        "Data backup and archival",
+                        "Security and compliance final review",
+                        "Cost analysis and chargeback finalization",
+                        "Resource cleanup and subscription decommissioning"
+                      ]
+                    }
+                  }
+                }
+              },
+              "explanation": "Provides enterprise-scale self-service provisioning with comprehensive governance automation"
+            }
+          ],
+          "validation": [
+            "Verify landing zone blueprints deploy consistently across subscriptions",
+            "Test self-service provisioning workflow including approval processes",
+            "Confirm automated governance and compliance monitoring works correctly",
+            "Validate subscription lifecycle management and retirement processes"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Enterprise Billing and Cost Management",
+      "estimated_time": "35 minutes",
+      "description": "Implement advanced cost management and billing governance",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Enterprise-Scale Cost Management and Chargeback",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up comprehensive billing and cost allocation",
+              "cost_management_configuration": {
+                "enterprise_billing_structure": {
+                  "enrollment_accounts": [
+                    {
+                      "account_name": "Production Workloads",
+                      "department": "Technology",
+                      "cost_center": "IT-001",
+                      "budget_allocation": "$500,000/year"
+                    },
+                    {
+                      "account_name": "Development and Testing",
+                      "department": "Engineering",
+                      "cost_center": "ENG-001",
+                      "budget_allocation": "$200,000/year"
+                    },
+                    {
+                      "account_name": "Data and Analytics",
+                      "department": "Data Science",
+                      "cost_center": "DS-001",
+                      "budget_allocation": "$300,000/year"
+                    }
+                  ],
+                  "cost_allocation_rules": [
+                    {
+                      "rule_name": "Business Unit Allocation",
+                      "allocation_method": "Tag-based",
+                      "tag_key": "BusinessUnit",
+                      "allocation_percentages": {
+                        "Finance": "25%",
+                        "Sales": "30%",
+                        "Marketing": "20%",
+                        "Operations": "25%"
+                      }
+                    },
+                    {
+                      "rule_name": "Shared Services Allocation",
+                      "allocation_method": "Usage-based",
+                      "services": ["Log Analytics", "Azure Monitor", "Azure Security Center"],
+                      "allocation_basis": "Resource consumption"
+                    }
+                  ]
+                },
+                "advanced_budgeting": {
+                  "hierarchical_budgets": [
+                    {
+                      "budget_name": "Enterprise Total Budget",
+                      "scope": "Root Management Group",
+                      "amount": "$1,000,000/year",
+                      "alert_thresholds": ["80%", "90%", "100%"],
+                      "child_budgets": [
+                        {
+                          "budget_name": "Platform Services Budget",
+                          "scope": "Platform Management Group",
+                          "amount": "$200,000/year",
+                          "allocation_method": "Fixed allocation"
+                        },
+                        {
+                          "budget_name": "Business Applications Budget",
+                          "scope": "Landing Zones Management Group",
+                          "amount": "$700,000/year",
+                          "allocation_method": "Dynamic based on usage"
+                        }
+                      ]
+                    }
+                  ],
+                  "dynamic_budget_adjustment": {
+                    "seasonal_adjustments": [
+                      {
+                        "period": "Q4 Holiday Season",
+                        "adjustment": "+30% for ecommerce subscriptions",
+                        "justification": "Increased traffic and processing requirements"
+                      },
+                      {
+                        "period": "Q1 Planning",
+                        "adjustment": "-20% for development subscriptions",
+                        "justification": "Reduced development activity during planning"
+                      }
+                    ],
+                    "automated_reallocation": {
+                      "trigger": "Budget utilization variance > 20%",
+                      "action": "Reallocate unused budget to high-demand areas",
+                      "approval_required": "Finance team approval for reallocations > $50,000"
+                    }
+                  }
+                },
+                "chargeback_automation": {
+                  "monthly_chargeback_reports": {
+                    "report_generation": "Automated on 1st of each month",
+                    "report_distribution": [
+                      {
+                        "audience": "Business Unit Leaders",
+                        "content": "Summary costs by business unit with trend analysis",
+                        "format": "Executive dashboard with key metrics"
+                      },
+                      {
+                        "audience": "Finance Team",
+                        "content": "Detailed cost breakdown with allocation details",
+                        "format": "Excel spreadsheet with pivot tables"
+                      },
+                      {
+                        "audience": "Technical Teams",
+                        "content": "Resource-level cost analysis with optimization recommendations",
+                        "format": "Technical dashboard with drill-down capabilities"
+                      }
+                    ]
+                  },
+                  "cost_anomaly_detection": {
+                    "anomaly_thresholds": [
+                      {
+                        "condition": "Daily cost increase > 50%",
+                        "action": "Immediate alert to FinOps team",
+                        "escalation": "Page on-call engineer if > 100% increase"
+                      },
+                      {
+                        "condition": "Monthly trend deviation > 20%",
+                        "action": "Weekly review with business unit leaders",
+                        "escalation": "Executive review if trend continues for 2 months"
+                      }
+                    ],
+                    "predictive_analytics": {
+                      "cost_forecasting": "ML-based 3-month cost projection",
+                      "budget_variance_prediction": "Early warning system for budget overruns",
+                      "optimization_recommendations": "AI-powered cost optimization suggestions"
+                    }
+                  }
+                }
+              },
+              "explanation": "Implements enterprise-grade cost management with automated chargeback and predictive analytics"
+            }
+          ],
+          "validation": [
+            "Verify cost allocation accurately reflects business unit usage",
+            "Test budget alerts and automated responses work correctly",
+            "Confirm chargeback reports provide accurate cost attribution",
+            "Validate cost anomaly detection identifies unusual spending patterns"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Governance Automation",
+      "aws_comparison": "Manual governance processes with higher operational overhead",
+      "azure_model": "Automated policy enforcement and remediation",
+      "optimization_strategies": [
+        "Automate policy compliance checking and remediation",
+        "Implement self-service subscription provisioning to reduce manual effort",
+        "Use Azure Blueprints for standardized deployments",
+        "Leverage Azure Cost Management for automated cost optimization"
+      ],
+      "estimated_savings": "50-70% reduction in governance operational costs"
+    },
+    {
+      "area": "Multi-Subscription Management",
+      "aws_comparison": "Separate billing and management overhead for each account",
+      "azure_model": "Centralized management with hierarchical governance",
+      "optimization_strategies": [
+        "Consolidate billing and cost management across subscriptions",
+        "Use Management Groups for policy inheritance and reduced duplication",
+        "Implement automated subscription lifecycle management",
+        "Leverage enterprise agreements for volume discounts"
+      ],
+      "estimated_savings": "30-50% reduction in multi-account management costs"
+    },
+    {
+      "area": "Compliance and Audit",
+      "aws_comparison": "Manual compliance checking and reporting",
+      "azure_model": "Automated compliance monitoring with continuous assessment",
+      "optimization_strategies": [
+        "Automate compliance reporting and audit preparation",
+        "Use Azure Policy for continuous compliance monitoring",
+        "Implement automated remediation for common compliance issues",
+        "Reduce manual audit effort through comprehensive audit trails"
+      ],
+      "estimated_savings": "60-80% reduction in compliance and audit operational costs"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Management Group Security",
+      "practices": [
+        "Implement least privilege access with time-bound elevated access",
+        "Use Azure AD Privileged Identity Management for management group access",
+        "Enable comprehensive audit logging for all management group changes",
+        "Implement break-glass access procedures for emergency scenarios"
+      ]
+    },
+    {
+      "category": "Policy Security",
+      "practices": [
+        "Version control all policy definitions and assignments",
+        "Implement approval workflows for policy changes in production",
+        "Use policy exemptions sparingly with proper justification and time limits",
+        "Monitor policy effectiveness and compliance continuously"
+      ]
+    },
+    {
+      "category": "Landing Zone Security",
+      "practices": [
+        "Implement security by default in all landing zone blueprints",
+        "Use managed identities for service authentication",
+        "Enable Azure Security Center for all subscriptions",
+        "Implement network segmentation and traffic inspection"
+      ]
+    },
+    {
+      "category": "Cost Management Security",
+      "practices": [
+        "Protect cost data with appropriate access controls",
+        "Implement budget alerts to prevent unauthorized spending",
+        "Use Azure Policy to enforce cost controls and resource limits",
+        "Monitor for cost anomalies that might indicate security incidents"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Planning",
+      "tasks": [
+        "Document current AWS Organizations structure and Service Control Policies",
+        "Inventory all AWS accounts and their purposes",
+        "Assess current governance, compliance, and cost management processes",
+        "Design Azure Management Group hierarchy and policy framework",
+        "Plan subscription migration strategy and timeline"
+      ]
+    },
+    {
+      "phase": "Azure Foundation Setup",
+      "tasks": [
+        "Create Management Group hierarchy with proper naming and organization",
+        "Deploy Azure Landing Zone foundation components",
+        "Configure enterprise-scale Azure Policy framework",
+        "Set up cost management and billing structure",
+        "Implement monitoring and governance automation"
+      ]
+    },
+    {
+      "phase": "Migration Execution",
+      "tasks": [
+        "Migrate workloads to standardized Azure subscriptions",
+        "Apply governance policies and validate compliance",
+        "Configure cost allocation and chargeback processes",
+        "Implement automated subscription provisioning workflows",
+        "Establish operational procedures and documentation"
+      ]
+    },
+    {
+      "phase": "Optimization and Operations",
+      "tasks": [
+        "Optimize governance policies based on operational experience",
+        "Fine-tune cost management and allocation rules",
+        "Implement advanced automation and self-service capabilities",
+        "Establish continuous improvement processes",
+        "Train teams on Azure governance and management practices"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Policy Assignment Conflicts",
+      "symptoms": [
+        "Resources cannot be deployed due to conflicting policies",
+        "Policy compliance shows inconsistent results",
+        "Automated remediation fails to execute"
+      ],
+      "solutions": [
+        "Review policy inheritance hierarchy and identify conflicts",
+        "Use policy exemptions for legitimate exceptions",
+        "Adjust policy definitions to reduce conflicts",
+        "Implement policy testing in non-production environments",
+        "Use Azure Resource Graph to query policy compliance status"
+      ]
+    },
+    {
+      "issue": "Management Group Access Issues",
+      "symptoms": [
+        "Users cannot access subscriptions or resources",
+        "Role assignments not working as expected",
+        "Privileged Identity Management activation failures"
+      ],
+      "solutions": [
+        "Verify role assignments at appropriate management group levels",
+        "Check Azure AD group memberships and conditional access policies",
+        "Review PIM activation requirements and approval processes",
+        "Validate subscription placement in management group hierarchy",
+        "Monitor Azure AD sign-in logs for authentication issues"
+      ]
+    },
+    {
+      "issue": "Cost Allocation Inaccuracies",
+      "symptoms": [
+        "Chargeback reports show incorrect cost attribution",
+        "Budget alerts triggering unexpectedly",
+        "Cost anomaly detection false positives"
+      ],
+      "solutions": [
+        "Verify resource tagging compliance and accuracy",
+        "Review cost allocation rules and methodology",
+        "Check for shared resource cost distribution settings",
+        "Validate budget configurations and alert thresholds",
+        "Analyze cost data exports for discrepancies"
+      ]
+    },
+    {
+      "issue": "Landing Zone Deployment Failures",
+      "symptoms": [
+        "Blueprint deployments failing consistently",
+        "Subscription provisioning stuck in progress",
+        "Policy compliance failing after deployment"
+      ],
+      "solutions": [
+        "Review blueprint artifact dependencies and order",
+        "Check resource provider registrations in target subscriptions",
+        "Verify service principal permissions for blueprint deployment",
+        "Monitor deployment logs for specific error messages",
+        "Validate ARM template syntax and parameter values"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure Management Groups documentation - https://docs.microsoft.com/en-us/azure/governance/management-groups/",
+        "Azure Policy documentation - https://docs.microsoft.com/en-us/azure/governance/policy/",
+        "Azure Landing Zones documentation - https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/",
+        "Azure Cost Management documentation - https://docs.microsoft.com/en-us/azure/cost-management-billing/"
+      ]
+    },
+    {
+      "type": "Best Practices Guides",
+      "links": [
+        "Enterprise-scale governance and compliance frameworks",
+        "Multi-subscription management and organization patterns",
+        "Cost optimization and chargeback implementation strategies",
+        "Landing zone design patterns and implementation guidance"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS Organizations to Azure Management Groups migration guide",
+        "Service Control Policies to Azure Policy conversion patterns",
+        "Multi-account governance migration strategies and best practices",
+        "Enterprise cost management migration planning and execution"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Sentinel for enterprise security information and event management",
+    "Set up Azure DevOps for advanced governance automation and CI/CD",
+    "Configure Azure Resource Graph for advanced compliance querying and reporting",
+    "Explore Azure Arc for hybrid and multi-cloud governance extension",
+    "Implement Azure Purview for data governance and compliance",
+    "Set up Azure Lighthouse for multi-tenant management scenarios"
+  ]
+}

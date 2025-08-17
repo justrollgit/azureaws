@@ -1,0 +1,314 @@
+{
+  "id": "dva-c02-security-lab",
+  "title": "AWS Developer Security to Azure Security: Application Security and Access Control",
+  "category": "application-security",
+  "difficulty": "intermediate",
+  "estimatedTime": "110 minutes",
+  "awsCertification": "DVA-C02",
+  "certificationWeight": "26% - Security Domain (Second Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master application security practices by implementing AWS IAM, encryption, and security services for developers, then migrating to Azure security equivalents with hands-on authentication, authorization, secrets management, and security monitoring.",
+  
+  "learningObjectives": [
+    "Implement AWS IAM policies and roles for application access control",
+    "Build Azure Active Directory authentication and authorization",
+    "Manage secrets and credentials using AWS Secrets Manager and Azure Key Vault",
+    "Implement encryption in transit and at rest for both platforms",
+    "Configure security monitoring and compliance for applications",
+    "Design secure application architectures following cloud security best practices"
+  ],
+
+  "prerequisites": [
+    "Completion of DVA-C02 Development with AWS Services Lab",
+    "Understanding of authentication and authorization concepts",
+    "Basic knowledge of encryption and cryptography",
+    "Familiarity with JSON Web Tokens (JWT) and OAuth flows"
+  ],
+
+  "awsServices": [
+    "AWS IAM (Identity and Access Management)",
+    "AWS Cognito (User Authentication)",
+    "AWS Secrets Manager",
+    "AWS Systems Manager Parameter Store",
+    "AWS KMS (Key Management Service)",
+    "AWS CloudTrail (Audit Logging)",
+    "AWS Config (Compliance Monitoring)",
+    "AWS GuardDuty (Threat Detection)",
+    "AWS WAF (Web Application Firewall)",
+    "AWS Certificate Manager"
+  ],
+
+  "azureServices": [
+    "Azure Active Directory (Azure AD)",
+    "Azure AD B2C (Customer Identity)",
+    "Azure Key Vault",
+    "Azure App Configuration",
+    "Azure Key Vault HSM",
+    "Azure Monitor and Activity Log",
+    "Azure Policy (Compliance)",
+    "Microsoft Defender for Cloud",
+    "Azure Web Application Firewall",
+    "Azure Certificate Service"
+  ],
+
+  "businessScenario": "SecureApp Solutions is developing a multi-tenant SaaS application that handles sensitive customer data and must comply with SOC 2, PCI DSS, and GDPR requirements. The development team needs to implement robust security controls including user authentication, API authorization, secrets management, data encryption, and security monitoring. They require expertise in both AWS and Azure security services to make informed decisions and potentially migrate between platforms while maintaining security compliance.",
+
+  "sections": [
+    {
+      "title": "Identity and Access Management for Applications",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS IAM roles and policies for application services",
+        "Azure managed identities and RBAC for applications",
+        "AWS Cognito user pools and identity pools",
+        "Azure AD B2C and enterprise authentication",
+        "Service-to-service authentication patterns"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive IAM Strategy",
+          "description": "Design and implement identity and access management for multi-tier application",
+          "steps": [
+            "Create AWS IAM roles for Lambda functions with least privilege access",
+            "Setup Azure managed identities for Function Apps and resources",
+            "Configure AWS Cognito user pool for customer authentication",
+            "Implement Azure AD B2C for equivalent customer identity management",
+            "Design service-to-service authentication using IAM roles vs managed identities",
+            "Implement API authorization using JWT validation and claims"
+          ],
+          "deliverables": [
+            "IAM role and policy configuration for AWS services",
+            "Azure managed identity setup with RBAC assignments",
+            "User authentication flows for both platforms",
+            "Service authentication architecture diagram"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Secrets and Configuration Management",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS Secrets Manager for database credentials and API keys",
+        "Azure Key Vault for secrets and certificate management",
+        "AWS Systems Manager Parameter Store for configuration",
+        "Azure App Configuration for application settings",
+        "Secret rotation and lifecycle management"
+      ],
+      "tasks": [
+        {
+          "title": "Build Secure Configuration Management",
+          "description": "Implement comprehensive secrets and configuration management system",
+          "steps": [
+            "Store database credentials in AWS Secrets Manager with rotation",
+            "Configure equivalent secrets in Azure Key Vault",
+            "Implement application configuration using Parameter Store",
+            "Setup Azure App Configuration for environment-specific settings",
+            "Configure automatic secret rotation policies",
+            "Implement secure secret retrieval in application code"
+          ],
+          "deliverables": [
+            "Secrets Manager configuration with rotation policies",
+            "Key Vault setup with access policies and secrets",
+            "Application configuration management strategy",
+            "Secure secret retrieval code examples"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Encryption and Data Protection",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS KMS for encryption key management",
+        "Azure Key Vault HSM for cryptographic operations",
+        "Encryption in transit: TLS/SSL certificate management",
+        "Encryption at rest: database and storage encryption",
+        "Application-level encryption for sensitive data fields"
+      ],
+      "tasks": [
+        {
+          "title": "Implement End-to-End Encryption",
+          "description": "Setup comprehensive encryption strategy for data protection",
+          "steps": [
+            "Create AWS KMS customer-managed keys for application encryption",
+            "Setup Azure Key Vault with equivalent cryptographic capabilities",
+            "Configure TLS certificates using AWS Certificate Manager",
+            "Implement Azure Certificate Service for SSL/TLS management",
+            "Encrypt sensitive database fields using application-level encryption",
+            "Implement secure key management practices and rotation"
+          ],
+          "deliverables": [
+            "KMS key policies and encryption configuration",
+            "Key Vault cryptographic key setup",
+            "TLS certificate management automation",
+            "Application-level encryption implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Security Monitoring and Compliance",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CloudTrail for API audit logging",
+        "Azure Activity Log and security event monitoring",
+        "AWS Config rules for compliance validation",
+        "Azure Policy for governance and compliance automation",
+        "Security incident detection and response workflows"
+      ],
+      "tasks": [
+        {
+          "title": "Setup Security Monitoring Framework",
+          "description": "Implement comprehensive security monitoring and compliance tracking",
+          "steps": [
+            "Configure AWS CloudTrail with S3 logging and CloudWatch integration",
+            "Setup Azure Activity Log with Log Analytics workspace",
+            "Create AWS Config rules for security compliance monitoring",
+            "Implement Azure Policy definitions for security governance",
+            "Configure security alerting for suspicious activities",
+            "Design incident response workflows and escalation procedures"
+          ],
+          "deliverables": [
+            "CloudTrail configuration with comprehensive logging",
+            "Azure security monitoring setup",
+            "Compliance rules and policy enforcement",
+            "Security incident response procedures"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Multi-Tenant Security Architecture",
+      "description": "Build secure multi-tenant application with data isolation and access controls",
+      "steps": [
+        "Design tenant isolation strategy using IAM and Azure AD",
+        "Implement row-level security in databases",
+        "Create tenant-specific encryption keys and data protection",
+        "Build API authorization with tenant context validation",
+        "Implement audit logging with tenant traceability",
+        "Test security boundaries and access controls"
+      ],
+      "expectedOutcome": "Secure multi-tenant application with proper isolation and compliance controls"
+    },
+    {
+      "title": "Security Compliance Automation",
+      "description": "Implement automated security compliance monitoring and remediation",
+      "steps": [
+        "Define security compliance requirements (SOC 2, PCI DSS)",
+        "Create automated compliance checks using Config and Azure Policy",
+        "Implement security scanning and vulnerability assessment",
+        "Build automated remediation workflows for common security issues",
+        "Create compliance reporting and audit trail documentation",
+        "Test compliance validation and remediation procedures"
+      ],
+      "expectedOutcome": "Automated compliance monitoring system with remediation capabilities"
+    },
+    {
+      "title": "Zero-Trust Application Security",
+      "description": "Implement zero-trust security model for application architecture",
+      "steps": [
+        "Design network segmentation with security groups and NSGs",
+        "Implement identity-based access controls for all resources",
+        "Configure encryption for all data flows and storage",
+        "Setup continuous security monitoring and threat detection",
+        "Implement least-privilege access principles throughout",
+        "Validate security posture with penetration testing approach"
+      ],
+      "expectedOutcome": "Zero-trust security architecture with comprehensive protection controls"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex IAM policy permissions and access denied errors",
+      "solution": "Use policy simulators, implement gradual privilege escalation, enable detailed CloudTrail logging, and test policies in development environments first"
+    },
+    {
+      "issue": "Secret management complexity and application configuration",
+      "solution": "Implement secret management SDK patterns, use caching for performance, implement retry logic for secret retrieval, and automate secret rotation testing"
+    },
+    {
+      "issue": "Encryption key management and performance impact",
+      "solution": "Use appropriate encryption patterns, implement key caching strategies, optimize cryptographic operations, and monitor performance impact"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Identity and Access Management",
+      "criteria": [
+        "Can implement proper IAM roles and policies for applications",
+        "Understands managed identities and service authentication",
+        "Can configure user authentication with Cognito and Azure AD B2C",
+        "Demonstrates least privilege access principles"
+      ]
+    },
+    {
+      "category": "Secrets and Configuration Management",
+      "criteria": [
+        "Can implement secure secrets management practices",
+        "Understands secret rotation and lifecycle management",
+        "Can configure application settings securely",
+        "Demonstrates secure coding practices for secret handling"
+      ]
+    },
+    {
+      "category": "Encryption and Data Protection",
+      "criteria": [
+        "Can implement encryption in transit and at rest",
+        "Understands key management best practices",
+        "Can configure TLS/SSL certificate management",
+        "Demonstrates application-level encryption techniques"
+      ]
+    },
+    {
+      "category": "Security Monitoring and Compliance",
+      "criteria": [
+        "Can setup comprehensive security logging and monitoring",
+        "Understands compliance automation and governance",
+        "Can implement security incident detection and response",
+        "Demonstrates security audit and compliance validation"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DVA-C02": {
+      "domain": "Security",
+      "weight": "26%",
+      "coverage": [
+        "Implement authentication and/or authorization for applications and AWS services",
+        "Implement encryption using AWS services",
+        "Manage sensitive data in application code",
+        "Implement application security",
+        "Use AWS security services to secure applications"
+      ],
+      "examTopics": [
+        "IAM roles, policies, and service authentication",
+        "AWS Cognito for user authentication and authorization",
+        "Secrets Manager and Parameter Store for configuration",
+        "KMS encryption and certificate management",
+        "Security monitoring with CloudTrail and Config"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive IAM and authentication strategies",
+    "Demonstrates secure secrets and configuration management",
+    "Shows understanding of encryption and data protection practices",
+    "Can setup security monitoring and compliance automation",
+    "Understands security best practices for application development"
+  ],
+
+  "nextSteps": [
+    "Proceed to DVA-C02 Deployment Lab (24% domain weight)",
+    "Practice implementing security controls in real applications",
+    "Gain hands-on experience with security compliance frameworks",
+    "Explore advanced security services and threat detection capabilities"
+  ]
+}

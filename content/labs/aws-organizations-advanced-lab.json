@@ -1,0 +1,296 @@
+{
+  "id": "aws-organizations-advanced-lab",
+  "title": "AWS Organizations to Azure Management Groups: Advanced Multi-Account Governance",
+  "difficulty": "expert",
+  "estimated_time": "360 minutes",
+  "aws_prerequisite": "Deep experience with AWS Organizations, Service Control Policies (SCPs), CloudFormation StackSets, and multi-account strategies",
+  "azure_target": "Master Azure Management Groups, Policy inheritance, cross-subscription governance, and organizational-scale deployments",
+  "learning_objectives": [
+    "Design and implement complex organizational hierarchies using Management Groups",
+    "Create sophisticated Azure Policy frameworks with inheritance and exceptions",
+    "Master cross-subscription resource deployment and governance",
+    "Implement enterprise-grade RBAC across organizational boundaries",
+    "Set up centralized billing, cost allocation, and chargeback mechanisms",
+    "Create automated compliance monitoring and remediation at scale",
+    "Design disaster recovery strategies across organizational units",
+    "Implement advanced security governance and threat protection"
+  ],
+  "aws_context": {
+    "organizations_hierarchy": {
+      "root_organization": "AWS Organizations Root",
+      "organizational_units": [
+        "Security OU (Logging, Audit accounts)",
+        "Production OU (Live workloads)",
+        "Non-Production OU (Dev, Test, Staging)",
+        "Shared Services OU (DNS, Directory, CI/CD)",
+        "Sandbox OU (Individual developer accounts)"
+      ],
+      "service_control_policies": [
+        "Root SCP (Organization-wide restrictions)",
+        "Security SCP (Audit requirements)",
+        "Production SCP (Change controls)",
+        "Non-Prod SCP (Resource limits)",
+        "Sandbox SCP (Restrictive policies)"
+      ]
+    },
+    "advanced_patterns": {
+      "cross_account_access": "Cross-account roles and resource sharing",
+      "stacksets_deployment": "CloudFormation StackSets for consistent deployments",
+      "consolidated_billing": "Cost allocation tags and billing alerts",
+      "service_catalog": "Standardized architecture templates",
+      "config_aggregation": "Multi-account compliance monitoring"
+    }
+  },
+  "sections": [
+    {
+      "title": "Advanced Management Group Architecture Design",
+      "content": "Design sophisticated organizational hierarchies that map AWS Organizations patterns to Azure Management Groups with enhanced capabilities.",
+      "organizational_design_patterns": {
+        "enterprise_hierarchy": {
+          "tenant_root": {
+            "name": "Contoso Corporation",
+            "description": "Top-level management group for entire organization",
+            "policies_inherited": ["Corporate Security Baseline", "Cost Management Framework"]
+          },
+          "business_units": [
+            {
+              "name": "Production Business Unit",
+              "subscriptions": ["Production App Services", "Production Data Services", "Production Infrastructure"],
+              "policies_inherited": ["Production Security Controls", "Change Management Policies"],
+              "custom_policies": ["Production SLA Requirements", "Data Residency Controls"]
+            },
+            {
+              "name": "Non-Production Business Unit", 
+              "subscriptions": ["Development", "Testing", "Staging", "User Acceptance Testing"],
+              "policies_inherited": ["Non-Prod Security Controls", "Resource Quotas"],
+              "custom_policies": ["Auto-shutdown Policies", "Development Resource Limits"]
+            },
+            {
+              "name": "Shared Services",
+              "subscriptions": ["Identity & Directory", "Networking Hub", "Security Services", "DevOps Platform"],
+              "policies_inherited": ["Shared Services Security", "Network Controls"],
+              "custom_policies": ["Central Logging Requirements", "Network Connectivity Rules"]
+            },
+            {
+              "name": "Sandbox Environment",
+              "subscriptions": ["Developer Sandboxes", "Innovation Lab", "Training Environment"],
+              "policies_inherited": ["Sandbox Restrictions", "Cost Controls"],
+              "custom_policies": ["Resource Cleanup Automation", "Learning Environment Policies"]
+            }
+          ]
+        },
+        "geographic_considerations": {
+          "regional_structure": {
+            "description": "Geographic management groups for data residency and compliance",
+            "regions": [
+              {
+                "name": "North America",
+                "compliance_frameworks": ["SOX", "CCPA"],
+                "data_residency": "US-based regions only"
+              },
+              {
+                "name": "Europe",
+                "compliance_frameworks": ["GDPR", "PCI-DSS"],
+                "data_residency": "EU-based regions only"
+              },
+              {
+                "name": "Asia Pacific",
+                "compliance_frameworks": ["Regional Privacy Laws"],
+                "data_residency": "APAC-based regions only"
+              }
+            ]
+          }
+        }
+      },
+      "code_examples": {
+        "create_management_group_hierarchy": {
+          "language": "bash",
+          "title": "Create Advanced Management Group Hierarchy",
+          "code": "# Create enterprise management group hierarchy\n\n# Create root-level management groups\necho \"Creating enterprise management group structure...\"\n\n# Business Unit Management Groups\naz account management-group create \\\n  --name \"production-bu\" \\\n  --display-name \"Production Business Unit\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/$(az account show --query tenantId -o tsv)\"\n\naz account management-group create \\\n  --name \"nonprod-bu\" \\\n  --display-name \"Non-Production Business Unit\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/$(az account show --query tenantId -o tsv)\"\n\naz account management-group create \\\n  --name \"shared-services-bu\" \\\n  --display-name \"Shared Services\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/$(az account show --query tenantId -o tsv)\"\n\naz account management-group create \\\n  --name \"sandbox-bu\" \\\n  --display-name \"Sandbox Environment\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/$(az account show --query tenantId -o tsv)\"\n\n# Create sub-level management groups for Production\naz account management-group create \\\n  --name \"prod-apps\" \\\n  --display-name \"Production Applications\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/production-bu\"\n\naz account management-group create \\\n  --name \"prod-data\" \\\n  --display-name \"Production Data Services\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/production-bu\"\n\naz account management-group create \\\n  --name \"prod-infra\" \\\n  --display-name \"Production Infrastructure\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/production-bu\"\n\n# Create sub-level management groups for Non-Production\naz account management-group create \\\n  --name \"dev-environment\" \\\n  --display-name \"Development Environment\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/nonprod-bu\"\n\naz account management-group create \\\n  --name \"test-environment\" \\\n  --display-name \"Testing Environment\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/nonprod-bu\"\n\naz account management-group create \\\n  --name \"staging-environment\" \\\n  --display-name \"Staging Environment\" \\\n  --parent-id \"/providers/Microsoft.Management/managementGroups/nonprod-bu\"\n\n# Display the created hierarchy\necho \"Management Group Hierarchy:\"\naz account management-group list --output table\n\necho \"\\nHierarchy relationships:\"\naz account management-group show --name \"production-bu\" --expand --recurse"
+        }
+      }
+    },
+    {
+      "title": "Advanced Azure Policy Framework Implementation",
+      "content": "Create sophisticated policy frameworks equivalent to AWS Service Control Policies with inheritance, exceptions, and automated remediation.",
+      "code_examples": {
+        "create_enterprise_policy_framework": {
+          "language": "bash",
+          "title": "Create Comprehensive Enterprise Policy Framework",
+          "code": "# Create enterprise-grade policy framework\n\necho \"Creating enterprise policy definitions...\"\n\n# Corporate Security Baseline Policy\ncat > corporate-security-baseline.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"in\": [\n            \"Microsoft.Storage/storageAccounts\",\n            \"Microsoft.Sql/servers\",\n            \"Microsoft.KeyVault/vaults\",\n            \"Microsoft.Compute/virtualMachines\"\n          ]\n        },\n        {\n          \"anyOf\": [\n            {\n              \"allOf\": [\n                {\n                  \"field\": \"type\",\n                  \"equals\": \"Microsoft.Storage/storageAccounts\"\n                },\n                {\n                  \"anyOf\": [\n                    {\n                      \"field\": \"Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly\",\n                      \"equals\": \"false\"\n                    },\n                    {\n                      \"field\": \"Microsoft.Storage/storageAccounts/minimumTlsVersion\",\n                      \"notEquals\": \"TLS1_2\"\n                    },\n                    {\n                      \"field\": \"Microsoft.Storage/storageAccounts/allowBlobPublicAccess\",\n                      \"equals\": \"true\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"allOf\": [\n                {\n                  \"field\": \"type\",\n                  \"equals\": \"Microsoft.Sql/servers\"\n                },\n                {\n                  \"field\": \"Microsoft.Sql/servers/minimalTlsVersion\",\n                  \"notEquals\": \"1.2\"\n                }\n              ]\n            },\n            {\n              \"allOf\": [\n                {\n                  \"field\": \"type\",\n                  \"equals\": \"Microsoft.Compute/virtualMachines\"\n                },\n                {\n                  \"field\": \"Microsoft.Compute/virtualMachines/securityProfile.encryptionAtHost\",\n                  \"notEquals\": \"true\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"parameters\": {},\n  \"metadata\": {\n    \"displayName\": \"Corporate Security Baseline\",\n    \"description\": \"Enforces organization-wide security requirements equivalent to AWS SCPs\",\n    \"category\": \"Enterprise Security\"\n  }\n}\nEOF\n\n# Advanced Tagging and Governance Policy\ncat > advanced-governance-policy.json << 'EOF'\n{\n  \"mode\": \"Indexed\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"notIn\": [\n            \"Microsoft.Resources/resourceGroups\",\n            \"Microsoft.Resources/subscriptions\",\n            \"Microsoft.Resources/deployments\"\n          ]\n        },\n        {\n          \"anyOf\": [\n            {\n              \"field\": \"tags['BusinessUnit']\",\n              \"notIn\": [\"Production\", \"NonProduction\", \"SharedServices\", \"Sandbox\"]\n            },\n            {\n              \"field\": \"tags['Environment']\",\n              \"notIn\": [\"prod\", \"staging\", \"test\", \"dev\", \"sandbox\"]\n            },\n            {\n              \"field\": \"tags['CostCenter']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['Owner']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['Project']\",\n              \"exists\": \"false\"\n            },\n            {\n              \"field\": \"tags['DataClassification']\",\n              \"notIn\": [\"Public\", \"Internal\", \"Confidential\", \"Restricted\"]\n            }\n          ]\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Advanced Enterprise Governance Tags\",\n    \"description\": \"Comprehensive tagging requirements for enterprise governance\",\n    \"category\": \"Enterprise Governance\"\n  }\n}\nEOF\n\n# Regional Restriction Policy (Data Residency)\ncat > regional-restriction-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"location\",\n          \"exists\": \"true\"\n        },\n        {\n          \"not\": {\n            \"field\": \"location\",\n            \"in\": \"[parameters('allowedLocations')]\"\n          }\n        },\n        {\n          \"field\": \"location\",\n          \"notEquals\": \"global\"\n        },\n        {\n          \"field\": \"type\",\n          \"notEquals\": \"Microsoft.Resources/resourceGroups\"\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"[parameters('effect')]\"\n    }\n  },\n  \"parameters\": {\n    \"allowedLocations\": {\n      \"type\": \"Array\",\n      \"metadata\": {\n        \"displayName\": \"Allowed locations\",\n        \"description\": \"The list of locations that can be specified when deploying resources\",\n        \"strongType\": \"location\"\n      }\n    },\n    \"effect\": {\n      \"type\": \"String\",\n      \"defaultValue\": \"deny\",\n      \"allowedValues\": [\"audit\", \"deny\", \"disabled\"],\n      \"metadata\": {\n        \"displayName\": \"Effect\",\n        \"description\": \"Enable or disable the execution of the policy\"\n      }\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Regional Restriction Policy\",\n    \"description\": \"Restricts resource deployment to specific regions for data residency\",\n    \"category\": \"Data Residency\"\n  }\n}\nEOF\n\n# Create policy definitions\naz policy definition create \\\n  --name corporate-security-baseline \\\n  --rules corporate-security-baseline.json \\\n  --display-name \"Corporate Security Baseline\"\n\naz policy definition create \\\n  --name advanced-governance-policy \\\n  --rules advanced-governance-policy.json \\\n  --display-name \"Advanced Enterprise Governance\"\n\naz policy definition create \\\n  --name regional-restriction-policy \\\n  --rules regional-restriction-policy.json \\\n  --display-name \"Regional Restriction Policy\"\n\necho \"Enterprise policy definitions created successfully.\""
+        },
+        "create_policy_initiatives": {
+          "language": "bash", 
+          "title": "Create Policy Initiatives with Inheritance",
+          "code": "# Create comprehensive policy initiatives (equivalent to AWS SCP sets)\n\necho \"Creating enterprise policy initiatives...\"\n\n# Production Environment Initiative\ncat > production-initiative.json << 'EOF'\n{\n  \"displayName\": \"Production Environment Governance\",\n  \"description\": \"Comprehensive policies for production workloads\",\n  \"metadata\": {\n    \"category\": \"Production Governance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/corporate-security-baseline\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/advanced-governance-policy\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/regional-restriction-policy\",\n      \"parameters\": {\n        \"allowedLocations\": {\n          \"value\": [\"eastus\", \"westus2\", \"centralus\"]\n        },\n        \"effect\": {\n          \"value\": \"deny\"\n        }\n      }\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/0a914e76-4921-4c19-b460-a2d36003525a\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c\",\n      \"parameters\": {}\n    }\n  ]\n}\nEOF\n\n# Non-Production Initiative\ncat > nonprod-initiative.json << 'EOF'\n{\n  \"displayName\": \"Non-Production Environment Governance\",\n  \"description\": \"Policies for development and testing environments\",\n  \"metadata\": {\n    \"category\": \"Non-Production Governance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/advanced-governance-policy\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/regional-restriction-policy\",\n      \"parameters\": {\n        \"allowedLocations\": {\n          \"value\": [\"eastus\", \"westus2\", \"centralus\", \"eastus2\"]\n        },\n        \"effect\": {\n          \"value\": \"audit\"\n        }\n      }\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/88999f4c-376a-45c8-bcb3-4058f713cf39\",\n      \"parameters\": {\n        \"tagName\": {\n          \"value\": \"AutoShutdown\"\n        },\n        \"tagValue\": {\n          \"value\": \"Enabled\"\n        }\n      }\n    }\n  ]\n}\nEOF\n\n# Sandbox Initiative (Most Restrictive)\ncat > sandbox-initiative.json << 'EOF'\n{\n  \"displayName\": \"Sandbox Environment Restrictions\",\n  \"description\": \"Restrictive policies for sandbox and training environments\",\n  \"metadata\": {\n    \"category\": \"Sandbox Governance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Authorization/policyDefinitions/advanced-governance-policy\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/e765b5de-1225-4ba3-bd56-1ac6695af988\",\n      \"parameters\": {\n        \"listOfAllowedSKUs\": {\n          \"value\": [\"Standard_B1s\", \"Standard_B1ms\", \"Standard_B2s\"]\n        }\n      }\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/34c877ad-507e-4c82-993e-3452a6e0ad3c\",\n      \"parameters\": {\n        \"listOfResourceTypesNotAllowed\": {\n          \"value\": [\n            \"Microsoft.HDInsight/clusters\",\n            \"Microsoft.Batch/batchAccounts\",\n            \"Microsoft.MachineLearningServices/workspaces\"\n          ]\n        }\n      }\n    }\n  ]\n}\nEOF\n\n# Replace subscription ID and create initiatives\nSUBSCRIPTION_ID=$(az account show --query id -o tsv)\nsed -i \"s/SUBSCRIPTION_ID/$SUBSCRIPTION_ID/g\" production-initiative.json\nsed -i \"s/SUBSCRIPTION_ID/$SUBSCRIPTION_ID/g\" nonprod-initiative.json  \nsed -i \"s/SUBSCRIPTION_ID/$SUBSCRIPTION_ID/g\" sandbox-initiative.json\n\n# Create policy set definitions\naz policy set-definition create \\\n  --name production-governance \\\n  --definitions production-initiative.json\n\naz policy set-definition create \\\n  --name nonprod-governance \\\n  --definitions nonprod-initiative.json\n\naz policy set-definition create \\\n  --name sandbox-restrictions \\\n  --definitions sandbox-initiative.json\n\necho \"Policy initiatives created successfully.\""
+        },
+        "assign_policies_with_inheritance": {
+          "language": "bash",
+          "title": "Assign Policies with Management Group Inheritance",
+          "code": "# Assign policies to management groups for inheritance\n\necho \"Assigning policies to management groups...\"\n\n# Assign Production Initiative to Production Management Group\naz policy assignment create \\\n  --name \"Production Governance Assignment\" \\\n  --policy-set-definition production-governance \\\n  --scope \"/providers/Microsoft.Management/managementGroups/production-bu\" \\\n  --display-name \"Production Environment Governance\" \\\n  --description \"Comprehensive governance for all production subscriptions\"\n\n# Assign Non-Prod Initiative to Non-Production Management Group\naz policy assignment create \\\n  --name \"NonProd Governance Assignment\" \\\n  --policy-set-definition nonprod-governance \\\n  --scope \"/providers/Microsoft.Management/managementGroups/nonprod-bu\" \\\n  --display-name \"Non-Production Environment Governance\" \\\n  --description \"Governance policies for development and testing environments\"\n\n# Assign Sandbox Restrictions to Sandbox Management Group\naz policy assignment create \\\n  --name \"Sandbox Restrictions Assignment\" \\\n  --policy-set-definition sandbox-restrictions \\\n  --scope \"/providers/Microsoft.Management/managementGroups/sandbox-bu\" \\\n  --display-name \"Sandbox Environment Restrictions\" \\\n  --description \"Restrictive policies for sandbox and training environments\"\n\n# Create exemptions for specific scenarios\necho \"Creating policy exemptions for special cases...\"\n\n# Exemption for emergency resource deployment\ncat > emergency-exemption.json << 'EOF'\n{\n  \"properties\": {\n    \"policyAssignmentId\": \"/providers/Microsoft.Management/managementGroups/production-bu/providers/Microsoft.Authorization/policyAssignments/Production Governance Assignment\",\n    \"policyDefinitionReferenceIds\": [\"regional-restriction-policy\"],\n    \"exemptionCategory\": \"Waiver\",\n    \"displayName\": \"Emergency Deployment Exemption\",\n    \"description\": \"Temporary exemption for emergency deployments to alternate regions\",\n    \"expiresOn\": \"2024-12-31T23:59:59Z\"\n  }\n}\nEOF\n\n# Apply exemption (example for emergency scenarios)\necho \"Policy assignments with inheritance completed.\"\necho \"Exemption template created for emergency scenarios.\"\n\n# Verify policy assignments\necho \"\\nVerifying policy assignments:\"\naz policy assignment list --scope \"/providers/Microsoft.Management/managementGroups/production-bu\" --query \"[].{Name:displayName, Scope:scope}\" --output table"
+        }
+      }
+    },
+    {
+      "title": "Cross-Subscription Resource Management",
+      "content": "Implement advanced cross-subscription governance equivalent to AWS cross-account access patterns and CloudFormation StackSets.",
+      "code_examples": {
+        "setup_cross_subscription_rbac": {
+          "language": "bash",
+          "title": "Advanced Cross-Subscription RBAC Implementation",
+          "code": "# Create advanced cross-subscription access patterns\n\necho \"Setting up cross-subscription RBAC framework...\"\n\n# Create custom roles for cross-subscription management\ncat > cross-subscription-reader.json << 'EOF'\n{\n  \"Name\": \"Cross-Subscription Resource Reader\",\n  \"Id\": null,\n  \"IsCustom\": true,\n  \"Description\": \"Can read resources across multiple subscriptions for monitoring and compliance\",\n  \"Actions\": [\n    \"*/read\",\n    \"Microsoft.Resources/subscriptions/resourceGroups/read\",\n    \"Microsoft.Resources/deployments/read\",\n    \"Microsoft.Security/assessments/read\",\n    \"Microsoft.Security/secureScores/read\",\n    \"Microsoft.CostManagement/*/read\"\n  ],\n  \"NotActions\": [\n    \"Microsoft.Authorization/*/Delete\",\n    \"Microsoft.Authorization/elevateAccess/Action\",\n    \"Microsoft.Blueprint/blueprintAssignments/write\",\n    \"Microsoft.Blueprint/blueprintAssignments/delete\"\n  ],\n  \"DataActions\": [],\n  \"NotDataActions\": [],\n  \"AssignableScopes\": [\n    \"/providers/Microsoft.Management/managementGroups/production-bu\",\n    \"/providers/Microsoft.Management/managementGroups/nonprod-bu\",\n    \"/providers/Microsoft.Management/managementGroups/shared-services-bu\"\n  ]\n}\nEOF\n\ncat > cross-subscription-deployer.json << 'EOF'\n{\n  \"Name\": \"Cross-Subscription Deployer\",\n  \"Id\": null,\n  \"IsCustom\": true,\n  \"Description\": \"Can deploy standardized resources across multiple subscriptions\",\n  \"Actions\": [\n    \"Microsoft.Resources/subscriptions/resourceGroups/*\",\n    \"Microsoft.Resources/deployments/*\",\n    \"Microsoft.Blueprint/blueprintAssignments/*\",\n    \"Microsoft.Storage/storageAccounts/*\",\n    \"Microsoft.KeyVault/vaults/*\",\n    \"Microsoft.Network/virtualNetworks/*\",\n    \"Microsoft.Network/networkSecurityGroups/*\",\n    \"Microsoft.Compute/virtualMachines/*\",\n    \"Microsoft.Web/serverfarms/*\",\n    \"Microsoft.Web/sites/*\"\n  ],\n  \"NotActions\": [\n    \"Microsoft.Authorization/*/Delete\",\n    \"Microsoft.Authorization/elevateAccess/Action\",\n    \"Microsoft.Security/pricings/*\"\n  ],\n  \"DataActions\": [],\n  \"NotDataActions\": [],\n  \"AssignableScopes\": [\n    \"/providers/Microsoft.Management/managementGroups/nonprod-bu\",\n    \"/providers/Microsoft.Management/managementGroups/shared-services-bu\"\n  ]\n}\nEOF\n\n# Create the custom roles\naz role definition create --role-definition @cross-subscription-reader.json\naz role definition create --role-definition @cross-subscription-deployer.json\n\n# Create Azure AD groups for cross-subscription access\necho \"Creating Azure AD groups for cross-subscription access...\"\n\n# Cross-subscription readers group\nREADER_GROUP_ID=$(az ad group create \\\n  --display-name \"Enterprise Resource Readers\" \\\n  --mail-nickname \"enterprise-readers\" \\\n  --description \"Group with read access across all enterprise subscriptions\" \\\n  --query objectId -o tsv)\n\n# Cross-subscription deployers group\nDEPLOYER_GROUP_ID=$(az ad group create \\\n  --display-name \"Enterprise Resource Deployers\" \\\n  --mail-nickname \"enterprise-deployers\" \\\n  --description \"Group with deployment access across non-production subscriptions\" \\\n  --query objectId -o tsv)\n\n# Security administrators group\nSECURITY_GROUP_ID=$(az ad group create \\\n  --display-name \"Enterprise Security Administrators\" \\\n  --mail-nickname \"enterprise-security\" \\\n  --description \"Group with security management access across all subscriptions\" \\\n  --query objectId -o tsv)\n\n# Assign roles to management groups\necho \"Assigning cross-subscription roles...\"\n\n# Assign reader role across all management groups\naz role assignment create \\\n  --assignee $READER_GROUP_ID \\\n  --role \"Cross-Subscription Resource Reader\" \\\n  --scope \"/providers/Microsoft.Management/managementGroups/$(az account show --query tenantId -o tsv)\"\n\n# Assign deployer role to non-production environments\naz role assignment create \\\n  --assignee $DEPLOYER_GROUP_ID \\\n  --role \"Cross-Subscription Deployer\" \\\n  --scope \"/providers/Microsoft.Management/managementGroups/nonprod-bu\"\n\n# Assign security role across all environments\naz role assignment create \\\n  --assignee $SECURITY_GROUP_ID \\\n  --role \"Security Admin\" \\\n  --scope \"/providers/Microsoft.Management/managementGroups/$(az account show --query tenantId -o tsv)\"\n\necho \"Cross-subscription RBAC framework configured successfully.\""
+        },
+        "implement_cross_subscription_templates": {
+          "language": "bash",
+          "title": "Cross-Subscription ARM Template Deployment (StackSets Equivalent)",
+          "code": "# Create cross-subscription deployment templates (equivalent to CloudFormation StackSets)\n\necho \"Creating cross-subscription deployment framework...\"\n\n# Create a subscription-level ARM template for standard resources\ncat > cross-subscription-standard-template.json << 'EOF'\n{\n  \"$schema\": \"https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#\",\n  \"contentVersion\": \"1.0.0.0\",\n  \"parameters\": {\n    \"environment\": {\n      \"type\": \"string\",\n      \"allowedValues\": [\"prod\", \"staging\", \"test\", \"dev\", \"sandbox\"],\n      \"metadata\": {\n        \"description\": \"Environment type for resource tagging and naming\"\n      }\n    },\n    \"businessUnit\": {\n      \"type\": \"string\",\n      \"allowedValues\": [\"Production\", \"NonProduction\", \"SharedServices\", \"Sandbox\"],\n      \"metadata\": {\n        \"description\": \"Business unit for governance and billing\"\n      }\n    },\n    \"costCenter\": {\n      \"type\": \"string\",\n      \"metadata\": {\n        \"description\": \"Cost center for chargeback allocation\"\n      }\n    },\n    \"regions\": {\n      \"type\": \"array\",\n      \"defaultValue\": [\"eastus\", \"westus2\"],\n      \"metadata\": {\n        \"description\": \"Regions for multi-region deployment\"\n      }\n    }\n  },\n  \"variables\": {\n    \"standardTags\": {\n      \"Environment\": \"[parameters('environment')]\",\n      \"BusinessUnit\": \"[parameters('businessUnit')]\",\n      \"CostCenter\": \"[parameters('costCenter')]\",\n      \"CreatedBy\": \"CrossSubscriptionTemplate\",\n      \"CreatedOn\": \"[utcNow('yyyy-MM-dd')]\"\n    },\n    \"resourceGroupName\": \"[concat('rg-', parameters('environment'), '-standard-', uniqueString(subscription().subscriptionId))]\",\n    \"keyVaultName\": \"[concat('kv-', parameters('environment'), '-', uniqueString(subscription().subscriptionId))]\",\n    \"storageAccountName\": \"[concat('sa', parameters('environment'), uniqueString(subscription().subscriptionId))]\",\n    \"logAnalyticsName\": \"[concat('law-', parameters('environment'), '-', uniqueString(subscription().subscriptionId))]\"\n  },\n  \"resources\": [\n    {\n      \"type\": \"Microsoft.Resources/resourceGroups\",\n      \"apiVersion\": \"2021-04-01\",\n      \"name\": \"[variables('resourceGroupName')]\",\n      \"location\": \"[parameters('regions')[0]]\",\n      \"tags\": \"[variables('standardTags')]\",\n      \"properties\": {}\n    },\n    {\n      \"type\": \"Microsoft.Resources/deployments\",\n      \"apiVersion\": \"2021-04-01\",\n      \"name\": \"standardResourcesDeployment\",\n      \"resourceGroup\": \"[variables('resourceGroupName')]\",\n      \"dependsOn\": [\n        \"[resourceId('Microsoft.Resources/resourceGroups', variables('resourceGroupName'))]\"\n      ],\n      \"properties\": {\n        \"mode\": \"Incremental\",\n        \"template\": {\n          \"$schema\": \"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#\",\n          \"contentVersion\": \"1.0.0.0\",\n          \"resources\": [\n            {\n              \"type\": \"Microsoft.KeyVault/vaults\",\n              \"apiVersion\": \"2021-11-01-preview\",\n              \"name\": \"[variables('keyVaultName')]\",\n              \"location\": \"[parameters('regions')[0]]\",\n              \"tags\": \"[variables('standardTags')]\",\n              \"properties\": {\n                \"sku\": {\n                  \"family\": \"A\",\n                  \"name\": \"standard\"\n                },\n                \"tenantId\": \"[subscription().tenantId]\",\n                \"enabledForDeployment\": true,\n                \"enabledForDiskEncryption\": true,\n                \"enabledForTemplateDeployment\": true,\n                \"enableSoftDelete\": true,\n                \"softDeleteRetentionInDays\": 90,\n                \"enablePurgeProtection\": true,\n                \"accessPolicies\": []\n              }\n            },\n            {\n              \"type\": \"Microsoft.Storage/storageAccounts\",\n              \"apiVersion\": \"2021-09-01\",\n              \"name\": \"[variables('storageAccountName')]\",\n              \"location\": \"[parameters('regions')[0]]\",\n              \"tags\": \"[variables('standardTags')]\",\n              \"sku\": {\n                \"name\": \"Standard_LRS\"\n              },\n              \"kind\": \"StorageV2\",\n              \"properties\": {\n                \"supportsHttpsTrafficOnly\": true,\n                \"minimumTlsVersion\": \"TLS1_2\",\n                \"allowBlobPublicAccess\": false,\n                \"encryption\": {\n                  \"services\": {\n                    \"blob\": {\n                      \"enabled\": true\n                    },\n                    \"file\": {\n                      \"enabled\": true\n                    }\n                  },\n                  \"keySource\": \"Microsoft.Storage\"\n                }\n              }\n            },\n            {\n              \"type\": \"Microsoft.OperationalInsights/workspaces\",\n              \"apiVersion\": \"2021-12-01-preview\",\n              \"name\": \"[variables('logAnalyticsName')]\",\n              \"location\": \"[parameters('regions')[0]]\",\n              \"tags\": \"[variables('standardTags')]\",\n              \"properties\": {\n                \"sku\": {\n                  \"name\": \"PerGB2018\"\n                },\n                \"retentionInDays\": 30,\n                \"features\": {\n                  \"enableLogAccessUsingOnlyResourcePermissions\": true\n                }\n              }\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"outputs\": {\n    \"resourceGroupName\": {\n      \"type\": \"string\",\n      \"value\": \"[variables('resourceGroupName')]\"\n    },\n    \"keyVaultName\": {\n      \"type\": \"string\",\n      \"value\": \"[variables('keyVaultName')]\"\n    },\n    \"storageAccountName\": {\n      \"type\": \"string\",\n      \"value\": \"[variables('storageAccountName')]\"\n    }\n  }\n}\nEOF\n\n# Create deployment script for multiple subscriptions\ncat > deploy-cross-subscription.sh << 'EOF'\n#!/bin/bash\n\n# Cross-subscription deployment script (equivalent to CloudFormation StackSets)\n\nSUBSCRIPTIONS=(\n  \"subscription-id-1:Production:CC001:prod\"\n  \"subscription-id-2:NonProduction:CC002:dev\"\n  \"subscription-id-3:NonProduction:CC002:test\"\n  \"subscription-id-4:SharedServices:CC003:shared\"\n)\n\nDEPLOYMENT_NAME=\"standard-resources-$(date +%Y%m%d-%H%M%S)\"\n\nfor sub_config in \"${SUBSCRIPTIONS[@]}\"; do\n  IFS=\":\" read -r sub_id business_unit cost_center environment <<< \"$sub_config\"\n  \n  echo \"Deploying to subscription: $sub_id (Environment: $environment)\"\n  \n  # Set subscription context\n  az account set --subscription \"$sub_id\"\n  \n  # Deploy template\n  az deployment sub create \\\n    --name \"$DEPLOYMENT_NAME\" \\\n    --location \"eastus\" \\\n    --template-file cross-subscription-standard-template.json \\\n    --parameters \\\n      environment=\"$environment\" \\\n      businessUnit=\"$business_unit\" \\\n      costCenter=\"$cost_center\" \\\n    --confirm-with-what-if\n  \n  if [ $? -eq 0 ]; then\n    echo \"✅ Deployment successful for subscription $sub_id\"\n  else\n    echo \"❌ Deployment failed for subscription $sub_id\"\n  fi\n  \n  echo \"---\"\ndone\n\necho \"Cross-subscription deployment completed.\"\nEOF\n\nchmod +x deploy-cross-subscription.sh\n\necho \"Cross-subscription deployment framework created.\"\necho \"Use ./deploy-cross-subscription.sh to deploy standard resources across subscriptions.\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Design and implement enterprise-scale multi-account governance architecture",
+    "requirements": [
+      "Create sophisticated management group hierarchy with 4 business units",
+      "Implement comprehensive policy framework with inheritance and exceptions",
+      "Set up cross-subscription RBAC with custom roles and Azure AD groups",
+      "Deploy standardized resources across multiple subscriptions using ARM templates",
+      "Configure automated compliance monitoring and reporting",
+      "Implement cost allocation and chargeback mechanisms",
+      "Set up centralized logging and security monitoring across all subscriptions",
+      "Create disaster recovery strategy across organizational boundaries"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify management group hierarchy",
+        "command": "az account management-group list --query 'length(@)'",
+        "expected": "Should return count of created management groups (minimum 8)"
+      },
+      {
+        "step": "Check policy assignments inheritance",
+        "command": "az policy assignment list --scope '/providers/Microsoft.Management/managementGroups/production-bu' --query 'length(@)'",
+        "expected": "Should return policy assignments for production management group"
+      },
+      {
+        "step": "Verify custom RBAC roles",
+        "command": "az role definition list --custom-role-only --query '[?contains(roleName, `Cross-Subscription`)].roleName'",
+        "expected": "Should return custom cross-subscription roles"
+      },
+      {
+        "step": "Check cross-subscription deployments",
+        "command": "az deployment sub list --query '[?contains(name, `standard-resources`)].name'",
+        "expected": "Should return cross-subscription deployment names"
+      }
+    ]
+  },
+  "organizational_complexity_patterns": {
+    "multi_tenant_scenarios": {
+      "holding_company": {
+        "description": "Parent company with multiple subsidiary organizations",
+        "structure": "Tenant Root → Regional Holdings → Business Units → Subsidiaries → Subscriptions",
+        "governance_model": "Federated governance with centralized security and compliance"
+      },
+      "merger_acquisition": {
+        "description": "Integrating acquired companies with different governance models",
+        "structure": "Tenant Root → Legacy Company A + Legacy Company B → Unified Business Units",
+        "governance_model": "Gradual convergence with policy harmonization"
+      },
+      "global_enterprise": {
+        "description": "Multinational corporation with regional compliance requirements",
+        "structure": "Tenant Root → Geographic Regions → Business Units → Local Entities → Subscriptions",
+        "governance_model": "Hierarchical with regional policy variations"
+      }
+    },
+    "compliance_frameworks": {
+      "sox_compliance": {
+        "controls": ["Change management through policy", "Access controls via RBAC", "Audit trails via Activity Log"],
+        "management_group_policies": ["SOX Change Control", "SOX Access Management", "SOX Audit Requirements"]
+      },
+      "pci_dss": {
+        "controls": ["Network segmentation", "Encryption requirements", "Access monitoring"],
+        "management_group_policies": ["PCI Network Controls", "PCI Encryption Standards", "PCI Access Monitoring"]
+      },
+      "gdpr_compliance": {
+        "controls": ["Data residency", "Right to be forgotten", "Consent management"],
+        "management_group_policies": ["GDPR Data Residency", "GDPR Data Rights", "GDPR Consent Framework"]
+      }
+    }
+  },
+  "advanced_cost_management": {
+    "chargeback_implementation": {
+      "cost_allocation_strategy": {
+        "by_business_unit": "Management group level cost allocation with automatic tagging",
+        "by_project": "Resource-level tagging with cost center assignments",
+        "by_environment": "Environment-based allocation with lifecycle cost tracking"
+      },
+      "automation_framework": {
+        "budget_creation": "Automated budget creation for new subscriptions and management groups",
+        "alert_configuration": "Cascading cost alerts from management group to subscription level",
+        "reporting_automation": "Monthly cost reports with variance analysis and recommendations"
+      }
+    }
+  },
+  "disaster_recovery_organizational": {
+    "cross_region_strategy": {
+      "primary_regions": "East US (Production), West US 2 (DR)",
+      "secondary_regions": "Central US (Development), East US 2 (Overflow)",
+      "management_group_dr": "Management group policies replicated across regions with regional variations"
+    },
+    "business_continuity": {
+      "management_plane_recovery": "Management group structure backup and restoration procedures",
+      "policy_continuity": "Policy definition backup and cross-region replication",
+      "rbac_recovery": "RBAC assignment documentation and automated restoration"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove organizational complexity lab resources in proper order",
+    "commands": [
+      "# Remove policy assignments (bottom-up)",
+      "az policy assignment delete --name 'Production Governance Assignment'",
+      "az policy assignment delete --name 'NonProd Governance Assignment'", 
+      "az policy assignment delete --name 'Sandbox Restrictions Assignment'",
+      "# Remove policy set definitions",
+      "az policy set-definition delete --name production-governance",
+      "az policy set-definition delete --name nonprod-governance", 
+      "az policy set-definition delete --name sandbox-restrictions",
+      "# Remove custom policy definitions",
+      "az policy definition delete --name corporate-security-baseline",
+      "az policy definition delete --name advanced-governance-policy",
+      "az policy definition delete --name regional-restriction-policy",
+      "# Remove custom RBAC roles",
+      "az role definition delete --name 'Cross-Subscription Resource Reader'",
+      "az role definition delete --name 'Cross-Subscription Deployer'",
+      "# Remove Azure AD groups",
+      "az ad group delete --group 'Enterprise Resource Readers'",
+      "az ad group delete --group 'Enterprise Resource Deployers'",
+      "az ad group delete --group 'Enterprise Security Administrators'",
+      "# Remove management groups (bottom-up hierarchy)",
+      "az account management-group delete --name dev-environment",
+      "az account management-group delete --name test-environment", 
+      "az account management-group delete --name staging-environment",
+      "az account management-group delete --name prod-apps",
+      "az account management-group delete --name prod-data",
+      "az account management-group delete --name prod-infra",
+      "az account management-group delete --name nonprod-bu",
+      "az account management-group delete --name production-bu",
+      "az account management-group delete --name shared-services-bu",
+      "az account management-group delete --name sandbox-bu"
+    ]
+  },
+  "key_takeaways": [
+    "Azure Management Groups provide more flexible organizational hierarchy than AWS Organizations",
+    "Azure Policy with inheritance offers more sophisticated governance than AWS SCPs",
+    "Cross-subscription RBAC in Azure provides granular access control across organizational boundaries",
+    "ARM templates at subscription level equivalent to CloudFormation StackSets for standardized deployments",
+    "Azure's built-in compliance frameworks reduce governance overhead compared to AWS Config",
+    "Management group inheritance enables consistent policy application with selective exceptions",
+    "Cross-subscription resource management in Azure provides better organizational integration"
+  ],
+  "next_steps": [
+    "Learn Azure Lighthouse for multi-tenant management scenarios",
+    "Explore Azure Purview for data governance across organizational boundaries", 
+    "Study Azure Cost Management APIs for advanced chargeback automation",
+    "Practice with Azure DevOps for governance-as-code implementations",
+    "Learn Azure Sentinel for organization-wide security monitoring"
+  ]
+}

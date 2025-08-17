@@ -1,0 +1,840 @@
+{
+  "lab_metadata": {
+    "id": "edge-5g-computing-lab",
+    "title": "AWS Edge Computing to Azure Edge Zones: 5G, MEC, and Ultra-Low Latency Applications",
+    "category": "edge-computing",
+    "difficulty": "advanced",
+    "estimated_time": "180 minutes",
+    "description": "Master next-generation edge computing by migrating from AWS Wavelength, Local Zones, and Outposts to Azure Edge Zones, Private MEC, and Azure Stack with 5G integration and ultra-low latency scenarios",
+    "aws_services": ["Wavelength", "Local Zones", "Outposts", "IoT Greengrass", "CloudFront", "Global Accelerator"],
+    "azure_services": ["Edge Zones", "Private MEC", "Azure Stack Edge", "IoT Edge", "Front Door", "Azure Arc"],
+    "tags": ["edge-computing", "5g", "latency", "iot", "future-tech", "enterprise", "sap-c02"],
+    "prerequisites": [
+      "Understanding of edge computing concepts and use cases",
+      "Knowledge of network latency and performance optimization",
+      "Familiarity with IoT and real-time processing",
+      "Basic understanding of 5G networks and MEC",
+      "Knowledge of containerization and microservices"
+    ],
+    "learning_objectives": [
+      "Migrate AWS Wavelength 5G edge applications to Azure Private MEC",
+      "Transform AWS Local Zones to Azure Edge Zones for regional edge computing",
+      "Convert AWS Outposts to Azure Stack Edge for on-premises edge",
+      "Implement 5G-enabled ultra-low latency applications",
+      "Set up edge AI and real-time analytics at the network edge",
+      "Configure hybrid edge-to-cloud orchestration and management",
+      "Establish monitoring and optimization for edge workloads"
+    ]
+  },
+  "scenario": {
+    "title": "Smart City and Industrial IoT Edge Migration",
+    "description": "MetroTech Solutions operates a comprehensive smart city platform with industrial IoT monitoring, autonomous vehicle coordination, and real-time video analytics across 15 cities. They need to migrate from AWS edge services to Azure while expanding 5G capabilities and reducing latency for critical applications to sub-10ms.",
+    "business_requirements": [
+      "Sub-10ms latency for autonomous vehicle coordination",
+      "Real-time video analytics for security and traffic management",
+      "5G-enabled AR/VR experiences for smart city applications",
+      "Industrial IoT monitoring with edge AI processing",
+      "Disaster-resilient edge infrastructure with local autonomy",
+      "Global orchestration with local edge processing",
+      "Compliance with local data sovereignty requirements"
+    ],
+    "current_aws_architecture": [
+      "Wavelength zones for 5G-enabled applications",
+      "Local Zones for regional low-latency processing",
+      "Outposts for on-premises edge computing",
+      "IoT Greengrass for edge device management",
+      "CloudFront for content delivery optimization",
+      "Global Accelerator for traffic routing"
+    ],
+    "target_azure_architecture": [
+      "Private MEC for 5G ultra-low latency applications",
+      "Edge Zones for regional edge computing",
+      "Azure Stack Edge for on-premises processing",
+      "IoT Edge for intelligent edge device management",
+      "Azure Front Door for global content delivery",
+      "Azure Arc for hybrid edge orchestration"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "5G Edge Computing: AWS Wavelength to Azure Private MEC",
+      "estimated_time": "60 minutes",
+      "description": "Deploy ultra-low latency 5G applications with Private MEC",
+      "aws_context": {
+        "service": "AWS Wavelength",
+        "description": "Ultra-low latency computing at 5G edge locations",
+        "key_features": [
+          "Sub-10ms latency to mobile devices",
+          "Integration with carrier networks",
+          "Standard AWS compute and storage services",
+          "Direct connection to 5G networks",
+          "Global availability through carrier partnerships"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Private MEC",
+        "description": "Private multi-access edge computing for 5G networks",
+        "key_features": [
+          "Ultra-low latency (<5ms) to 5G devices",
+          "Private edge cloud deployment",
+          "Carrier-grade reliability and security",
+          "Integration with Azure services and Arc",
+          "Custom deployment for enterprise requirements"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy 5G-Enabled Autonomous Vehicle Coordination System",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Azure Private MEC infrastructure",
+              "aws_context": "Similar to launching EC2 instances in Wavelength zones",
+              "private_mec_setup": {
+                "deployment_model": "Carrier-hosted private MEC",
+                "location": "Edge of 5G RAN (Radio Access Network)",
+                "specifications": {
+                  "compute": "Azure Stack Edge with GPU acceleration",
+                  "storage": "NVMe SSD for ultra-low latency data access",
+                  "networking": "Direct 5G RAN integration",
+                  "ai_acceleration": "NVIDIA T4 GPUs for real-time inference"
+                },
+                "azure_services": [
+                  "Container Instances for microservices",
+                  "IoT Edge for device management",
+                  "Cognitive Services for AI processing",
+                  "Event Hubs for real-time data streaming"
+                ]
+              },
+              "explanation": "Establishes carrier-grade edge computing infrastructure for 5G applications"
+            },
+            {
+              "step": 2,
+              "description": "Implement autonomous vehicle coordination application",
+              "aws_context": "Equivalent to Wavelength application for vehicle-to-infrastructure communication",
+              "av_coordination_system": {
+                "real_time_processing": {
+                  "vehicle_telemetry": {
+                    "data_sources": ["GPS position", "speed", "heading", "sensor data"],
+                    "processing_frequency": "100Hz (10ms intervals)",
+                    "latency_requirement": "<5ms end-to-end"
+                  },
+                  "traffic_optimization": {
+                    "intersection_management": "Real-time traffic light optimization",
+                    "route_coordination": "Dynamic routing based on traffic patterns",
+                    "emergency_response": "Priority routing for emergency vehicles"
+                  }
+                },
+                "microservices_architecture": {
+                  "vehicle_tracker": {
+                    "container": "metrotech/vehicle-tracker:latest",
+                    "resources": {"cpu": "2", "memory": "4Gi"},
+                    "latency_target": "<2ms"
+                  },
+                  "coordination_engine": {
+                    "container": "metrotech/coordination-engine:latest",
+                    "resources": {"cpu": "4", "memory": "8Gi", "gpu": "1"},
+                    "ai_models": ["traffic_prediction", "route_optimization"]
+                  },
+                  "safety_monitor": {
+                    "container": "metrotech/safety-monitor:latest",
+                    "resources": {"cpu": "2", "memory": "4Gi"},
+                    "priority": "critical"
+                  }
+                }
+              },
+              "explanation": "Creates real-time vehicle coordination with sub-5ms response times"
+            },
+            {
+              "step": 3,
+              "description": "Configure 5G network slicing and QoS",
+              "aws_context": "Similar to Wavelength Carrier IP configuration",
+              "network_slicing": {
+                "dedicated_slice": {
+                  "slice_id": "autonomous-vehicles",
+                  "bandwidth": "1Gbps guaranteed",
+                  "latency": "<1ms radio latency",
+                  "reliability": "99.999% availability"
+                },
+                "qos_configuration": {
+                  "ultra_reliable_low_latency": {
+                    "priority": 1,
+                    "applications": ["safety-critical", "collision-avoidance"],
+                    "latency_budget": "1ms"
+                  },
+                  "enhanced_mobile_broadband": {
+                    "priority": 2,
+                    "applications": ["video-streaming", "navigation"],
+                    "bandwidth": "100Mbps"
+                  }
+                },
+                "edge_orchestration": {
+                  "service_mesh": "Istio for traffic management",
+                  "load_balancing": "Round-robin with latency-aware routing",
+                  "failover": "Automatic failover to cloud in <100ms"
+                }
+              },
+              "explanation": "Ensures guaranteed performance for critical 5G applications"
+            },
+            {
+              "step": 4,
+              "description": "Implement edge AI for real-time decision making",
+              "aws_context": "Similar to running inference at Wavelength edge",
+              "edge_ai_processing": {
+                "ai_models": [
+                  {
+                    "name": "collision_prediction",
+                    "type": "ONNX",
+                    "inference_time": "<1ms",
+                    "input": "vehicle_sensor_data",
+                    "output": "collision_probability"
+                  },
+                  {
+                    "name": "traffic_flow_optimization",
+                    "type": "TensorFlow Lite",
+                    "inference_time": "<5ms",
+                    "input": "traffic_camera_feed",
+                    "output": "optimal_traffic_signals"
+                  }
+                ],
+                "real_time_pipeline": {
+                  "data_ingestion": "5G sensors → Edge Event Hubs (1ms)",
+                  "preprocessing": "Data normalization and filtering (1ms)",
+                  "ai_inference": "GPU-accelerated model execution (<1ms)",
+                  "decision_output": "Control signals to infrastructure (<2ms)",
+                  "total_latency": "<5ms end-to-end"
+                },
+                "model_management": {
+                  "deployment": "Azure Arc-enabled ML for model deployment",
+                  "updates": "Rolling updates with zero-downtime",
+                  "monitoring": "Real-time model performance tracking"
+                }
+              },
+              "explanation": "Enables intelligent real-time decision making at the network edge"
+            }
+          ],
+          "validation": [
+            "Verify end-to-end latency meets <5ms requirement",
+            "Test autonomous vehicle coordination under various traffic scenarios",
+            "Confirm 5G network slicing provides guaranteed performance",
+            "Validate edge AI models provide accurate real-time predictions"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Regional Edge Computing: Local Zones to Azure Edge Zones",
+      "estimated_time": "45 minutes",
+      "description": "Transform regional edge processing capabilities",
+      "aws_context": {
+        "service": "AWS Local Zones",
+        "description": "AWS infrastructure deployments closer to end users",
+        "key_features": [
+          "Single-digit millisecond latency to end users",
+          "Subset of AWS services at edge locations",
+          "Integration with parent AWS Region",
+          "Direct connection to local internet infrastructure",
+          "Support for latency-sensitive applications"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Edge Zones",
+        "description": "Small-footprint Azure extensions in metro areas",
+        "key_features": [
+          "Ultra-low latency for local applications",
+          "Core Azure services at edge locations",
+          "Seamless integration with Azure regions",
+          "Operator and partner ecosystem integration",
+          "Support for mixed reality and gaming"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Smart City Video Analytics Platform",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Azure Edge Zone infrastructure",
+              "aws_context": "Similar to deploying resources in AWS Local Zones",
+              "edge_zone_deployment": {
+                "location": "Metro Edge Zone - New York",
+                "available_services": [
+                  "Virtual Machines with GPU support",
+                  "Container Instances",
+                  "Cognitive Services (Computer Vision)",
+                  "Storage with local caching",
+                  "Networking with ExpressRoute Local"
+                ],
+                "infrastructure_spec": {
+                  "compute": "Standard_NC6s_v3 (6 vCPU, 112 GB RAM, 1 Tesla V100)",
+                  "storage": "Premium SSD with 10,000 IOPS",
+                  "network": "25 Gbps to parent region, 10 Gbps local"
+                }
+              },
+              "explanation": "Creates regional edge presence for latency-sensitive applications"
+            },
+            {
+              "step": 2,
+              "description": "Implement real-time video analytics for traffic management",
+              "video_analytics_system": {
+                "camera_network": {
+                  "coverage": "150 traffic intersections across metro area",
+                  "data_volume": "50TB/day of video data",
+                  "streaming_protocol": "RTSP with H.264 encoding"
+                },
+                "processing_pipeline": {
+                  "video_ingestion": {
+                    "service": "Azure Media Services at edge",
+                    "capacity": "150 concurrent 4K streams",
+                    "latency": "<100ms from camera to processing"
+                  },
+                  "computer_vision": {
+                    "models": ["vehicle_detection", "pedestrian_counting", "incident_detection"],
+                    "processing": "Real-time inference on edge GPUs",
+                    "accuracy": ">95% detection rate"
+                  },
+                  "analytics_output": {
+                    "traffic_metrics": "Vehicle count, speed, density per intersection",
+                    "incident_alerts": "Automatic incident detection and notification",
+                    "optimization_data": "Traffic pattern analysis for signal optimization"
+                  }
+                },
+                "edge_ai_models": [
+                  {
+                    "name": "YOLOv5 Vehicle Detection",
+                    "inference_time": "15ms per frame",
+                    "accuracy": "96.5% mAP",
+                    "deployment": "ONNX Runtime on NVIDIA V100"
+                  },
+                  {
+                    "name": "Pedestrian Safety Monitor",
+                    "inference_time": "20ms per frame",
+                    "features": ["crosswalk_detection", "jaywalking_alerts"],
+                    "integration": "Traffic signal control system"
+                  }
+                ]
+              },
+              "explanation": "Processes massive video streams locally for real-time traffic insights"
+            },
+            {
+              "step": 3,
+              "description": "Configure hybrid edge-to-cloud analytics",
+              "hybrid_analytics": {
+                "edge_processing": {
+                  "real_time_alerts": "Immediate incident response (<5 seconds)",
+                  "local_storage": "24-hour video retention for investigations",
+                  "traffic_optimization": "Real-time signal adjustment"
+                },
+                "cloud_integration": {
+                  "data_aggregation": "Hourly traffic pattern summaries to central cloud",
+                  "ml_training": "Weekly model retraining with aggregated data",
+                  "long_term_storage": "Compressed video archive in Azure Blob"
+                },
+                "intelligent_offloading": {
+                  "criteria": [
+                    "Process critical alerts locally",
+                    "Send summary data to cloud for historical analysis",
+                    "Offload compute-intensive training to cloud"
+                  ],
+                  "bandwidth_optimization": "90% reduction in data transfer through edge processing"
+                }
+              },
+              "explanation": "Optimizes processing between edge and cloud for efficiency and performance"
+            }
+          ],
+          "validation": [
+            "Verify video processing meets real-time requirements",
+            "Test incident detection accuracy and alert latency",
+            "Confirm hybrid processing optimizes bandwidth usage",
+            "Validate traffic optimization improves flow metrics"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "On-Premises Edge: AWS Outposts to Azure Stack Edge",
+      "estimated_time": "45 minutes",
+      "description": "Transform on-premises edge computing infrastructure",
+      "aws_context": {
+        "service": "AWS Outposts",
+        "description": "Fully managed service for on-premises AWS infrastructure",
+        "key_features": [
+          "AWS services on-premises with local compute and storage",
+          "Consistent hybrid experience across on-premises and cloud",
+          "Local data processing for latency and compliance",
+          "Managed updates and maintenance",
+          "Integration with AWS control plane"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Stack Edge",
+        "description": "AI-enabled edge computing device with cloud management",
+        "key_features": [
+          "Edge computing with GPU acceleration",
+          "AI and machine learning at the edge",
+          "Cloud-managed device with local autonomy",
+          "Data transfer and transformation capabilities",
+          "Integration with Azure Arc and IoT services"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Industrial IoT Edge Processing Platform",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Azure Stack Edge for manufacturing environment",
+              "aws_context": "Similar to deploying AWS Outposts rack in factory",
+              "azure_stack_edge_setup": {
+                "device_model": "Azure Stack Edge Pro GPU",
+                "specifications": {
+                  "compute": "Intel Xeon 4214 CPU, 128GB RAM",
+                  "gpu": "NVIDIA Tesla T4 (16GB)",
+                  "storage": "1.6TB NVMe SSD + 5.6TB SSD",
+                  "networking": "4x 25GbE ports"
+                },
+                "deployment_location": "Manufacturing floor - controlled environment",
+                "connectivity": {
+                  "cloud_connection": "ExpressRoute for reliable cloud connectivity",
+                  "local_network": "Integration with factory OT network",
+                  "security": "Isolated from corporate IT network"
+                }
+              },
+              "explanation": "Establishes ruggedized edge computing in industrial environment"
+            },
+            {
+              "step": 2,
+              "description": "Implement predictive maintenance with edge AI",
+              "predictive_maintenance": {
+                "sensor_integration": {
+                  "vibration_sensors": "Accelerometers on 200+ machines",
+                  "temperature_sensors": "Thermal monitoring of critical components",
+                  "acoustic_sensors": "Sound pattern analysis for anomaly detection",
+                  "data_frequency": "1kHz sampling rate per sensor"
+                },
+                "edge_processing": {
+                  "data_preprocessing": {
+                    "filtering": "Remove noise and irrelevant frequencies",
+                    "feature_extraction": "FFT analysis, statistical features",
+                    "normalization": "Machine-specific baseline normalization"
+                  },
+                  "ai_inference": {
+                    "anomaly_detection": "Autoencoder model for unusual patterns",
+                    "failure_prediction": "Time-series forecasting with LSTM",
+                    "classification": "Specific failure mode identification"
+                  },
+                  "real_time_alerts": {
+                    "immediate": "Critical failures predicted within 1 hour",
+                    "scheduled": "Maintenance recommendations for next window",
+                    "trends": "Long-term degradation patterns"
+                  }
+                },
+                "local_dashboard": {
+                  "real_time_monitoring": "Live machine health status",
+                  "predictive_insights": "Failure probability and timeline",
+                  "maintenance_scheduling": "Optimal maintenance window recommendations"
+                }
+              },
+              "explanation": "Enables proactive maintenance with sub-second response times"
+            },
+            {
+              "step": 3,
+              "description": "Configure quality control with computer vision",
+              "quality_control_system": {
+                "camera_setup": {
+                  "high_resolution": "12MP cameras at each inspection station",
+                  "lighting": "LED ring lights for consistent illumination",
+                  "positioning": "Robotic arms for multi-angle inspection"
+                },
+                "computer_vision_pipeline": {
+                  "image_capture": "Synchronized multi-camera capture",
+                  "preprocessing": "Noise reduction and image enhancement",
+                  "defect_detection": {
+                    "surface_inspection": "Scratch, dent, and discoloration detection",
+                    "dimensional_analysis": "Precise measurements against specifications",
+                    "assembly_verification": "Component presence and positioning"
+                  },
+                  "classification": {
+                    "pass_fail": "Binary classification for production line",
+                    "defect_categorization": "Specific defect type identification",
+                    "severity_assessment": "Quality grade assignment"
+                  }
+                },
+                "feedback_loop": {
+                  "real_time_adjustments": "Automatic machine parameter adjustments",
+                  "quality_metrics": "Continuous tracking of defect rates",
+                  "process_optimization": "Statistical analysis for process improvement"
+                }
+              },
+              "explanation": "Provides 100% inspection with consistent quality standards"
+            },
+            {
+              "step": 4,
+              "description": "Set up edge orchestration and cloud synchronization",
+              "edge_orchestration": {
+                "azure_arc_integration": {
+                  "device_management": "Centralized management of edge devices",
+                  "policy_enforcement": "Security and compliance policies",
+                  "remote_monitoring": "Cloud-based device health monitoring"
+                },
+                "workload_orchestration": {
+                  "container_runtime": "Kubernetes on Azure Stack Edge",
+                  "application_deployment": "GitOps-based deployment pipeline",
+                  "scaling": "Automatic workload scaling based on demand"
+                },
+                "data_synchronization": {
+                  "local_processing": "All real-time processing at edge",
+                  "cloud_sync": "Hourly aggregated data and model updates",
+                  "offline_capability": "Full autonomy during connectivity loss"
+                }
+              },
+              "explanation": "Ensures seamless hybrid operation with cloud orchestration"
+            }
+          ],
+          "validation": [
+            "Verify predictive maintenance accurately identifies potential failures",
+            "Test quality control system catches defects with >99% accuracy",
+            "Confirm edge operations continue during cloud connectivity loss",
+            "Validate cloud orchestration manages edge resources effectively"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Edge Orchestration and Management: Hybrid Edge-to-Cloud Operations",
+      "estimated_time": "30 minutes",
+      "description": "Implement comprehensive edge management and monitoring",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Global Edge Orchestration Platform",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Azure Arc for unified edge management",
+              "azure_arc_setup": {
+                "edge_device_registration": [
+                  "Private MEC sites (5G edge locations)",
+                  "Edge Zone deployments (metro areas)",
+                  "Azure Stack Edge devices (industrial sites)"
+                ],
+                "centralized_management": {
+                  "policy_management": "Consistent security and compliance policies",
+                  "configuration_management": "Standardized application configurations",
+                  "update_management": "Coordinated updates across edge infrastructure"
+                },
+                "monitoring_integration": {
+                  "azure_monitor": "Unified monitoring across edge and cloud",
+                  "log_analytics": "Centralized logging and analysis",
+                  "alerting": "Proactive alerts for edge infrastructure"
+                }
+              },
+              "explanation": "Provides unified management across distributed edge infrastructure"
+            },
+            {
+              "step": 2,
+              "description": "Implement intelligent workload placement",
+              "workload_orchestration": {
+                "placement_algorithm": {
+                  "latency_requirements": "Place workloads closest to data sources",
+                  "resource_availability": "Dynamic allocation based on capacity",
+                  "cost_optimization": "Balance between edge and cloud processing"
+                },
+                "application_scenarios": [
+                  {
+                    "workload": "Real-time video analytics",
+                    "placement": "Edge Zone for low latency",
+                    "failover": "Cloud processing during edge overload"
+                  },
+                  {
+                    "workload": "ML model training",
+                    "placement": "Cloud for compute-intensive tasks",
+                    "data_locality": "Use edge-processed training data"
+                  },
+                  {
+                    "workload": "IoT data processing",
+                    "placement": "Stack Edge for local processing",
+                    "aggregation": "Cloud for historical analysis"
+                  }
+                ]
+              },
+              "explanation": "Optimizes workload distribution for performance and cost"
+            },
+            {
+              "step": 3,
+              "description": "Configure comprehensive monitoring and analytics",
+              "monitoring_platform": {
+                "performance_metrics": [
+                  "End-to-end latency measurements",
+                  "Edge device resource utilization",
+                  "Network bandwidth and connectivity quality",
+                  "Application performance indicators"
+                ],
+                "operational_dashboards": [
+                  {
+                    "name": "Edge Infrastructure Overview",
+                    "components": ["Device health", "Connectivity status", "Resource utilization"],
+                    "audience": "Operations team"
+                  },
+                  {
+                    "name": "Application Performance",
+                    "components": ["Latency metrics", "Throughput", "Error rates"],
+                    "audience": "Development team"
+                  },
+                  {
+                    "name": "Business Intelligence",
+                    "components": ["KPI tracking", "Cost analysis", "ROI metrics"],
+                    "audience": "Business stakeholders"
+                  }
+                ],
+                "automated_optimization": {
+                  "resource_scaling": "Auto-scale based on demand patterns",
+                  "traffic_routing": "Dynamic routing for optimal performance",
+                  "cost_management": "Automatic workload migration for cost optimization"
+                }
+              },
+              "explanation": "Provides comprehensive visibility and automated optimization"
+            }
+          ],
+          "validation": [
+            "Verify Arc-enabled management works across all edge locations",
+            "Test intelligent workload placement optimizes performance",
+            "Confirm monitoring provides accurate real-time insights",
+            "Validate automated optimization improves efficiency"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Edge Infrastructure Costs",
+      "aws_comparison": "Outposts require significant upfront investment and ongoing fees",
+      "azure_model": "Azure Stack Edge offers flexible consumption-based pricing",
+      "optimization_strategies": [
+        "Right-size edge deployments based on actual workload requirements",
+        "Use intelligent workload placement to minimize edge resource usage",
+        "Implement auto-scaling to handle peak demands efficiently",
+        "Optimize data transfer between edge and cloud"
+      ],
+      "estimated_savings": "25-40% through optimized resource allocation and usage-based pricing"
+    },
+    {
+      "area": "5G and MEC Costs",
+      "aws_comparison": "Wavelength charges premium rates for 5G edge access",
+      "azure_model": "Private MEC offers dedicated infrastructure with predictable costs",
+      "optimization_strategies": [
+        "Leverage carrier partnerships for cost-effective 5G access",
+        "Implement efficient caching to reduce 5G data transmission",
+        "Use network slicing for optimized bandwidth allocation",
+        "Deploy edge AI to minimize cloud processing requirements"
+      ],
+      "estimated_savings": "30-50% through efficient 5G resource utilization"
+    },
+    {
+      "area": "Data Processing and Storage",
+      "aws_comparison": "High costs for data transfer and cloud processing",
+      "azure_model": "Local processing reduces cloud computing and transfer costs",
+      "optimization_strategies": [
+        "Process data locally at edge to minimize cloud transfer",
+        "Use intelligent data tiering for optimal storage costs",
+        "Implement compression and deduplication at edge",
+        "Optimize model inference frequency based on business value"
+      ],
+      "estimated_savings": "40-60% through local processing and intelligent data management"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Edge Device Security",
+      "practices": [
+        "Implement hardware-based root of trust for device authentication",
+        "Use encrypted communication channels for all edge-to-cloud traffic",
+        "Deploy regular security updates and patch management",
+        "Monitor edge devices for anomalous behavior and security threats"
+      ]
+    },
+    {
+      "category": "Network Security",
+      "practices": [
+        "Implement network segmentation between OT and IT networks",
+        "Use VPN or private connectivity for edge-to-cloud communication",
+        "Deploy network intrusion detection systems at edge locations",
+        "Implement zero-trust network access for edge resources"
+      ]
+    },
+    {
+      "category": "Data Protection",
+      "practices": [
+        "Encrypt data at rest and in transit at all edge locations",
+        "Implement data loss prevention policies for sensitive information",
+        "Use secure key management with Azure Key Vault integration",
+        "Regular security audits and vulnerability assessments"
+      ]
+    },
+    {
+      "category": "Operational Security",
+      "practices": [
+        "Implement role-based access control for edge management",
+        "Use Azure Arc for centralized security policy enforcement",
+        "Monitor and audit all edge device access and activities",
+        "Establish incident response procedures for edge security events"
+      ]
+    }
+  ],
+  "compliance_considerations": [
+    {
+      "regulation": "Data Sovereignty",
+      "requirements": [
+        "Ensure data processing remains within specified geographic boundaries",
+        "Implement controls to prevent unauthorized data egress",
+        "Maintain audit trails for all data processing activities",
+        "Comply with local data protection regulations"
+      ],
+      "implementation": "Edge processing ensures data locality with Azure Arc governance"
+    },
+    {
+      "regulation": "Industrial Safety Standards",
+      "requirements": [
+        "Meet functional safety requirements for industrial automation",
+        "Implement redundancy for critical safety systems",
+        "Ensure fail-safe operation during system failures",
+        "Regular safety system testing and validation"
+      ],
+      "implementation": "Azure Stack Edge provides industrial-grade reliability and safety features"
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment",
+      "tasks": [
+        "Audit current AWS edge infrastructure and usage patterns",
+        "Assess latency requirements for different application workloads",
+        "Evaluate 5G and carrier requirements for ultra-low latency applications",
+        "Plan edge location strategy and resource requirements",
+        "Design hybrid edge-to-cloud architecture"
+      ]
+    },
+    {
+      "phase": "Azure Edge Infrastructure Deployment",
+      "tasks": [
+        "Deploy Azure Stack Edge devices at on-premises locations",
+        "Set up Azure Edge Zones for regional edge processing",
+        "Configure Private MEC for 5G ultra-low latency applications",
+        "Establish connectivity and networking infrastructure",
+        "Implement security and compliance controls"
+      ]
+    },
+    {
+      "phase": "Application Migration and Optimization",
+      "tasks": [
+        "Migrate applications to edge computing environments",
+        "Optimize applications for edge resource constraints",
+        "Implement edge AI models and real-time processing",
+        "Configure hybrid edge-to-cloud data flows",
+        "Test and validate performance and latency requirements"
+      ]
+    },
+    {
+      "phase": "Management and Monitoring Setup",
+      "tasks": [
+        "Configure Azure Arc for unified edge management",
+        "Set up comprehensive monitoring and alerting",
+        "Implement automated scaling and optimization",
+        "Train operations teams on edge management",
+        "Establish ongoing optimization and maintenance procedures"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "High Latency in 5G Applications",
+      "symptoms": [
+        "Applications not meeting sub-10ms latency requirements",
+        "Inconsistent response times for real-time processing",
+        "Poor user experience for latency-sensitive applications"
+      ],
+      "solutions": [
+        "Verify 5G network slicing configuration and QoS settings",
+        "Check Private MEC placement and proximity to radio access network",
+        "Optimize application architecture for edge processing",
+        "Monitor network congestion and carrier performance",
+        "Review edge resource utilization and scaling policies"
+      ]
+    },
+    {
+      "issue": "Edge Device Connectivity Problems",
+      "symptoms": [
+        "Intermittent connectivity between edge and cloud",
+        "Data synchronization failures",
+        "Edge device management issues"
+      ],
+      "solutions": [
+        "Verify network connectivity and firewall configurations",
+        "Check Azure Arc agent status and registration",
+        "Review ExpressRoute or VPN connectivity for edge sites",
+        "Monitor edge device health and resource utilization",
+        "Implement connectivity redundancy and failover mechanisms"
+      ]
+    },
+    {
+      "issue": "Edge Resource Constraints",
+      "symptoms": [
+        "Applications running slowly on edge devices",
+        "Resource exhaustion alerts",
+        "Workload failures due to insufficient capacity"
+      ],
+      "solutions": [
+        "Right-size edge device specifications for workload requirements",
+        "Implement intelligent workload placement and scaling",
+        "Optimize applications for edge resource constraints",
+        "Configure automatic failover to cloud during peak loads",
+        "Monitor resource usage patterns and adjust capacity"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure Stack Edge documentation - https://docs.microsoft.com/en-us/azure/databox-online/",
+        "Azure Edge Zones documentation - https://docs.microsoft.com/en-us/azure/networking/edge-zones-overview",
+        "Azure Arc documentation - https://docs.microsoft.com/en-us/azure/azure-arc/",
+        "Azure Private MEC documentation - https://docs.microsoft.com/en-us/azure/private-multi-access-edge-compute-mec"
+      ]
+    },
+    {
+      "type": "Architecture Guides",
+      "links": [
+        "5G and edge computing architecture patterns",
+        "Industrial IoT edge computing reference architectures",
+        "Smart city edge computing solutions guide",
+        "Edge AI and machine learning deployment patterns"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS Wavelength to Azure Private MEC migration guide",
+        "Local Zones to Edge Zones migration patterns",
+        "Outposts to Azure Stack Edge migration strategies",
+        "Edge application optimization best practices"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Digital Twins for comprehensive edge device modeling",
+    "Set up Azure Time Series Insights for edge data analytics",
+    "Configure Azure Security Center for IoT for edge security monitoring",
+    "Explore Azure Percept for AI-enabled edge devices",
+    "Implement Azure Sphere for secured edge device connectivity",
+    "Set up Azure Maps for location-based edge services"
+  ]
+}

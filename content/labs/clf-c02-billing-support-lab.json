@@ -1,0 +1,310 @@
+{
+  "id": "clf-c02-billing-support-lab",
+  "title": "AWS Billing to Azure Cost Management: Pricing Models and Support Strategies",
+  "category": "cloud-financial-management",
+  "difficulty": "beginner",
+  "estimatedTime": "45 minutes",
+  "awsCertification": "CLF-C02",
+  "certificationWeight": "12% - Billing, Pricing, and Support Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master cloud financial management by understanding AWS billing and pricing models and migrating to Azure cost management with support tier comparisons, cost control strategies, and billing optimization techniques.",
+  
+  "learningObjectives": [
+    "Understand AWS pricing models and billing constructs",
+    "Learn Azure pricing and cost management equivalents",
+    "Compare AWS and Azure support tiers and services",
+    "Explore cost control and optimization strategies",
+    "Understand billing alerts, budgets, and cost monitoring",
+    "Learn support case management and resource utilization"
+  ],
+
+  "prerequisites": [
+    "Completion of previous CLF-C02 labs (Cloud Concepts, Security, Technology)",
+    "Basic understanding of IT costs and budgeting",
+    "Familiarity with subscription and payment models",
+    "No advanced financial management experience required"
+  ],
+
+  "awsServices": [
+    "AWS Pricing Calculator",
+    "AWS Cost Explorer",
+    "AWS Budgets",
+    "AWS Billing Dashboard",
+    "AWS Cost and Usage Reports",
+    "AWS Support Plans (Basic, Developer, Business, Enterprise)",
+    "AWS Trusted Advisor",
+    "AWS Well-Architected Tool"
+  ],
+
+  "azureServices": [
+    "Azure Pricing Calculator", 
+    "Azure Cost Management + Billing",
+    "Azure Budgets",
+    "Azure Billing Portal",
+    "Azure Usage and Billing APIs",
+    "Azure Support Plans (Basic, Developer, Standard, Professional Direct, Premier)",
+    "Azure Advisor",
+    "Azure Well-Architected Review"
+  ],
+
+  "businessScenario": "CloudStart Enterprises is a mid-size company planning their cloud migration and needs to understand cloud costs, billing models, and support options. They want to compare AWS and Azure pricing, establish cost controls and budgets, choose appropriate support levels, and ensure they can manage and optimize their cloud spending effectively while maintaining proper support coverage for their critical business operations.",
+
+  "sections": [
+    {
+      "title": "Cloud Pricing Models and Cost Structure",
+      "duration": "15 minutes",
+      "topics": [
+        "AWS pay-as-you-go pricing model",
+        "Azure consumption-based pricing approach",
+        "Reserved capacity and commitment discounts",
+        "Spot/low-priority pricing for cost optimization",
+        "Free tier offerings and trial credits"
+      ],
+      "tasks": [
+        {
+          "title": "Compare Pricing Models and Cost Structures",
+          "description": "Understand different pricing approaches and cost optimization opportunities",
+          "steps": [
+            "Explore AWS pay-as-you-go pricing for core services",
+            "Compare with Azure consumption-based pricing model",
+            "Analyze Reserved Instances vs Azure Reservations savings",
+            "Evaluate AWS Spot Instances vs Azure Spot VMs pricing",
+            "Compare free tier offerings and trial credit programs",
+            "Calculate cost scenarios for different workload types"
+          ],
+          "deliverables": [
+            "Pricing model comparison matrix",
+            "Cost scenario analysis",
+            "Reserved capacity savings calculation",
+            "Free tier utilization plan"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Billing Management and Cost Control",
+      "duration": "15 minutes",
+      "topics": [
+        "AWS Billing Dashboard and cost visualization",
+        "Azure Cost Management + Billing portal",
+        "Budget creation and alert configuration",
+        "Cost allocation and tagging strategies",
+        "Spending forecasts and trend analysis"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Cost Control Framework",
+          "description": "Set up comprehensive billing management and cost control systems",
+          "steps": [
+            "Navigate AWS Billing Dashboard and cost reporting features",
+            "Explore Azure Cost Management + Billing portal capabilities",
+            "Create budgets with appropriate thresholds and alerts",
+            "Design cost allocation strategy using resource tagging",
+            "Set up automated spending notifications and controls",
+            "Plan cost optimization review and governance processes"
+          ],
+          "deliverables": [
+            "Budget and alert configuration",
+            "Cost allocation tagging strategy", 
+            "Spending notification setup",
+            "Cost governance framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Support Plans and Service Levels",
+      "duration": "10 minutes",
+      "topics": [
+        "AWS Support plans: Basic, Developer, Business, Enterprise",
+        "Azure Support plans: Basic, Developer, Standard, Professional Direct, Premier",
+        "Support response times and escalation procedures",
+        "Technical account management and advisory services",
+        "Self-service resources and documentation"
+      ],
+      "tasks": [
+        {
+          "title": "Select Appropriate Support Strategy",
+          "description": "Choose optimal support plans and design support escalation procedures",
+          "steps": [
+            "Compare AWS Support plan features and pricing",
+            "Analyze Azure Support plan options and service levels",
+            "Map business requirements to support response times",
+            "Evaluate technical account management benefits",
+            "Plan support case escalation and communication procedures",
+            "Design hybrid support strategy for multi-cloud scenarios"
+          ],
+          "deliverables": [
+            "Support plan comparison and recommendation",
+            "Support escalation procedures",
+            "Technical account management plan",
+            "Self-service resource strategy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cost Optimization and Advisory Services",
+      "duration": "5 minutes",
+      "topics": [
+        "AWS Trusted Advisor cost optimization recommendations",
+        "Azure Advisor cost and performance guidance",
+        "Well-Architected Framework cost optimization pillar",
+        "Cost anomaly detection and automated responses",
+        "Regular cost review and optimization processes"
+      ],
+      "tasks": [
+        {
+          "title": "Establish Cost Optimization Processes",
+          "description": "Implement ongoing cost optimization and advisory service utilization",
+          "steps": [
+            "Configure AWS Trusted Advisor for cost optimization insights",
+            "Set up Azure Advisor recommendations and action items",
+            "Implement Well-Architected Framework cost reviews",
+            "Configure cost anomaly detection and alerting",
+            "Plan regular cost optimization review cycles",
+            "Design automated cost optimization responses"
+          ],
+          "deliverables": [
+            "Cost optimization dashboard",
+            "Advisory service configuration",
+            "Automated optimization workflows",
+            "Regular review and optimization schedule"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Cloud Cost Calculator Challenge",
+      "description": "Use pricing calculators to estimate costs for different scenarios",
+      "steps": [
+        "Define three business scenarios: startup, growing business, enterprise",
+        "Use AWS Pricing Calculator to estimate monthly costs",
+        "Use Azure Pricing Calculator for equivalent services",
+        "Compare costs including reserved capacity discounts",
+        "Factor in support plan costs and additional services",
+        "Create 3-year total cost of ownership (TCO) analysis"
+      ],
+      "expectedOutcome": "Comprehensive cost comparison with TCO analysis and optimization recommendations"
+    },
+    {
+      "title": "Budget and Alert Configuration Exercise", 
+      "description": "Set up cost monitoring and budget controls",
+      "steps": [
+        "Create monthly and annual budgets for sample organization",
+        "Configure budget alerts at 50%, 80%, and 100% thresholds",
+        "Set up cost allocation tags for different departments",
+        "Configure automated cost reporting for stakeholders",
+        "Test alert mechanisms and notification delivery",
+        "Plan budget review and adjustment procedures"
+      ],
+      "expectedOutcome": "Functional budget and alerting system with proper governance controls"
+    },
+    {
+      "title": "Support Plan Selection Workshop",
+      "description": "Choose appropriate support plans for different business needs",
+      "steps": [
+        "Analyze three different business profiles with varying support needs",
+        "Map each profile's requirements to AWS and Azure support features",
+        "Calculate support costs vs business impact of downtime",
+        "Evaluate technical account management benefits for each scenario",
+        "Create support escalation procedures and contact strategies",
+        "Present support plan recommendations with justification"
+      ],
+      "expectedOutcome": "Tailored support strategy recommendations with cost-benefit analysis"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Difficulty understanding complex pricing models and hidden costs",
+      "solution": "Use simple examples with clear line-item breakdowns, emphasize common cost drivers, and provide pricing calculator walkthroughs"
+    },
+    {
+      "issue": "Overwhelming number of support options and features",
+      "solution": "Focus on business impact and response time requirements, use comparison tables, and provide decision trees for support selection"
+    },
+    {
+      "issue": "Confusion about budget setup and cost allocation",
+      "solution": "Start with simple organizational budgets, provide tagging strategy templates, and use step-by-step configuration guides"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Pricing Model Understanding",
+      "criteria": [
+        "Can explain different cloud pricing models and their benefits",
+        "Understands reserved capacity and spot pricing concepts",
+        "Can use pricing calculators effectively for cost estimation",
+        "Demonstrates awareness of cost optimization opportunities"
+      ]
+    },
+    {
+      "category": "Billing and Cost Management",
+      "criteria": [
+        "Can navigate billing dashboards and cost reporting tools",
+        "Understands how to set up budgets and spending alerts",
+        "Can design cost allocation and tagging strategies",
+        "Demonstrates knowledge of cost control best practices"
+      ]
+    },
+    {
+      "category": "Support Planning",
+      "criteria": [
+        "Can compare support plans and select appropriate coverage",
+        "Understands support response times and escalation procedures",
+        "Can evaluate technical account management benefits",
+        "Demonstrates ability to design support strategies"
+      ]
+    },
+    {
+      "category": "Cost Optimization",
+      "criteria": [
+        "Can use advisory services for cost optimization insights",
+        "Understands automated cost optimization opportunities",
+        "Can plan regular cost review and optimization processes",
+        "Demonstrates knowledge of Well-Architected cost principles"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "CLF-C02": {
+      "domain": "Billing, Pricing, and Support",
+      "weight": "12%",
+      "coverage": [
+        "Compare AWS pricing models",
+        "Recognize the various account structures in relation to AWS billing and pricing",
+        "Identify resources available for billing support",
+        "Identify AWS cost management tools",
+        "Identify AWS support options"
+      ],
+      "examTopics": [
+        "AWS pricing models and cost structure",
+        "Billing management and cost control tools",
+        "Support plans and service level comparisons",
+        "Cost optimization and advisory services",
+        "Account management and cost allocation strategies"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can effectively use pricing calculators for cost estimation",
+    "Demonstrates ability to set up cost controls and budget management",
+    "Shows understanding of support plan selection criteria",
+    "Can implement cost optimization and monitoring strategies",
+    "Understands billing structures and payment models"
+  ],
+
+  "nextSteps": [
+    "Complete CLF-C02 certification preparation and practice exams",
+    "Begin exploring associate-level certifications (SAA-C03, DVA-C02)",
+    "Gain hands-on experience with AWS and Azure billing portals",
+    "Practice cost optimization techniques in real cloud environments"
+  ]
+}

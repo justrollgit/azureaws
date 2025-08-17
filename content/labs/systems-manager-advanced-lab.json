@@ -1,0 +1,1240 @@
+{
+  "lab_metadata": {
+    "id": "systems-manager-advanced-lab",
+    "title": "AWS Systems Manager to Azure App Configuration & Automation: Advanced Configuration Management and Operations",
+    "category": "configuration-management",
+    "difficulty": "advanced",
+    "estimated_time": "165 minutes",
+    "description": "Master advanced configuration management and operations automation by migrating from AWS Systems Manager to Azure App Configuration, Update Management, and Automation solutions with enterprise-grade compliance and governance",
+    "aws_services": ["Systems Manager Parameter Store", "Patch Manager", "Session Manager", "Systems Manager Automation", "Inventory", "Compliance", "OpsCenter"],
+    "azure_services": ["App Configuration", "Update Management", "Azure Bastion", "Azure Automation", "Azure Policy", "Security Center", "Log Analytics"],
+    "tags": ["configuration-management", "automation", "compliance", "patch-management", "devops", "dop-c02-critical", "governance"],
+    "prerequisites": [
+      "Understanding of configuration management principles",
+      "Knowledge of patch management and compliance frameworks",
+      "Familiarity with automation and orchestration concepts",
+      "Basic understanding of remote access and session management",
+      "Experience with infrastructure as code and policy management"
+    ],
+    "learning_objectives": [
+      "Migrate AWS Systems Manager Parameter Store to Azure App Configuration",
+      "Transform Patch Manager workflows to Azure Update Management",
+      "Convert Session Manager access to Azure Bastion secure connectivity",
+      "Implement Systems Manager Automation using Azure Automation runbooks",
+      "Establish Inventory management with Azure Policy and Security Center",
+      "Build compliance monitoring and reporting frameworks",
+      "Configure advanced automation workflows and orchestration"
+    ]
+  },
+  "scenario": {
+    "title": "Enterprise IT Operations Migration with Advanced Configuration Management",
+    "description": "GlobalCorp operates a hybrid enterprise environment with 5,000+ servers across multiple data centers and cloud regions. They need to migrate from AWS Systems Manager to Azure while enhancing security, compliance, and automation capabilities with 99.9% uptime requirements and comprehensive governance.",
+    "business_requirements": [
+      "Centralized configuration management for 5,000+ servers with real-time updates",
+      "Automated patch management with zero-downtime deployment strategies",
+      "Secure remote access without VPN dependencies or exposed RDP/SSH",
+      "Compliance monitoring across SOC 2, ISO 27001, and industry-specific standards",
+      "Advanced automation workflows for incident response and remediation",
+      "Enterprise-grade audit trails and change management processes",
+      "Cross-platform support for Windows, Linux, and hybrid environments"
+    ],
+    "current_aws_architecture": [
+      "Systems Manager Parameter Store for application and infrastructure configuration",
+      "Patch Manager with maintenance windows and compliance reporting",
+      "Session Manager for secure shell access to EC2 instances",
+      "Systems Manager Automation for operational runbooks and remediation",
+      "Inventory service for asset discovery and compliance tracking",
+      "OpsCenter for operational issue management and resolution"
+    ],
+    "target_azure_architecture": [
+      "Azure App Configuration for centralized application configuration management",
+      "Update Management for comprehensive patch and update orchestration",
+      "Azure Bastion for secure, browserless RDP and SSH connectivity",
+      "Azure Automation for advanced runbook execution and workflow orchestration",
+      "Azure Policy and Security Center for compliance monitoring and governance",
+      "Log Analytics and Azure Monitor for operational insights and alerting"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Advanced Parameter Store: SSM Parameter Store to Azure App Configuration",
+      "estimated_time": "45 minutes",
+      "description": "Migrate sophisticated configuration management with advanced features",
+      "aws_context": {
+        "service": "AWS Systems Manager Parameter Store",
+        "description": "Centralized configuration and secrets management with hierarchical organization",
+        "key_features": [
+          "Hierarchical parameter organization with path-based access control",
+          "Standard and advanced parameters with policies and notifications",
+          "Integration with KMS for encryption and CloudWatch for monitoring",
+          "Cross-region parameter replication and versioning",
+          "Integration with CloudFormation and application deployment pipelines"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure App Configuration",
+        "description": "Centralized configuration service with feature management and dynamic updates",
+        "key_features": [
+          "Key-value configuration with labels and feature flags",
+          "Integration with Azure Key Vault for secrets management",
+          "Real-time configuration updates with change notifications",
+          "Configuration snapshots and point-in-time recovery",
+          "Integration with Azure DevOps and CI/CD pipelines"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise App Configuration with Advanced Organization",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create App Configuration store with enterprise features",
+              "aws_context": "Similar to Parameter Store with hierarchical organization and encryption",
+              "app_config_deployment": {
+                "store_configuration": {
+                  "name": "globalcorp-config-store",
+                  "sku": "Standard",
+                  "location": "East US",
+                  "soft_delete_retention": 7,
+                  "purge_protection": true,
+                  "public_network_access": "Disabled"
+                },
+                "private_endpoint": {
+                  "enabled": true,
+                  "subnet_id": "/subscriptions/.../subnets/private-endpoints-subnet",
+                  "private_dns_integration": true
+                },
+                "encryption": {
+                  "customer_managed_key": {
+                    "key_vault_uri": "https://globalcorp-kv.vault.azure.net/",
+                    "key_name": "app-config-key",
+                    "identity_type": "SystemAssigned"
+                  }
+                },
+                "azure_cli_creation": "az appconfig create --name globalcorp-config-store --resource-group rg-config-management --location eastus --sku Standard --enable-purge-protection --retention-days 7"
+              },
+              "explanation": "Creates enterprise-grade configuration store with security and compliance features"
+            },
+            {
+              "step": 2,
+              "description": "Implement hierarchical configuration organization and access control",
+              "configuration_hierarchy": {
+                "application_configs": [
+                  {
+                    "key": "WebApp:Database:ConnectionString",
+                    "value": "Server=sqlserver.database.windows.net;Database=WebAppDB",
+                    "label": "Production",
+                    "content_type": "application/json",
+                    "tags": {
+                      "Environment": "Production",
+                      "Application": "WebApp",
+                      "Tier": "Database"
+                    }
+                  },
+                  {
+                    "key": "WebApp:Logging:Level",
+                    "value": "Information",
+                    "label": "Production",
+                    "content_type": "text/plain",
+                    "tags": {
+                      "Environment": "Production",
+                      "Application": "WebApp",
+                      "Tier": "Logging"
+                    }
+                  },
+                  {
+                    "key": "ApiService:RateLimit:RequestsPerMinute",
+                    "value": "1000",
+                    "label": "Production",
+                    "content_type": "text/plain",
+                    "tags": {
+                      "Environment": "Production",
+                      "Application": "ApiService",
+                      "Tier": "Performance"
+                    }
+                  }
+                ],
+                "infrastructure_configs": [
+                  {
+                    "key": "Infrastructure:Monitoring:MetricsInterval",
+                    "value": "30",
+                    "label": "Global",
+                    "content_type": "text/plain",
+                    "tags": {
+                      "Category": "Infrastructure",
+                      "Component": "Monitoring"
+                    }
+                  },
+                  {
+                    "key": "Infrastructure:Backup:RetentionDays",
+                    "value": "90",
+                    "label": "Global",
+                    "content_type": "text/plain",
+                    "tags": {
+                      "Category": "Infrastructure",
+                      "Component": "Backup"
+                    }
+                  }
+                ],
+                "feature_flags": [
+                  {
+                    "feature_name": "NewPaymentGateway",
+                    "enabled": false,
+                    "conditions": [
+                      {
+                        "client_filters": [
+                          {
+                            "name": "Microsoft.Percentage",
+                            "parameters": {"Value": "10"}
+                          }
+                        ]
+                      }
+                    ],
+                    "description": "Gradual rollout of new payment gateway"
+                  }
+                ]
+              },
+              "explanation": "Establishes comprehensive configuration management with advanced organization and feature management"
+            },
+            {
+              "step": 3,
+              "description": "Configure Key Vault integration for secrets management",
+              "key_vault_integration": {
+                "secrets_configuration": [
+                  {
+                    "key": "WebApp:Database:Password",
+                    "key_vault_reference": "https://globalcorp-kv.vault.azure.net/secrets/db-password",
+                    "label": "Production",
+                    "content_type": "application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8"
+                  },
+                  {
+                    "key": "ApiService:ExternalApi:ApiKey",
+                    "key_vault_reference": "https://globalcorp-kv.vault.azure.net/secrets/external-api-key",
+                    "label": "Production",
+                    "content_type": "application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8"
+                  }
+                ],
+                "access_control": {
+                  "managed_identity": {
+                    "type": "SystemAssigned",
+                    "key_vault_access_policy": {
+                      "secret_permissions": ["get", "list"],
+                      "key_permissions": ["get", "decrypt"],
+                      "certificate_permissions": ["get"]
+                    }
+                  },
+                  "rbac_assignments": [
+                    {
+                      "principal_type": "ServicePrincipal",
+                      "role": "App Configuration Data Reader",
+                      "scope": "WebApp applications"
+                    },
+                    {
+                      "principal_type": "Group",
+                      "role": "App Configuration Data Owner",
+                      "scope": "DevOps team"
+                    }
+                  ]
+                }
+              },
+              "explanation": "Integrates secure secrets management with proper access control and audit capabilities"
+            },
+            {
+              "step": 4,
+              "description": "Implement real-time configuration updates and change notifications",
+              "change_management": {
+                "change_notifications": {
+                  "event_grid_integration": {
+                    "topic_endpoint": "https://globalcorp-config-events.eastus-1.eventgrid.azure.net/api/events",
+                    "event_types": ["Microsoft.AppConfiguration.KeyValueModified", "Microsoft.AppConfiguration.KeyValueDeleted"],
+                    "subscription_filters": [
+                      {
+                        "subject_begins_with": "WebApp:",
+                        "webhook_endpoint": "https://webapp.globalcorp.com/config-webhook"
+                      },
+                      {
+                        "subject_begins_with": "Infrastructure:",
+                        "logic_app_endpoint": "https://prod-123.eastus.logic.azure.com:443/workflows/.../triggers/manual/paths/invoke"
+                      }
+                    ]
+                  }
+                },
+                "configuration_snapshots": {
+                  "automated_snapshots": {
+                    "schedule": "Daily at 2:00 AM UTC",
+                    "retention": "30 days",
+                    "naming_convention": "snapshot-{date}-{time}",
+                    "storage_account": "globalcorpconfigbackup"
+                  },
+                  "change_approval_workflow": {
+                    "approval_required_for": ["Production", "Staging"],
+                    "approvers": ["DevOps-Managers", "Security-Team"],
+                    "approval_timeout": "4 hours",
+                    "auto_rollback": true
+                  }
+                },
+                "validation_rules": [
+                  {
+                    "rule_name": "ConnectionStringValidation",
+                    "pattern": "^Server=.*Database=.*$",
+                    "applies_to": "keys ending with :ConnectionString"
+                  },
+                  {
+                    "rule_name": "NumericRangeValidation",
+                    "min_value": 1,
+                    "max_value": 10000,
+                    "applies_to": "keys ending with :RequestsPerMinute"
+                  }
+                ]
+              },
+              "explanation": "Enables advanced change management with notifications, approvals, and validation"
+            }
+          ],
+          "validation": [
+            "Verify App Configuration store handles hierarchical configuration management",
+            "Test Key Vault integration retrieves secrets securely",
+            "Confirm change notifications trigger proper application updates",
+            "Validate configuration snapshots and rollback procedures work correctly"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Advanced Patch Management: Patch Manager to Azure Update Management",
+      "estimated_time": "50 minutes",
+      "description": "Transform comprehensive patch management and compliance workflows",
+      "aws_context": {
+        "service": "AWS Systems Manager Patch Manager",
+        "description": "Automated patch management with maintenance windows and compliance tracking",
+        "key_features": [
+          "Patch baselines and approval rules for different operating systems",
+          "Maintenance windows with scheduling and resource targeting",
+          "Patch compliance reporting and remediation workflows",
+          "Integration with AWS Config for compliance monitoring",
+          "Cross-platform patching for Windows and Linux systems"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Update Management",
+        "description": "Comprehensive update management with advanced scheduling and reporting",
+        "key_features": [
+          "Update assessments and deployment scheduling across Azure and hybrid environments",
+          "Maintenance configurations with flexible scheduling options",
+          "Update compliance tracking with Security Center integration",
+          "Pre and post-update script execution capabilities",
+          "Integration with Azure Policy for governance and compliance"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Enterprise Update Management with Advanced Compliance",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Log Analytics workspace and Update Management solution",
+              "update_management_setup": {
+                "log_analytics_workspace": {
+                  "name": "globalcorp-update-management-workspace",
+                  "location": "East US",
+                  "sku": "PerGB2018",
+                  "retention_days": 90,
+                  "daily_quota_gb": 10
+                },
+                "automation_account": {
+                  "name": "globalcorp-automation-account",
+                  "location": "East US",
+                  "sku": "Basic",
+                  "system_assigned_identity": true
+                },
+                "update_management_solution": {
+                  "enabled": true,
+                  "workspace_linked": true,
+                  "scope": ["Production", "Staging", "Development"],
+                  "machine_groups": [
+                    {
+                      "name": "WebServers",
+                      "query": "Heartbeat | where Computer contains 'web' | distinct Computer"
+                    },
+                    {
+                      "name": "DatabaseServers",
+                      "query": "Heartbeat | where Computer contains 'db' | distinct Computer"
+                    },
+                    {
+                      "name": "DomainControllers",
+                      "query": "Heartbeat | where Computer contains 'dc' | distinct Computer"
+                    }
+                  ]
+                },
+                "azure_cli_setup": "az automation account create --automation-account-name globalcorp-automation-account --resource-group rg-update-management --location eastus && az monitor log-analytics workspace create --workspace-name globalcorp-update-management-workspace --resource-group rg-update-management --location eastus"
+              },
+              "explanation": "Creates centralized update management infrastructure with comprehensive logging and automation"
+            },
+            {
+              "step": 2,
+              "description": "Configure advanced update classifications and deployment schedules",
+              "update_deployment_configuration": {
+                "update_classifications": {
+                  "windows": {
+                    "critical_updates": {
+                      "included": true,
+                      "auto_approve": true,
+                      "deployment_window": "Immediate"
+                    },
+                    "security_updates": {
+                      "included": true,
+                      "auto_approve": true,
+                      "deployment_window": "Within 24 hours"
+                    },
+                    "update_rollups": {
+                      "included": true,
+                      "auto_approve": false,
+                      "deployment_window": "Maintenance window"
+                    },
+                    "feature_packs": {
+                      "included": false,
+                      "auto_approve": false,
+                      "deployment_window": "Manual approval required"
+                    }
+                  },
+                  "linux": {
+                    "security": {
+                      "included": true,
+                      "auto_approve": true,
+                      "deployment_window": "Within 4 hours"
+                    },
+                    "other": {
+                      "included": true,
+                      "auto_approve": false,
+                      "deployment_window": "Maintenance window"
+                    }
+                  }
+                },
+                "maintenance_configurations": [
+                  {
+                    "name": "CriticalSystemsMaintenanceWindow",
+                    "target_machines": "DomainControllers",
+                    "schedule": {
+                      "frequency": "Weekly",
+                      "day_of_week": "Sunday",
+                      "start_time": "02:00 AM",
+                      "duration": "4 hours",
+                      "timezone": "Eastern Standard Time"
+                    },
+                    "pre_maintenance_tasks": [
+                      "Verify system backups completed",
+                      "Check active user sessions",
+                      "Validate cluster health"
+                    ],
+                    "post_maintenance_tasks": [
+                      "Verify system functionality",
+                      "Run compliance scans",
+                      "Update documentation"
+                    ]
+                  },
+                  {
+                    "name": "WebServersMaintenanceWindow",
+                    "target_machines": "WebServers",
+                    "schedule": {
+                      "frequency": "Monthly",
+                      "week_of_month": "Second",
+                      "day_of_week": "Saturday",
+                      "start_time": "01:00 AM",
+                      "duration": "6 hours",
+                      "timezone": "Eastern Standard Time"
+                    },
+                    "rolling_deployment": {
+                      "enabled": true,
+                      "batch_size": "25%",
+                      "wait_between_batches": "30 minutes"
+                    }
+                  }
+                ],
+                "compliance_requirements": [
+                  {
+                    "framework": "SOC 2",
+                    "requirements": [
+                      "Critical security updates within 72 hours",
+                      "Monthly vulnerability assessments",
+                      "Documented change management process"
+                    ]
+                  },
+                  {
+                    "framework": "ISO 27001",
+                    "requirements": [
+                      "Patch management policy implementation",
+                      "Regular security update deployment",
+                      "Audit trail maintenance"
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Establishes enterprise-grade update management with compliance and automation"
+            },
+            {
+              "step": 3,
+              "description": "Implement advanced update assessment and deployment automation",
+              "automation_workflows": {
+                "update_assessment_automation": {
+                  "schedule": "Daily at 6:00 AM",
+                  "assessment_scope": ["Azure VMs", "Hybrid machines", "Arc-enabled servers"],
+                  "reporting": {
+                    "dashboard_integration": "Azure Monitor Workbooks",
+                    "alert_conditions": [
+                      {
+                        "condition": "Critical updates pending > 5 days",
+                        "severity": "High",
+                        "action": "Email DevOps team and create incident"
+                      },
+                      {
+                        "condition": "Security updates pending > 2 days",
+                        "severity": "Medium",
+                        "action": "Notify security team"
+                      }
+                    ]
+                  }
+                },
+                "automated_deployment_workflows": [
+                  {
+                    "workflow_name": "CriticalSecurityUpdateDeployment",
+                    "trigger": "Critical security update detected",
+                    "approval_required": false,
+                    "target_environment": "All environments",
+                    "deployment_strategy": "Rolling deployment with automatic rollback",
+                    "success_criteria": [
+                      "No increase in error rates",
+                      "System health checks pass",
+                      "Application functionality verified"
+                    ]
+                  },
+                  {
+                    "workflow_name": "ScheduledMaintenanceDeployment",
+                    "trigger": "Maintenance window start",
+                    "approval_required": true,
+                    "target_environment": "Production",
+                    "deployment_strategy": "Staged deployment with manual validation",
+                    "pre_deployment_checks": [
+                      "Backup verification",
+                      "Load balancer health",
+                      "Database replication status"
+                    ]
+                  }
+                ],
+                "rollback_procedures": {
+                  "automatic_rollback_triggers": [
+                    "Application error rate > 5%",
+                    "System performance degradation > 20%",
+                    "Health check failures > 2 consecutive"
+                  ],
+                  "manual_rollback_process": {
+                    "approval_required": true,
+                    "approvers": ["DevOps Manager", "Security Lead"],
+                    "documentation_required": true
+                  }
+                }
+              },
+              "explanation": "Provides comprehensive automation with intelligent deployment and rollback capabilities"
+            }
+          ],
+          "validation": [
+            "Verify update assessments identify all pending updates correctly",
+            "Test maintenance window scheduling and deployment automation",
+            "Confirm compliance reporting meets regulatory requirements",
+            "Validate rollback procedures work during deployment failures"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Secure Remote Access: Session Manager to Azure Bastion",
+      "estimated_time": "35 minutes",
+      "description": "Transform secure remote access and session management",
+      "aws_context": {
+        "service": "AWS Systems Manager Session Manager",
+        "description": "Browser-based secure shell access to EC2 instances without SSH/RDP",
+        "key_features": [
+          "Browser-based console access without exposing SSH/RDP ports",
+          "Session logging and audit trails for compliance",
+          "IAM-based access control with fine-grained permissions",
+          "Session recording and monitoring capabilities",
+          "Integration with CloudTrail for comprehensive audit logging"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Bastion",
+        "description": "Secure RDP and SSH connectivity without public IP exposure",
+        "key_features": [
+          "Browser-based RDP and SSH access without public IPs",
+          "Native integration with Azure virtual networks and NSGs",
+          "Session recording and monitoring with Azure Monitor",
+          "Azure AD integration for authentication and authorization",
+          "Support for multiple connection protocols and file transfer"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise Azure Bastion with Advanced Security",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure Bastion with enterprise security features",
+              "bastion_deployment": {
+                "bastion_configuration": {
+                  "name": "globalcorp-bastion",
+                  "sku": "Standard",
+                  "virtual_network": "globalcorp-hub-vnet",
+                  "subnet": "AzureBastionSubnet",
+                  "public_ip": "globalcorp-bastion-pip",
+                  "scale_units": 10,
+                  "features": {
+                    "copy_paste": true,
+                    "file_copy": true,
+                    "shareable_link": false,
+                    "tunneling": true,
+                    "ip_connect": true
+                  }
+                },
+                "network_security": {
+                  "nsg_rules": [
+                    {
+                      "name": "AllowHttpsInbound",
+                      "direction": "Inbound",
+                      "access": "Allow",
+                      "protocol": "Tcp",
+                      "source": "Internet",
+                      "destination": "AzureBastionSubnet",
+                      "destination_port": "443"
+                    },
+                    {
+                      "name": "AllowBastionHostCommunication",
+                      "direction": "Inbound",
+                      "access": "Allow",
+                      "protocol": "*",
+                      "source": "VirtualNetwork",
+                      "destination": "VirtualNetwork",
+                      "destination_port": "8080,5701"
+                    }
+                  ],
+                  "private_endpoint_integration": {
+                    "enabled": true,
+                    "allowed_virtual_networks": ["prod-vnet", "staging-vnet"],
+                    "dns_integration": true
+                  }
+                },
+                "azure_cli_deployment": "az network bastion create --name globalcorp-bastion --public-ip-address globalcorp-bastion-pip --resource-group rg-bastion --vnet-name globalcorp-hub-vnet --sku Standard --enable-tunneling --enable-ip-connect"
+              },
+              "explanation": "Creates enterprise-grade bastion host with advanced security and connectivity features"
+            },
+            {
+              "step": 2,
+              "description": "Configure access control and session management",
+              "access_control_configuration": {
+                "rbac_assignments": [
+                  {
+                    "role": "Virtual Machine Administrator Login",
+                    "principal": "DevOps-Admins",
+                    "scope": "Production VMs",
+                    "conditions": {
+                      "ip_restriction": "Corporate network only",
+                      "time_restriction": "Business hours only",
+                      "mfa_required": true
+                    }
+                  },
+                  {
+                    "role": "Virtual Machine User Login",
+                    "principal": "Developers",
+                    "scope": "Development and Staging VMs",
+                    "conditions": {
+                      "session_duration": "8 hours maximum",
+                      "concurrent_sessions": "2 maximum",
+                      "audit_required": true
+                    }
+                  }
+                ],
+                "conditional_access_policies": [
+                  {
+                    "policy_name": "BastionProductionAccess",
+                    "conditions": {
+                      "users": "Production-Admins",
+                      "locations": "Trusted locations",
+                      "device_state": "Compliant devices only"
+                    },
+                    "controls": {
+                      "mfa_required": true,
+                      "approved_client_required": true,
+                      "session_controls": {
+                        "sign_in_frequency": "4 hours",
+                        "persistent_browser_session": false
+                      }
+                    }
+                  }
+                ],
+                "session_policies": {
+                  "idle_timeout": "30 minutes",
+                  "maximum_session_duration": "8 hours",
+                  "concurrent_session_limit": 5,
+                  "clipboard_restrictions": {
+                    "copy_from_remote": "Administrators only",
+                    "paste_to_remote": "Administrators only"
+                  }
+                }
+              },
+              "explanation": "Implements comprehensive access control with enterprise security policies"
+            },
+            {
+              "step": 3,
+              "description": "Set up session monitoring and audit logging",
+              "monitoring_configuration": {
+                "session_recording": {
+                  "enabled": true,
+                  "storage_account": "globalcorpsessionlogs",
+                  "retention_policy": "2 years",
+                  "encryption": {
+                    "enabled": true,
+                    "key_vault": "globalcorp-logging-kv",
+                    "key_name": "session-encryption-key"
+                  }
+                },
+                "audit_logging": {
+                  "log_analytics_workspace": "globalcorp-security-workspace",
+                  "logged_events": [
+                    "Session start/end",
+                    "Connection attempts",
+                    "File transfer operations",
+                    "Command execution (if enabled)",
+                    "Authentication events"
+                  ],
+                  "real_time_monitoring": {
+                    "suspicious_activity_detection": true,
+                    "alert_rules": [
+                      {
+                        "rule_name": "MultipleFailedConnections",
+                        "condition": "Failed connections > 5 in 15 minutes",
+                        "action": "Block user and alert security team"
+                      },
+                      {
+                        "rule_name": "UnusualSessionDuration",
+                        "condition": "Session duration > 12 hours",
+                        "action": "Alert DevOps manager"
+                      }
+                    ]
+                  }
+                },
+                "compliance_reporting": {
+                  "automated_reports": [
+                    {
+                      "report_name": "Weekly Session Activity Report",
+                      "schedule": "Every Monday 9:00 AM",
+                      "recipients": ["Security-Team", "Compliance-Officer"],
+                      "content": [
+                        "User session statistics",
+                        "Failed connection attempts",
+                        "Policy violations",
+                        "Privileged access usage"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "explanation": "Establishes comprehensive monitoring and compliance framework for secure access"
+            }
+          ],
+          "validation": [
+            "Verify Azure Bastion provides secure browser-based VM access",
+            "Test RBAC and conditional access policies work correctly",
+            "Confirm session recording and audit logging capture all activities",
+            "Validate compliance reporting meets regulatory requirements"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Advanced Automation: Systems Manager Automation to Azure Automation",
+      "estimated_time": "35 minutes",
+      "description": "Transform operational automation and runbook execution",
+      "aws_context": {
+        "service": "AWS Systems Manager Automation",
+        "description": "Workflow automation for operational tasks and remediation",
+        "key_features": [
+          "Pre-built and custom automation documents for common tasks",
+          "Cross-service automation with IAM role-based execution",
+          "Conditional logic and error handling in automation workflows",
+          "Integration with CloudWatch Events for trigger-based automation",
+          "Change Calendar integration for maintenance window awareness"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Automation",
+        "description": "Comprehensive automation platform with runbooks and configuration management",
+        "key_features": [
+          "PowerShell and Python runbook execution with hybrid worker support",
+          "Integration with Azure Monitor and Event Grid for event-driven automation",
+          "State Configuration for desired state management",
+          "Update Management integration for patch automation",
+          "Integration with Azure DevOps for CI/CD automation workflows"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Implement Enterprise Automation with Advanced Orchestration",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create comprehensive automation runbooks for operational tasks",
+              "runbook_development": {
+                "incident_response_runbooks": [
+                  {
+                    "name": "HighCPURemediationRunbook",
+                    "type": "PowerShell",
+                    "trigger": "Azure Monitor alert: CPU > 90%",
+                    "workflow": [
+                      "Identify process causing high CPU usage",
+                      "Capture performance counters and logs",
+                      "Attempt automatic remediation (restart service if safe)",
+                      "Scale out if auto-scaling is configured",
+                      "Create incident ticket if manual intervention required",
+                      "Send notification to on-call engineer"
+                    ],
+                    "parameters": {
+                      "VMResourceId": "Resource ID of affected VM",
+                      "AlertSeverity": "Severity level from monitoring alert",
+                      "AutoRemediate": "Boolean flag for automatic remediation"
+                    }
+                  },
+                  {
+                    "name": "DatabaseConnectionFailureRunbook",
+                    "type": "Python",
+                    "trigger": "Application Insights alert: Database connection failures",
+                    "workflow": [
+                      "Test database connectivity from multiple sources",
+                      "Check database server health and performance metrics",
+                      "Verify network connectivity and firewall rules",
+                      "Attempt connection pool reset if applicable",
+                      "Failover to secondary database if configured",
+                      "Escalate to DBA team if issues persist"
+                    ]
+                  }
+                ],
+                "maintenance_runbooks": [
+                  {
+                    "name": "AutomatedBackupValidationRunbook",
+                    "type": "PowerShell",
+                    "schedule": "Daily at 3:00 AM",
+                    "workflow": [
+                      "Verify all scheduled backups completed successfully",
+                      "Test backup integrity and recoverability",
+                      "Check backup storage utilization and retention",
+                      "Generate backup health report",
+                      "Alert if any backups failed or are missing"
+                    ]
+                  }
+                ],
+                "compliance_runbooks": [
+                  {
+                    "name": "SecurityComplianceScanRunbook",
+                    "type": "PowerShell",
+                    "schedule": "Weekly on Sunday at 2:00 AM",
+                    "workflow": [
+                      "Run comprehensive security compliance scans",
+                      "Check for unauthorized software installations",
+                      "Validate security group configurations",
+                      "Verify encryption status of all resources",
+                      "Generate compliance report for audit purposes"
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Creates comprehensive automation library for operational excellence and compliance"
+            },
+            {
+              "step": 2,
+              "description": "Configure hybrid runbook workers and distributed execution",
+              "hybrid_worker_configuration": {
+                "worker_groups": [
+                  {
+                    "name": "ProductionWorkers",
+                    "location": "On-premises data center",
+                    "capabilities": ["Domain operations", "Legacy system integration", "Sensitive data processing"],
+                    "machines": [
+                      {
+                        "name": "PROD-AUTO-01",
+                        "os": "Windows Server 2022",
+                        "roles": ["Domain Controller automation", "Exchange management"]
+                      },
+                      {
+                        "name": "PROD-AUTO-02",
+                        "os": "Ubuntu 20.04",
+                        "roles": ["Linux system management", "Database automation"]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "AzureWorkers",
+                    "location": "Azure cloud",
+                    "capabilities": ["Azure resource management", "Cloud-native automation", "Scaling operations"],
+                    "scaling": {
+                      "min_workers": 2,
+                      "max_workers": 10,
+                      "scale_trigger": "Queue depth > 50 jobs"
+                    }
+                  }
+                ],
+                "execution_policies": [
+                  {
+                    "policy_name": "SensitiveDataPolicy",
+                    "applies_to": "Runbooks handling PII or financial data",
+                    "requirements": [
+                      "Execute only on on-premises workers",
+                      "Require approval for execution",
+                      "Enable detailed audit logging",
+                      "Encrypt all data in transit and at rest"
+                    ]
+                  },
+                  {
+                    "policy_name": "ProductionChangePolicy",
+                    "applies_to": "Production environment modifications",
+                    "requirements": [
+                      "Change management approval required",
+                      "Execute during maintenance windows only",
+                      "Rollback plan mandatory",
+                      "Post-execution validation required"
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Enables secure, distributed automation execution across hybrid environments"
+            },
+            {
+              "step": 3,
+              "description": "Implement advanced workflow orchestration and error handling",
+              "workflow_orchestration": {
+                "complex_workflows": [
+                  {
+                    "workflow_name": "ApplicationDeploymentOrchestration",
+                    "description": "End-to-end application deployment with validation and rollback",
+                    "steps": [
+                      {
+                        "step": "PreDeploymentValidation",
+                        "runbook": "ValidateDeploymentEnvironment",
+                        "success_criteria": "All health checks pass",
+                        "on_failure": "Stop deployment and notify team"
+                      },
+                      {
+                        "step": "DatabaseSchemaUpdate",
+                        "runbook": "UpdateDatabaseSchema",
+                        "parallel_execution": false,
+                        "rollback_procedure": "RevertDatabaseSchema"
+                      },
+                      {
+                        "step": "ApplicationDeployment",
+                        "runbook": "DeployApplicationCode",
+                        "parallel_targets": ["WebServer1", "WebServer2", "WebServer3"],
+                        "rolling_deployment": {
+                          "batch_size": 1,
+                          "wait_between_batches": "5 minutes",
+                          "health_check_between_batches": true
+                        }
+                      },
+                      {
+                        "step": "PostDeploymentTesting",
+                        "runbook": "RunAutomatedTests",
+                        "timeout": "15 minutes",
+                        "success_threshold": "95% tests pass"
+                      },
+                      {
+                        "step": "TrafficSwitchover",
+                        "runbook": "UpdateLoadBalancerConfiguration",
+                        "condition": "All previous steps successful"
+                      }
+                    ],
+                    "error_handling": {
+                      "global_rollback": "Enabled",
+                      "notification_channels": ["DevOps-Team", "Application-Owners"],
+                      "incident_creation": "Automatic for deployment failures"
+                    }
+                  }
+                ],
+                "approval_workflows": {
+                  "production_changes": {
+                    "approval_chain": [
+                      {
+                        "approver": "Technical Lead",
+                        "condition": "Changes affecting > 10% of infrastructure"
+                      },
+                      {
+                        "approver": "Security Team",
+                        "condition": "Changes affecting security configurations"
+                      },
+                      {
+                        "approver": "Change Advisory Board",
+                        "condition": "High-risk changes or emergency changes"
+                      }
+                    ],
+                    "approval_timeout": "4 hours",
+                    "escalation_policy": "Auto-approve if no response after timeout (emergency only)"
+                  }
+                },
+                "monitoring_integration": {
+                  "real_time_monitoring": {
+                    "execution_metrics": ["Duration", "Success rate", "Resource utilization"],
+                    "alerting_rules": [
+                      {
+                        "condition": "Runbook failure rate > 10% in 1 hour",
+                        "action": "Page automation team"
+                      },
+                      {
+                        "condition": "Queue depth > 100 jobs",
+                        "action": "Scale out hybrid workers"
+                      }
+                    ]
+                  }
+                }
+              },
+              "explanation": "Provides enterprise-grade workflow orchestration with comprehensive governance and monitoring"
+            }
+          ],
+          "validation": [
+            "Verify runbooks execute successfully across hybrid environments",
+            "Test complex workflow orchestration and error handling",
+            "Confirm approval workflows enforce governance policies",
+            "Validate monitoring and alerting detect issues proactively"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Configuration Management Consolidation",
+      "aws_comparison": "Separate costs for Parameter Store, KMS, and monitoring",
+      "azure_model": "Unified App Configuration service with integrated security",
+      "optimization_strategies": [
+        "Consolidate configuration management into single service",
+        "Use Azure Key Vault integration to reduce secrets management overhead",
+        "Implement feature flags to reduce deployment complexity and costs",
+        "Leverage Azure Monitor integration for reduced monitoring costs"
+      ],
+      "estimated_savings": "25-40% through service consolidation and reduced operational overhead"
+    },
+    {
+      "area": "Patch Management Automation",
+      "aws_comparison": "Manual patch management processes with higher operational costs",
+      "azure_model": "Automated Update Management with intelligent scheduling",
+      "optimization_strategies": [
+        "Reduce manual intervention through automated patch assessment and deployment",
+        "Implement maintenance windows to minimize business impact",
+        "Use rolling deployments to maintain availability without additional infrastructure",
+        "Leverage Azure Security Center for centralized compliance monitoring"
+      ],
+      "estimated_savings": "40-60% reduction in patch management operational costs"
+    },
+    {
+      "area": "Remote Access Infrastructure",
+      "aws_comparison": "Bastion hosts and VPN infrastructure maintenance costs",
+      "azure_model": "Managed Azure Bastion service with automatic scaling",
+      "optimization_strategies": [
+        "Eliminate bastion host infrastructure maintenance and patching",
+        "Remove VPN infrastructure for remote access requirements",
+        "Use native Azure AD integration to reduce identity management overhead",
+        "Leverage automatic scaling to optimize costs based on usage"
+      ],
+      "estimated_savings": "50-70% reduction in remote access infrastructure costs"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Configuration Security",
+      "practices": [
+        "Use Azure Key Vault integration for all sensitive configuration data",
+        "Implement private endpoints for App Configuration access",
+        "Enable customer-managed encryption keys for configuration data",
+        "Use Azure RBAC for fine-grained access control to configuration settings"
+      ]
+    },
+    {
+      "category": "Update Management Security",
+      "practices": [
+        "Implement approval workflows for production environment updates",
+        "Use maintenance windows to control when updates are applied",
+        "Enable rollback procedures for failed update deployments",
+        "Monitor update compliance and generate security reports"
+      ]
+    },
+    {
+      "category": "Remote Access Security",
+      "practices": [
+        "Use Azure Bastion to eliminate public IP exposure for VMs",
+        "Implement conditional access policies for privileged access",
+        "Enable session recording and monitoring for compliance",
+        "Use just-in-time access for administrative operations"
+      ]
+    },
+    {
+      "category": "Automation Security",
+      "practices": [
+        "Use managed identities for runbook authentication",
+        "Implement approval workflows for sensitive automation tasks",
+        "Encrypt runbook execution logs and audit trails",
+        "Use hybrid workers for sensitive on-premises operations"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment",
+      "tasks": [
+        "Inventory current Systems Manager Parameter Store usage and organization",
+        "Document patch management policies and maintenance windows",
+        "Assess Session Manager usage patterns and security requirements",
+        "Analyze current automation runbooks and dependencies",
+        "Plan Azure configuration management and automation architecture"
+      ]
+    },
+    {
+      "phase": "Azure Infrastructure Setup",
+      "tasks": [
+        "Deploy App Configuration store with Key Vault integration",
+        "Set up Update Management with Log Analytics workspace",
+        "Configure Azure Bastion for secure remote access",
+        "Create Automation Account with hybrid workers",
+        "Implement monitoring and compliance reporting infrastructure"
+      ]
+    },
+    {
+      "phase": "Migration and Configuration",
+      "tasks": [
+        "Migrate parameter hierarchies to App Configuration",
+        "Configure update management policies and schedules",
+        "Set up Azure Bastion access controls and policies",
+        "Convert Systems Manager Automation documents to Azure runbooks",
+        "Implement compliance monitoring and reporting"
+      ]
+    },
+    {
+      "phase": "Testing and Validation",
+      "tasks": [
+        "Test configuration updates and change notifications",
+        "Validate patch deployment and rollback procedures",
+        "Verify secure remote access functionality",
+        "Test automation runbooks in non-production environments",
+        "Conduct compliance and security validation"
+      ]
+    },
+    {
+      "phase": "Cutover and Optimization",
+      "tasks": [
+        "Execute production migration with minimal downtime",
+        "Monitor system performance and functionality",
+        "Optimize automation workflows based on usage patterns",
+        "Establish operational procedures and documentation",
+        "Train teams on Azure configuration management and automation"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "App Configuration Access Issues",
+      "symptoms": [
+        "Applications cannot retrieve configuration values",
+        "Authentication failures when accessing App Configuration",
+        "Slow configuration retrieval performance"
+      ],
+      "solutions": [
+        "Verify managed identity configuration and role assignments",
+        "Check private endpoint configuration and DNS resolution",
+        "Review App Configuration access policies and firewall rules",
+        "Monitor App Configuration metrics for throttling or capacity issues",
+        "Validate Key Vault permissions for secret references"
+      ]
+    },
+    {
+      "issue": "Update Management Deployment Failures",
+      "symptoms": [
+        "Updates fail to install on target machines",
+        "Maintenance windows not executing as scheduled",
+        "Inconsistent update compliance reporting"
+      ],
+      "solutions": [
+        "Verify Log Analytics agent connectivity and health",
+        "Check update deployment configurations and targeting",
+        "Review maintenance window schedules and machine availability",
+        "Monitor update deployment logs for specific error messages",
+        "Validate Azure Automation permissions and runbook execution"
+      ]
+    },
+    {
+      "issue": "Azure Bastion Connection Problems",
+      "symptoms": [
+        "Unable to connect to VMs through Azure Bastion",
+        "Session timeouts or disconnections",
+        "Slow performance during remote sessions"
+      ],
+      "solutions": [
+        "Verify Azure Bastion subnet configuration and NSG rules",
+        "Check VM network security groups and connectivity",
+        "Review Azure Bastion resource health and capacity",
+        "Validate user permissions and conditional access policies",
+        "Monitor Azure Bastion metrics for performance issues"
+      ]
+    },
+    {
+      "issue": "Automation Runbook Execution Failures",
+      "symptoms": [
+        "Runbooks fail with authentication errors",
+        "Hybrid worker jobs timing out or failing",
+        "Inconsistent runbook execution results"
+      ],
+      "solutions": [
+        "Verify managed identity and service principal configurations",
+        "Check hybrid worker health and connectivity",
+        "Review runbook code for errors and dependencies",
+        "Monitor Azure Automation logs and job execution details",
+        "Validate required permissions for target resources"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure App Configuration documentation - https://docs.microsoft.com/en-us/azure/azure-app-configuration/",
+        "Azure Update Management documentation - https://docs.microsoft.com/en-us/azure/automation/update-management/",
+        "Azure Bastion documentation - https://docs.microsoft.com/en-us/azure/bastion/",
+        "Azure Automation documentation - https://docs.microsoft.com/en-us/azure/automation/"
+      ]
+    },
+    {
+      "type": "Best Practices Guides",
+      "links": [
+        "Configuration management best practices for enterprise applications",
+        "Patch management strategies and compliance frameworks",
+        "Secure remote access patterns and governance",
+        "Automation workflow design and operational excellence"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS Systems Manager to Azure migration patterns and strategies",
+        "Configuration management migration planning and execution",
+        "Patch management workflow migration best practices",
+        "Automation runbook conversion and optimization techniques"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Policy for advanced governance and compliance automation",
+    "Set up Azure Resource Graph for advanced inventory and compliance queries",
+    "Configure Azure Security Center for integrated security management",
+    "Explore Azure Arc for hybrid and multi-cloud configuration management",
+    "Implement Azure DevOps integration for CI/CD automation workflows",
+    "Set up Azure Sentinel for security information and event management (SIEM)"
+  ]
+}

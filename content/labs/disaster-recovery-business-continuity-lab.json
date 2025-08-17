@@ -1,0 +1,358 @@
+{
+  "id": "disaster-recovery-business-continuity-lab",
+  "title": "AWS Backup to Azure Site Recovery: Comprehensive Disaster Recovery",
+  "category": "disaster-recovery",
+  "difficulty": "advanced", 
+  "estimated_time": "180 minutes",
+  "description": "Master disaster recovery patterns with comprehensive backup, replication, and failover strategies migrating from AWS to Azure",
+  "aws_services": [
+    "AWS Backup",
+    "Cross-region replication",
+    "Route 53 health checks",
+    "CloudFormation StackSets",
+    "RDS automated backups",
+    "EBS snapshots"
+  ],
+  "azure_services": [
+    "Azure Backup",
+    "Site Recovery",
+    "Traffic Manager",
+    "Azure Resource Manager templates",
+    "SQL Database automated backups", 
+    "Disk snapshots"
+  ],
+  "learning_objectives": [
+    "Compare AWS Backup and Azure Backup architectures and capabilities",
+    "Migrate cross-region replication strategies to Azure Site Recovery",
+    "Transform Route 53 health checks to Traffic Manager probing",
+    "Implement comprehensive disaster recovery testing procedures",
+    "Design RTO and RPO-based recovery strategies",
+    "Configure automated failover and failback procedures",
+    "Implement backup governance and compliance frameworks",
+    "Build disaster recovery runbooks and documentation"
+  ],
+  "aws_context": {
+    "equivalent_service": "AWS Backup, Cross-region replication, Route 53",
+    "key_concepts": [
+      "AWS Backup → Azure Backup",
+      "Cross-region replication → Site Recovery replication",
+      "Route 53 health checks → Traffic Manager monitoring",
+      "CloudFormation StackSets → ARM template deployment",
+      "RDS automated backups → SQL Database automated backups",
+      "EBS snapshots → Managed disk snapshots",
+      "Multi-region architecture → Multi-region Azure deployment"
+    ]
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "Disaster Recovery Fundamentals",
+      "estimated_time": "30 minutes",
+      "description": "Understanding disaster recovery principles and comparing AWS vs Azure DR architectures",
+      "learning_outcomes": [
+        "Understand RTO and RPO requirements",
+        "Compare AWS and Azure DR capabilities",
+        "Design appropriate DR strategies for different workload types"
+      ],
+      "content": {
+        "theory": {
+          "dr_fundamentals": {
+            "rto": "Recovery Time Objective - maximum acceptable downtime",
+            "rpo": "Recovery Point Objective - maximum acceptable data loss",
+            "dr_tiers": {
+              "tier_1": "Critical systems requiring immediate recovery (RTO < 1 hour)",
+              "tier_2": "Important systems with moderate recovery requirements (RTO < 24 hours)",
+              "tier_3": "Non-critical systems with extended recovery windows (RTO < 72 hours)"
+            }
+          },
+          "dr_strategies": {
+            "backup_restore": "Lowest cost, highest RTO/RPO - suitable for non-critical workloads",
+            "pilot_light": "Core infrastructure pre-deployed, data replicated - moderate cost/RTO",
+            "warm_standby": "Scaled-down version running, quick scale-up - higher cost, lower RTO",
+            "hot_standby": "Full capacity standby, immediate failover - highest cost, lowest RTO"
+          },
+          "aws_vs_azure_comparison": {
+            "backup_services": {
+              "aws": "AWS Backup provides centralized backup across services with cross-region replication",
+              "azure": "Azure Backup offers unified backup for VMs, databases, and files with geo-redundant storage"
+            },
+            "replication_services": {
+              "aws": "Cross-region replication varies by service (S3, RDS, etc.)",
+              "azure": "Site Recovery provides unified replication for VMs and physical servers"
+            },
+            "traffic_management": {
+              "aws": "Route 53 health checks with DNS failover",
+              "azure": "Traffic Manager with endpoint monitoring and automatic failover"
+            }
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "DR Strategy Assessment",
+            "description": "Assess application requirements and design appropriate DR strategy", 
+            "steps": [
+              "Analyze sample applications for RTO/RPO requirements",
+              "Map applications to appropriate DR tiers",
+              "Design DR architecture for each tier"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-2",
+      "title": "AWS Backup to Azure Backup Migration",
+      "estimated_time": "45 minutes", 
+      "description": "Migrating centralized backup strategies from AWS Backup to Azure Backup",
+      "learning_outcomes": [
+        "Configure Azure Backup for comprehensive data protection",
+        "Implement backup policies equivalent to AWS Backup plans",
+        "Set up cross-region backup replication"
+      ],
+      "content": {
+        "theory": {
+          "aws_backup_capabilities": [
+            "Centralized backup management across AWS services",
+            "Backup plans with retention policies",
+            "Cross-region and cross-account backup",
+            "Backup compliance and governance"
+          ],
+          "azure_backup_features": [
+            "Recovery Services vault for centralized management",
+            "Backup policies for VMs, databases, and files",
+            "Geo-redundant storage for cross-region protection",
+            "Integration with Azure Policy for governance"
+          ],
+          "backup_types": {
+            "vm_backups": {
+              "aws": "EBS snapshots and AMI creation",
+              "azure": "VM backup with application-consistent snapshots"
+            },
+            "database_backups": {
+              "aws": "RDS automated backups and manual snapshots", 
+              "azure": "SQL Database automated backups and long-term retention"
+            },
+            "file_backups": {
+              "aws": "EFS backup and S3 cross-region replication",
+              "azure": "Azure Files backup and blob storage replication"
+            }
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Recovery Services Vault Setup",
+            "description": "Configure centralized backup management in Azure",
+            "steps": [
+              "Create Recovery Services vault with geo-redundant storage",
+              "Configure backup policies for different workload types",
+              "Set up backup monitoring and alerting"
+            ]
+          },
+          {
+            "title": "VM Backup Configuration",
+            "description": "Implement comprehensive VM backup strategy",
+            "steps": [
+              "Enable Azure VM backup with application consistency",
+              "Configure backup retention policies",
+              "Test backup and restore procedures"
+            ]
+          },
+          {
+            "title": "Database Backup Migration",
+            "description": "Migrate database backup strategies to Azure",
+            "steps": [
+              "Configure SQL Database automated backups",
+              "Set up long-term retention policies",
+              "Implement cross-region backup replication"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-3",
+      "title": "Site Recovery Implementation",
+      "estimated_time": "60 minutes",
+      "description": "Implementing Azure Site Recovery for comprehensive disaster recovery replication",
+      "learning_outcomes": [
+        "Configure Site Recovery for VM replication",
+        "Implement recovery plans with automated failover",
+        "Set up failback procedures and testing"
+      ],
+      "content": {
+        "theory": {
+          "site_recovery_architecture": {
+            "replication_types": [
+              "Azure-to-Azure replication for regional DR",
+              "On-premises-to-Azure for hybrid DR",
+              "VMware and Hyper-V support"
+            ],
+            "recovery_plans": [
+              "Multi-tier application recovery orchestration",
+              "Pre and post-failover scripts",
+              "Testing without impacting production"
+            ]
+          },
+          "replication_features": [
+            "Application-consistent snapshots",
+            "Minimal RPO with continuous replication",
+            "Network mapping and IP preservation",
+            "Automated recovery point management"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Site Recovery Vault Configuration",
+            "description": "Set up Site Recovery for VM replication",
+            "steps": [
+              "Create Site Recovery vault in target region",
+              "Configure replication policies and settings",
+              "Enable replication for critical VMs"
+            ]
+          },
+          {
+            "title": "Recovery Plan Creation",
+            "description": "Build comprehensive recovery plans for applications",
+            "steps": [
+              "Create recovery plans for multi-tier applications",
+              "Configure boot order and dependencies",
+              "Add automation scripts for post-failover tasks"
+            ]
+          },
+          {
+            "title": "DR Testing and Validation",
+            "description": "Implement regular DR testing procedures",
+            "steps": [
+              "Perform test failover without production impact",
+              "Validate application functionality in DR environment", 
+              "Document and address any issues found"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-4",
+      "title": "Traffic Manager Failover Configuration",
+      "estimated_time": "30 minutes",
+      "description": "Implementing automated traffic failover using Azure Traffic Manager",
+      "learning_outcomes": [
+        "Configure Traffic Manager for automatic failover",
+        "Set up health monitoring equivalent to Route 53 health checks",
+        "Implement DNS-based disaster recovery"
+      ],
+      "content": {
+        "theory": {
+          "traffic_manager_capabilities": [
+            "DNS-based load balancing and failover",
+            "Health monitoring with custom probes",
+            "Geographic, performance, and priority routing",
+            "Integration with Site Recovery for automated DR"
+          ],
+          "routing_methods": {
+            "priority": "Primary/secondary failover routing",
+            "performance": "Route to closest healthy endpoint",
+            "geographic": "Route based on user location", 
+            "weighted": "Distribute traffic across endpoints"
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Traffic Manager Profile Setup",
+            "description": "Configure DNS-based failover for applications",
+            "steps": [
+              "Create Traffic Manager profile with priority routing",
+              "Add primary and secondary endpoints",
+              "Configure health monitoring and probe settings"
+            ]
+          },
+          {
+            "title": "Automated Failover Testing",
+            "description": "Test automated failover scenarios",
+            "steps": [
+              "Simulate primary endpoint failure",
+              "Verify automatic traffic redirection",
+              "Test failback when primary endpoint recovers"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-5", 
+      "title": "DR Governance and Testing",
+      "estimated_time": "15 minutes",
+      "description": "Implementing disaster recovery governance, compliance, and regular testing procedures",
+      "learning_outcomes": [
+        "Create DR governance frameworks",
+        "Implement automated DR testing schedules",
+        "Build compliance reporting and documentation"
+      ],
+      "content": {
+        "theory": {
+          "dr_governance": [
+            "Regular DR testing schedules and procedures",
+            "Compliance reporting for audit requirements",
+            "Change management for DR configurations",
+            "Training and documentation maintenance"
+          ],
+          "testing_strategies": [
+            "Monthly partial failover tests",
+            "Quarterly full DR exercises",
+            "Annual business continuity validation",
+            "Continuous monitoring and alerting"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "DR Testing Automation",
+            "description": "Automate regular DR testing procedures",
+            "steps": [
+              "Create automated testing runbooks",
+              "Schedule regular test failovers",
+              "Set up testing result reporting"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "assessment": {
+    "quiz_questions": [
+      {
+        "question": "What is the main advantage of Azure Site Recovery over AWS cross-region replication?",
+        "options": [
+          "Lower replication costs",
+          "Faster replication speed",
+          "Unified replication service across resource types",
+          "Better compression algorithms"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure Site Recovery provides a unified replication service for VMs and applications, while AWS requires different replication mechanisms for different services."
+      },
+      {
+        "question": "How does Azure Traffic Manager differ from Route 53 health checks?",
+        "options": [
+          "Traffic Manager only supports HTTP health checks",
+          "Route 53 provides better geographic routing",
+          "Traffic Manager integrates better with Site Recovery",
+          "Route 53 has lower latency for DNS queries"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure Traffic Manager integrates seamlessly with Site Recovery for automated DR scenarios, providing unified failover management."
+      }
+    ]
+  },
+  "next_steps": {
+    "recommended_follow_up": [
+      "advanced-security-monitoring-lab",
+      "well-architected-framework-lab",
+      "cost-optimization-management-lab"
+    ],
+    "additional_resources": [
+      "Azure Site Recovery documentation",
+      "Azure Backup best practices",
+      "Disaster recovery planning guide"
+    ]
+  }
+}

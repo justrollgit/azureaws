@@ -1,0 +1,314 @@
+{
+  "id": "dva-c02-deployment-lab",
+  "title": "AWS Deployment Services to Azure DevOps: CI/CD and Application Deployment",
+  "category": "application-deployment",
+  "difficulty": "intermediate",
+  "estimatedTime": "100 minutes",
+  "awsCertification": "DVA-C02",
+  "certificationWeight": "24% - Deployment Domain (Third Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master application deployment practices by implementing AWS CI/CD pipelines and deployment strategies, then migrating to Azure DevOps equivalents with Infrastructure as Code, automated testing, and deployment automation across both platforms.",
+  
+  "learningObjectives": [
+    "Build CI/CD pipelines using AWS CodePipeline and Azure DevOps Pipelines",
+    "Implement Infrastructure as Code with CloudFormation and ARM templates",
+    "Configure automated deployment strategies and blue-green deployments",
+    "Setup application monitoring and deployment validation",
+    "Implement rollback strategies and deployment safety controls",
+    "Compare deployment patterns and best practices across both platforms"
+  ],
+
+  "prerequisites": [
+    "Completion of DVA-C02 Development and Security labs",
+    "Basic understanding of version control systems (Git)",
+    "Familiarity with YAML and JSON configuration formats",
+    "Understanding of containerization concepts (Docker basics)"
+  ],
+
+  "awsServices": [
+    "AWS CodePipeline (CI/CD Pipeline)",
+    "AWS CodeBuild (Build Service)",
+    "AWS CodeDeploy (Deployment Service)",
+    "AWS CodeCommit (Source Control)",
+    "AWS CloudFormation (Infrastructure as Code)",
+    "AWS Elastic Beanstalk",
+    "Amazon ECS (Container Service)",
+    "AWS X-Ray (Application Tracing)",
+    "Amazon CloudWatch (Monitoring)",
+    "AWS Lambda (Serverless Deployment)"
+  ],
+
+  "azureServices": [
+    "Azure DevOps Pipelines",
+    "Azure DevOps Build",
+    "Azure DevOps Release",
+    "Azure Repos (Source Control)",
+    "Azure Resource Manager (ARM) Templates",
+    "Azure App Service",
+    "Azure Container Instances",
+    "Azure Application Insights",
+    "Azure Monitor",
+    "Azure Functions (Serverless Deployment)"
+  ],
+
+  "businessScenario": "DevOps Innovations is a software development company that needs to modernize their deployment practices from manual processes to fully automated CI/CD pipelines. They develop applications for both AWS and Azure environments and need to implement consistent deployment practices, Infrastructure as Code, automated testing, and monitoring across both platforms while ensuring zero-downtime deployments and rapid rollback capabilities.",
+
+  "sections": [
+    {
+      "title": "Infrastructure as Code and Environment Management",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS CloudFormation templates and stack management",
+        "Azure Resource Manager (ARM) templates and deployments",
+        "Infrastructure versioning and environment consistency",
+        "Parameter management and template reusability",
+        "Infrastructure validation and drift detection"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Infrastructure as Code Strategy",
+          "description": "Create and manage infrastructure using CloudFormation and ARM templates",
+          "steps": [
+            "Design CloudFormation template for multi-tier application infrastructure",
+            "Create equivalent ARM template with same resource configuration",
+            "Implement parameter files for different environments (dev, staging, prod)",
+            "Setup stack/deployment validation and testing procedures",
+            "Configure infrastructure drift detection and remediation",
+            "Implement infrastructure versioning and change management"
+          ],
+          "deliverables": [
+            "CloudFormation templates with parameter files",
+            "ARM templates for equivalent Azure infrastructure",
+            "Infrastructure validation and testing procedures",
+            "Environment management and versioning strategy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CI/CD Pipeline Development",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CodePipeline design and configuration",
+        "Azure DevOps Pipeline creation and management",
+        "Source control integration and triggering",
+        "Build automation with CodeBuild and Azure Build",
+        "Artifact management and deployment staging"
+      ],
+      "tasks": [
+        {
+          "title": "Build Complete CI/CD Pipeline",
+          "description": "Create end-to-end automated deployment pipeline on both platforms",
+          "steps": [
+            "Setup AWS CodePipeline with source, build, and deploy stages",
+            "Create equivalent Azure DevOps Pipeline with same workflow",
+            "Configure automated builds with testing and quality gates",
+            "Implement artifact versioning and dependency management",
+            "Setup multi-environment deployment with approvals",
+            "Configure pipeline monitoring and failure notifications"
+          ],
+          "deliverables": [
+            "AWS CodePipeline configuration",
+            "Azure DevOps Pipeline YAML definition",
+            "Build and test automation setup",
+            "Multi-environment deployment workflow"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Application Deployment Strategies",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS CodeDeploy deployment configurations",
+        "Azure DevOps Release management",
+        "Blue-green deployment implementation",
+        "Canary deployments and feature flags",
+        "Rolling deployments and health checks"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Deployment Patterns",
+          "description": "Setup sophisticated deployment strategies with safety controls",
+          "steps": [
+            "Configure AWS CodeDeploy with blue-green deployment strategy",
+            "Implement Azure DevOps deployment slots for zero-downtime deployments",
+            "Setup canary deployment with traffic shifting",
+            "Configure health checks and automated rollback triggers",
+            "Implement feature flags for gradual feature release",
+            "Design deployment validation and monitoring workflows"
+          ],
+          "deliverables": [
+            "Blue-green deployment configuration",
+            "Canary deployment with traffic management",
+            "Health check and rollback automation",
+            "Feature flag implementation strategy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Deployment Monitoring and Validation",
+      "duration": "20 minutes",
+      "topics": [
+        "AWS X-Ray distributed tracing for deployment validation",
+        "Azure Application Insights for deployment monitoring",
+        "CloudWatch and Azure Monitor for deployment metrics",
+        "Automated testing in deployment pipeline",
+        "Post-deployment validation and smoke testing"
+      ],
+      "tasks": [
+        {
+          "title": "Setup Deployment Monitoring and Validation",
+          "description": "Implement comprehensive monitoring and validation for deployments",
+          "steps": [
+            "Configure AWS X-Ray tracing for deployment impact analysis",
+            "Setup Azure Application Insights for deployment tracking",
+            "Implement automated smoke testing in deployment pipeline",
+            "Create deployment success metrics and dashboards",
+            "Configure alerting for deployment failures and performance degradation",
+            "Design post-deployment validation workflows"
+          ],
+          "deliverables": [
+            "Deployment tracing and monitoring configuration",
+            "Automated testing integration in pipeline",
+            "Deployment metrics and alerting setup",
+            "Post-deployment validation procedures"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Multi-Environment Deployment Pipeline",
+      "description": "Build complete deployment pipeline supporting dev, staging, and production environments",
+      "steps": [
+        "Design environment-specific infrastructure templates",
+        "Implement automated deployment pipeline with environment promotion",
+        "Configure approval gates and deployment validations",
+        "Setup environment-specific configuration management",
+        "Implement database migration and data deployment strategies",
+        "Test end-to-end deployment and rollback procedures"
+      ],
+      "expectedOutcome": "Fully automated multi-environment deployment pipeline with proper controls and validation"
+    },
+    {
+      "title": "Container Deployment Modernization",
+      "description": "Migrate traditional application deployment to containerized deployment",
+      "steps": [
+        "Containerize sample application with proper Dockerfile",
+        "Implement container deployment using AWS ECS and Azure Container Instances",
+        "Setup container registry and image management",
+        "Configure container deployment pipeline with security scanning",
+        "Implement container orchestration and scaling policies",
+        "Compare container deployment patterns between platforms"
+      ],
+      "expectedOutcome": "Modernized container deployment with automated scaling and security controls"
+    },
+    {
+      "title": "Disaster Recovery and Rollback Automation",
+      "description": "Implement comprehensive disaster recovery and rollback capabilities",
+      "steps": [
+        "Design automated backup and recovery procedures",
+        "Implement rapid rollback mechanisms for failed deployments",
+        "Create cross-region disaster recovery deployment strategy",
+        "Setup automated testing of disaster recovery procedures",
+        "Configure monitoring and alerting for system health",
+        "Document and test incident response procedures"
+      ],
+      "expectedOutcome": "Robust disaster recovery system with automated rollback and tested procedures"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Pipeline failures due to environment differences and configuration drift",
+      "solution": "Implement Infrastructure as Code validation, use consistent environment configurations, implement automated testing of infrastructure changes"
+    },
+    {
+      "issue": "Complex dependency management and deployment ordering",
+      "solution": "Use dependency mapping, implement staged deployments, use health checks and validation gates, implement proper rollback procedures"
+    },
+    {
+      "issue": "Performance impact during deployments and slow rollback procedures",
+      "solution": "Implement blue-green deployments, use deployment slots, optimize artifact sizes, implement quick health checks and automated rollback triggers"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Infrastructure as Code Implementation",
+      "criteria": [
+        "Can create and manage CloudFormation and ARM templates",
+        "Understands infrastructure versioning and environment management",
+        "Can implement parameter management and template reusability",
+        "Demonstrates infrastructure validation and drift detection"
+      ]
+    },
+    {
+      "category": "CI/CD Pipeline Development",
+      "criteria": [
+        "Can build complete CI/CD pipelines on both platforms",
+        "Understands build automation and artifact management",
+        "Can implement multi-environment deployment workflows",
+        "Demonstrates pipeline monitoring and failure handling"
+      ]
+    },
+    {
+      "category": "Deployment Strategy Implementation",
+      "criteria": [
+        "Can implement blue-green and canary deployment strategies",
+        "Understands health checks and automated rollback procedures",
+        "Can configure feature flags and gradual feature release",
+        "Demonstrates zero-downtime deployment capabilities"
+      ]
+    },
+    {
+      "category": "Deployment Monitoring and Validation",
+      "criteria": [
+        "Can setup deployment monitoring and tracing",
+        "Understands automated testing integration in pipelines",
+        "Can implement deployment success metrics and alerting",
+        "Demonstrates post-deployment validation procedures"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DVA-C02": {
+      "domain": "Deployment",
+      "weight": "24%",
+      "coverage": [
+        "Prepare application deployment packages",
+        "Deploy applications using AWS services",
+        "Prepare application deployment packages by using AWS services",
+        "Deploy applications to AWS services",
+        "Automate deployment processes"
+      ],
+      "examTopics": [
+        "CodePipeline, CodeBuild, and CodeDeploy implementation",
+        "CloudFormation and Infrastructure as Code practices",
+        "Deployment strategies and rollback procedures",
+        "Container deployment and orchestration",
+        "Serverless deployment patterns and automation"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement complete CI/CD pipelines with proper automation",
+    "Demonstrates Infrastructure as Code best practices",
+    "Shows understanding of advanced deployment strategies",
+    "Can setup comprehensive deployment monitoring and validation",
+    "Understands deployment security and rollback procedures"
+  ],
+
+  "nextSteps": [
+    "Proceed to DVA-C02 Troubleshooting and Optimization Lab (18% domain weight)",
+    "Practice implementing advanced deployment patterns in production scenarios",
+    "Gain hands-on experience with container orchestration platforms",
+    "Explore advanced monitoring and observability practices for deployments"
+  ]
+}

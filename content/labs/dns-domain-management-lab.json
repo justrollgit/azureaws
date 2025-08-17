@@ -1,0 +1,638 @@
+{
+  "lab_metadata": {
+    "id": "dns-domain-management-lab",
+    "title": "Route 53 to Azure DNS: Advanced Domain Management and DNS Resolution",
+    "category": "networking",
+    "difficulty": "intermediate",
+    "estimated_time": "90 minutes",
+    "description": "Master advanced DNS patterns by migrating from AWS Route 53 to Azure DNS with sophisticated routing policies, health checks, and hybrid name resolution",
+    "aws_services": ["Route 53", "Route 53 Resolver", "Health Checks", "CloudMap"],
+    "azure_services": ["Azure DNS", "Private DNS", "Traffic Manager", "DNS Private Resolver"],
+    "tags": ["networking", "dns", "domain-management", "routing", "saa-c03", "enterprise"],
+    "prerequisites": [
+      "Completion of networking-fundamentals-lab",
+      "Understanding of DNS protocols and record types",
+      "Knowledge of health checking and failover concepts",
+      "Familiarity with hybrid cloud networking",
+      "Basic understanding of load balancing concepts"
+    ],
+    "learning_objectives": [
+      "Migrate AWS Route 53 hosted zones to Azure DNS",
+      "Transform Route 53 health checks to Azure Traffic Manager monitoring",
+      "Convert Route 53 Resolver rules to Azure DNS Private Resolver",
+      "Implement advanced DNS routing policies and traffic management",
+      "Set up hybrid DNS resolution for on-premises integration",
+      "Configure DNS-based load balancing and failover",
+      "Establish DNS security and monitoring best practices"
+    ]
+  },
+  "scenario": {
+    "title": "Enterprise DNS Infrastructure Migration",
+    "description": "GlobalTech Corporation manages DNS for 50+ domains across multiple business units with complex routing requirements, hybrid cloud integration, and strict availability SLAs. They need to migrate from AWS Route 53 to Azure DNS while maintaining zero downtime and improving global performance.",
+    "business_requirements": [
+      "Zero DNS resolution downtime during migration",
+      "Sub-50ms DNS query response times globally",
+      "Advanced traffic routing for disaster recovery",
+      "Hybrid DNS resolution for on-premises resources",
+      "DNS-based load balancing for global applications",
+      "Comprehensive monitoring and alerting",
+      "Cost optimization for high-volume DNS queries"
+    ],
+    "current_aws_architecture": [
+      "Route 53 hosted zones for 50+ public domains",
+      "Route 53 Resolver for hybrid DNS resolution",
+      "Health checks for endpoint monitoring",
+      "Weighted and latency-based routing policies",
+      "CloudMap for service discovery",
+      "CloudWatch monitoring for DNS metrics",
+      "Cross-region failover configurations"
+    ],
+    "target_azure_architecture": [
+      "Azure DNS for public domain hosting",
+      "Private DNS zones for internal name resolution",
+      "DNS Private Resolver for hybrid connectivity",
+      "Traffic Manager for DNS-based load balancing",
+      "Monitor and Log Analytics for DNS telemetry",
+      "Application Gateway for application-level routing",
+      "Azure Front Door for global traffic management"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Public DNS Migration: Route 53 to Azure DNS",
+      "estimated_time": "30 minutes",
+      "description": "Migrate public domain hosting with advanced record management",
+      "aws_context": {
+        "service": "AWS Route 53",
+        "description": "Highly available and scalable DNS web service",
+        "key_features": [
+          "Public and private hosted zones",
+          "Multiple routing policies (simple, weighted, latency-based)",
+          "Health checks and DNS failover",
+          "Domain registration and management",
+          "Integration with AWS services via alias records"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure DNS",
+        "description": "High-performance DNS hosting service with global anycast network",
+        "key_features": [
+          "Public DNS zones with global distribution",
+          "Support for all common DNS record types",
+          "Role-based access control and DNS zone delegation",
+          "Integration with Azure services via alias records",
+          "Private DNS zones for internal name resolution"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Create Azure DNS Zones and Migrate DNS Records",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create public DNS zone for primary domain",
+              "aws_context": "Similar to creating Route 53 hosted zone",
+              "azure_command": "az network dns zone create --name globaltech.com --resource-group rg-dns --location global",
+              "explanation": "Creates globally distributed DNS zone with Azure's anycast network"
+            },
+            {
+              "step": 2,
+              "description": "Import existing DNS records from Route 53",
+              "aws_context": "Equivalent to exporting Route 53 zone file",
+              "migration_process": {
+                "export_route53": "aws route53 list-resource-record-sets --hosted-zone-id Z123456789 --output json > route53-records.json",
+                "convert_format": "Transform Route 53 JSON to Azure DNS import format",
+                "import_azure": "az network dns record-set import --zone-name globaltech.com --resource-group rg-dns --file azure-dns-records.txt"
+              },
+              "record_types": [
+                {"type": "A", "count": 25, "description": "IPv4 address records"},
+                {"type": "AAAA", "count": 8, "description": "IPv6 address records"},
+                {"type": "CNAME", "count": 15, "description": "Canonical name records"},
+                {"type": "MX", "count": 3, "description": "Mail exchange records"},
+                {"type": "TXT", "count": 12, "description": "Text records for verification"}
+              ],
+              "explanation": "Preserves all existing DNS records during migration"
+            },
+            {
+              "step": 3,
+              "description": "Configure Azure service integration with alias records",
+              "aws_context": "Similar to Route 53 alias records for AWS services",
+              "alias_records": [
+                {
+                  "name": "www.globaltech.com",
+                  "type": "A",
+                  "target": "Azure Application Gateway",
+                  "azure_command": "az network dns record-set a create --zone-name globaltech.com --resource-group rg-dns --name www --target-resource /subscriptions/{sub}/resourceGroups/rg-apps/providers/Microsoft.Network/applicationGateways/app-gateway"
+                },
+                {
+                  "name": "api.globaltech.com",
+                  "type": "A", 
+                  "target": "Azure Load Balancer",
+                  "azure_command": "az network dns record-set a create --zone-name globaltech.com --resource-group rg-dns --name api --target-resource /subscriptions/{sub}/resourceGroups/rg-api/providers/Microsoft.Network/loadBalancers/api-lb"
+                }
+              ],
+              "explanation": "Creates dynamic DNS records that automatically update with Azure resource changes"
+            },
+            {
+              "step": 4,
+              "description": "Update domain registrar nameservers",
+              "aws_context": "Similar to updating nameservers at domain registrar",
+              "nameserver_migration": {
+                "azure_nameservers": [
+                  "ns1-05.azure-dns.com",
+                  "ns2-05.azure-dns.net", 
+                  "ns3-05.azure-dns.org",
+                  "ns4-05.azure-dns.info"
+                ],
+                "migration_strategy": [
+                  "Lower TTL values 24 hours before migration",
+                  "Update nameservers during low-traffic period",
+                  "Monitor DNS propagation globally",
+                  "Verify all services remain accessible"
+                ],
+                "rollback_plan": "Keep Route 53 zone active for 48 hours as backup"
+              },
+              "explanation": "Ensures smooth transition with minimal DNS propagation delay"
+            }
+          ],
+          "validation": [
+            "Verify Azure DNS zone is created with correct records",
+            "Confirm alias records resolve to Azure resources",
+            "Test DNS resolution from multiple global locations",
+            "Validate all subdomains and services remain accessible"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Private DNS and Hybrid Resolution: Route 53 Resolver to DNS Private Resolver",
+      "estimated_time": "25 minutes",
+      "description": "Implement hybrid DNS resolution for on-premises integration",
+      "aws_context": {
+        "service": "AWS Route 53 Resolver",
+        "description": "DNS resolver for hybrid cloud environments",
+        "key_features": [
+          "Inbound and outbound resolver endpoints",
+          "Conditional forwarding rules",
+          "DNS query logging and monitoring",
+          "Integration with on-premises DNS infrastructure",
+          "Cross-VPC DNS resolution"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure DNS Private Resolver",
+        "description": "Hybrid DNS service for cross-premises name resolution",
+        "key_features": [
+          "Inbound and outbound endpoints for hybrid scenarios",
+          "DNS forwarding rules for conditional resolution",
+          "Private DNS zone integration",
+          "Virtual network DNS integration",
+          "Monitoring and diagnostics for DNS queries"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Hybrid DNS Resolution Infrastructure",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Private DNS zones for internal resources",
+              "aws_context": "Similar to Route 53 private hosted zones",
+              "private_dns_setup": [
+                {
+                  "zone": "internal.globaltech.com",
+                  "purpose": "Internal application services",
+                  "azure_command": "az network private-dns zone create --name internal.globaltech.com --resource-group rg-dns"
+                },
+                {
+                  "zone": "dev.globaltech.local", 
+                  "purpose": "Development environment resources",
+                  "azure_command": "az network private-dns zone create --name dev.globaltech.local --resource-group rg-dns"
+                }
+              ],
+              "vnet_links": [
+                "az network private-dns link vnet create --zone-name internal.globaltech.com --resource-group rg-dns --name prod-vnet-link --virtual-network prod-vnet --registration-enabled true",
+                "az network private-dns link vnet create --zone-name dev.globaltech.local --resource-group rg-dns --name dev-vnet-link --virtual-network dev-vnet --registration-enabled true"
+              ],
+              "explanation": "Creates isolated DNS namespaces for internal Azure resources"
+            },
+            {
+              "step": 2,
+              "description": "Deploy DNS Private Resolver for hybrid connectivity",
+              "aws_context": "Equivalent to Route 53 Resolver endpoints",
+              "resolver_deployment": {
+                "resource_creation": "az network dns-resolver create --name globaltech-dns-resolver --resource-group rg-dns --location eastus --virtual-network /subscriptions/{sub}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/hub-vnet",
+                "inbound_endpoint": {
+                  "purpose": "Allow on-premises to query Azure DNS",
+                  "subnet": "dns-inbound-subnet (10.0.10.0/28)",
+                  "azure_command": "az network dns-resolver inbound-endpoint create --dns-resolver-name globaltech-dns-resolver --resource-group rg-dns --name inbound-endpoint --location eastus --ip-configurations '[{\"privateIpAllocationMethod\":\"Dynamic\",\"subnet\":{\"id\":\"/subscriptions/{sub}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/hub-vnet/subnets/dns-inbound-subnet\"}}]'"
+                },
+                "outbound_endpoint": {
+                  "purpose": "Allow Azure to query on-premises DNS",
+                  "subnet": "dns-outbound-subnet (10.0.11.0/28)",
+                  "azure_command": "az network dns-resolver outbound-endpoint create --dns-resolver-name globaltech-dns-resolver --resource-group rg-dns --name outbound-endpoint --location eastus --subnet /subscriptions/{sub}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/hub-vnet/subnets/dns-outbound-subnet"
+                }
+              },
+              "explanation": "Establishes bidirectional DNS resolution between Azure and on-premises"
+            },
+            {
+              "step": 3,
+              "description": "Configure DNS forwarding rules for on-premises domains",
+              "aws_context": "Similar to Route 53 Resolver forwarding rules",
+              "forwarding_rules": [
+                {
+                  "domain": "corp.globaltech.com",
+                  "target_servers": ["192.168.1.10", "192.168.1.11"],
+                  "description": "Forward corporate domain queries to on-premises DNS",
+                  "azure_command": "az network dns-resolver forwarding-rule create --name corp-domain-rule --dns-forwarding-ruleset-name globaltech-ruleset --resource-group rg-dns --domain-name corp.globaltech.com --forwarding-rule-state Enabled --target-dns-servers '[{\"ipAddress\":\"192.168.1.10\",\"port\":53},{\"ipAddress\":\"192.168.1.11\",\"port\":53}]'"
+                },
+                {
+                  "domain": "manufacturing.local",
+                  "target_servers": ["10.10.1.5", "10.10.1.6"],
+                  "description": "Forward manufacturing domain to plant DNS servers",
+                  "azure_command": "az network dns-resolver forwarding-rule create --name manufacturing-rule --dns-forwarding-ruleset-name globaltech-ruleset --resource-group rg-dns --domain-name manufacturing.local --forwarding-rule-state Enabled --target-dns-servers '[{\"ipAddress\":\"10.10.1.5\",\"port\":53},{\"ipAddress\":\"10.10.1.6\",\"port\":53}]'"
+                }
+              ],
+              "explanation": "Routes specific domain queries to appropriate DNS servers"
+            }
+          ],
+          "validation": [
+            "Verify Private DNS zones resolve correctly from Azure VMs",
+            "Confirm DNS Private Resolver endpoints are operational",
+            "Test on-premises domain resolution from Azure resources",
+            "Validate Azure domain resolution from on-premises systems"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Advanced DNS Routing: Health Checks and Traffic Management",
+      "estimated_time": "35 minutes",
+      "description": "Implement sophisticated DNS-based routing and monitoring",
+      "aws_context": {
+        "service": "Route 53 Health Checks",
+        "description": "Health checking and DNS failover service",
+        "key_features": [
+          "HTTP, HTTPS, and TCP health checks",
+          "Calculated health checks for complex scenarios",
+          "CloudWatch integration for monitoring",
+          "Geographic and latency-based routing",
+          "Automatic DNS failover"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Traffic Manager",
+        "description": "DNS-based load balancing with endpoint monitoring",
+        "key_features": [
+          "Multiple routing methods (performance, weighted, priority)",
+          "Endpoint health monitoring",
+          "Nested profiles for complex scenarios",
+          "Geographic routing with custom regions",
+          "Real-time monitoring and alerting"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure DNS-Based Load Balancing and Failover",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Traffic Manager profile for primary application",
+              "aws_context": "Similar to Route 53 health checks with failover routing",
+              "traffic_manager_setup": {
+                "profile_creation": "az network traffic-manager profile create --name globaltech-app --resource-group rg-dns --routing-method Performance --unique-dns-name globaltech-app --ttl 30 --monitor-protocol HTTPS --monitor-port 443 --monitor-path /health",
+                "routing_method": "Performance-based routing for optimal user experience",
+                "monitoring_config": {
+                  "protocol": "HTTPS",
+                  "port": 443,
+                  "path": "/health",
+                  "interval": 30,
+                  "timeout": 10,
+                  "tolerated_failures": 3
+                }
+              },
+              "explanation": "Creates intelligent DNS routing based on endpoint performance"
+            },
+            {
+              "step": 2,
+              "description": "Add regional endpoints with health monitoring",
+              "aws_context": "Equivalent to Route 53 weighted routing with health checks",
+              "regional_endpoints": [
+                {
+                  "name": "primary-east-us",
+                  "target": "app-eastus.cloudapp.azure.com",
+                  "location": "East US",
+                  "priority": 1,
+                  "weight": 100,
+                  "azure_command": "az network traffic-manager endpoint create --profile-name globaltech-app --resource-group rg-dns --name primary-east-us --type externalEndpoints --target app-eastus.cloudapp.azure.com --endpoint-location 'East US' --priority 1 --weight 100"
+                },
+                {
+                  "name": "secondary-west-europe",
+                  "target": "app-westeurope.cloudapp.azure.com", 
+                  "location": "West Europe",
+                  "priority": 2,
+                  "weight": 100,
+                  "azure_command": "az network traffic-manager endpoint create --profile-name globaltech-app --resource-group rg-dns --name secondary-west-europe --type externalEndpoints --target app-westeurope.cloudapp.azure.com --endpoint-location 'West Europe' --priority 2 --weight 100"
+                },
+                {
+                  "name": "disaster-recovery",
+                  "target": "dr.globaltech.com",
+                  "location": "Central US",
+                  "priority": 3,
+                  "weight": 100,
+                  "azure_command": "az network traffic-manager endpoint create --profile-name globaltech-app --resource-group rg-dns --name disaster-recovery --type externalEndpoints --target dr.globaltech.com --endpoint-location 'Central US' --priority 3 --weight 100"
+                }
+              ],
+              "explanation": "Provides automatic failover with geographic optimization"
+            },
+            {
+              "step": 3,
+              "description": "Implement nested Traffic Manager profiles for complex routing",
+              "aws_context": "Similar to calculated health checks in Route 53",
+              "nested_profiles": {
+                "parent_profile": {
+                  "name": "globaltech-global",
+                  "routing_method": "Geographic",
+                  "purpose": "Route users based on geographic location"
+                },
+                "child_profiles": [
+                  {
+                    "name": "globaltech-americas",
+                    "routing_method": "Performance",
+                    "endpoints": ["east-us", "west-us", "central-canada"],
+                    "purpose": "Optimize routing within Americas region"
+                  },
+                  {
+                    "name": "globaltech-europe",
+                    "routing_method": "Weighted", 
+                    "endpoints": ["west-europe", "north-europe", "uk-south"],
+                    "purpose": "Load balance across European data centers"
+                  },
+                  {
+                    "name": "globaltech-asia",
+                    "routing_method": "Priority",
+                    "endpoints": ["east-asia", "southeast-asia"],
+                    "purpose": "Primary/secondary routing for Asian users"
+                  }
+                ]
+              },
+              "explanation": "Creates sophisticated multi-tier routing for global applications"
+            },
+            {
+              "step": 4,
+              "description": "Set up DNS monitoring and alerting",
+              "aws_context": "Equivalent to CloudWatch alarms for Route 53 health checks",
+              "monitoring_setup": {
+                "log_analytics": "az monitor log-analytics workspace create --name globaltech-dns-logs --resource-group rg-dns --location eastus",
+                "diagnostic_settings": "az monitor diagnostic-settings create --name dns-diagnostics --resource /subscriptions/{sub}/resourceGroups/rg-dns/providers/Microsoft.Network/trafficManagerProfiles/globaltech-app --logs '[{\"category\":\"ProbeHealthStatusEvents\",\"enabled\":true}]' --workspace globaltech-dns-logs",
+                "alert_rules": [
+                  {
+                    "name": "endpoint-down-alert",
+                    "condition": "Traffic Manager endpoint health check failure",
+                    "action": "Send notification to operations team",
+                    "severity": "Critical"
+                  },
+                  {
+                    "name": "high-query-volume",
+                    "condition": "DNS query volume exceeds baseline by 200%",
+                    "action": "Scale Traffic Manager and investigate cause",
+                    "severity": "Warning"
+                  }
+                ]
+              },
+              "explanation": "Provides comprehensive monitoring and proactive alerting"
+            }
+          ],
+          "validation": [
+            "Verify Traffic Manager profile routes traffic correctly",
+            "Confirm endpoint health monitoring detects failures",
+            "Test geographic routing from different locations",
+            "Validate alerts trigger during simulated failures"
+          ]
+        }
+      ]
+    }
+  ],
+  "performance_optimization": [
+    {
+      "optimization": "DNS Query Performance",
+      "aws_equivalent": "Route 53 edge locations and resolver caching",
+      "azure_implementation": "Azure DNS anycast network with optimized TTL values",
+      "benefits": [
+        "Sub-50ms DNS response times globally",
+        "Reduced DNS query volume through intelligent caching",
+        "Improved application performance with faster name resolution"
+      ],
+      "configuration": "Optimize TTL values based on change frequency and performance requirements"
+    },
+    {
+      "optimization": "Traffic Routing Efficiency",
+      "aws_equivalent": "Route 53 latency-based and geolocation routing",
+      "azure_implementation": "Traffic Manager performance routing with nested profiles",
+      "benefits": [
+        "Automatic routing to optimal endpoints",
+        "Reduced latency through geographic optimization", 
+        "Improved user experience with intelligent failover"
+      ],
+      "configuration": "Use nested Traffic Manager profiles for multi-tier routing optimization"
+    },
+    {
+      "optimization": "Hybrid DNS Resolution",
+      "aws_equivalent": "Route 53 Resolver with optimized forwarding",
+      "azure_implementation": "DNS Private Resolver with selective forwarding",
+      "benefits": [
+        "Faster resolution of on-premises resources",
+        "Reduced cross-network DNS traffic",
+        "Improved hybrid application performance"
+      ],
+      "configuration": "Configure forwarding rules to minimize cross-network DNS queries"
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "DNS Hosting Costs",
+      "aws_comparison": "Route 53 charges per hosted zone plus query volume",
+      "azure_model": "Azure DNS charges per zone plus query volume with bulk discounts",
+      "optimization_strategies": [
+        "Consolidate DNS zones where possible",
+        "Optimize TTL values to reduce query volume",
+        "Use Traffic Manager for DNS-based load balancing vs expensive hardware",
+        "Monitor query patterns and optimize for cost efficiency"
+      ],
+      "estimated_savings": "20-35% for high-volume DNS scenarios"
+    },
+    {
+      "area": "Traffic Manager vs Load Balancers",
+      "aws_comparison": "Route 53 health checks plus Application Load Balancers",
+      "azure_model": "Traffic Manager with endpoint monitoring",
+      "optimization_strategies": [
+        "Use Traffic Manager for global routing vs regional load balancers",
+        "Combine with Azure Front Door for HTTP-specific optimization",
+        "Implement smart endpoint selection to reduce costs",
+        "Monitor endpoint usage and optimize configuration"
+      ],
+      "estimated_savings": "25-40% for global load balancing scenarios"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "DNS Security",
+      "practices": [
+        "Enable DNSSEC for DNS zones where supported",
+        "Use private DNS zones for internal resource resolution",
+        "Implement DNS filtering and threat protection",
+        "Monitor DNS queries for anomalous patterns"
+      ]
+    },
+    {
+      "category": "Access Control",
+      "practices": [
+        "Use Azure RBAC for DNS zone management",
+        "Implement least privilege access for DNS administrators",
+        "Enable audit logging for all DNS zone changes",
+        "Use managed identities for automated DNS updates"
+      ]
+    },
+    {
+      "category": "Hybrid Security",
+      "practices": [
+        "Secure DNS Private Resolver with network security groups",
+        "Use encrypted channels for DNS forwarding where possible",
+        "Implement conditional access for DNS management",
+        "Regular security reviews of DNS forwarding rules"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment", 
+      "tasks": [
+        "Audit all Route 53 hosted zones and record types",
+        "Document existing health checks and routing policies",
+        "Map on-premises DNS dependencies and forwarding rules",
+        "Plan TTL reduction strategy for faster migration",
+        "Identify critical services requiring zero-downtime migration"
+      ]
+    },
+    {
+      "phase": "Azure DNS Infrastructure Setup",
+      "tasks": [
+        "Create Azure DNS zones for all domains",
+        "Set up DNS Private Resolver for hybrid scenarios",
+        "Configure Traffic Manager profiles for advanced routing",
+        "Establish monitoring and alerting infrastructure",
+        "Create backup and recovery procedures"
+      ]
+    },
+    {
+      "phase": "DNS Record Migration",
+      "tasks": [
+        "Import DNS records from Route 53 to Azure DNS",
+        "Configure alias records for Azure service integration",
+        "Set up private DNS zones for internal resources",
+        "Test DNS resolution from multiple locations",
+        "Validate all applications continue to function"
+      ]
+    },
+    {
+      "phase": "Cutover and Optimization",
+      "tasks": [
+        "Update nameservers at domain registrars",
+        "Monitor DNS propagation and query patterns",
+        "Optimize TTL values and routing policies",
+        "Decommission Route 53 infrastructure after validation",
+        "Train operations team on Azure DNS management"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "DNS Resolution Failures",
+      "symptoms": [
+        "Domain names not resolving to correct IP addresses",
+        "Intermittent DNS lookup failures",
+        "Slow DNS response times"
+      ],
+      "solutions": [
+        "Verify Azure DNS zone configuration and record syntax",
+        "Check nameserver propagation using DNS lookup tools",
+        "Review TTL values and caching behavior",
+        "Test DNS resolution from multiple geographic locations",
+        "Monitor Azure DNS service health and performance metrics"
+      ]
+    },
+    {
+      "issue": "Traffic Manager Endpoint Health Issues",
+      "symptoms": [
+        "Traffic not routing to healthy endpoints",
+        "False positive health check failures",
+        "Delayed failover during outages"
+      ],
+      "solutions": [
+        "Review Traffic Manager endpoint configuration and health check settings",
+        "Verify endpoint accessibility from Traffic Manager probe locations",
+        "Check firewall rules and network security group configurations",
+        "Monitor endpoint health status and probe results",
+        "Adjust health check intervals and failure thresholds"
+      ]
+    },
+    {
+      "issue": "Hybrid DNS Resolution Problems",
+      "symptoms": [
+        "On-premises domains not resolving from Azure",
+        "Azure private resources not accessible from on-premises",
+        "DNS forwarding rules not working correctly"
+      ],
+      "solutions": [
+        "Verify DNS Private Resolver configuration and network connectivity",
+        "Check forwarding rules and target DNS server accessibility",
+        "Review virtual network DNS settings and custom DNS configurations", 
+        "Test DNS resolution paths using network diagnostics tools",
+        "Monitor DNS Private Resolver logs for errors and performance"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure DNS documentation - https://docs.microsoft.com/en-us/azure/dns/",
+        "DNS Private Resolver documentation - https://docs.microsoft.com/en-us/azure/dns/dns-private-resolver-overview",
+        "Traffic Manager documentation - https://docs.microsoft.com/en-us/azure/traffic-manager/",
+        "Private DNS zones documentation - https://docs.microsoft.com/en-us/azure/dns/private-dns-overview"
+      ]
+    },
+    {
+      "type": "Migration Guides",
+      "links": [
+        "Route 53 to Azure DNS migration guide",
+        "DNS best practices for hybrid cloud",
+        "Traffic Manager configuration patterns",
+        "DNS security and monitoring guides"
+      ]
+    },
+    {
+      "type": "Hands-on Tutorials",
+      "links": [
+        "Azure DNS quickstart tutorials",
+        "Traffic Manager deployment samples",
+        "DNS Private Resolver configuration guides",
+        "Hybrid DNS resolution examples"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Front Door for HTTP-specific global routing",
+    "Set up Azure Private Link for secure service connectivity",
+    "Configure Azure Firewall DNS proxy for enhanced security",
+    "Explore Azure Arc for hybrid DNS management",
+    "Implement DNS analytics with Azure Monitor and Log Analytics",
+    "Set up automated DNS management with Azure DevOps"
+  ]
+}

@@ -1,0 +1,1391 @@
+{
+  "lab_metadata": {
+    "id": "saa-c03-high-performance-architecture-lab",
+    "title": "AWS High-Performance Architecture to Azure: Advanced Caching, Database Optimization, and Network Performance",
+    "category": "high-performance-architecture",
+    "difficulty": "expert",
+    "estimated_time": "175 minutes",
+    "description": "Master high-performance architecture by migrating from AWS performance optimization patterns to Azure solutions with advanced caching strategies, database performance tuning, CDN optimization, and network acceleration",
+    "aws_services": ["ElastiCache", "CloudFront", "RDS", "DynamoDB", "ELB", "Auto Scaling", "Route 53", "Global Accelerator"],
+    "azure_services": ["Azure Cache for Redis", "Azure CDN", "Azure SQL Database", "Cosmos DB", "Load Balancer", "Application Gateway", "Traffic Manager", "Front Door"],
+    "tags": ["performance", "caching", "database-optimization", "cdn", "networking", "saa-c03-critical", "high-throughput"],
+    "prerequisites": [
+      "Understanding of performance optimization principles and bottleneck identification",
+      "Knowledge of caching strategies and cache patterns for high-performance applications",
+      "Familiarity with database performance tuning and optimization techniques",
+      "Experience with CDN and content delivery optimization strategies",
+      "Understanding of network optimization and traffic routing patterns"
+    ],
+    "learning_objectives": [
+      "Migrate AWS ElastiCache patterns to Azure Cache for Redis with advanced performance optimization",
+      "Transform CloudFront CDN to Azure CDN and Front Door with global acceleration",
+      "Convert RDS performance optimization to Azure SQL Database with intelligent performance",
+      "Implement DynamoDB equivalent using Cosmos DB with performance optimization",
+      "Establish high-performance load balancing and traffic routing with Azure solutions",
+      "Design comprehensive performance monitoring and optimization automation",
+      "Implement advanced caching architectures with multi-tier and hybrid patterns"
+    ]
+  },
+  "scenario": {
+    "title": "Global Gaming Platform High-Performance Migration",
+    "description": "GameTech operates a global gaming platform serving 100M+ active players worldwide with ultra-low latency requirements (<50ms), massive concurrent connections (1M+ simultaneous), and real-time data processing. They need to migrate from AWS to Azure while improving performance by 40%, reducing latency by 30%, and supporting 5x traffic growth.",
+    "business_requirements": [
+      "Ultra-low latency gaming experience with <50ms response times globally",
+      "Massive scale support for 1M+ concurrent players with automatic scaling",
+      "Real-time leaderboards and player data with sub-millisecond database response",
+      "Global content delivery for game assets with 99.9% cache hit ratio",
+      "High-throughput analytics processing 1TB+ data per hour in real-time",
+      "Advanced caching strategies with multi-tier and intelligent invalidation",
+      "Performance optimization automation with ML-driven scaling and optimization"
+    ],
+    "current_aws_architecture": [
+      "ElastiCache Redis clusters with read replicas for session and game state caching",
+      "CloudFront with custom origins and advanced caching behaviors",
+      "RDS with read replicas and performance insights for relational data",
+      "DynamoDB with DAX for ultra-low latency NoSQL operations",
+      "Application Load Balancer with advanced routing and health checks",
+      "Global Accelerator for network performance optimization"
+    ],
+    "target_azure_architecture": [
+      "Azure Cache for Redis with clustering and advanced performance features",
+      "Azure Front Door with global load balancing and intelligent routing",
+      "Azure SQL Database with intelligent performance optimization",
+      "Cosmos DB with dedicated throughput and multi-region writes",
+      "Application Gateway with performance optimization and advanced routing",
+      "Traffic Manager with performance-based routing and health monitoring"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Advanced Caching Architecture: ElastiCache to Azure Cache for Redis",
+      "estimated_time": "55 minutes",
+      "description": "Implement enterprise-scale caching with advanced performance optimization",
+      "aws_context": {
+        "service": "AWS ElastiCache",
+        "description": "Managed in-memory caching with Redis and Memcached engines",
+        "key_features": [
+          "Redis clusters with read replicas and automatic failover",
+          "Advanced data structures with pub/sub and streaming capabilities",
+          "Integration with CloudWatch for performance monitoring",
+          "VPC placement with security groups and encryption",
+          "Backup and restore capabilities with point-in-time recovery"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Cache for Redis",
+        "description": "Fully managed Redis service with enterprise features and performance optimization",
+        "key_features": [
+          "Redis Enterprise with active-active geo-replication",
+          "Advanced data persistence with RDB and AOF options",
+          "Integration with Azure Monitor for comprehensive performance insights",
+          "VNet integration with private endpoints and network isolation",
+          "Redis modules support including search, graph, and time series"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy High-Performance Redis Caching Architecture",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Azure Cache for Redis with enterprise clustering and optimization",
+              "aws_context": "Similar to ElastiCache Redis cluster with read replicas and performance optimization",
+              "redis_deployment": {
+                "cache_configuration": {
+                  "name": "gametech-redis-premium",
+                  "sku": "Premium",
+                  "family": "P",
+                  "capacity": 6,
+                  "shard_count": 10,
+                  "replica_count": 2,
+                  "redis_version": "6.0",
+                  "port": 6380,
+                  "non_ssl_port_enabled": false,
+                  "minimum_tls_version": "1.2"
+                },
+                "enterprise_features": {
+                  "zones": ["1", "2", "3"],
+                  "persistence": {
+                    "rdb_backup_enabled": true,
+                    "rdb_backup_frequency": 60,
+                    "rdb_backup_max_snapshot_count": 7,
+                    "aof_backup_enabled": true,
+                    "aof_storage_connection_string": "DefaultEndpointsProtocol=https;AccountName=gametechbackup;AccountKey=..."
+                  },
+                  "geo_replication": {
+                    "enabled": true,
+                    "linked_caches": [
+                      {
+                        "cache_name": "gametech-redis-westus",
+                        "replication_role": "Primary"
+                      },
+                      {
+                        "cache_name": "gametech-redis-eastus",
+                        "replication_role": "Secondary"
+                      },
+                      {
+                        "cache_name": "gametech-redis-europe",
+                        "replication_role": "Secondary"
+                      }
+                    ]
+                  }
+                },
+                "performance_optimization": {
+                  "maxmemory_policy": "allkeys-lru",
+                  "maxmemory_delta": "10%",
+                  "maxmemory_reserved": "10%",
+                  "maxfragmentationmemory_reserved": "12%",
+                  "advanced_settings": {
+                    "tcp-keepalive": "300",
+                    "timeout": "300",
+                    "maxclients": "20000",
+                    "databases": "16"
+                  }
+                },
+                "network_configuration": {
+                  "subnet_id": "/subscriptions/.../subnets/redis-subnet",
+                  "private_endpoint": {
+                    "enabled": true,
+                    "subnet_id": "/subscriptions/.../subnets/private-endpoints",
+                    "private_dns_zone": "privatelink.redis.cache.windows.net"
+                  },
+                  "firewall_rules": [
+                    {
+                      "rule_name": "AllowApplicationSubnet",
+                      "start_ip": "10.0.1.0",
+                      "end_ip": "10.0.1.255"
+                    },
+                    {
+                      "rule_name": "AllowLoadBalancerSubnet", 
+                      "start_ip": "10.0.2.0",
+                      "end_ip": "10.0.2.255"
+                    }
+                  ]
+                },
+                "azure_cli_deployment": "az redis create --name gametech-redis-premium --resource-group rg-gaming-cache --location eastus --sku Premium --vm-size P4 --shard-count 10 --replica-count 2 --zones 1 2 3"
+              },
+              "explanation": "Creates enterprise-grade Redis caching with high availability, geo-replication, and performance optimization"
+            },
+            {
+              "step": 2,
+              "description": "Implement advanced caching patterns and strategies",
+              "caching_patterns": {
+                "cache_aside_pattern": {
+                  "use_case": "Player profiles and game statistics",
+                  "implementation": {
+                    "key_pattern": "player:{player_id}:profile",
+                    "ttl": 3600,
+                    "cache_strategy": "Lazy loading with write-through",
+                    "invalidation": "Time-based and event-driven",
+                    "sample_code": {
+                      "language": "C#",
+                      "code": "public async Task<PlayerProfile> GetPlayerProfileAsync(string playerId)\n{\n    var cacheKey = $\"player:{playerId}:profile\";\n    var cachedProfile = await _cache.StringGetAsync(cacheKey);\n    \n    if (cachedProfile.HasValue)\n    {\n        return JsonSerializer.Deserialize<PlayerProfile>(cachedProfile);\n    }\n    \n    var profile = await _database.GetPlayerProfileAsync(playerId);\n    await _cache.StringSetAsync(cacheKey, JsonSerializer.Serialize(profile), TimeSpan.FromHours(1));\n    \n    return profile;\n}"
+                    }
+                  }
+                },
+                "write_through_pattern": {
+                  "use_case": "Real-time leaderboards and scores",
+                  "implementation": {
+                    "key_pattern": "leaderboard:{game_id}:{region}",
+                    "data_structure": "Sorted Set (ZSET)",
+                    "update_strategy": "Immediate cache update with database write",
+                    "sample_code": {
+                      "language": "C#",
+                      "code": "public async Task UpdatePlayerScoreAsync(string gameId, string region, string playerId, long score)\n{\n    var leaderboardKey = $\"leaderboard:{gameId}:{region}\";\n    \n    // Update database first for consistency\n    await _database.UpdatePlayerScoreAsync(gameId, region, playerId, score);\n    \n    // Update cache immediately\n    await _cache.SortedSetAddAsync(leaderboardKey, playerId, score);\n    \n    // Trim leaderboard to top 1000 players\n    await _cache.SortedSetRemoveRangeByRankAsync(leaderboardKey, 0, -1001);\n}"
+                    }
+                  }
+                },
+                "write_behind_pattern": {
+                  "use_case": "High-frequency game events and analytics",
+                  "implementation": {
+                    "key_pattern": "events:{game_id}:{timestamp}",
+                    "data_structure": "Stream",
+                    "batch_processing": "Every 10 seconds or 1000 events",
+                    "sample_code": {
+                      "language": "C#", 
+                      "code": "public async Task LogGameEventAsync(GameEvent gameEvent)\n{\n    var streamKey = $\"events:{gameEvent.GameId}:{DateTime.UtcNow:yyyyMMddHH}\";\n    \n    // Add to Redis stream for real-time processing\n    await _cache.StreamAddAsync(streamKey, new NameValueEntry[]\n    {\n        new(\"player_id\", gameEvent.PlayerId),\n        new(\"event_type\", gameEvent.EventType),\n        new(\"timestamp\", gameEvent.Timestamp.ToString()),\n        new(\"data\", JsonSerializer.Serialize(gameEvent.Data))\n    });\n    \n    // Background service will batch process to database\n}"
+                    }
+                  }
+                }
+              },
+              "explanation": "Implements advanced caching patterns optimized for gaming workloads with high performance requirements"
+            },
+            {
+              "step": 3,
+              "description": "Configure advanced performance monitoring and optimization",
+              "performance_monitoring": {
+                "redis_insights_integration": {
+                  "enabled": true,
+                  "features": [
+                    "Real-time performance monitoring",
+                    "Memory usage analysis and optimization",
+                    "Slow query detection and alerting",
+                    "Key space analysis and recommendations"
+                  ]
+                },
+                "azure_monitor_integration": {
+                  "diagnostic_settings": {
+                    "enabled": true,
+                    "log_categories": ["ConnectedClientList"],
+                    "metrics": [
+                      "connectedclients",
+                      "totalcommandsprocessed",
+                      "cachehits",
+                      "cachemisses", 
+                      "getcommands",
+                      "setcommands",
+                      "operationsPerSecond",
+                      "evictedkeys",
+                      "totalkeys",
+                      "expiredkeys",
+                      "usedmemory",
+                      "usedmemorypercentage",
+                      "serverLoad",
+                      "cacheWrite",
+                      "cacheRead"
+                    ],
+                    "retention_days": 90
+                  },
+                  "alert_rules": [
+                    {
+                      "alert_name": "High Cache Miss Ratio",
+                      "metric": "cachemisses",
+                      "threshold": 20,
+                      "evaluation_frequency": "PT1M",
+                      "window_size": "PT5M",
+                      "severity": 2,
+                      "condition": "Cache miss percentage > 20% for 5 minutes"
+                    },
+                    {
+                      "alert_name": "Memory Usage High",
+                      "metric": "usedmemorypercentage",
+                      "threshold": 80,
+                      "evaluation_frequency": "PT1M",
+                      "window_size": "PT5M",
+                      "severity": 1,
+                      "condition": "Memory usage > 80% for 5 minutes"
+                    },
+                    {
+                      "alert_name": "High Server Load",
+                      "metric": "serverLoad",
+                      "threshold": 80,
+                      "evaluation_frequency": "PT1M",
+                      "window_size": "PT3M",
+                      "severity": 2,
+                      "condition": "Server load > 80% for 3 minutes"
+                    }
+                  ]
+                },
+                "performance_optimization_automation": {
+                  "auto_scaling": {
+                    "enabled": true,
+                    "metrics": ["usedmemorypercentage", "serverLoad", "operationsPerSecond"],
+                    "scale_up_threshold": "Memory > 75% OR CPU > 70% for 5 minutes",
+                    "scale_down_threshold": "Memory < 50% AND CPU < 40% for 15 minutes",
+                    "cool_down_period": "PT15M"
+                  },
+                  "cache_optimization": {
+                    "memory_optimization": {
+                      "automatic_eviction_tuning": true,
+                      "memory_fragmentation_monitoring": true,
+                      "key_expiration_optimization": true
+                    },
+                    "performance_tuning": {
+                      "connection_pool_optimization": true,
+                      "pipeline_batching": true,
+                      "compression_optimization": true
+                    }
+                  }
+                }
+              },
+              "explanation": "Establishes comprehensive performance monitoring with automated optimization and intelligent scaling"
+            },
+            {
+              "step": 4,
+              "description": "Implement multi-tier caching architecture with intelligent routing",
+              "multi_tier_caching": {
+                "l1_cache_local": {
+                  "type": "In-Memory (Application Level)",
+                  "technology": "Microsoft Memory Cache",
+                  "capacity": "2GB per instance",
+                  "ttl": "5 minutes",
+                  "use_cases": ["Frequently accessed game data", "Player session data"],
+                  "invalidation_strategy": "Time-based with manual invalidation on updates"
+                },
+                "l2_cache_distributed": {
+                  "type": "Distributed (Redis Cluster)",
+                  "technology": "Azure Cache for Redis Premium",
+                  "capacity": "100GB clustered",
+                  "ttl": "1-24 hours based on data type",
+                  "use_cases": ["Player profiles", "Game configurations", "Leaderboards"],
+                  "invalidation_strategy": "Event-driven with intelligent TTL"
+                },
+                "l3_cache_cdn": {
+                  "type": "Edge Caching (CDN)",
+                  "technology": "Azure Front Door",
+                  "capacity": "Global edge locations",
+                  "ttl": "1-30 days based on content type",
+                  "use_cases": ["Game assets", "Static content", "API responses"],
+                  "invalidation_strategy": "Content-based with manual purge capability"
+                },
+                "cache_routing_logic": {
+                  "read_strategy": "L1 -> L2 -> L3 -> Database",
+                  "write_strategy": "Write-through to L2, Invalidate L1, Update L3 for static content",
+                  "intelligent_routing": {
+                    "hot_data_promotion": "Automatically promote frequently accessed data to higher cache tiers",
+                    "cache_warming": "Predictive cache warming based on player behavior patterns",
+                    "adaptive_ttl": "Dynamic TTL adjustment based on access patterns and data volatility"
+                  }
+                },
+                "cache_coherence": {
+                  "invalidation_mechanisms": [
+                    {
+                      "method": "Event-driven invalidation",
+                      "triggers": ["Player profile updates", "Game configuration changes"],
+                      "scope": "Specific keys and key patterns"
+                    },
+                    {
+                      "method": "Time-based invalidation",
+                      "schedule": "Hourly for analytics data, Daily for static configurations",
+                      "scope": "Data categories with predictable update patterns"
+                    },
+                    {
+                      "method": "Version-based invalidation",
+                      "triggers": ["Application deployments", "Game version updates"],
+                      "scope": "All cached application data"
+                    }
+                  ]
+                }
+              },
+              "explanation": "Implements sophisticated multi-tier caching with intelligent routing and automated optimization"
+            }
+          ],
+          "validation": [
+            "Verify Redis cluster provides high availability and performance under load",
+            "Test multi-tier caching reduces database load and improves response times",
+            "Confirm cache invalidation strategies maintain data consistency",
+            "Validate performance monitoring accurately tracks cache effectiveness"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Database Performance Optimization: RDS/DynamoDB to SQL Database/Cosmos DB",
+      "estimated_time": "60 minutes",
+      "description": "Implement high-performance database architectures with intelligent optimization",
+      "aws_context": {
+        "service": "AWS RDS + DynamoDB + DAX",
+        "description": "Managed relational and NoSQL databases with performance acceleration",
+        "key_features": [
+          "RDS with read replicas and Performance Insights",
+          "DynamoDB with DAX for microsecond latency",
+          "Auto scaling and performance monitoring",
+          "Cross-region replication and global tables",
+          "Advanced indexing and query optimization"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure SQL Database + Cosmos DB",
+        "description": "Intelligent database services with automatic performance tuning",
+        "key_features": [
+          "SQL Database with intelligent performance and auto-tuning",
+          "Cosmos DB with dedicated throughput and multi-region writes",
+          "Automatic scaling and performance recommendations",
+          "Global distribution with multi-master replication",
+          "Advanced indexing policies and query optimization"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy High-Performance Database Architecture with Intelligent Optimization",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure SQL Database with intelligent performance features",
+              "sql_database_optimization": {
+                "database_configuration": {
+                  "name": "gametech-playerdata-db",
+                  "service_tier": "Hyperscale",
+                  "compute_tier": "Provisioned",
+                  "hardware_generation": "Gen5",
+                  "vcore_count": 32,
+                  "storage_size_gb": 1024,
+                  "storage_type": "Premium SSD",
+                  "backup_retention_days": 35,
+                  "geo_redundant_backup": true,
+                  "zone_redundant": true
+                },
+                "intelligent_performance": {
+                  "automatic_tuning": {
+                    "create_index": "Enabled",
+                    "drop_index": "Enabled", 
+                    "force_last_good_plan": "Enabled"
+                  },
+                  "query_store": {
+                    "enabled": true,
+                    "operation_mode": "ReadWrite",
+                    "data_flush_interval": "PT15M",
+                    "statistics_collection_interval": "PT1H",
+                    "max_storage_size_mb": 1024
+                  },
+                  "performance_recommendations": {
+                    "enabled": true,
+                    "auto_implement": "Safe recommendations only",
+                    "notification_email": "dba@gametech.com"
+                  }
+                },
+                "read_scale_out": {
+                  "enabled": true,
+                  "read_replica_count": 3,
+                  "geo_replicas": [
+                    {
+                      "location": "West US 2",
+                      "replica_type": "Geo",
+                      "service_tier": "Hyperscale",
+                      "vcore_count": 16
+                    },
+                    {
+                      "location": "West Europe",
+                      "replica_type": "Geo", 
+                      "service_tier": "Hyperscale",
+                      "vcore_count": 16
+                    }
+                  ]
+                },
+                "advanced_features": {
+                  "in_memory_oltp": {
+                    "enabled": true,
+                    "memory_optimized_tables": [
+                      {
+                        "table_name": "PlayerSessions",
+                        "durability": "Schema_And_Data",
+                        "use_case": "High-frequency session updates"
+                      },
+                      {
+                        "table_name": "GameEvents",
+                        "durability": "Schema_Only",
+                        "use_case": "Ultra-high-frequency event logging"
+                      }
+                    ]
+                  },
+                  "columnstore_indexes": [
+                    {
+                      "table_name": "PlayerStatistics",
+                      "index_type": "Clustered Columnstore",
+                      "use_case": "Analytics queries and reporting"
+                    }
+                  ],
+                  "temporal_tables": [
+                    {
+                      "table_name": "PlayerProfiles", 
+                      "history_table": "PlayerProfiles_History",
+                      "use_case": "Player progression tracking and auditing"
+                    }
+                  ]
+                }
+              },
+              "explanation": "Deploys high-performance SQL Database with intelligent optimization and advanced features"
+            },
+            {
+              "step": 2,
+              "description": "Configure Cosmos DB with performance optimization and global distribution",
+              "cosmos_db_optimization": {
+                "database_configuration": {
+                  "account_name": "gametech-realtime-cosmos",
+                  "api": "Core (SQL)",
+                  "consistency_level": "Session",
+                  "multi_region_writes": true,
+                  "automatic_failover": true,
+                  "geo_redundancy": true,
+                  "regions": [
+                    {
+                      "location": "East US",
+                      "failover_priority": 0,
+                      "zone_redundant": true
+                    },
+                    {
+                      "location": "West US 2",
+                      "failover_priority": 1,
+                      "zone_redundant": true
+                    },
+                    {
+                      "location": "West Europe",
+                      "failover_priority": 2,
+                      "zone_redundant": true
+                    },
+                    {
+                      "location": "East Asia",
+                      "failover_priority": 3,
+                      "zone_redundant": false
+                    }
+                  ]
+                },
+                "containers": [
+                  {
+                    "container_name": "player-sessions",
+                    "partition_key": "/playerId",
+                    "throughput_mode": "Autoscale",
+                    "max_throughput": 100000,
+                    "indexing_policy": {
+                      "indexing_mode": "Consistent",
+                      "automatic": true,
+                      "included_paths": [
+                        {
+                          "path": "/gameId/?",
+                          "indexes": [
+                            {
+                              "kind": "Range",
+                              "dataType": "String",
+                              "precision": -1
+                            }
+                          ]
+                        },
+                        {
+                          "path": "/timestamp/?",
+                          "indexes": [
+                            {
+                              "kind": "Range",
+                              "dataType": "Number",
+                              "precision": -1
+                            }
+                          ]
+                        }
+                      ],
+                      "excluded_paths": [
+                        {
+                          "path": "/sessionData/*"
+                        }
+                      ]
+                    },
+                    "ttl": 3600,
+                    "analytical_storage": {
+                      "enabled": true,
+                      "ttl": -1
+                    }
+                  },
+                  {
+                    "container_name": "game-leaderboards",
+                    "partition_key": "/gameId",
+                    "throughput_mode": "Dedicated",
+                    "throughput": 50000,
+                    "indexing_policy": {
+                      "indexing_mode": "Consistent", 
+                      "automatic": true,
+                      "included_paths": [
+                        {
+                          "path": "/score/?",
+                          "indexes": [
+                            {
+                              "kind": "Range",
+                              "dataType": "Number",
+                              "precision": -1
+                            }
+                          ]
+                        },
+                        {
+                          "path": "/region/?",
+                          "indexes": [
+                            {
+                              "kind": "Hash",
+                              "dataType": "String",
+                              "precision": 3
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "unique_key_policy": {
+                      "unique_keys": [
+                        {
+                          "paths": ["/playerId", "/gameId"]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "container_name": "real-time-events",
+                    "partition_key": "/eventType",
+                    "throughput_mode": "Autoscale",
+                    "max_throughput": 200000,
+                    "change_feed": {
+                      "enabled": true,
+                      "retention_duration": "PT24H"
+                    },
+                    "analytical_storage": {
+                      "enabled": true,
+                      "ttl": 86400
+                    },
+                    "ttl": 86400
+                  }
+                ],
+                "performance_optimization": {
+                  "connection_policy": {
+                    "connection_mode": "Direct",
+                    "connection_protocol": "Tcp",
+                    "request_timeout": "PT30S",
+                    "idle_connection_timeout": "PT1H",
+                    "max_connections_per_endpoint": 50,
+                    "max_request_retries": 9,
+                    "retry_delay": "PT1S"
+                  },
+                  "bulk_operations": {
+                    "bulk_insert_batch_size": 1000,
+                    "max_concurrent_operations": 10,
+                    "max_retry_attempts": 3
+                  },
+                  "query_optimization": {
+                    "enable_cross_partition_query": true,
+                    "max_degree_of_parallelism": 16,
+                    "max_buffered_item_count": 1000,
+                    "enable_scan_in_query": false
+                  }
+                }
+              },
+              "explanation": "Configures high-performance Cosmos DB with global distribution and intelligent optimization"
+            },
+            {
+              "step": 3,
+              "description": "Implement database performance monitoring and automated optimization",
+              "database_monitoring": {
+                "sql_database_monitoring": {
+                  "query_performance_insight": {
+                    "enabled": true,
+                    "retention_days": 30,
+                    "query_capture_mode": "Auto",
+                    "size_based_cleanup_mode": "Auto"
+                  },
+                  "performance_recommendations": {
+                    "automatic_implementation": true,
+                    "recommendation_types": [
+                      "Create Index",
+                      "Drop Index", 
+                      "Force Last Good Plan",
+                      "Create Statistics",
+                      "Parameterize Queries"
+                    ]
+                  },
+                  "intelligent_insights": {
+                    "enabled": true,
+                    "log_analytics_workspace": "law-gametech-performance",
+                    "alert_rules": [
+                      {
+                        "alert_name": "High DTU Usage",
+                        "condition": "DTU percentage > 80% for 5 minutes",
+                        "severity": 2,
+                        "action_group": "ag-database-performance"
+                      },
+                      {
+                        "alert_name": "Blocking Detected",
+                        "condition": "Blocking processes detected",
+                        "severity": 1,
+                        "action_group": "ag-database-critical"
+                      }
+                    ]
+                  }
+                },
+                "cosmos_db_monitoring": {
+                  "metrics_monitoring": {
+                    "enabled_metrics": [
+                      "TotalRequests",
+                      "TotalRequestUnits",
+                      "AvailableStorage",
+                      "DataSize",
+                      "IndexSize",
+                      "DocumentCount",
+                      "NormalizedRUConsumption",
+                      "ProvisionedThroughput"
+                    ],
+                    "alert_rules": [
+                      {
+                        "alert_name": "High RU Consumption",
+                        "metric": "NormalizedRUConsumption", 
+                        "threshold": 80,
+                        "evaluation_frequency": "PT1M",
+                        "window_size": "PT5M",
+                        "severity": 2
+                      },
+                      {
+                        "alert_name": "High Request Rate",
+                        "metric": "TotalRequests",
+                        "threshold": 10000,
+                        "evaluation_frequency": "PT1M",
+                        "window_size": "PT5M",
+                        "severity": 3
+                      },
+                      {
+                        "alert_name": "Throttling Detected",
+                        "metric": "TotalRequests",
+                        "dimension_filters": {
+                          "StatusCode": "429"
+                        },
+                        "threshold": 1,
+                        "evaluation_frequency": "PT1M",
+                        "severity": 1
+                      }
+                    ]
+                  },
+                  "performance_insights": {
+                    "slow_query_detection": {
+                      "enabled": true,
+                      "threshold_ru": 1000,
+                      "log_analytics_workspace": "law-gametech-performance"
+                    },
+                    "partition_key_statistics": {
+                      "enabled": true,
+                      "hot_partition_detection": true,
+                      "cross_partition_query_detection": true
+                    }
+                  }
+                },
+                "automated_optimization": {
+                  "sql_database_auto_tuning": {
+                    "performance_monitoring": "Continuous query performance analysis",
+                    "automatic_plan_correction": "Enabled for regression detection",
+                    "index_management": "Automatic creation and removal of optimal indexes"
+                  },
+                  "cosmos_db_auto_scaling": {
+                    "ru_auto_scaling": "Dynamic RU adjustment based on usage patterns",
+                    "partition_scaling": "Automatic partition management for hot partitions",
+                    "query_optimization": "Automatic indexing policy adjustments"
+                  }
+                }
+              },
+              "explanation": "Establishes comprehensive database monitoring with automated performance optimization"
+            }
+          ],
+          "validation": [
+            "Verify SQL Database intelligent features improve query performance automatically",
+            "Test Cosmos DB global distribution provides low-latency access worldwide",
+            "Confirm automated optimization reduces manual tuning requirements",
+            "Validate performance monitoring accurately identifies and resolves bottlenecks"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Global Content Delivery: CloudFront to Azure CDN and Front Door",
+      "estimated_time": "45 minutes",
+      "description": "Implement high-performance global content delivery with intelligent routing",
+      "aws_context": {
+        "service": "AWS CloudFront + Global Accelerator",
+        "description": "Global content delivery network with edge locations and acceleration",
+        "key_features": [
+          "Global edge locations with low-latency content delivery",
+          "Custom origins with advanced caching behaviors",
+          "Real-time performance monitoring and optimization",
+          "DDoS protection and security integration",
+          "Global Accelerator for network path optimization"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Front Door + Azure CDN",
+        "description": "Global application delivery platform with intelligent routing and optimization",
+        "key_features": [
+          "Global load balancing with automatic failover",
+          "Intelligent routing based on performance and health",
+          "Advanced caching with custom rules and behaviors",
+          "Integrated WAF and DDoS protection",
+          "Real-time analytics and performance insights"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Global Content Delivery with Performance Optimization",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure Front Door with intelligent global routing",
+              "front_door_configuration": {
+                "front_door_profile": {
+                  "name": "gametech-global-cdn",
+                  "sku": "Premium_AzureFrontDoor",
+                  "resource_group": "rg-gametech-cdn",
+                  "tags": {
+                    "Environment": "Production",
+                    "Application": "Gaming Platform",
+                    "CostCenter": "Infrastructure"
+                  }
+                },
+                "origins_and_endpoints": [
+                  {
+                    "origin_group_name": "api-backend-origins",
+                    "load_balancing": {
+                      "sample_size": 4,
+                      "successful_samples_required": 3,
+                      "additional_latency_in_milliseconds": 50
+                    },
+                    "health_probe": {
+                      "path": "/health",
+                      "protocol": "Https",
+                      "interval_in_seconds": 30,
+                      "request_type": "HEAD"
+                    },
+                    "origins": [
+                      {
+                        "name": "api-eastus",
+                        "host_name": "api-eastus.gametech.com",
+                        "origin_host_header": "api-eastus.gametech.com",
+                        "priority": 1,
+                        "weight": 1000,
+                        "enabled": true
+                      },
+                      {
+                        "name": "api-westus2",
+                        "host_name": "api-westus2.gametech.com",
+                        "origin_host_header": "api-westus2.gametech.com", 
+                        "priority": 1,
+                        "weight": 1000,
+                        "enabled": true
+                      },
+                      {
+                        "name": "api-westeurope",
+                        "host_name": "api-westeurope.gametech.com",
+                        "origin_host_header": "api-westeurope.gametech.com",
+                        "priority": 2,
+                        "weight": 500,
+                        "enabled": true
+                      }
+                    ]
+                  },
+                  {
+                    "origin_group_name": "static-content-origins",
+                    "load_balancing": {
+                      "sample_size": 2,
+                      "successful_samples_required": 1,
+                      "additional_latency_in_milliseconds": 0
+                    },
+                    "origins": [
+                      {
+                        "name": "storage-eastus",
+                        "host_name": "gametechassetseast.blob.core.windows.net",
+                        "priority": 1,
+                        "weight": 1000,
+                        "enabled": true
+                      },
+                      {
+                        "name": "storage-westus2",
+                        "host_name": "gametechassetswest.blob.core.windows.net",
+                        "priority": 2,
+                        "weight": 500,
+                        "enabled": true
+                      }
+                    ]
+                  }
+                ],
+                "routing_rules": [
+                  {
+                    "name": "api-routing",
+                    "route_configuration": {
+                      "supported_protocols": ["Http", "Https"],
+                      "patterns_to_match": ["/api/*"],
+                      "forwarding_protocol": "HttpsOnly",
+                      "origin_group": "api-backend-origins",
+                      "caching": {
+                        "caching_behavior": "OverrideIfOriginMissing",
+                        "cache_duration": "PT0S",
+                        "dynamic_compression": "Enabled"
+                      }
+                    }
+                  },
+                  {
+                    "name": "static-content-routing",
+                    "route_configuration": {
+                      "supported_protocols": ["Http", "Https"],
+                      "patterns_to_match": ["/assets/*", "/images/*", "/js/*", "/css/*"],
+                      "forwarding_protocol": "HttpsOnly",
+                      "origin_group": "static-content-origins",
+                      "caching": {
+                        "caching_behavior": "OverrideAlways",
+                        "cache_duration": "P30D",
+                        "dynamic_compression": "Enabled",
+                        "query_string_caching_behavior": "IgnoreQueryString"
+                      }
+                    }
+                  }
+                ],
+                "security_policies": [
+                  {
+                    "name": "waf-protection",
+                    "waf_policy_id": "/subscriptions/.../resourceGroups/.../providers/Microsoft.Network/frontdoorwebapplicationfirewallpolicies/gametech-waf-policy",
+                    "domains": ["*.gametech.com"]
+                  }
+                ]
+              },
+              "explanation": "Configures global content delivery with intelligent routing and performance optimization"
+            },
+            {
+              "step": 2,
+              "description": "Implement advanced caching strategies and performance optimization",
+              "caching_optimization": {
+                "caching_rules": [
+                  {
+                    "rule_name": "GameAssetsLongCache",
+                    "conditions": [
+                      {
+                        "match_variable": "RequestFilename",
+                        "operator": "Contains",
+                        "match_values": [".jpg", ".png", ".gif", ".mp4", ".mp3", ".zip"]
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "cache_behavior": "Override",
+                        "cache_duration": "P90D",
+                        "cache_key_query_string_behavior": "IgnoreSpecifiedQueryStrings",
+                        "query_parameters": ["utm_source", "utm_medium", "utm_campaign"]
+                      }
+                    ]
+                  },
+                  {
+                    "rule_name": "APIResponsesNoCache",
+                    "conditions": [
+                      {
+                        "match_variable": "RequestUri",
+                        "operator": "BeginsWith",
+                        "match_values": ["/api/"]
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "cache_behavior": "Bypass",
+                        "cache_duration": "PT0S"
+                      }
+                    ]
+                  },
+                  {
+                    "rule_name": "PlayerDataCache",
+                    "conditions": [
+                      {
+                        "match_variable": "RequestUri",
+                        "operator": "BeginsWith",
+                        "match_values": ["/api/player/", "/api/leaderboard/"]
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "cache_behavior": "Override",
+                        "cache_duration": "PT5M",
+                        "cache_key_query_string_behavior": "IncludeAll"
+                      }
+                    ]
+                  }
+                ],
+                "compression_settings": {
+                  "dynamic_compression": true,
+                  "static_compression": true,
+                  "compression_content_types": [
+                    "application/javascript",
+                    "application/json",
+                    "application/xml",
+                    "text/css",
+                    "text/html",
+                    "text/javascript",
+                    "text/plain",
+                    "text/xml"
+                  ]
+                },
+                "origin_optimization": {
+                  "origin_response_timeout": 60,
+                  "origin_keep_alive_timeout": 30,
+                  "connection_pooling": true,
+                  "tcp_fast_open": true,
+                  "http2_support": true
+                }
+              },
+              "explanation": "Implements advanced caching strategies optimized for gaming content and APIs"
+            },
+            {
+              "step": 3,
+              "description": "Configure performance monitoring and analytics",
+              "performance_analytics": {
+                "real_time_metrics": {
+                  "enabled_metrics": [
+                    "Requests per second",
+                    "Bytes transferred",
+                    "Cache hit ratio",
+                    "Origin latency",
+                    "Edge latency",
+                    "Error rates by status code",
+                    "Top URLs by traffic",
+                    "Geographic distribution"
+                  ],
+                  "custom_dashboards": [
+                    {
+                      "dashboard_name": "Gaming Performance Overview",
+                      "widgets": [
+                        {
+                          "type": "line_chart",
+                          "title": "Request Volume and Cache Hit Ratio",
+                          "metrics": ["RequestCount", "CacheHitRatio"],
+                          "time_range": "Last 24 hours"
+                        },
+                        {
+                          "type": "geo_map",
+                          "title": "Global Traffic Distribution",
+                          "metric": "RequestCount",
+                          "grouping": "Country"
+                        },
+                        {
+                          "type": "bar_chart",
+                          "title": "Top Game Assets by Downloads",
+                          "metric": "BytesTransferred",
+                          "grouping": "RequestPath",
+                          "top_n": 10
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "performance_alerts": [
+                  {
+                    "alert_name": "Low Cache Hit Ratio",
+                    "condition": "Cache hit ratio < 85% for 10 minutes",
+                    "severity": "Warning",
+                    "action_groups": ["performance-team"],
+                    "remediation": "Investigate caching rules and origin performance"
+                  },
+                  {
+                    "alert_name": "High Origin Latency", 
+                    "condition": "Average origin latency > 1000ms for 5 minutes",
+                    "severity": "Critical",
+                    "action_groups": ["performance-team", "backend-team"],
+                    "remediation": "Check origin server health and capacity"
+                  },
+                  {
+                    "alert_name": "High Error Rate",
+                    "condition": "Error rate > 5% for 5 minutes",
+                    "severity": "Critical",
+                    "action_groups": ["operations-team"],
+                    "remediation": "Investigate origin server issues and traffic patterns"
+                  }
+                ],
+                "optimization_recommendations": {
+                  "automated_optimization": {
+                    "cache_rule_optimization": "Analyze traffic patterns and suggest optimal cache durations",
+                    "origin_routing_optimization": "Recommend origin priorities based on performance metrics",
+                    "compression_optimization": "Suggest content types for compression based on savings"
+                  }
+                }
+              },
+              "explanation": "Establishes comprehensive performance monitoring with automated optimization recommendations"
+            }
+          ],
+          "validation": [
+            "Verify Front Door provides optimal routing based on performance and health",
+            "Test caching strategies achieve high cache hit ratios for different content types",
+            "Confirm global distribution reduces latency for users worldwide",
+            "Validate performance monitoring accurately tracks optimization opportunities"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Network Performance Optimization",
+      "estimated_time": "15 minutes",
+      "description": "Implement advanced network optimization and traffic management",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Advanced Network Performance Optimization",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Traffic Manager with performance-based routing",
+              "traffic_manager_configuration": {
+                "profile_configuration": {
+                  "name": "gametech-global-traffic",
+                  "traffic_routing_method": "Performance",
+                  "dns_ttl": 30,
+                  "monitor_config": {
+                    "protocol": "HTTPS",
+                    "port": 443,
+                    "path": "/health",
+                    "interval_in_seconds": 30,
+                    "timeout_in_seconds": 10,
+                    "tolerated_number_of_failures": 3
+                  }
+                },
+                "endpoints": [
+                  {
+                    "name": "eastus-endpoint",
+                    "type": "Azure",
+                    "target_resource_id": "/subscriptions/.../providers/Microsoft.Network/frontdoors/gametech-global-cdn",
+                    "priority": 1,
+                    "weight": 100,
+                    "geo_mapping": ["North America", "South America"]
+                  },
+                  {
+                    "name": "westeurope-endpoint", 
+                    "type": "Azure",
+                    "target_resource_id": "/subscriptions/.../providers/Microsoft.Network/frontdoors/gametech-europe-cdn",
+                    "priority": 1,
+                    "weight": 100,
+                    "geo_mapping": ["Europe", "Africa"]
+                  },
+                  {
+                    "name": "eastasia-endpoint",
+                    "type": "Azure", 
+                    "target_resource_id": "/subscriptions/.../providers/Microsoft.Network/frontdoors/gametech-asia-cdn",
+                    "priority": 1,
+                    "weight": 100,
+                    "geo_mapping": ["Asia", "Australia"]
+                  }
+                ],
+                "performance_optimization": {
+                  "real_user_measurements": {
+                    "enabled": true,
+                    "key": "performance-measurement-key"
+                  },
+                  "traffic_view": {
+                    "enabled": true
+                  }
+                }
+              },
+              "explanation": "Configures intelligent traffic routing based on real-time performance measurements"
+            }
+          ],
+          "validation": [
+            "Verify Traffic Manager routes users to optimal endpoints based on performance",
+            "Test automatic failover when primary endpoints become unavailable",
+            "Confirm real user measurements improve routing decisions over time",
+            "Validate network optimization reduces latency for global users"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Caching Infrastructure",
+      "aws_comparison": "Multiple ElastiCache clusters with manual scaling and management overhead",
+      "azure_model": "Unified Azure Cache for Redis with intelligent scaling and geo-replication",
+      "optimization_strategies": [
+        "Use Azure Cache for Redis clustering for cost-effective scaling",
+        "Implement intelligent cache tiering to optimize storage costs",
+        "Leverage Azure Monitor for automated cache optimization",
+        "Use geo-replication instead of separate regional cache deployments"
+      ],
+      "estimated_savings": "30-45% reduction in caching infrastructure costs"
+    },
+    {
+      "area": "Database Performance",
+      "aws_comparison": "Separate RDS instances with manual read replicas and performance tuning",
+      "azure_model": "Intelligent Azure SQL Database and Cosmos DB with automated optimization",
+      "optimization_strategies": [
+        "Use intelligent performance features to reduce manual DBA effort",
+        "Implement Cosmos DB autoscale for cost-effective throughput management",
+        "Leverage serverless options for variable workloads",
+        "Use analytical storage for reduced costs on historical data"
+      ],
+      "estimated_savings": "25-40% reduction in database operational and infrastructure costs"
+    },
+    {
+      "area": "Content Delivery",
+      "aws_comparison": "Separate CloudFront and Global Accelerator with complex configuration",
+      "azure_model": "Integrated Front Door with unified global optimization",
+      "optimization_strategies": [
+        "Consolidate CDN and global load balancing in Front Door",
+        "Use intelligent caching to reduce origin bandwidth costs",
+        "Implement compression and optimization for bandwidth savings",
+        "Leverage Azure CDN for cost-effective edge caching"
+      ],
+      "estimated_savings": "20-35% reduction in content delivery and bandwidth costs"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Cache Security",
+      "practices": [
+        "Use private endpoints for Redis cache access",
+        "Enable encryption in transit and at rest for cached data",
+        "Implement network isolation with VNet integration",
+        "Use Azure Key Vault for cache connection string management"
+      ]
+    },
+    {
+      "category": "Database Security",
+      "practices": [
+        "Enable Transparent Data Encryption (TDE) for data at rest",
+        "Use Always Encrypted for sensitive data protection",
+        "Implement row-level security for multi-tenant scenarios",
+        "Enable threat detection and vulnerability assessment"
+      ]
+    },
+    {
+      "category": "CDN Security",
+      "practices": [
+        "Use custom SSL certificates for domain validation",
+        "Implement WAF policies for application protection",
+        "Enable DDoS protection for infrastructure security",
+        "Use signed URLs for secure content access"
+      ]
+    },
+    {
+      "category": "Network Security",
+      "practices": [
+        "Implement network security groups for traffic filtering",
+        "Use private endpoints for internal service communication",
+        "Enable traffic analytics for security monitoring",
+        "Implement geo-filtering for content access control"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Performance Assessment and Planning",
+      "tasks": [
+        "Analyze current AWS caching patterns and ElastiCache configurations",
+        "Document RDS and DynamoDB performance requirements and usage patterns",
+        "Assess CloudFront and Global Accelerator performance characteristics",
+        "Plan Azure high-performance architecture with optimization strategies",
+        "Design performance testing and validation procedures"
+      ]
+    },
+    {
+      "phase": "Azure Performance Infrastructure",
+      "tasks": [
+        "Deploy Azure Cache for Redis with clustering and geo-replication",
+        "Configure Azure SQL Database and Cosmos DB with performance optimization",
+        "Set up Azure Front Door with intelligent routing and caching",
+        "Implement Traffic Manager with performance-based routing",
+        "Configure comprehensive performance monitoring and analytics"
+      ]
+    },
+    {
+      "phase": "Performance Migration and Optimization",
+      "tasks": [
+        "Migrate caching patterns and data to Azure Cache for Redis",
+        "Transfer database schemas and optimize for Azure SQL and Cosmos DB",
+        "Configure CDN caching rules and content delivery optimization",
+        "Implement multi-tier caching architecture with intelligent routing",
+        "Optimize network performance and traffic management"
+      ]
+    },
+    {
+      "phase": "Performance Testing and Validation",
+      "tasks": [
+        "Conduct comprehensive performance testing under load",
+        "Validate caching effectiveness and database performance",
+        "Test CDN performance and global content delivery",
+        "Verify network optimization and traffic routing effectiveness",
+        "Compare performance metrics against AWS baseline"
+      ]
+    },
+    {
+      "phase": "Performance Monitoring and Continuous Optimization",
+      "tasks": [
+        "Implement continuous performance monitoring and alerting",
+        "Establish performance optimization automation and recommendations",
+        "Configure intelligent scaling and performance adaptation",
+        "Train teams on Azure performance optimization best practices",
+        "Implement ongoing performance improvement processes"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Redis Cache Performance Issues",
+      "symptoms": [
+        "High latency for cache operations",
+        "Frequent cache timeouts or connection issues",
+        "Low cache hit ratios"
+      ],
+      "solutions": [
+        "Review Redis cache sizing and memory utilization",
+        "Check network connectivity and security group configurations",
+        "Optimize cache key patterns and TTL strategies",
+        "Monitor Redis performance metrics and slow operations",
+        "Validate connection pooling and client configuration"
+      ]
+    },
+    {
+      "issue": "Database Performance Degradation",
+      "symptoms": [
+        "Slow query execution and high response times",
+        "High DTU or RU consumption",
+        "Blocking and deadlock issues"
+      ],
+      "solutions": [
+        "Use Query Performance Insight to identify problematic queries",
+        "Review and optimize indexing strategies",
+        "Check for blocking processes and optimize query patterns",
+        "Validate database sizing and scaling configuration",
+        "Monitor intelligent performance recommendations and implement suggestions"
+      ]
+    },
+    {
+      "issue": "CDN Performance Problems",
+      "symptoms": [
+        "Low cache hit ratios for static content",
+        "High origin server load",
+        "Slow content delivery to certain regions"
+      ],
+      "solutions": [
+        "Review and optimize caching rules and TTL settings",
+        "Check origin server performance and capacity",
+        "Validate CDN endpoint configuration and routing rules",
+        "Monitor cache purge patterns and optimize invalidation strategies",
+        "Analyze traffic patterns and geographic distribution"
+      ]
+    },
+    {
+      "issue": "Network Latency Issues", 
+      "symptoms": [
+        "High round-trip times to Azure services",
+        "Inconsistent performance across regions",
+        "Poor user experience for global users"
+      ],
+      "solutions": [
+        "Review Traffic Manager routing method and endpoint health",
+        "Check network connectivity and ExpressRoute configuration",
+        "Validate Front Door routing rules and origin optimization",
+        "Monitor real user measurements and performance data",
+        "Optimize application architecture for network efficiency"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure Cache for Redis documentation - https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/",
+        "Azure SQL Database performance - https://docs.microsoft.com/en-us/azure/azure-sql/database/performance-guidance",
+        "Azure Cosmos DB performance - https://docs.microsoft.com/en-us/azure/cosmos-db/performance-tips",
+        "Azure Front Door documentation - https://docs.microsoft.com/en-us/azure/frontdoor/"
+      ]
+    },
+    {
+      "type": "Performance Optimization Guides",
+      "links": [
+        "Azure performance optimization best practices and patterns",
+        "High-performance caching strategies and implementation guides",
+        "Database performance tuning and optimization techniques",
+        "CDN and content delivery optimization strategies"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS to Azure performance migration patterns and strategies",
+        "Caching architecture migration planning and execution guides",
+        "Database performance migration best practices and optimization",
+        "CDN and content delivery migration strategies and optimization"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Application Insights for comprehensive application performance monitoring",
+    "Set up Azure Monitor Workbooks for advanced performance analytics and dashboards",
+    "Configure Azure Advisor for automated performance recommendations and cost optimization",
+    "Explore Azure Machine Learning for predictive performance optimization and anomaly detection",
+    "Implement Azure Chaos Studio for performance resilience testing and optimization",
+    "Set up Azure Performance Diagnostics for deep performance analysis and troubleshooting"
+  ]
+}

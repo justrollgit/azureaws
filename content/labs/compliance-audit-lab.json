@@ -1,0 +1,743 @@
+{
+  "lab_metadata": {
+    "id": "compliance-audit-lab",
+    "title": "AWS Compliance Tools to Azure Security Center: Enterprise Governance, Compliance, and Audit Management",
+    "category": "security",
+    "difficulty": "advanced",
+    "estimated_time": "120 minutes",
+    "description": "Master enterprise compliance and audit management by migrating from AWS compliance tools to Azure Security Center and Compliance Manager with comprehensive governance frameworks",
+    "aws_services": ["Audit Manager", "AWS Artifact", "Config Rules", "CloudTrail", "Security Hub", "Well-Architected Tool"],
+    "azure_services": ["Security Center", "Compliance Manager", "Policy", "Activity Log", "Sentinel", "Advisor"],
+    "tags": ["compliance", "governance", "audit", "security", "enterprise", "saa-c03", "sap-c02"],
+    "prerequisites": [
+      "Completion of enterprise-governance-lab",
+      "Understanding of compliance frameworks (SOC, PCI-DSS, GDPR)",
+      "Knowledge of audit requirements and controls",
+      "Familiarity with security monitoring concepts",
+      "Basic understanding of governance policies"
+    ],
+    "learning_objectives": [
+      "Migrate AWS Audit Manager compliance assessments to Azure Compliance Manager",
+      "Transform AWS Config Rules to Azure Policy for governance enforcement",
+      "Convert AWS CloudTrail audit logs to Azure Activity Log and Sentinel",
+      "Implement Azure Security Center for unified security posture management",
+      "Set up continuous compliance monitoring and reporting",
+      "Configure automated remediation for compliance violations",
+      "Establish audit trails and evidence collection processes"
+    ]
+  },
+  "scenario": {
+    "title": "Financial Services Compliance Migration",
+    "description": "SecureBank operates under strict financial industry regulations including PCI-DSS, SOX, and regional banking compliance requirements. They need to migrate their AWS compliance framework to Azure while maintaining continuous compliance monitoring and preparing for upcoming regulatory audits.",
+    "business_requirements": [
+      "Maintain continuous compliance during migration",
+      "Zero gaps in audit trail and evidence collection",
+      "Automated compliance reporting for multiple frameworks",
+      "Real-time detection and remediation of violations",
+      "Integration with existing GRC (Governance, Risk, Compliance) tools",
+      "Preparation for SOC 2 Type II and PCI-DSS audits",
+      "Cost optimization while maintaining compliance standards"
+    ],
+    "current_aws_architecture": [
+      "AWS Audit Manager for compliance assessment automation",
+      "Config Rules for continuous compliance monitoring",
+      "CloudTrail for comprehensive audit logging",
+      "Security Hub for centralized security findings",
+      "GuardDuty for threat detection and compliance",
+      "AWS Artifact for compliance documentation access",
+      "Lambda functions for automated remediation"
+    ],
+    "target_azure_architecture": [
+      "Azure Security Center for unified security posture",
+      "Compliance Manager for compliance assessment tracking",
+      "Azure Policy for governance and compliance enforcement",
+      "Activity Log and Sentinel for audit trail management",
+      "Defender for Cloud for threat protection and compliance",
+      "Service Trust Portal for compliance documentation",
+      "Logic Apps for automated compliance remediation"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Compliance Framework Migration: AWS Audit Manager to Azure Compliance Manager",
+      "estimated_time": "40 minutes",
+      "description": "Establish comprehensive compliance assessment and tracking framework",
+      "aws_context": {
+        "service": "AWS Audit Manager",
+        "description": "Service for automating evidence collection for compliance audits",
+        "key_features": [
+          "Pre-built audit frameworks (SOC, PCI-DSS, GDPR)",
+          "Automated evidence collection from AWS services",
+          "Continuous compliance assessment",
+          "Audit readiness dashboard and reporting",
+          "Custom framework creation capabilities"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Compliance Manager",
+        "description": "Compliance management solution for tracking regulatory requirements",
+        "key_features": [
+          "Built-in compliance frameworks and assessments",
+          "Real-time compliance score and recommendations",
+          "Evidence automation and collection",
+          "Custom assessment creation",
+          "Integration with Microsoft 365 and Azure services"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Set Up Comprehensive Compliance Assessment Framework",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Enable Microsoft Purview Compliance Manager",
+              "aws_context": "Similar to setting up AWS Audit Manager in the console",
+              "azure_portal_steps": [
+                "Navigate to Microsoft Purview compliance portal",
+                "Access Compliance Manager from the navigation menu",
+                "Review default compliance score and baseline assessment"
+              ],
+              "explanation": "Provides centralized compliance management across Microsoft 365 and Azure"
+            },
+            {
+              "step": 2,
+              "description": "Configure compliance assessments for financial services",
+              "aws_context": "Equivalent to creating audit assessments in AWS Audit Manager",
+              "compliance_frameworks": [
+                {
+                  "framework": "SOC 2 Type II",
+                  "description": "Service Organization Control 2 assessment",
+                  "controls": 64,
+                  "status": "Configure automatic evidence collection"
+                },
+                {
+                  "framework": "PCI-DSS v3.2.1",
+                  "description": "Payment Card Industry Data Security Standard",
+                  "controls": 321,
+                  "status": "Enable continuous monitoring"
+                },
+                {
+                  "framework": "NIST Cybersecurity Framework",
+                  "description": "National Institute of Standards framework",
+                  "controls": 108,
+                  "status": "Baseline assessment configuration"
+                }
+              ],
+              "explanation": "Establishes multi-framework compliance monitoring for financial services"
+            },
+            {
+              "step": 3,
+              "description": "Create custom assessment for internal policies",
+              "aws_context": "Similar to creating custom framework in AWS Audit Manager",
+              "custom_assessment": {
+                "name": "SecureBank Internal Security Policy",
+                "description": "Custom assessment for bank-specific security requirements",
+                "control_families": [
+                  "Data Encryption and Protection",
+                  "Access Control and Identity Management",
+                  "Network Security and Monitoring",
+                  "Incident Response and Recovery",
+                  "Vendor Risk Management"
+                ],
+                "total_controls": 45
+              },
+              "explanation": "Creates organization-specific compliance requirements tracking"
+            },
+            {
+              "step": 4,
+              "description": "Configure automated evidence collection",
+              "aws_context": "Equivalent to AWS service data source configuration",
+              "evidence_automation": {
+                "azure_services": [
+                  "Azure Security Center for security configuration evidence",
+                  "Azure Monitor for operational evidence",
+                  "Azure Policy for governance compliance evidence",
+                  "Azure Key Vault for encryption evidence",
+                  "Azure AD for identity and access evidence"
+                ],
+                "collection_frequency": "Continuous with daily snapshots",
+                "retention_period": "7 years for financial compliance"
+              },
+              "explanation": "Automates evidence collection reducing manual audit preparation time"
+            }
+          ],
+          "validation": [
+            "Verify Compliance Manager is configured with relevant frameworks",
+            "Confirm automated evidence collection is operational",
+            "Test custom assessment creation and scoring",
+            "Validate compliance score accuracy and recommendations"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Policy Enforcement Migration: AWS Config Rules to Azure Policy",
+      "estimated_time": "35 minutes",
+      "description": "Transform governance enforcement from AWS Config to Azure Policy",
+      "aws_context": {
+        "service": "AWS Config Rules",
+        "description": "Service for evaluating AWS resource configurations against compliance rules",
+        "key_features": [
+          "Pre-built managed rules for common compliance checks",
+          "Custom rules with AWS Lambda functions",
+          "Remediation configurations for automatic fixes",
+          "Configuration history and change tracking",
+          "Multi-account and multi-region rule deployment"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Policy",
+        "description": "Service for creating, assigning, and managing governance policies",
+        "key_features": [
+          "Built-in policy definitions and initiatives",
+          "Custom policy creation with Azure Resource Manager",
+          "Automatic remediation capabilities",
+          "Compliance dashboard and reporting",
+          "Management group inheritance and exclusions"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Comprehensive Governance Policy Framework",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Assign built-in policy initiatives for financial compliance",
+              "aws_context": "Similar to deploying AWS Config managed rules",
+              "azure_commands": [
+                "az policy assignment create --name 'PCI-DSS-Initiative' --scope '/subscriptions/{subscription-id}' --policy-set-definition '/providers/Microsoft.Authorization/policySetDefinitions/496eeda9-8f2f-4d5e-8dfd-204f0a92ed41'",
+                "az policy assignment create --name 'ISO-27001-Initiative' --scope '/subscriptions/{subscription-id}' --policy-set-definition '/providers/Microsoft.Authorization/policySetDefinitions/89c6cddc-1c73-4ac1-b19c-54d1a15a42f2'"
+              ],
+              "explanation": "Deploys comprehensive compliance policy sets across subscription"
+            },
+            {
+              "step": 2,
+              "description": "Create custom policies for bank-specific requirements",
+              "aws_context": "Equivalent to custom Config rules with Lambda functions",
+              "custom_policies": [
+                {
+                  "name": "require-storage-encryption-customer-keys",
+                  "description": "Ensure all storage accounts use customer-managed encryption keys",
+                  "policy_rule": {
+                    "if": {
+                      "allOf": [
+                        {"field": "type", "equals": "Microsoft.Storage/storageAccounts"},
+                        {"field": "Microsoft.Storage/storageAccounts/encryption.keySource", "notEquals": "Microsoft.Keyvault"}
+                      ]
+                    },
+                    "then": {"effect": "deny"}
+                  }
+                },
+                {
+                  "name": "require-sql-tde-customer-key",
+                  "description": "Require SQL databases to use customer-managed TDE keys",
+                  "policy_rule": {
+                    "if": {
+                      "allOf": [
+                        {"field": "type", "equals": "Microsoft.Sql/servers/databases"},
+                        {"field": "Microsoft.Sql/servers/databases/transparentDataEncryption.keyVaultKeyUri", "exists": "false"}
+                      ]
+                    },
+                    "then": {"effect": "audit"}
+                  }
+                }
+              ],
+              "explanation": "Implements organization-specific security and compliance requirements"
+            },
+            {
+              "step": 3,
+              "description": "Configure automatic remediation for policy violations",
+              "aws_context": "Similar to AWS Config remediation configurations",
+              "remediation_setup": {
+                "managed_identity": "Create managed identity for policy remediation actions",
+                "remediation_tasks": [
+                  {
+                    "policy": "Deploy diagnostic settings for Activity Log",
+                    "action": "Automatically enable diagnostic settings when non-compliant",
+                    "azure_command": "az policy remediation create --name 'activity-log-remediation' --policy-assignment 'diagnostic-settings-assignment' --resource-group 'rg-compliance'"
+                  },
+                  {
+                    "policy": "Configure backup for virtual machines",
+                    "action": "Automatically enable backup when VM is non-compliant",
+                    "azure_command": "az policy remediation create --name 'vm-backup-remediation' --policy-assignment 'vm-backup-assignment' --subscription '{subscription-id}'"
+                  }
+                ]
+              },
+              "explanation": "Provides automatic remediation reducing manual compliance overhead"
+            }
+          ],
+          "validation": [
+            "Verify policy initiatives are assigned and evaluating resources",
+            "Confirm custom policies are detecting violations correctly",
+            "Test automatic remediation functionality",
+            "Validate compliance dashboard shows accurate status"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Audit Trail Migration: AWS CloudTrail to Azure Activity Log and Sentinel",
+      "estimated_time": "30 minutes",
+      "description": "Establish comprehensive audit logging and security information management",
+      "aws_context": {
+        "service": "AWS CloudTrail",
+        "description": "Service for governance, compliance, and auditing of AWS account activity",
+        "key_features": [
+          "API call logging across all AWS services",
+          "Management and data event capture",
+          "Log file integrity validation",
+          "Multi-region and multi-account trails",
+          "Integration with CloudWatch and S3"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Activity Log + Sentinel",
+        "description": "Platform and subscription-level audit logging with SIEM capabilities",
+        "key_features": [
+          "Azure Resource Manager operation logging",
+          "Service health and administrative activity tracking",
+          "Integration with Azure Monitor and Log Analytics",
+          "Azure Sentinel for security information and event management",
+          "Long-term retention and compliance reporting"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Comprehensive Audit Logging and SIEM",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up centralized Log Analytics workspace for audit data",
+              "aws_context": "Similar to configuring CloudTrail with S3 bucket for log storage",
+              "azure_command": "az monitor log-analytics workspace create --name securebank-audit-workspace --resource-group rg-compliance --location eastus --sku PerGB2018",
+              "explanation": "Creates centralized repository for all audit and security logs"
+            },
+            {
+              "step": 2,
+              "description": "Configure Activity Log export to Log Analytics",
+              "aws_context": "Equivalent to creating CloudTrail with comprehensive event logging",
+              "diagnostic_settings": {
+                "azure_command": "az monitor diagnostic-settings subscription create --name 'activity-log-audit' --logs '[{\"category\":\"Administrative\",\"enabled\":true},{\"category\":\"Security\",\"enabled\":true},{\"category\":\"Policy\",\"enabled\":true},{\"category\":\"Alert\",\"enabled\":true}]' --workspace securebank-audit-workspace",
+                "retention_policy": "7 years retention for financial compliance",
+                "categories": ["Administrative", "Security", "Policy", "Alert", "Autoscale", "Recommendation"]
+              },
+              "explanation": "Captures all subscription-level activities for compliance auditing"
+            },
+            {
+              "step": 3,
+              "description": "Deploy Azure Sentinel for advanced security analytics",
+              "aws_context": "Similar to integrating CloudTrail with Security Hub",
+              "sentinel_deployment": {
+                "enable_sentinel": "az sentinel workspace create --name securebank-audit-workspace --resource-group rg-compliance",
+                "data_connectors": [
+                  "Azure Activity",
+                  "Azure Security Center",
+                  "Azure AD Sign-in Logs",
+                  "Azure AD Audit Logs",
+                  "Office 365",
+                  "Microsoft Defender for Cloud"
+                ],
+                "analytics_rules": [
+                  "Suspicious administrative activities",
+                  "Privilege escalation attempts",
+                  "Unusual resource access patterns",
+                  "Failed authentication anomalies"
+                ]
+              },
+              "explanation": "Provides advanced threat detection and security incident management"
+            },
+            {
+              "step": 4,
+              "description": "Create compliance-focused workbooks and dashboards",
+              "aws_context": "Similar to CloudTrail Insights and custom CloudWatch dashboards",
+              "compliance_monitoring": {
+                "workbooks": [
+                  {
+                    "name": "PCI-DSS Compliance Monitoring",
+                    "queries": [
+                      "Administrative actions on payment processing resources",
+                      "Access to cardholder data environments",
+                      "Network security group changes",
+                      "Encryption key access and modifications"
+                    ]
+                  },
+                  {
+                    "name": "SOX Compliance Audit Trail",
+                    "queries": [
+                      "Financial system access and modifications",
+                      "Privileged user activities",
+                      "System configuration changes",
+                      "Data export and backup activities"
+                    ]
+                  }
+                ],
+                "automated_reports": "Daily compliance reports exported to compliance team"
+              },
+              "explanation": "Provides real-time compliance monitoring and audit-ready reporting"
+            }
+          ],
+          "validation": [
+            "Verify Activity Log is streaming to Log Analytics workspace",
+            "Confirm Azure Sentinel is collecting security data from all sources",
+            "Test compliance workbooks show accurate audit information",
+            "Validate alert rules trigger for compliance violations"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Security Posture Management: AWS Security Hub to Azure Security Center",
+      "estimated_time": "15 minutes",
+      "description": "Implement unified security posture management and compliance monitoring",
+      "aws_context": {
+        "service": "AWS Security Hub",
+        "description": "Central security findings aggregation and compliance status service",
+        "key_features": [
+          "Centralized security findings from multiple AWS services",
+          "Compliance standard dashboards (CIS, PCI-DSS, AWS Foundational)",
+          "Custom insights and finding prioritization",
+          "Integration with third-party security tools",
+          "Automated remediation through EventBridge"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Security Center / Microsoft Defender for Cloud",
+        "description": "Unified security management and advanced threat protection",
+        "key_features": [
+          "Secure score and security recommendations",
+          "Regulatory compliance dashboard",
+          "Threat protection across Azure and hybrid resources",
+          "Just-in-time VM access and adaptive controls",
+          "Integration with Azure Sentinel and Logic Apps"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Unified Security Posture Management",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Enable Microsoft Defender for Cloud with enhanced security",
+              "aws_context": "Similar to enabling AWS Security Hub standard",
+              "azure_portal_steps": [
+                "Navigate to Microsoft Defender for Cloud",
+                "Enable enhanced security features for subscription",
+                "Configure defender plans for specific resource types"
+              ],
+              "defender_plans": {
+                "servers": "Microsoft Defender for Servers Plan 2",
+                "storage": "Microsoft Defender for Storage",
+                "databases": "Microsoft Defender for Azure SQL",
+                "containers": "Microsoft Defender for Containers",
+                "key_vault": "Microsoft Defender for Key Vault"
+              },
+              "explanation": "Provides comprehensive threat protection and security monitoring"
+            },
+            {
+              "step": 2,
+              "description": "Configure regulatory compliance monitoring",
+              "aws_context": "Equivalent to Security Hub compliance standards",
+              "compliance_standards": [
+                {
+                  "standard": "Azure Security Benchmark",
+                  "controls": 230,
+                  "description": "Microsoft's security best practices for Azure"
+                },
+                {
+                  "standard": "PCI-DSS v3.2.1",
+                  "controls": 321,
+                  "description": "Payment Card Industry compliance"
+                },
+                {
+                  "standard": "ISO 27001:2013",
+                  "controls": 133,
+                  "description": "Information security management"
+                },
+                {
+                  "standard": "SOC TSP",
+                  "controls": 67,
+                  "description": "Service Organization Control Trust Service Principles"
+                }
+              ],
+              "explanation": "Enables continuous compliance monitoring across multiple frameworks"
+            },
+            {
+              "step": 3,
+              "description": "Set up security automation and remediation",
+              "aws_context": "Similar to Security Hub custom actions and EventBridge integration",
+              "automation_setup": {
+                "logic_apps": [
+                  {
+                    "name": "auto-remediate-storage-encryption",
+                    "trigger": "Security Center recommendation",
+                    "action": "Enable encryption on non-compliant storage accounts"
+                  },
+                  {
+                    "name": "notify-security-team",
+                    "trigger": "High severity security alert",
+                    "action": "Send notification to security operations team"
+                  }
+                ],
+                "workflow_automation": "Configure in Security Center > Workflow automation"
+              },
+              "explanation": "Automates security remediation and incident response processes"
+            }
+          ],
+          "validation": [
+            "Verify Defender for Cloud is enabled with all protection plans",
+            "Confirm regulatory compliance standards are monitoring resources",
+            "Test security automation workflows respond to alerts",
+            "Validate security score improvements with remediation"
+          ]
+        }
+      ]
+    }
+  ],
+  "compliance_frameworks": [
+    {
+      "framework": "PCI-DSS v3.2.1",
+      "aws_coverage": "AWS Audit Manager PCI-DSS framework",
+      "azure_coverage": "Azure Policy PCI-DSS initiative + Compliance Manager",
+      "migration_approach": [
+        "Map AWS Config rules to Azure Policy definitions",
+        "Configure evidence collection for PCI requirements",
+        "Set up continuous monitoring for cardholder data environment",
+        "Implement automated remediation for critical violations"
+      ],
+      "key_controls": [
+        "Build and maintain secure networks and systems",
+        "Protect cardholder data with encryption",
+        "Maintain vulnerability management program",
+        "Implement strong access control measures",
+        "Regularly monitor and test networks",
+        "Maintain information security policy"
+      ]
+    },
+    {
+      "framework": "SOC 2 Type II",
+      "aws_coverage": "AWS Audit Manager SOC framework",
+      "azure_coverage": "Compliance Manager SOC TSP + Security Center monitoring",
+      "migration_approach": [
+        "Configure control environment monitoring",
+        "Set up continuous security and availability monitoring",
+        "Implement change management tracking",
+        "Establish incident response evidence collection"
+      ],
+      "trust_service_criteria": [
+        "Security - Protection against unauthorized access",
+        "Availability - System availability for operation and use",
+        "Processing Integrity - Complete and accurate processing",
+        "Confidentiality - Information designated as confidential",
+        "Privacy - Personal information collection and use"
+      ]
+    },
+    {
+      "framework": "GDPR",
+      "aws_coverage": "AWS Audit Manager GDPR framework",
+      "azure_coverage": "Microsoft 365 Compliance Manager GDPR assessment",
+      "migration_approach": [
+        "Configure data processing activity monitoring",
+        "Set up data subject rights automation",
+        "Implement data breach detection and notification",
+        "Establish consent and privacy preference tracking"
+      ],
+      "key_requirements": [
+        "Lawful basis for processing personal data",
+        "Data subject rights (access, rectification, erasure)",
+        "Privacy by design and default",
+        "Data protection impact assessments",
+        "Data breach notification (72 hours)",
+        "Appointment of Data Protection Officer"
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Compliance Management",
+      "aws_comparison": "AWS Audit Manager per evidence collection",
+      "azure_model": "Microsoft Purview Compliance Manager included with M365/Azure AD licenses",
+      "optimization_strategies": [
+        "Leverage existing Microsoft 365 licenses for Compliance Manager",
+        "Use built-in compliance assessments before creating custom ones",
+        "Automate evidence collection to reduce manual effort costs",
+        "Consolidate compliance monitoring through single platform"
+      ],
+      "estimated_savings": "40-60% reduction in compliance management costs"
+    },
+    {
+      "area": "Security Monitoring",
+      "aws_comparison": "Security Hub + GuardDuty + Config Rules per account",
+      "azure_model": "Defender for Cloud + Sentinel with consolidated pricing",
+      "optimization_strategies": [
+        "Use Azure Security Center free tier for basic recommendations",
+        "Enable Defender plans only for critical resource types",
+        "Optimize Sentinel data ingestion and retention costs",
+        "Leverage automation to reduce manual security operations"
+      ],
+      "estimated_savings": "25-35% for enterprise security monitoring"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Audit Trail Security",
+      "practices": [
+        "Enable log file integrity monitoring for Activity Log",
+        "Use customer-managed keys for audit log encryption",
+        "Implement log forwarding to immutable storage",
+        "Configure log retention policies per compliance requirements"
+      ]
+    },
+    {
+      "category": "Access Control for Compliance",
+      "practices": [
+        "Implement least privilege access for compliance administrators",
+        "Use Privileged Identity Management for compliance role access",
+        "Enable multi-factor authentication for all compliance access",
+        "Regular access reviews for compliance-related permissions"
+      ]
+    },
+    {
+      "category": "Evidence Protection",
+      "practices": [
+        "Encrypt all compliance evidence at rest and in transit",
+        "Implement evidence chain of custody tracking",
+        "Use legal hold capabilities for litigation readiness",
+        "Regular backup and recovery testing for evidence repositories"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment",
+      "tasks": [
+        "Inventory all AWS compliance frameworks and assessments",
+        "Document current Config rules and their business purposes",
+        "Map compliance requirements to Azure equivalent services",
+        "Assess current audit trail retention and access requirements",
+        "Plan compliance monitoring continuity during migration"
+      ]
+    },
+    {
+      "phase": "Azure Compliance Infrastructure Setup",
+      "tasks": [
+        "Enable Microsoft Purview Compliance Manager",
+        "Configure Azure Policy with required initiatives",
+        "Set up Log Analytics workspace for audit data",
+        "Deploy Azure Sentinel for security monitoring",
+        "Enable Microsoft Defender for Cloud protection plans"
+      ]
+    },
+    {
+      "phase": "Compliance Framework Migration",
+      "tasks": [
+        "Migrate compliance assessments to Compliance Manager",
+        "Convert AWS Config rules to Azure Policy definitions",
+        "Configure automated evidence collection",
+        "Set up compliance reporting and dashboards",
+        "Test automated remediation workflows"
+      ]
+    },
+    {
+      "phase": "Validation and Optimization",
+      "tasks": [
+        "Verify all compliance frameworks are monitoring correctly",
+        "Validate audit trail completeness and accuracy",
+        "Test incident response and automated remediation",
+        "Optimize compliance monitoring performance and costs",
+        "Train compliance team on new tools and processes"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Compliance Score Discrepancies",
+      "symptoms": [
+        "Compliance Manager scores don't match expected values",
+        "Missing evidence for compliance controls",
+        "Delayed compliance score updates"
+      ],
+      "solutions": [
+        "Verify all Azure services are properly configured for evidence collection",
+        "Check assessment scope includes all relevant subscriptions",
+        "Review improvement action completion status",
+        "Validate evidence automation is functioning correctly",
+        "Contact Microsoft support for assessment scoring issues"
+      ]
+    },
+    {
+      "issue": "Policy Compliance Issues",
+      "symptoms": [
+        "Azure Policy showing unexpected compliance results",
+        "Remediation tasks failing to execute",
+        "Policy assignment not covering intended resources"
+      ],
+      "solutions": [
+        "Review policy definition logic and parameter values",
+        "Check managed identity permissions for remediation tasks",
+        "Verify policy assignment scope and exclusions",
+        "Monitor policy evaluation logs for errors",
+        "Test policy definitions in development environment first"
+      ]
+    },
+    {
+      "issue": "Audit Data Collection Problems",
+      "symptoms": [
+        "Missing audit logs in Log Analytics workspace",
+        "Delayed data ingestion to Sentinel",
+        "Incomplete activity log coverage"
+      ],
+      "solutions": [
+        "Verify diagnostic settings are configured correctly",
+        "Check Log Analytics workspace permissions and quotas",
+        "Review data connector configuration in Sentinel",
+        "Monitor Azure service health for platform issues",
+        "Validate network connectivity for log forwarding"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Microsoft Purview Compliance Manager - https://docs.microsoft.com/en-us/microsoft-365/compliance/compliance-manager",
+        "Azure Policy documentation - https://docs.microsoft.com/en-us/azure/governance/policy/",
+        "Microsoft Defender for Cloud - https://docs.microsoft.com/en-us/azure/defender-for-cloud/",
+        "Azure Sentinel documentation - https://docs.microsoft.com/en-us/azure/sentinel/"
+      ]
+    },
+    {
+      "type": "Compliance Frameworks",
+      "links": [
+        "Azure compliance offerings - https://docs.microsoft.com/en-us/azure/compliance/",
+        "Service Trust Portal - https://servicetrust.microsoft.com/",
+        "Azure Security Benchmark - https://docs.microsoft.com/en-us/azure/security/benchmarks/",
+        "Microsoft compliance documentation"
+      ]
+    },
+    {
+      "type": "Migration Guides",
+      "links": [
+        "AWS to Azure compliance services comparison",
+        "Config Rules to Azure Policy migration guide",
+        "CloudTrail to Activity Log migration patterns",
+        "Security Hub to Defender for Cloud migration"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Blueprints for repeatable compliance deployments",
+    "Set up Microsoft Purview for data governance and classification",
+    "Configure Azure Arc for hybrid compliance monitoring",
+    "Implement Azure Resource Graph for advanced compliance queries",
+    "Set up Azure Cost Management for compliance cost tracking",
+    "Explore Microsoft Compliance Score for M365 integration"
+  ]
+}

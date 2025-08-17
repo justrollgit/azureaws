@@ -1,0 +1,302 @@
+{
+  "guide_metadata": {
+    "title": "AWS to Azure Architecture Patterns Guide",
+    "description": "Common architecture patterns migrated from AWS to Azure",
+    "difficulty": "advanced",
+    "estimated_reading_time": "30 minutes"
+  },
+  "patterns": [
+    {
+      "pattern_name": "Three-Tier Web Application",
+      "description": "Classic web application with presentation, application, and data tiers",
+      "aws_architecture": {
+        "components": [
+          "Route 53 (DNS)",
+          "CloudFront (CDN)",
+          "Application Load Balancer",
+          "EC2 instances (Auto Scaling)",
+          "RDS Multi-AZ",
+          "ElastiCache",
+          "S3 (static assets)"
+        ],
+        "diagram_description": "Route 53 → CloudFront → ALB → EC2 (ASG) → RDS + ElastiCache"
+      },
+      "azure_architecture": {
+        "components": [
+          "Azure DNS",
+          "Azure CDN",
+          "Application Gateway",
+          "Virtual Machine Scale Sets",
+          "Azure SQL Database",
+          "Azure Cache for Redis",
+          "Blob Storage (static assets)"
+        ],
+        "diagram_description": "Azure DNS → CDN → Application Gateway → VMSS → SQL Database + Redis Cache"
+      },
+      "migration_considerations": [
+        "Application Gateway provides Layer 7 load balancing like ALB",
+        "VMSS auto-scaling configuration differs from ASG policies",
+        "Azure SQL Database zone-redundant replaces RDS Multi-AZ",
+        "Static assets in Blob Storage with CDN integration",
+        "Network Security Groups replace Security Groups with subnet-level controls"
+      ],
+      "cost_optimization": [
+        "Use Azure Reserved Instances for predictable workloads",
+        "Implement auto-scaling policies to match demand",
+        "Choose appropriate SQL Database service tier",
+        "Use Blob Storage access tiers for static content",
+        "Consider Azure Front Door for global applications"
+      ]
+    },
+    {
+      "pattern_name": "Serverless Microservices",
+      "description": "Event-driven microservices using serverless computing",
+      "aws_architecture": {
+        "components": [
+          "API Gateway",
+          "Lambda Functions",
+          "DynamoDB",
+          "SQS/SNS",
+          "CloudWatch Events",
+          "S3 (event triggers)",
+          "Cognito (authentication)"
+        ],
+        "diagram_description": "API Gateway → Lambda → DynamoDB + SQS/SNS event handling"
+      },
+      "azure_architecture": {
+        "components": [
+          "Function Apps (HTTP triggers)",
+          "Azure Functions",
+          "Cosmos DB",
+          "Service Bus/Event Grid",
+          "Logic Apps",
+          "Blob Storage (event triggers)",
+          "Azure AD B2C (authentication)"
+        ],
+        "diagram_description": "Function Apps → Azure Functions → Cosmos DB + Service Bus/Event Grid"
+      },
+      "migration_considerations": [
+        "Azure Functions can handle HTTP directly without separate API Gateway",
+        "Cosmos DB offers multiple consistency models vs DynamoDB",
+        "Event Grid provides more sophisticated event routing than CloudWatch Events",
+        "Service Bus queues/topics replace SQS/SNS functionality",
+        "Logic Apps can orchestrate complex workflows",
+        "Azure AD B2C provides more advanced identity features than Cognito"
+      ],
+      "cost_optimization": [
+        "Use Consumption plan for Functions with sporadic workloads",
+        "Consider Premium plan for performance-critical functions",
+        "Optimize Cosmos DB throughput allocation",
+        "Use Event Grid for cost-effective event routing",
+        "Implement proper function bindings to reduce latency"
+      ]
+    },
+    {
+      "pattern_name": "Data Lake and Analytics",
+      "description": "Big data processing and analytics platform",
+      "aws_architecture": {
+        "components": [
+          "S3 Data Lake",
+          "Kinesis Data Streams",
+          "EMR (Spark/Hadoop)",
+          "Redshift",
+          "QuickSight",
+          "Glue (ETL)",
+          "Athena (SQL queries)"
+        ],
+        "diagram_description": "Kinesis → S3 Data Lake → EMR/Glue → Redshift → QuickSight"
+      },
+      "azure_architecture": {
+        "components": [
+          "Data Lake Storage Gen2",
+          "Event Hubs",
+          "HDInsight/Databricks",
+          "Synapse Analytics",
+          "Power BI",
+          "Data Factory (ETL)",
+          "Synapse SQL on-demand"
+        ],
+        "diagram_description": "Event Hubs → Data Lake Gen2 → Databricks/HDInsight → Synapse → Power BI"
+      },
+      "migration_considerations": [
+        "Data Lake Storage Gen2 provides hierarchical namespace unlike standard Blob Storage",
+        "Event Hubs offer similar streaming capabilities to Kinesis",
+        "Azure Databricks provides managed Spark environment",
+        "Synapse Analytics combines data warehouse and big data analytics",
+        "Data Factory offers visual ETL pipeline design",
+        "Power BI integrates seamlessly with Azure data services"
+      ],
+      "cost_optimization": [
+        "Use appropriate Data Lake storage tiers",
+        "Optimize Databricks cluster sizing and auto-termination",
+        "Choose right Synapse compute model (provisioned vs serverless)",
+        "Implement data lifecycle policies",
+        "Use spot instances for non-critical batch processing"
+      ]
+    },
+    {
+      "pattern_name": "Multi-Region Disaster Recovery",
+      "description": "Cross-region disaster recovery and high availability",
+      "aws_architecture": {
+        "components": [
+          "Route 53 health checks",
+          "Cross-region VPC peering",
+          "RDS Cross-Region Read Replicas",
+          "S3 Cross-Region Replication",
+          "CloudFormation stacks",
+          "Auto Scaling across AZs"
+        ],
+        "diagram_description": "Primary Region (full stack) → Secondary Region (standby) with Route 53 failover"
+      },
+      "azure_architecture": {
+        "components": [
+          "Traffic Manager",
+          "Global VNet peering",
+          "SQL Database geo-replication",
+          "Storage geo-redundant replication",
+          "Azure Resource Manager templates",
+          "Availability Zones and Sets"
+        ],
+        "diagram_description": "Primary Region (full stack) → Secondary Region (standby) with Traffic Manager failover"
+      },
+      "migration_considerations": [
+        "Traffic Manager provides DNS-based failover like Route 53",
+        "Azure geo-replication is built into storage and SQL services",
+        "ARM templates deploy consistently across regions",
+        "Availability Zones provide in-region high availability",
+        "Azure Site Recovery can automate DR orchestration",
+        "Global VNet peering enables cross-region connectivity"
+      ],
+      "cost_optimization": [
+        "Use read-only replicas in secondary region until failover",
+        "Implement proper backup retention policies",
+        "Consider Azure Site Recovery for automated failover",
+        "Use Azure Monitor for health checking and alerting",
+        "Optimize data transfer costs between regions"
+      ]
+    },
+    {
+      "pattern_name": "Hybrid Cloud Integration",
+      "description": "Connecting on-premises infrastructure with cloud",
+      "aws_architecture": {
+        "components": [
+          "Direct Connect",
+          "VPN Gateway",
+          "Directory Service",
+          "Storage Gateway",
+          "Database Migration Service",
+          "AWS Outposts (edge computing)"
+        ],
+        "diagram_description": "On-premises DC → Direct Connect/VPN → AWS VPC → Cloud services"
+      },
+      "azure_architecture": {
+        "components": [
+          "ExpressRoute",
+          "VPN Gateway",
+          "Azure AD Connect",
+          "StorSimple/Azure File Sync",
+          "Database Migration Service",
+          "Azure Stack (edge computing)"
+        ],
+        "diagram_description": "On-premises DC → ExpressRoute/VPN → Azure VNet → Cloud services"
+      },
+      "migration_considerations": [
+        "ExpressRoute provides dedicated connectivity like Direct Connect",
+        "Azure AD Connect synchronizes on-premises Active Directory",
+        "Azure File Sync provides hybrid file services",
+        "VPN Gateway supports site-to-site and point-to-site connections",
+        "Azure Arc extends Azure management to on-premises resources",
+        "Database Migration Service supports various database engines"
+      ],
+      "cost_optimization": [
+        "Choose appropriate ExpressRoute bandwidth",
+        "Use VPN for non-critical connections to reduce costs",
+        "Optimize data synchronization schedules",
+        "Consider Azure Stack for edge computing needs",
+        "Implement proper network security group configurations"
+      ]
+    }
+  ],
+  "best_practices": {
+    "security": [
+      "Implement defense in depth with multiple security layers",
+      "Use Azure Security Center for threat detection and compliance",
+      "Enable Azure Sentinel for SIEM capabilities",
+      "Use Key Vault for secrets management",
+      "Implement network segmentation with NSGs and ASGs"
+    ],
+    "performance": [
+      "Design for auto-scaling from the beginning",
+      "Use Azure Monitor and Application Insights for observability",
+      "Implement caching strategies with Redis or CDN",
+      "Choose appropriate storage types for workload requirements",
+      "Use availability zones for high availability within regions"
+    ],
+    "cost_management": [
+      "Use Azure Cost Management for monitoring and budgeting",
+      "Implement resource tagging for cost allocation",
+      "Use Reserved Instances for predictable workloads",
+      "Set up auto-scaling policies to match demand",
+      "Regular review and optimization of resources"
+    ],
+    "governance": [
+      "Use Azure Policy for compliance and governance",
+      "Implement proper RBAC with least privilege principle",
+      "Use Management Groups for organizational hierarchy",
+      "Tag resources consistently for management and billing",
+      "Use Azure Blueprints for repeatable deployments"
+    ]
+  },
+  "migration_timeline": {
+    "assessment_phase": {
+      "duration": "2-4 weeks",
+      "activities": [
+        "Inventory current AWS resources and dependencies",
+        "Assess application architecture and data flow",
+        "Identify integration points and APIs",
+        "Evaluate performance and security requirements",
+        "Calculate current costs and forecast Azure costs"
+      ]
+    },
+    "planning_phase": {
+      "duration": "2-3 weeks", 
+      "activities": [
+        "Design target Azure architecture",
+        "Create migration strategy and timeline",
+        "Plan network connectivity and security",
+        "Design disaster recovery and backup strategy",
+        "Prepare migration tools and automation"
+      ]
+    },
+    "pilot_phase": {
+      "duration": "2-4 weeks",
+      "activities": [
+        "Migrate non-critical workload as proof of concept",
+        "Test performance, security, and functionality",
+        "Validate monitoring and alerting",
+        "Train team on Azure tools and processes",
+        "Refine migration processes based on learnings"
+      ]
+    },
+    "migration_phase": {
+      "duration": "4-12 weeks",
+      "activities": [
+        "Migrate applications in planned waves",
+        "Perform data migration with minimal downtime",
+        "Update DNS and routing configurations",
+        "Validate all functionality and integrations",
+        "Monitor performance and costs closely"
+      ]
+    },
+    "optimization_phase": {
+      "duration": "Ongoing",
+      "activities": [
+        "Optimize costs based on usage patterns",
+        "Fine-tune performance and scaling policies",
+        "Implement additional Azure-native features",
+        "Enhance security and compliance posture",
+        "Plan for continuous improvement and modernization"
+      ]
+    }
+  }
+}

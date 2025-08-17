@@ -1,0 +1,563 @@
+{
+  "lab_metadata": {
+    "id": "iot-edge-computing-lab",
+    "title": "AWS IoT to Azure IoT: Enterprise Edge Computing and Device Management",
+    "category": "iot-edge",
+    "difficulty": "advanced",
+    "estimated_time": "180 minutes",
+    "description": "Master IoT device management and edge computing by migrating from AWS IoT services to Azure IoT platform with real-world industrial scenarios",
+    "aws_services": ["IoT Core", "IoT Greengrass", "IoT Analytics", "IoT Device Management"],
+    "azure_services": ["IoT Hub", "IoT Edge", "IoT Central", "Device Provisioning Service"],
+    "tags": ["iot", "edge-computing", "device-management", "analytics", "enterprise", "saa-c03", "sap-c02"],
+    "prerequisites": [
+      "Basic understanding of IoT concepts",
+      "Familiarity with device connectivity",
+      "Knowledge of cloud messaging patterns",
+      "Understanding of edge computing principles"
+    ],
+    "learning_objectives": [
+      "Migrate AWS IoT Core device registry to Azure IoT Hub",
+      "Transform AWS IoT Greengrass edge deployments to Azure IoT Edge",
+      "Convert AWS IoT Analytics pipelines to Azure IoT Central insights",
+      "Implement device provisioning and lifecycle management",
+      "Deploy edge computing workloads with offline capabilities",
+      "Configure device-to-cloud and cloud-to-device messaging",
+      "Set up IoT device monitoring and diagnostics"
+    ]
+  },
+  "scenario": {
+    "title": "Smart Manufacturing Plant Migration",
+    "description": "TechFlow Manufacturing operates a smart factory with 500+ connected devices using AWS IoT. They need to migrate to Azure while maintaining 24/7 operations and adding predictive maintenance capabilities.",
+    "business_requirements": [
+      "Zero downtime during migration",
+      "Enhanced edge computing for real-time decisions",
+      "Predictive maintenance using IoT analytics",
+      "Secure device authentication and authorization",
+      "Scalable architecture for plant expansion",
+      "Integration with existing Azure enterprise services"
+    ],
+    "current_aws_architecture": [
+      "IoT Core for device connectivity (500 devices)",
+      "IoT Greengrass for edge processing (10 edge gateways)",
+      "IoT Analytics for data processing and insights",
+      "IoT Device Management for fleet management",
+      "Lambda functions for device triggers",
+      "S3 for IoT data storage",
+      "CloudWatch for monitoring"
+    ],
+    "target_azure_architecture": [
+      "IoT Hub for device connectivity and messaging",
+      "IoT Edge for edge computing and offline processing",
+      "IoT Central for device management and insights",
+      "Device Provisioning Service for automated provisioning",
+      "Functions for device event processing",
+      "Blob Storage for IoT data archival",
+      "Monitor for comprehensive observability"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "IoT Foundation Setup: AWS IoT Core to Azure IoT Hub",
+      "estimated_time": "45 minutes",
+      "description": "Establish core IoT infrastructure and device connectivity",
+      "aws_context": {
+        "service": "AWS IoT Core",
+        "description": "Fully managed service for connecting IoT devices to the cloud",
+        "key_features": [
+          "Device registry and authentication",
+          "Secure device communication with TLS",
+          "Device shadows for state management",
+          "Rules engine for message routing",
+          "Built-in security and access control"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure IoT Hub",
+        "description": "Managed service for bi-directional communication between IoT applications and devices",
+        "key_features": [
+          "Device-to-cloud and cloud-to-device messaging",
+          "Device twins for metadata and state",
+          "Direct methods for device control",
+          "Built-in security with per-device authentication",
+          "Device streams for secure tunneling"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Create Azure IoT Hub and Configure Device Registry",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Azure IoT Hub with appropriate pricing tier",
+              "aws_context": "Similar to creating IoT Core endpoint in AWS console",
+              "azure_command": "az iot hub create --name smartfactory-iot-hub --resource-group rg-smartfactory --sku S1 --location eastus",
+              "explanation": "S1 tier provides enterprise features like device-to-cloud partitions and cloud-to-device messaging"
+            },
+            {
+              "step": 2,
+              "description": "Configure device authentication and security policies",
+              "aws_context": "Equivalent to AWS IoT Core device certificates and policies",
+              "azure_command": "az iot hub device-identity create --hub-name smartfactory-iot-hub --device-id sensor-001 --auth-method shared_private_key",
+              "explanation": "Creates device identity with symmetric key authentication (X.509 certificates also supported)"
+            },
+            {
+              "step": 3,
+              "description": "Set up device twins for state management",
+              "aws_context": "Similar to AWS IoT Device Shadows for device state",
+              "azure_cli": [
+                "az iot hub device-twin show --hub-name smartfactory-iot-hub --device-id sensor-001",
+                "az iot hub device-twin update --hub-name smartfactory-iot-hub --device-id sensor-001 --desired '{\"temperature_threshold\": 75}'"
+              ],
+              "explanation": "Device twins store device metadata, configuration, and state information"
+            }
+          ],
+          "validation": [
+            "Verify IoT Hub is created and accessible",
+            "Confirm device identity is registered",
+            "Test device twin desired properties update",
+            "Validate device authentication credentials"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Edge Computing Migration: AWS IoT Greengrass to Azure IoT Edge",
+      "estimated_time": "60 minutes",
+      "description": "Deploy edge computing capabilities with offline processing",
+      "aws_context": {
+        "service": "AWS IoT Greengrass",
+        "description": "Edge runtime for local compute, messaging, and sync with the cloud",
+        "key_features": [
+          "Local Lambda execution",
+          "Local device shadows",
+          "Local messaging between devices",
+          "ML inference at the edge",
+          "Secure tunneling for remote access"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure IoT Edge",
+        "description": "IoT Edge runtime that deploys cloud workloads to IoT devices",
+        "key_features": [
+          "Container-based module deployment",
+          "Offline and low-connectivity support",
+          "Built-in machine learning capabilities",
+          "Local blob storage and time series insights",
+          "Hierarchical deployments"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Azure IoT Edge Runtime and Modules",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create IoT Edge device identity",
+              "aws_context": "Similar to registering Greengrass core device",
+              "azure_command": "az iot hub device-identity create --hub-name smartfactory-iot-hub --device-id edge-gateway-001 --edge-enabled",
+              "explanation": "Creates IoT Edge device identity with edge capabilities enabled"
+            },
+            {
+              "step": 2,
+              "description": "Install IoT Edge runtime on edge device",
+              "aws_context": "Equivalent to installing Greengrass core software",
+              "bash_commands": [
+                "curl https://packages.microsoft.com/config/ubuntu/20.04/multiarch/packages-microsoft-prod.deb > ./packages-microsoft-prod.deb",
+                "sudo dpkg -i ./packages-microsoft-prod.deb",
+                "sudo apt-get update && sudo apt-get install aziot-edge"
+              ],
+              "explanation": "Installs Azure IoT Edge runtime with containerized module support"
+            },
+            {
+              "step": 3,
+              "description": "Configure edge device with connection string",
+              "aws_context": "Similar to configuring Greengrass core with certificates",
+              "configuration": {
+                "file_path": "/etc/aziot/config.toml",
+                "content": "[provisioning]\nsource = \"manual\"\nconnection_string = \"HostName=smartfactory-iot-hub.azure-devices.net;DeviceId=edge-gateway-001;SharedAccessKey={key}\""
+              },
+              "azure_command": "sudo iotedge config apply",
+              "explanation": "Configures edge runtime with IoT Hub connection and authentication"
+            },
+            {
+              "step": 4,
+              "description": "Deploy temperature monitoring module",
+              "aws_context": "Similar to deploying Lambda function to Greengrass",
+              "deployment_manifest": {
+                "moduleContent": {
+                  "$edgeAgent": {
+                    "properties.desired": {
+                      "modules": {
+                        "tempSensor": {
+                          "version": "1.0",
+                          "type": "docker",
+                          "status": "running",
+                          "restartPolicy": "always",
+                          "settings": {
+                            "image": "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0",
+                            "createOptions": "{}"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "explanation": "Deploys containerized temperature sensor module for edge processing"
+            }
+          ],
+          "validation": [
+            "Verify IoT Edge runtime is running",
+            "Confirm modules are deployed and healthy",
+            "Test edge-to-cloud messaging",
+            "Validate offline processing capabilities"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Device Provisioning: AWS IoT Device Management to Azure DPS",
+      "estimated_time": "45 minutes",
+      "description": "Implement automated device provisioning and lifecycle management",
+      "aws_context": {
+        "service": "AWS IoT Device Management",
+        "description": "Fleet management capabilities for IoT devices at scale",
+        "key_features": [
+          "Fleet indexing and search",
+          "Bulk device registration",
+          "Remote device actions",
+          "Device defender for security",
+          "Fleet hub for monitoring"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Device Provisioning Service (DPS)",
+        "description": "Helper service for IoT Hub that enables zero-touch device provisioning",
+        "key_features": [
+          "Automatic device registration",
+          "Load balancing across IoT hubs",
+          "Device reprovisioning support",
+          "Enrollment groups for bulk provisioning",
+          "Hardware security module integration"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Automated Device Provisioning",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Device Provisioning Service instance",
+              "aws_context": "Similar to configuring fleet provisioning in AWS IoT",
+              "azure_command": "az iot dps create --name smartfactory-dps --resource-group rg-smartfactory --location eastus",
+              "explanation": "Creates DPS instance for automated device provisioning"
+            },
+            {
+              "step": 2,
+              "description": "Link DPS to IoT Hub",
+              "aws_context": "Equivalent to configuring provisioning template target",
+              "azure_command": "az iot dps linked-hub create --dps-name smartfactory-dps --resource-group rg-smartfactory --connection-string \"HostName=smartfactory-iot-hub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey={key}\"",
+              "explanation": "Links provisioning service to target IoT Hub for device registration"
+            },
+            {
+              "step": 3,
+              "description": "Create enrollment group for device family",
+              "aws_context": "Similar to creating provisioning template in AWS IoT",
+              "azure_command": "az iot dps enrollment-group create --dps-name smartfactory-dps --enrollment-id manufacturing-sensors --initial-twin-tags '{\"deviceType\": \"sensor\", \"location\": \"factory-floor\"}' --initial-twin-properties '{\"desired\": {\"telemetryInterval\": 30}}'",
+              "explanation": "Creates enrollment group for automatic provisioning of sensor devices"
+            }
+          ],
+          "validation": [
+            "Verify DPS service is created and linked",
+            "Confirm enrollment group is configured",
+            "Test device auto-provisioning",
+            "Validate device twin initialization"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "IoT Analytics Migration: AWS IoT Analytics to Azure IoT Central",
+      "estimated_time": "30 minutes",
+      "description": "Transform IoT data processing and analytics workflows",
+      "aws_context": {
+        "service": "AWS IoT Analytics",
+        "description": "Fully managed service for sophisticated analytics on IoT data",
+        "key_features": [
+          "Data pipeline automation",
+          "SQL-based data analysis",
+          "Machine learning integration",
+          "Data lake integration",
+          "Containerized analytics"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure IoT Central",
+        "description": "SaaS IoT platform with built-in analytics and device management",
+        "key_features": [
+          "Pre-built industry templates",
+          "Real-time analytics and dashboards",
+          "Rules and notifications",
+          "Data export to external systems",
+          "Device management at scale"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Set Up IoT Analytics and Monitoring",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create IoT Central application",
+              "aws_context": "Similar to setting up IoT Analytics channel and datastore",
+              "azure_portal_steps": [
+                "Navigate to Azure IoT Central",
+                "Create new application using Manufacturing template",
+                "Configure application name: SmartFactory-Analytics"
+              ],
+              "explanation": "IoT Central provides pre-built analytics for manufacturing scenarios"
+            },
+            {
+              "step": 2,
+              "description": "Configure device templates and telemetry",
+              "aws_context": "Equivalent to defining message schemas in IoT Analytics",
+              "device_template": {
+                "name": "Industrial Sensor",
+                "telemetry": [
+                  {"name": "temperature", "displayName": "Temperature", "schema": "double"},
+                  {"name": "humidity", "displayName": "Humidity", "schema": "double"},
+                  {"name": "vibration", "displayName": "Vibration", "schema": "double"}
+                ],
+                "properties": [
+                  {"name": "location", "displayName": "Location", "schema": "string"},
+                  {"name": "calibrationDate", "displayName": "Last Calibration", "schema": "date"}
+                ]
+              },
+              "explanation": "Device templates define data structure and analytics capabilities"
+            },
+            {
+              "step": 3,
+              "description": "Create analytics rules and alerts",
+              "aws_context": "Similar to IoT Analytics datasets and notebooks",
+              "rule_configuration": {
+                "rule_name": "High Temperature Alert",
+                "condition": "temperature > 80",
+                "actions": [
+                  {"type": "email", "recipients": ["maintenance@techflow.com"]},
+                  {"type": "webhook", "url": "https://api.maintenance-system.com/alerts"}
+                ]
+              },
+              "explanation": "Rules enable real-time alerting and automated responses"
+            }
+          ],
+          "validation": [
+            "Verify IoT Central application is configured",
+            "Confirm device templates are created",
+            "Test analytics rules and notifications",
+            "Validate dashboard visualizations"
+          ]
+        }
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Planning",
+      "tasks": [
+        "Inventory all AWS IoT devices and their configurations",
+        "Document current Greengrass deployments and Lambda functions",
+        "Assess network connectivity and bandwidth requirements",
+        "Plan device downtime windows for migration",
+        "Prepare Azure subscriptions and resource groups"
+      ]
+    },
+    {
+      "phase": "Infrastructure Setup",
+      "tasks": [
+        "Create Azure IoT Hub with appropriate scaling tier",
+        "Set up Device Provisioning Service for automated onboarding",
+        "Configure Azure IoT Edge runtime on gateway devices",
+        "Establish security policies and device authentication",
+        "Set up monitoring and alerting infrastructure"
+      ]
+    },
+    {
+      "phase": "Device Migration",
+      "tasks": [
+        "Migrate device identities and certificates",
+        "Update device firmware with Azure IoT SDK",
+        "Test device connectivity and telemetry flow",
+        "Validate edge computing functionality",
+        "Implement rollback procedures for failed migrations"
+      ]
+    },
+    {
+      "phase": "Analytics Migration",
+      "tasks": [
+        "Configure IoT Central with device templates",
+        "Migrate historical data from AWS IoT Analytics",
+        "Set up real-time analytics rules and dashboards",
+        "Test predictive maintenance workflows",
+        "Train operations team on new analytics platform"
+      ]
+    },
+    {
+      "phase": "Validation & Optimization",
+      "tasks": [
+        "Verify end-to-end device connectivity",
+        "Validate analytics accuracy and performance",
+        "Test disaster recovery and failover scenarios",
+        "Optimize costs and resource utilization",
+        "Document new operational procedures"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Device Connection Failures",
+      "aws_equivalent": "Similar to IoT Core connection issues",
+      "symptoms": [
+        "Devices cannot connect to IoT Hub",
+        "Authentication errors in device logs",
+        "Intermittent connectivity issues"
+      ],
+      "solutions": [
+        "Verify device connection string and credentials",
+        "Check IoT Hub access policies and permissions",
+        "Validate network connectivity and firewall rules",
+        "Review device certificate expiration dates",
+        "Use Azure IoT Explorer for connection testing"
+      ]
+    },
+    {
+      "issue": "Edge Module Deployment Failures",
+      "aws_equivalent": "Similar to Greengrass deployment issues",
+      "symptoms": [
+        "Modules fail to start on edge devices",
+        "Edge runtime reports unhealthy status",
+        "Container pull errors from registry"
+      ],
+      "solutions": [
+        "Check edge device system requirements and resources",
+        "Verify container registry access and authentication",
+        "Review deployment manifest for configuration errors",
+        "Check edge device internet connectivity",
+        "Use 'iotedge logs' command for detailed diagnostics"
+      ]
+    },
+    {
+      "issue": "Analytics Data Processing Delays",
+      "aws_equivalent": "Similar to IoT Analytics pipeline issues",
+      "symptoms": [
+        "Delayed telemetry processing in IoT Central",
+        "Missing data points in analytics dashboards",
+        "Rule executions not triggering as expected"
+      ],
+      "solutions": [
+        "Check IoT Hub message routing configuration",
+        "Verify device telemetry message format compliance",
+        "Review IoT Central data ingestion limits",
+        "Monitor Azure service health and status",
+        "Optimize telemetry frequency to reduce load"
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "IoT Hub Pricing",
+      "aws_comparison": "AWS IoT Core charges per message",
+      "azure_model": "Azure IoT Hub uses fixed monthly pricing tiers",
+      "recommendations": [
+        "Choose appropriate IoT Hub tier based on message volume",
+        "Use IoT Hub message routing to reduce processing costs",
+        "Implement device-side message batching",
+        "Monitor daily message quotas to avoid overage charges"
+      ]
+    },
+    {
+      "area": "Edge Computing Costs",
+      "aws_comparison": "Greengrass charges for core device hours",
+      "azure_model": "IoT Edge runtime is free, pay for underlying compute",
+      "recommendations": [
+        "Right-size edge device hardware specifications",
+        "Use container resource limits to optimize memory usage",
+        "Implement edge data filtering to reduce cloud transfer costs",
+        "Schedule non-critical edge workloads during off-peak hours"
+      ]
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Device Authentication",
+      "practices": [
+        "Use X.509 certificates for production device authentication",
+        "Implement certificate rotation policies and procedures",
+        "Enable per-device access control and permissions",
+        "Use hardware security modules (HSM) for certificate storage"
+      ]
+    },
+    {
+      "category": "Data Protection",
+      "practices": [
+        "Enable TLS encryption for all device communications",
+        "Implement message signing for data integrity verification",
+        "Use Azure Key Vault for secure credential management",
+        "Enable IoT Hub diagnostic logging for security monitoring"
+      ]
+    },
+    {
+      "category": "Edge Security",
+      "practices": [
+        "Secure edge device operating systems with regular updates",
+        "Use container image scanning for vulnerability detection",
+        "Implement network segmentation for edge devices",
+        "Enable edge module attestation and secure boot processes"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure IoT Hub documentation - https://docs.microsoft.com/en-us/azure/iot-hub/",
+        "Azure IoT Edge documentation - https://docs.microsoft.com/en-us/azure/iot-edge/",
+        "Device Provisioning Service guide - https://docs.microsoft.com/en-us/azure/iot-dps/",
+        "IoT Central documentation - https://docs.microsoft.com/en-us/azure/iot-central/"
+      ]
+    },
+    {
+      "type": "Hands-on Tutorials",
+      "links": [
+        "IoT Hub quickstart tutorials",
+        "IoT Edge module development guides",
+        "Device provisioning service samples",
+        "IoT Central application templates"
+      ]
+    },
+    {
+      "type": "AWS to Azure Migration Guides",
+      "links": [
+        "AWS to Azure IoT services comparison",
+        "IoT workload migration strategies",
+        "Edge computing migration patterns",
+        "IoT security migration checklist"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Complete machine learning integration with IoT data",
+    "Implement advanced edge analytics with Time Series Insights",
+    "Set up multi-tenant IoT solutions for different factories",
+    "Explore Azure Digital Twins for facility modeling",
+    "Integrate with enterprise systems using Logic Apps",
+    "Implement predictive maintenance using Azure Machine Learning"
+  ]
+}

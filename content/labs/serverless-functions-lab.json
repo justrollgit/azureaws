@@ -1,0 +1,193 @@
+{
+  "id": "serverless-functions-lab",
+  "title": "AWS Lambda to Azure Functions: Serverless Migration",
+  "difficulty": "intermediate",
+  "estimated_time": "60 minutes",
+  "aws_prerequisite": "Experience with Lambda functions, API Gateway, and serverless architectures",
+  "azure_target": "Build and deploy Azure Functions with HTTP triggers and bindings",
+  "learning_objectives": [
+    "Understand Azure Functions runtime and hosting plans",
+    "Convert Lambda function code to Azure Functions",
+    "Configure triggers and bindings equivalent to AWS services",
+    "Implement monitoring and logging for serverless functions",
+    "Set up CI/CD pipeline for function deployment"
+  ],
+  "aws_context": {
+    "equivalent_service": "AWS Lambda",
+    "key_concepts": [
+      "Lambda Functions → Azure Functions",
+      "API Gateway → Function Apps HTTP triggers",
+      "CloudWatch Events → Event Grid/Timer triggers",
+      "S3 Events → Blob Storage triggers",
+      "DynamoDB Streams → Cosmos DB change feed"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Azure Functions vs AWS Lambda Comparison",
+      "content": "Understanding the key differences between Azure Functions and AWS Lambda runtime environments.",
+      "comparison_table": {
+        "runtime_model": {
+          "aws": "Function-centric deployment",
+          "azure": "Function App container with multiple functions",
+          "use_case": "Azure allows grouping related functions together"
+        },
+        "hosting_plans": {
+          "aws": "On-demand execution only",
+          "azure": "Consumption, Premium, and Dedicated plans",
+          "use_case": "More flexibility in performance and cost optimization"
+        },
+        "cold_start": {
+          "aws": "~100-200ms for Node.js",
+          "azure": "Similar, but Premium plan eliminates cold starts",
+          "use_case": "Premium plan for latency-sensitive applications"
+        },
+        "timeout_limits": {
+          "aws": "15 minutes maximum",
+          "azure": "5 minutes (Consumption), 30 minutes (Premium/Dedicated)",
+          "use_case": "Longer-running processes in Premium plan"
+        }
+      }
+    },
+    {
+      "title": "Function Runtime and Language Support",
+      "content": "Azure Functions supports multiple languages with different runtime versions.",
+      "code_examples": {
+        "lambda_nodejs": {
+          "language": "javascript",
+          "title": "AWS Lambda: Node.js Function",
+          "code": "exports.handler = async (event) => {\n    console.log('Event: ', JSON.stringify(event, null, 2));\n    \n    const response = {\n        statusCode: 200,\n        body: JSON.stringify({\n            message: 'Hello from Lambda!',\n            requestId: event.requestContext.requestId\n        })\n    };\n    \n    return response;\n};"
+        },
+        "azure_functions_nodejs": {
+          "language": "javascript",
+          "title": "Azure Functions: Node.js Function",
+          "code": "module.exports = async function (context, req) {\n    context.log('JavaScript HTTP trigger function processed a request.');\n    \n    const name = (req.query.name || (req.body && req.body.name));\n    const responseMessage = name\n        ? \"Hello, \" + name + \". This HTTP triggered function executed successfully.\"\n        : \"Hello from Azure Functions!\";\n    \n    context.res = {\n        status: 200,\n        body: responseMessage\n    };\n};"
+        }
+      }
+    },
+    {
+      "title": "Hands-On Exercise: Migrate Lambda to Azure Functions",
+      "content": "Step-by-step migration of a real-world Lambda function to Azure Functions.",
+      "exercise": {
+        "scenario": "Migrate a Lambda function that processes uploaded images and stores metadata in a database",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Install Azure Functions Core Tools",
+            "aws_equivalent": "Similar to AWS SAM CLI for local development",
+            "instructions": "Set up the development environment for Azure Functions",
+            "code": {
+              "cli": "# Install Azure Functions Core Tools\nnpm install -g azure-functions-core-tools@4 --unsafe-perm true\n\n# Install Azure CLI (if not already installed)\ncurl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\n\n# Login to Azure\naz login\n\n# Verify installation\nfunc --version"
+            }
+          },
+          {
+            "step": 2,
+            "title": "Create Function App Project",
+            "aws_equivalent": "Similar to sam init for creating Lambda project structure",
+            "instructions": "Initialize a new Azure Functions project",
+            "code": {
+              "cli": "# Create new function app\nfunc init ImageProcessorApp --typescript\ncd ImageProcessorApp\n\n# Create HTTP triggered function\nfunc new --name ProcessImage --template \"HTTP trigger\" --authlevel \"anonymous\"\n\n# Create blob triggered function  \nfunc new --name ProcessUpload --template \"Blob trigger\" --authlevel \"anonymous\""
+            },
+            "explanation": "Azure Functions can have multiple functions in one app, unlike Lambda's single function per deployment"
+          },
+          {
+            "step": 3,
+            "title": "Configure Function Bindings",
+            "aws_equivalent": "Similar to Lambda event sources and IAM roles",
+            "instructions": "Set up input/output bindings for storage and database",
+            "code": {
+              "cli": "# Update function.json for blob trigger\ncat > ProcessUpload/function.json << 'EOF'\n{\n  \"bindings\": [\n    {\n      \"name\": \"myBlob\",\n      \"type\": \"blobTrigger\",\n      \"direction\": \"in\",\n      \"path\": \"uploads/{name}\",\n      \"connection\": \"AzureWebJobsStorage\"\n    },\n    {\n      \"type\": \"cosmosDB\",\n      \"direction\": \"out\",\n      \"name\": \"outputDocument\",\n      \"databaseName\": \"imagedb\",\n      \"collectionName\": \"metadata\",\n      \"connection\": \"CosmosDBConnection\"\n    }\n  ]\n}\nEOF"
+            }
+          },
+          {
+            "step": 4,
+            "title": "Implement Image Processing Logic",
+            "aws_equivalent": "Lambda function code with AWS SDK integration",
+            "instructions": "Write the function code to process images and store metadata",
+            "code": {
+              "cli": "# Install dependencies\nnpm install sharp @azure/storage-blob\n\n# Update ProcessUpload/index.ts\ncat > ProcessUpload/index.ts << 'EOF'\nimport { AzureFunction, Context } from \"@azure/functions\";\nimport * as sharp from \"sharp\";\n\nconst blobTrigger: AzureFunction = async function (context: Context, myBlob: any): Promise<void> {\n    context.log(`Processing blob: ${context.bindingData.name}`);\n    \n    try {\n        // Get image metadata using Sharp\n        const metadata = await sharp(myBlob).metadata();\n        \n        // Create metadata document\n        const document = {\n            id: context.bindingData.name.replace(/\\.[^/.]+$/, \"\"),\n            filename: context.bindingData.name,\n            format: metadata.format,\n            width: metadata.width,\n            height: metadata.height,\n            size: metadata.size,\n            processedAt: new Date().toISOString()\n        };\n        \n        // Output to Cosmos DB via binding\n        context.bindings.outputDocument = document;\n        \n        context.log(`Successfully processed: ${context.bindingData.name}`);\n    } catch (error) {\n        context.log.error(`Error processing image: ${error.message}`);\n        throw error;\n    }\n};\n\nexport default blobTrigger;\nEOF"
+            }
+          },
+          {
+            "step": 5,
+            "title": "Configure Local Settings",
+            "aws_equivalent": "Similar to AWS credentials and environment variables",
+            "instructions": "Set up connection strings and environment variables",
+            "code": {
+              "cli": "# Update local.settings.json\ncat > local.settings.json << 'EOF'\n{\n  \"IsEncrypted\": false,\n  \"Values\": {\n    \"AzureWebJobsStorage\": \"UseDevelopmentStorage=true\",\n    \"FUNCTIONS_WORKER_RUNTIME\": \"node\",\n    \"CosmosDBConnection\": \"AccountEndpoint=https://your-cosmos-account.documents.azure.com:443/;AccountKey=your-key;\"\n  }\n}\nEOF\n\n# Install Azure Storage Emulator (for local testing)\n# For Linux/Mac, use Azurite\nnpm install -g azurite\nazurite --silent --location /tmp/azurite --debug /tmp/azurite/debug.log &"
+            }
+          },
+          {
+            "step": 6,
+            "title": "Test Function Locally",
+            "aws_equivalent": "Similar to sam local invoke for testing Lambda locally",
+            "instructions": "Run and test the function in local development environment",
+            "code": {
+              "cli": "# Start the function app locally\nfunc start\n\n# In another terminal, test HTTP endpoint\ncurl -X POST http://localhost:7071/api/ProcessImage \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\": \"test-image.jpg\"}'\n\n# Upload test file to trigger blob function\n# (requires Azurite to be running)"
+            }
+          },
+          {
+            "step": 7,
+            "title": "Deploy to Azure",
+            "aws_equivalent": "Similar to sam deploy or serverless framework deployment",
+            "instructions": "Create Azure resources and deploy the function app",
+            "code": {
+              "cli": "# Create resource group\naz group create --name functions-lab-rg --location eastus\n\n# Create storage account\naz storage account create \\\n  --name functionslabacc \\\n  --resource-group functions-lab-rg \\\n  --location eastus \\\n  --sku Standard_LRS\n\n# Create function app\naz functionapp create \\\n  --resource-group functions-lab-rg \\\n  --consumption-plan-location eastus \\\n  --runtime node \\\n  --runtime-version 18 \\\n  --functions-version 4 \\\n  --name image-processor-func \\\n  --storage-account functionslabacc\n\n# Deploy the function\nfunc azure functionapp publish image-processor-func"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Monitoring and Observability",
+      "content": "Set up monitoring equivalent to CloudWatch for Lambda functions.",
+      "code_examples": {
+        "application_insights": {
+          "language": "bash",
+          "title": "Configure Application Insights for Function Monitoring",
+          "code": "# Create Application Insights\naz monitor app-insights component create \\\n  --app image-processor-insights \\\n  --location eastus \\\n  --resource-group functions-lab-rg\n\n# Get instrumentation key\nINSTRUMENTATION_KEY=$(az monitor app-insights component show \\\n  --app image-processor-insights \\\n  --resource-group functions-lab-rg \\\n  --query instrumentationKey -o tsv)\n\n# Configure function app to use Application Insights\naz functionapp config appsettings set \\\n  --name image-processor-func \\\n  --resource-group functions-lab-rg \\\n  --settings \"APPINSIGHTS_INSTRUMENTATIONKEY=$INSTRUMENTATION_KEY\""
+        }
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Test HTTP trigger function",
+      "command": "curl -X POST https://image-processor-func.azurewebsites.net/api/ProcessImage",
+      "expected": "Should return 200 OK with response message"
+    },
+    {
+      "step": "Verify blob trigger activation",
+      "command": "az storage blob upload --account-name functionslabacc --container-name uploads --file test-image.jpg --name test-image.jpg",
+      "expected": "Function should be triggered and process the image"
+    },
+    {
+      "step": "Check function logs",
+      "command": "az functionapp log tail --name image-processor-func --resource-group functions-lab-rg",
+      "expected": "Should show processing logs and any errors"
+    },
+    {
+      "step": "Verify Application Insights data",
+      "command": "Check Azure portal for Application Insights metrics",
+      "expected": "Should show function invocations and performance metrics"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all Azure resources to avoid ongoing charges",
+    "command": "az group delete --name functions-lab-rg --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Azure Functions provide more hosting plan flexibility than Lambda",
+    "Function bindings simplify integration with Azure services",
+    "Multiple functions can be grouped in a single Function App",
+    "Application Insights provides comprehensive monitoring",
+    "Cold start performance is similar, but Premium plans eliminate cold starts",
+    "Local development experience is similar to AWS SAM"
+  ],
+  "next_steps": [
+    "Explore Durable Functions for stateful serverless workflows",
+    "Learn about Azure Logic Apps for workflow orchestration",
+    "Practice with Event Grid for event-driven architectures",
+    "Study Azure API Management for serverless API governance"
+  ]
+}

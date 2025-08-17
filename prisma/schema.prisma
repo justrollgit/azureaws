@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  awsExperience String    // "BEGINNER", "INTERMEDIATE", "ADVANCED"
+  currentRole   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLogin     DateTime?
+  
+  // Relations
+  assessments   Assessment[]
+  progress      LearningProgress[]
+  
+  @@map("users")
+}
+
+model Assessment {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    String
+  score       Int
+  totalQuestions Int
+  answers     String   // JSON string for question IDs and selected answers
+  completedAt DateTime @default(now())
+  
+  @@map("assessments")
+}
+
+model LearningProgress {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  moduleId      String   // e.g., "vm-deployment-lab"
+  moduleType    String   // "lab", "tutorial", "assessment"
+  status        String   @default("NOT_STARTED") // "NOT_STARTED", "IN_PROGRESS", "COMPLETED", "ABANDONED"
+  completedSteps Int     @default(0)
+  totalSteps    Int
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+  lastAccessedAt DateTime @default(now())
+  
+  @@unique([userId, moduleId])
+  @@map("learning_progress")
+}
+
+model LearningPath {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  difficulty  String   // "BEGINNER", "INTERMEDIATE", "ADVANCED"
+  estimatedHours Int
+  prerequisites String  // JSON string for array of required knowledge/certifications
+  modules     String   // JSON string for array of module IDs in order
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("learning_paths")
+}

@@ -1,0 +1,330 @@
+{
+  "id": "cost-optimization-management-lab",
+  "title": "AWS Cost Tools to Azure Cost Management: Advanced Cost Optimization",
+  "category": "cost-optimization",
+  "difficulty": "intermediate",
+  "estimated_time": "120 minutes",
+  "description": "Master cost optimization with comprehensive cost management tools, reserved capacity strategies, and automated cost controls across AWS and Azure",
+  "aws_services": [
+    "Cost Explorer",
+    "AWS Budgets", 
+    "Reserved Instances",
+    "Spot Instances",
+    "Trusted Advisor",
+    "Cost and Usage Reports"
+  ],
+  "azure_services": [
+    "Cost Management + Billing",
+    "Azure Budgets",
+    "Reserved VM Instances", 
+    "Spot Virtual Machines",
+    "Azure Advisor",
+    "Cost Analysis"
+  ],
+  "learning_objectives": [
+    "Compare AWS Cost Explorer and Azure Cost Management capabilities",
+    "Migrate cost monitoring and alerting from AWS Budgets to Azure Budgets",
+    "Transform Reserved Instance strategies to Azure Reservations",
+    "Implement Spot Instance patterns using Azure Spot VMs",
+    "Design automated cost optimization workflows",
+    "Create comprehensive cost governance frameworks",
+    "Implement cost allocation and chargeback models",
+    "Build cost optimization dashboards and reporting"
+  ],
+  "aws_context": {
+    "equivalent_service": "Cost Explorer, AWS Budgets, Reserved Instances",
+    "key_concepts": [
+      "Cost Explorer → Cost Management + Billing",
+      "AWS Budgets → Azure Budgets",
+      "Reserved Instances → Reserved VM Instances",
+      "Spot Instances → Spot Virtual Machines",
+      "Cost and Usage Reports → Cost exports",
+      "Trusted Advisor → Azure Advisor",
+      "Cost Allocation Tags → Cost center tags",
+      "Billing Alerts → Budget alerts"
+    ]
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "Cost Management Fundamentals",
+      "estimated_time": "20 minutes",
+      "description": "Understanding cost optimization principles and comparing AWS vs Azure cost models",
+      "learning_outcomes": [
+        "Understand cloud cost optimization strategies",
+        "Compare AWS and Azure pricing models",
+        "Identify cost optimization opportunities"
+      ],
+      "content": {
+        "theory": {
+          "overview": "Cost optimization is a critical aspect of cloud architecture that requires continuous monitoring, analysis, and optimization of resource usage and spending patterns.",
+          "key_principles": [
+            "Right-sizing resources based on actual usage",
+            "Leveraging reserved capacity for predictable workloads", 
+            "Using spot/preemptible instances for fault-tolerant workloads",
+            "Implementing automated cost controls and alerts",
+            "Regular cost review and optimization cycles"
+          ],
+          "aws_vs_azure": {
+            "cost_management_tools": {
+              "aws": "Cost Explorer provides detailed cost analysis with forecasting, while Budgets enable proactive cost control",
+              "azure": "Cost Management + Billing offers unified cost tracking across subscriptions with advanced analytics"
+            },
+            "reserved_capacity": {
+              "aws": "Reserved Instances offer up to 75% savings with 1-3 year commitments",
+              "azure": "Reserved VM Instances provide similar savings with more flexible exchange options"
+            },
+            "spot_pricing": {
+              "aws": "Spot Instances offer up to 90% savings for interruption-tolerant workloads",
+              "azure": "Spot VMs provide similar savings with eviction policies and notifications"
+            }
+          }
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Cost Model Comparison Analysis",
+            "description": "Compare equivalent workload costs between AWS and Azure",
+            "steps": [
+              "Analyze sample architecture costs in both clouds",
+              "Compare reserved vs on-demand pricing",
+              "Evaluate spot instance savings potential"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-2", 
+      "title": "Cost Explorer to Azure Cost Management Migration",
+      "estimated_time": "30 minutes",
+      "description": "Migrating cost monitoring and analysis from AWS Cost Explorer to Azure Cost Management",
+      "learning_outcomes": [
+        "Configure Azure Cost Management for comprehensive cost tracking",
+        "Create cost analysis views equivalent to Cost Explorer",
+        "Set up cost forecasting and trend analysis"
+      ],
+      "content": {
+        "theory": {
+          "cost_explorer_capabilities": [
+            "Historical cost analysis and trending",
+            "Cost forecasting based on usage patterns", 
+            "Service-level cost breakdown",
+            "Reserved Instance utilization tracking"
+          ],
+          "azure_cost_management": [
+            "Multi-subscription cost aggregation",
+            "Advanced filtering and grouping",
+            "Custom cost views and dashboards",
+            "Integration with Power BI for advanced analytics"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Set Up Azure Cost Management",
+            "description": "Configure comprehensive cost tracking and analysis in Azure",
+            "steps": [
+              "Enable Cost Management for subscriptions",
+              "Create custom cost views for different services",
+              "Configure cost analysis filters and groupings",
+              "Set up automated cost reports"
+            ]
+          },
+          {
+            "title": "Cost Forecasting Implementation", 
+            "description": "Implement cost forecasting equivalent to AWS Cost Explorer",
+            "steps": [
+              "Configure cost forecasting models",
+              "Set up trend analysis for different time periods",
+              "Create forecasting alerts for budget planning"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-3",
+      "title": "Budget and Alert Migration", 
+      "estimated_time": "25 minutes",
+      "description": "Migrating AWS Budgets to Azure Budgets with advanced alerting and automation",
+      "learning_outcomes": [
+        "Create Azure Budgets equivalent to AWS Budget configurations", 
+        "Configure budget alerts and notifications",
+        "Implement automated responses to budget thresholds"
+      ],
+      "content": {
+        "theory": {
+          "aws_budgets_features": [
+            "Cost, usage, and reservation budgets",
+            "Custom budget periods and filters",
+            "Multiple alert thresholds",
+            "Integration with SNS for notifications"
+          ],
+          "azure_budgets_advantages": [
+            "Resource group and subscription scoping",
+            "Integration with Azure Logic Apps for automation",
+            "Advanced budget filters and dimensions",
+            "Cost center and department allocation"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Azure Budget Configuration",
+            "description": "Create comprehensive budgets for cost control",
+            "steps": [
+              "Set up subscription and resource group budgets",
+              "Configure multiple alert thresholds", 
+              "Create usage and cost-based budgets",
+              "Set up email and webhook notifications"
+            ]
+          },
+          {
+            "title": "Automated Budget Response",
+            "description": "Implement automated actions when budgets are exceeded",
+            "steps": [
+              "Create Logic App for budget automation",
+              "Configure resource shutdown for over-budget scenarios", 
+              "Set up approval workflows for budget increases"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-4",
+      "title": "Reserved Capacity Strategy Migration",
+      "estimated_time": "30 minutes", 
+      "description": "Migrating AWS Reserved Instance strategies to Azure Reserved VM Instances",
+      "learning_outcomes": [
+        "Analyze current Reserved Instance utilization",
+        "Design Azure Reserved VM Instance strategy",
+        "Implement reservation management and optimization"
+      ],
+      "content": {
+        "theory": {
+          "reserved_instance_comparison": {
+            "aws_ri_features": [
+              "Standard and Convertible RIs",
+              "1-year and 3-year terms",
+              "Payment options: All/Partial/No upfront",
+              "Instance size flexibility within family"
+            ],
+            "azure_reservations": [
+              "VM Reservations with size flexibility",
+              "Exchange and refund capabilities",
+              "Scope management (subscription/resource group)",
+              "Combined with Hybrid Benefit for additional savings"
+            ]
+          },
+          "optimization_strategies": [
+            "Right-sizing before purchasing reservations",
+            "Analyzing usage patterns for optimal commitment",
+            "Balancing reserved vs on-demand capacity",
+            "Implementing reservation management governance"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Reservation Analysis and Planning",
+            "description": "Analyze workloads and plan optimal reservation strategy",
+            "steps": [
+              "Analyze current VM usage patterns",
+              "Calculate potential savings with reservations",
+              "Plan reservation coverage for different workloads"
+            ]
+          },
+          {
+            "title": "Azure Reservation Purchase and Management",
+            "description": "Purchase and configure Azure reservations",
+            "steps": [
+              "Purchase VM reservations with optimal scope",
+              "Configure reservation sharing across subscriptions",
+              "Set up reservation utilization monitoring"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-5",
+      "title": "Spot Instance to Spot VM Migration",
+      "estimated_time": "15 minutes",
+      "description": "Implementing Azure Spot VMs for cost optimization equivalent to AWS Spot Instances",
+      "learning_outcomes": [
+        "Design fault-tolerant architectures using Spot VMs",
+        "Implement Spot VM pricing and eviction policies",
+        "Configure hybrid spot and regular VM deployments"
+      ],
+      "content": {
+        "theory": {
+          "spot_instance_patterns": {
+            "aws_spot_instances": [
+              "Spot Fleet for automatic instance management",
+              "Interruption notices and handling",
+              "Mixed instance types and AZ distribution"
+            ],
+            "azure_spot_vms": [
+              "Eviction policies (Deallocate vs Delete)",
+              "Max price configuration for cost control",
+              "Integration with VM Scale Sets"
+            ]
+          },
+          "use_cases": [
+            "Batch processing and analytics workloads",
+            "Development and testing environments",
+            "Fault-tolerant distributed applications",
+            "CI/CD build agents"
+          ]
+        },
+        "hands_on_exercises": [
+          {
+            "title": "Spot VM Implementation",
+            "description": "Deploy and configure Azure Spot VMs",
+            "steps": [
+              "Create Spot VMs with appropriate eviction policies",
+              "Configure max price and eviction handling",
+              "Implement workload checkpointing for resilience"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "assessment": {
+    "quiz_questions": [
+      {
+        "question": "What is the main advantage of Azure Cost Management over AWS Cost Explorer?",
+        "options": [
+          "Lower pricing for cost analysis",
+          "Multi-subscription cost aggregation",
+          "Better forecasting accuracy", 
+          "Faster report generation"
+        ],
+        "correct_answer": 1,
+        "explanation": "Azure Cost Management provides unified cost tracking and analysis across multiple subscriptions, which is particularly valuable for enterprise scenarios."
+      },
+      {
+        "question": "How do Azure Reserved VM Instances differ from AWS Reserved Instances?",
+        "options": [
+          "Azure reservations cannot be exchanged",
+          "Azure offers more payment options",
+          "Azure provides better exchange and refund capabilities",
+          "Azure reservations are region-specific only"
+        ],
+        "correct_answer": 2,
+        "explanation": "Azure reservations offer more flexible exchange and refund policies compared to AWS Reserved Instances."
+      }
+    ]
+  },
+  "next_steps": {
+    "recommended_follow_up": [
+      "advanced-security-monitoring-lab",
+      "disaster-recovery-business-continuity-lab",
+      "well-architected-framework-lab"
+    ],
+    "additional_resources": [
+      "Azure Cost Management documentation",
+      "Azure Reserved VM Instances guide",
+      "Cost optimization best practices"
+    ]
+  }
+}

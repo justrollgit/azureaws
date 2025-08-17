@@ -1,0 +1,1437 @@
+{
+  "lab_metadata": {
+    "id": "saa-c03-security-deep-dive-lab",
+    "title": "AWS Security Architecture to Azure Security: Advanced IAM, Network Security, and Compliance Deep-Dive",
+    "category": "security-architecture",
+    "difficulty": "expert",
+    "estimated_time": "185 minutes",
+    "description": "Master enterprise-scale security architecture by migrating from AWS advanced security patterns to Azure security solutions with comprehensive IAM, network security, threat protection, and compliance frameworks",
+    "aws_services": ["IAM", "Organizations", "SSO", "GuardDuty", "Security Hub", "WAF", "Shield", "Secrets Manager", "KMS", "CloudTrail", "Config"],
+    "azure_services": ["Azure AD", "Privileged Identity Management", "Security Center", "Sentinel", "Key Vault", "Application Gateway WAF", "DDoS Protection", "Azure Monitor", "Policy"],
+    "tags": ["security", "iam", "compliance", "threat-protection", "encryption", "saa-c03-critical", "enterprise"],
+    "prerequisites": [
+      "Understanding of enterprise security frameworks and zero trust principles",
+      "Knowledge of identity and access management concepts and best practices",
+      "Familiarity with network security patterns and threat protection strategies", 
+      "Experience with encryption, key management, and compliance requirements",
+      "Understanding of security monitoring, incident response, and threat detection"
+    ],
+    "learning_objectives": [
+      "Migrate AWS IAM advanced patterns to Azure AD with cross-account and federation strategies",
+      "Transform AWS Organizations security to Azure AD multi-tenant and cross-tenant patterns",
+      "Convert AWS SSO to Azure AD SSO with advanced conditional access and MFA",
+      "Implement GuardDuty equivalent using Azure Security Center and Sentinel",
+      "Establish WAF and Shield protection using Azure Application Gateway and DDoS Protection",
+      "Migrate KMS and Secrets Manager to Azure Key Vault with advanced encryption patterns",
+      "Design comprehensive compliance frameworks with automated security validation"
+    ]
+  },
+  "scenario": {
+    "title": "Global Financial Institution Security Architecture Migration",
+    "description": "SecureBank operates a global financial platform serving 50M+ customers across 40 countries with stringent regulatory requirements including PCI DSS Level 1, SOX, GDPR, and Basel III compliance. They need to migrate from AWS to Azure while enhancing security posture, implementing zero trust architecture, and maintaining 99.99% availability with comprehensive threat protection.",
+    "business_requirements": [
+      "Zero trust security architecture with identity-centric access control across 5,000+ employees",
+      "Advanced threat protection with real-time detection, analysis, and automated response",
+      "Multi-regulatory compliance (PCI DSS, SOX, GDPR, Basel III) with automated validation",
+      "Cross-account and cross-tenant security with federated identity management",
+      "Enterprise-scale encryption with customer-managed keys and HSM integration",
+      "Comprehensive security monitoring with 24/7 SOC integration and incident response",
+      "Advanced network security with micro-segmentation and threat intelligence integration"
+    ],
+    "current_aws_architecture": [
+      "Multi-account setup with AWS Organizations and cross-account IAM roles",
+      "AWS SSO with SAML federation and advanced MFA requirements", 
+      "GuardDuty and Security Hub for centralized threat detection and security monitoring",
+      "AWS WAF and Shield Advanced for application layer protection",
+      "KMS with customer-managed keys and CloudHSM for encryption",
+      "Comprehensive CloudTrail and Config for audit logging and compliance"
+    ],
+    "target_azure_architecture": [
+      "Multi-tenant Azure AD with cross-tenant B2B collaboration and identity governance",
+      "Azure AD SSO with conditional access, MFA, and risk-based authentication",
+      "Azure Security Center and Sentinel for unified security monitoring and SIEM",
+      "Application Gateway WAF and DDoS Protection for comprehensive application security",
+      "Azure Key Vault with managed HSM and customer-managed encryption keys",
+      "Azure Monitor and Policy for continuous compliance monitoring and automated remediation"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Advanced Identity Architecture: AWS IAM to Azure AD Enterprise",
+      "estimated_time": "60 minutes", 
+      "description": "Implement enterprise-scale identity and access management with advanced patterns",
+      "aws_context": {
+        "service": "AWS IAM + Organizations + SSO",
+        "description": "Comprehensive identity management with cross-account access and federation",
+        "key_features": [
+          "Cross-account IAM roles with trust relationships and external ID",
+          "AWS SSO with SAML 2.0 federation and permission sets",
+          "Advanced MFA with hardware tokens and risk-based authentication",
+          "Identity Center integration with external identity providers",
+          "Organizational units with service control policies for governance"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure AD Premium + PIM + B2B",
+        "description": "Enterprise identity platform with advanced governance and security",
+        "key_features": [
+          "Cross-tenant B2B collaboration with conditional access policies",
+          "Privileged Identity Management with time-bound role activation",
+          "Risk-based conditional access with machine learning threat detection",
+          "Seamless SSO with SAML, OIDC, and custom application integration",
+          "Identity governance with access reviews and lifecycle management"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise Azure AD with Advanced Identity Governance",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure AD Premium with enterprise security features",
+              "aws_context": "Similar to AWS Organizations with cross-account IAM roles and SSO",
+              "azure_ad_deployment": {
+                "tenant_configuration": {
+                  "tenant_name": "securebank.onmicrosoft.com",
+                  "custom_domain": "securebank.com", 
+                  "license_type": "Azure AD Premium P2",
+                  "security_defaults": false,
+                  "external_collaboration_settings": {
+                    "guest_user_access": "Limited access",
+                    "guest_invite_restrictions": "Admins and users in guest inviter role",
+                    "collaboration_restrictions": "Allow invitations to any domain",
+                    "b2b_direct_connect": "Enabled for trusted partners"
+                  }
+                },
+                "directory_structure": {
+                  "organizational_units": [
+                    {
+                      "name": "Corporate Banking",
+                      "description": "Corporate banking division users and resources",
+                      "members": ["corp-banking-users", "corp-banking-admins"],
+                      "administrative_units": [
+                        {
+                          "name": "Corporate Banking - Americas",
+                          "scope": "/users/corp-banking AND /groups/americas"
+                        },
+                        {
+                          "name": "Corporate Banking - EMEA", 
+                          "scope": "/users/corp-banking AND /groups/emea"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Investment Banking",
+                      "description": "Investment banking high-security division",
+                      "members": ["investment-banking-users", "investment-banking-admins"],
+                      "security_requirements": "Enhanced security with mandatory MFA and device compliance"
+                    },
+                    {
+                      "name": "IT Operations",
+                      "description": "IT infrastructure and security operations",
+                      "members": ["platform-admins", "security-team", "devops-engineers"],
+                      "privileged_access": true
+                    }
+                  ]
+                },
+                "custom_security_attributes": [
+                  {
+                    "attribute_set": "SecureBank",
+                    "attributes": [
+                      {
+                        "name": "SecurityClearance",
+                        "type": "String",
+                        "values": ["Public", "Internal", "Confidential", "Restricted"],
+                        "multi_valued": false
+                      },
+                      {
+                        "name": "DataClassification",
+                        "type": "String", 
+                        "values": ["PII", "Financial", "Trading", "Compliance"],
+                        "multi_valued": true
+                      },
+                      {
+                        "name": "GeographicRestriction",
+                        "type": "String",
+                        "values": ["Global", "Americas", "EMEA", "APAC"],
+                        "multi_valued": false
+                      }
+                    ]
+                  }
+                ],
+                "azure_cli_setup": "az ad tenant show && az ad user create --display-name 'Banking Admin' --user-principal-name admin@securebank.com --password SecureP@ssw0rd123 --force-change-password-next-sign-in"
+              },
+              "explanation": "Creates enterprise-scale Azure AD tenant with advanced organizational structure and security attributes"
+            },
+            {
+              "step": 2,
+              "description": "Configure advanced cross-tenant and cross-account access patterns",
+              "cross_tenant_security": {
+                "b2b_collaboration": {
+                  "external_organizations": [
+                    {
+                      "organization": "regulatory-authority.gov",
+                      "trust_level": "High",
+                      "allowed_applications": ["Compliance Portal", "Audit Management"],
+                      "conditional_access": {
+                        "require_mfa": true,
+                        "require_compliant_device": true,
+                        "allowed_locations": ["Named Location: Regulatory Offices"],
+                        "session_controls": {
+                          "sign_in_frequency": "4 hours",
+                          "persistent_browser_session": false
+                        }
+                      }
+                    },
+                    {
+                      "organization": "audit-firm.com",
+                      "trust_level": "Medium",
+                      "allowed_applications": ["Read-only Financial Reports"],
+                      "access_restrictions": {
+                        "time_limited_access": "During audit periods only",
+                        "approval_workflow": "Required with dual approval",
+                        "maximum_session_duration": "2 hours"
+                      }
+                    },
+                    {
+                      "organization": "technology-partner.com",
+                      "trust_level": "Medium",
+                      "allowed_applications": ["Development Environment", "Testing Tools"],
+                      "security_requirements": {
+                        "require_mfa": true,
+                        "allowed_ip_ranges": ["198.51.100.0/24", "203.0.113.0/24"],
+                        "device_compliance": "Required"
+                      }
+                    }
+                  ]
+                },
+                "cross_tenant_access_settings": {
+                  "default_settings": {
+                    "b2b_collaboration": "Block all by default",
+                    "b2b_direct_connect": "Block all by default",
+                    "inbound_trust": "Do not trust MFA and device claims"
+                  },
+                  "organization_specific_settings": [
+                    {
+                      "organization": "regulatory-authority.gov",
+                      "b2b_collaboration": {
+                        "applications": "Allow specific applications only",
+                        "users": "Allow invited users only"
+                      },
+                      "inbound_trust": {
+                        "trust_mfa": true,
+                        "trust_compliant_device": true,
+                        "trust_hybrid_azure_ad_joined": false
+                      }
+                    }
+                  ]
+                },
+                "identity_governance": {
+                  "access_reviews": [
+                    {
+                      "review_name": "Quarterly Guest User Access Review",
+                      "scope": "All guest users",
+                      "reviewers": ["Resource owners", "Security team"],
+                      "frequency": "Quarterly",
+                      "auto_apply_decisions": true,
+                      "default_decision": "Remove access"
+                    },
+                    {
+                      "review_name": "Privileged Role Access Review",
+                      "scope": "All privileged roles",
+                      "reviewers": ["Role owners", "Security administrators"],
+                      "frequency": "Monthly",
+                      "require_justification": true
+                    }
+                  ],
+                  "entitlement_management": {
+                    "access_packages": [
+                      {
+                        "package_name": "Corporate Banking Access",
+                        "description": "Standard access for corporate banking employees",
+                        "resources": ["Office 365", "Banking Applications", "File Shares"],
+                        "policies": [
+                          {
+                            "policy_name": "Employee Access",
+                            "requestors": "Internal users in Corporate Banking OU",
+                            "approval": "Manager approval required",
+                            "assignment_duration": "365 days with renewal"
+                          }
+                        ]
+                      },
+                      {
+                        "package_name": "External Auditor Access",
+                        "description": "Time-limited access for external auditors",
+                        "resources": ["Audit Reports", "Compliance Documents"],
+                        "policies": [
+                          {
+                            "policy_name": "Auditor Access",
+                            "requestors": "External users from approved audit firms",
+                            "approval": "Dual approval: Security team and Audit manager",
+                            "assignment_duration": "90 days maximum",
+                            "access_review": "Weekly during audit period"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "explanation": "Implements advanced cross-tenant security with comprehensive identity governance and access management"
+            },
+            {
+              "step": 3,
+              "description": "Configure Privileged Identity Management with zero trust principles",
+              "privileged_identity_management": {
+                "pim_configuration": {
+                  "eligible_roles": [
+                    {
+                      "role_name": "Global Administrator",
+                      "eligible_users": ["emergency-admin@securebank.com"],
+                      "settings": {
+                        "activation_maximum_duration": "1 hour",
+                        "require_justification": true,
+                        "require_ticket_info": true,
+                        "require_approval": true,
+                        "approvers": ["Security Leadership Team"],
+                        "notification_settings": {
+                          "send_notifications": "All",
+                          "critical_emails": ["ciso@securebank.com", "ceo@securebank.com"]
+                        }
+                      }
+                    },
+                    {
+                      "role_name": "Security Administrator",
+                      "eligible_users": ["security-team@securebank.com"],
+                      "settings": {
+                        "activation_maximum_duration": "4 hours",
+                        "require_mfa": true,
+                        "require_justification": true,
+                        "conditional_access_authentication_context": "c1"
+                      }
+                    },
+                    {
+                      "role_name": "Application Administrator",
+                      "eligible_users": ["app-admins@securebank.com"],
+                      "settings": {
+                        "activation_maximum_duration": "8 hours",
+                        "require_mfa": true,
+                        "activation_rules": {
+                          "require_azure_mfa": true,
+                          "require_justification": true,
+                          "require_ticket_info": false
+                        }
+                      }
+                    }
+                  ],
+                  "azure_resource_roles": [
+                    {
+                      "resource_type": "Subscription",
+                      "resource_name": "Production Banking Subscription",
+                      "role_name": "Owner",
+                      "eligible_users": ["platform-leads@securebank.com"],
+                      "settings": {
+                        "activation_maximum_duration": "2 hours",
+                        "require_approval": true,
+                        "approvers": ["Security Team", "Infrastructure Leads"],
+                        "assignment_type": "Eligible"
+                      }
+                    },
+                    {
+                      "resource_type": "Resource Group",
+                      "resource_name": "rg-banking-core-prod",
+                      "role_name": "Contributor",
+                      "eligible_users": ["banking-app-team@securebank.com"],
+                      "settings": {
+                        "activation_maximum_duration": "4 hours",
+                        "require_mfa": true,
+                        "require_justification": true
+                      }
+                    }
+                  ]
+                },
+                "access_review_automation": {
+                  "privileged_role_reviews": [
+                    {
+                      "review_name": "Monthly Global Admin Review",
+                      "scope": "Global Administrator role assignments",
+                      "frequency": "Monthly",
+                      "reviewers": ["Role assignees", "Security team"],
+                      "auto_apply_decisions": false,
+                      "reminder_notifications": true
+                    },
+                    {
+                      "review_name": "Quarterly Azure Resource Role Review",
+                      "scope": "All Azure resource role assignments",
+                      "frequency": "Quarterly",
+                      "reviewers": ["Resource owners"],
+                      "backup_reviewers": ["Security administrators"],
+                      "auto_apply_decisions": true
+                    }
+                  ]
+                },
+                "privileged_access_workstations": {
+                  "paw_configuration": {
+                    "device_compliance_policy": "High security baseline",
+                    "conditional_access_requirements": [
+                      "Require hybrid Azure AD joined device",
+                      "Require device to be marked as compliant",
+                      "Require approved client app",
+                      "Require app protection policy"
+                    ],
+                    "allowed_applications": [
+                      "Azure portal",
+                      "Azure CLI",
+                      "PowerShell with constrained endpoints",
+                      "Microsoft Admin portals"
+                    ]
+                  }
+                }
+              },
+              "explanation": "Establishes enterprise-grade privileged access management with zero trust and comprehensive governance"
+            },
+            {
+              "step": 4,
+              "description": "Implement advanced conditional access and risk-based authentication",
+              "conditional_access_policies": {
+                "baseline_security_policies": [
+                  {
+                    "policy_name": "Baseline - Require MFA for All Users",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": "All users",
+                        "exclude": ["Emergency access accounts", "Service accounts"]
+                      },
+                      "cloud_apps": "All cloud apps",
+                      "conditions": {
+                        "sign_in_risk": "Any",
+                        "user_risk": "Any",
+                        "platforms": "Any",
+                        "locations": "Any",
+                        "client_apps": "Any"
+                      }
+                    },
+                    "access_controls": {
+                      "grant": {
+                        "require_mfa": true,
+                        "require_compliant_device": false,
+                        "require_hybrid_joined_device": false
+                      }
+                    }
+                  },
+                  {
+                    "policy_name": "High-Risk Users - Block Access",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": "All users",
+                        "exclude": ["Emergency access accounts"]
+                      },
+                      "cloud_apps": "All cloud apps",
+                      "user_risk": "High"
+                    },
+                    "access_controls": {
+                      "grant": "Block access"
+                    }
+                  }
+                ],
+                "application_specific_policies": [
+                  {
+                    "policy_name": "Banking Applications - Enhanced Security",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": "All users"
+                      },
+                      "cloud_apps": ["Core Banking System", "Trading Platform", "Risk Management"],
+                      "locations": {
+                        "include": "All locations",
+                        "exclude": ["Trusted corporate networks"]
+                      }
+                    },
+                    "access_controls": {
+                      "grant": {
+                        "require_mfa": true,
+                        "require_compliant_device": true,
+                        "require_app_protection_policy": true,
+                        "authentication_context": "c1"
+                      },
+                      "session": {
+                        "sign_in_frequency": "4 hours",
+                        "persistent_browser_session": "Never",
+                        "cloud_app_security": {
+                          "use_app_enforced_restrictions": true,
+                          "monitor_only": false
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "policy_name": "Administrative Portals - Zero Trust",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": ["IT Operations", "Security Team"],
+                        "exclude": ["Emergency access accounts"]
+                      },
+                      "cloud_apps": ["Azure portal", "Microsoft 365 admin center", "Azure AD admin center"]
+                    },
+                    "access_controls": {
+                      "grant": {
+                        "require_mfa": true,
+                        "require_compliant_device": true,
+                        "require_hybrid_joined_device": true,
+                        "require_approved_client_app": true
+                      },
+                      "session": {
+                        "sign_in_frequency": "1 hour",
+                        "persistent_browser_session": "Never"
+                      }
+                    }
+                  }
+                ],
+                "location_based_policies": [
+                  {
+                    "policy_name": "Untrusted Locations - Additional Verification",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": "All users"
+                      },
+                      "cloud_apps": "All cloud apps",
+                      "locations": {
+                        "include": "All locations",
+                        "exclude": ["All trusted locations"]
+                      }
+                    },
+                    "access_controls": {
+                      "grant": {
+                        "require_mfa": true,
+                        "require_compliant_device": true,
+                        "custom_controls": ["Additional verification required"]
+                      }
+                    }
+                  }
+                ],
+                "risk_based_policies": [
+                  {
+                    "policy_name": "Medium Risk Sign-ins - Require Password Change",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": "All users"
+                      },
+                      "sign_in_risk": "Medium",
+                      "cloud_apps": "All cloud apps"
+                    },
+                    "access_controls": {
+                      "grant": {
+                        "require_mfa": true,
+                        "require_password_change": true
+                      }
+                    }
+                  },
+                  {
+                    "policy_name": "High Risk Sign-ins - Block",
+                    "state": "Enabled",
+                    "conditions": {
+                      "users": {
+                        "include": "All users",
+                        "exclude": ["Emergency access accounts"]
+                      },
+                      "sign_in_risk": "High",
+                      "cloud_apps": "All cloud apps"
+                    },
+                    "access_controls": {
+                      "grant": "Block access"
+                    }
+                  }
+                ]
+              },
+              "explanation": "Implements comprehensive conditional access with risk-based authentication and zero trust principles"
+            }
+          ],
+          "validation": [
+            "Verify Azure AD tenant supports enterprise-scale identity governance",
+            "Test cross-tenant B2B collaboration with security controls",
+            "Confirm PIM enables secure privileged access with proper approvals",
+            "Validate conditional access policies enforce zero trust requirements"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Advanced Threat Protection: GuardDuty to Security Center & Sentinel",
+      "estimated_time": "50 minutes",
+      "description": "Implement comprehensive threat detection and response automation",
+      "aws_context": {
+        "service": "AWS GuardDuty + Security Hub",
+        "description": "AI-powered threat detection with centralized security management",
+        "key_features": [
+          "Machine learning-based threat detection with behavioral analysis",
+          "DNS, VPC Flow Logs, and CloudTrail data analysis",
+          "Integration with Security Hub for centralized findings management",
+          "Custom threat intelligence feeds and allowlists",
+          "Automated response through EventBridge and Lambda functions"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Security Center + Sentinel",
+        "description": "Cloud-native SIEM with advanced threat hunting and automated response",
+        "key_features": [
+          "AI and machine learning-powered threat detection and hunting",
+          "Integration with Microsoft threat intelligence and security research",
+          "Custom analytics rules with KQL queries for threat detection",
+          "Automated investigation and response with playbooks",
+          "Advanced threat hunting with Jupyter notebooks and investigation tools"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Advanced Threat Detection and Response Platform",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure Security Center with advanced threat protection",
+              "security_center_deployment": {
+                "security_center_configuration": {
+                  "pricing_tier": "Standard",
+                  "auto_provisioning": {
+                    "log_analytics_agent": "On",
+                    "vulnerability_assessment": "On",
+                    "security_policy": "On",
+                    "security_configurations": "On"
+                  },
+                  "email_notifications": {
+                    "security_contact_emails": ["security@securebank.com", "soc@securebank.com"],
+                    "alert_notifications": "On",
+                    "alerts_to_admins": "On",
+                    "phone_number": "+1-555-0199"
+                  },
+                  "threat_protection_services": [
+                    {
+                      "service": "Azure Defender for Servers",
+                      "enabled": true,
+                      "configuration": {
+                        "vulnerability_assessment": "Qualys integrated solution",
+                        "adaptive_application_controls": "Enabled",
+                        "adaptive_network_hardening": "Enabled",
+                        "file_integrity_monitoring": "Enabled"
+                      }
+                    },
+                    {
+                      "service": "Azure Defender for SQL",
+                      "enabled": true,
+                      "configuration": {
+                        "advanced_threat_protection": "Enabled",
+                        "vulnerability_assessment": "Enabled",
+                        "data_discovery_and_classification": "Enabled"
+                      }
+                    },
+                    {
+                      "service": "Azure Defender for Storage",
+                      "enabled": true,
+                      "configuration": {
+                        "malware_scanning": "Enabled",
+                        "sensitive_data_discovery": "Enabled",
+                        "activity_monitoring": "Enabled"
+                      }
+                    },
+                    {
+                      "service": "Azure Defender for Key Vault",
+                      "enabled": true,
+                      "configuration": {
+                        "threat_detection": "Enabled",
+                        "access_anomaly_detection": "Enabled"
+                      }
+                    },
+                    {
+                      "service": "Azure Defender for Resource Manager",
+                      "enabled": true,
+                      "configuration": {
+                        "suspicious_resource_manager_operations": "Enabled",
+                        "privilege_escalation_detection": "Enabled"
+                      }
+                    }
+                  ]
+                },
+                "custom_security_policies": [
+                  {
+                    "policy_name": "SecureBank Financial Services Security Standard",
+                    "description": "Enhanced security requirements for financial services",
+                    "policy_rules": [
+                      {
+                        "rule_name": "Require encryption for all storage accounts",
+                        "effect": "Deny",
+                        "condition": "Storage account encryption not enabled"
+                      },
+                      {
+                        "rule_name": "Require private endpoints for PaaS services",
+                        "effect": "Audit",
+                        "condition": "PaaS service accessible from public internet"
+                      },
+                      {
+                        "rule_name": "Require disk encryption for all VMs",
+                        "effect": "DeployIfNotExists",
+                        "condition": "VM disk encryption not enabled"
+                      }
+                    ]
+                  }
+                ],
+                "regulatory_compliance": {
+                  "compliance_standards": [
+                    "PCI DSS 3.2.1",
+                    "ISO 27001:2013",
+                    "SOC 2 Type 2",
+                    "NIST Cybersecurity Framework",
+                    "CIS Microsoft Azure Foundations Benchmark"
+                  ],
+                  "continuous_compliance_assessment": true,
+                  "compliance_reporting": {
+                    "frequency": "Daily",
+                    "recipients": ["compliance@securebank.com", "audit@securebank.com"],
+                    "format": "Detailed dashboard with executive summary"
+                  }
+                }
+              },
+              "explanation": "Establishes comprehensive cloud security posture management with regulatory compliance"
+            },
+            {
+              "step": 2,
+              "description": "Deploy Azure Sentinel with advanced threat detection and hunting",
+              "sentinel_deployment": {
+                "workspace_configuration": {
+                  "name": "securebank-sentinel-workspace",
+                  "location": "East US",
+                  "pricing_tier": "PerGB2018",
+                  "retention_days": 730,
+                  "daily_quota_gb": 100,
+                  "data_export_rules": [
+                    {
+                      "destination": "Long-term storage account",
+                      "table_names": ["SecurityEvent", "SigninLogs", "AuditLogs"],
+                      "enabled": true
+                    }
+                  ]
+                },
+                "data_connectors": [
+                  {
+                    "connector": "Azure Active Directory",
+                    "data_types": ["SigninLogs", "AuditLogs", "NonInteractiveUserSignInLogs", "ServicePrincipalSignInLogs", "ManagedIdentitySignInLogs", "ProvisioningLogs"]
+                  },
+                  {
+                    "connector": "Azure Security Center",
+                    "data_types": ["SecurityAlerts", "SecurityRecommendations"]
+                  },
+                  {
+                    "connector": "Azure Activity",
+                    "subscriptions": ["Production", "Staging", "Development"]
+                  },
+                  {
+                    "connector": "Office 365",
+                    "data_types": ["Exchange", "SharePoint", "Teams"]
+                  },
+                  {
+                    "connector": "Microsoft Cloud App Security",
+                    "data_types": ["Alerts", "Discovery Logs"]
+                  },
+                  {
+                    "connector": "Azure Information Protection",
+                    "data_types": ["InformationProtectionLogs_CL"]
+                  },
+                  {
+                    "connector": "Threat Intelligence Platforms",
+                    "platforms": ["Microsoft Threat Intelligence", "AlienVault OTX", "MISP"]
+                  }
+                ],
+                "analytics_rules": [
+                  {
+                    "rule_name": "Suspicious Login Activity",
+                    "description": "Detect unusual login patterns and potential account compromise",
+                    "severity": "High",
+                    "tactics": ["Initial Access", "Credential Access"],
+                    "techniques": ["T1078", "T1110"],
+                    "query": "SigninLogs\n| where TimeGenerated > ago(1h)\n| where ResultType != 0\n| summarize FailureCount = count(), IPAddresses = make_set(IPAddress), Locations = make_set(Location) by UserPrincipalName, bin(TimeGenerated, 5m)\n| where FailureCount > 5\n| extend AccountCustomEntity = UserPrincipalName, IPCustomEntity = tostring(IPAddresses[0])",
+                    "query_frequency": "PT5M",
+                    "query_period": "PT1H",
+                    "trigger_operator": "GreaterThan",
+                    "trigger_threshold": 0,
+                    "suppression_enabled": false
+                  },
+                  {
+                    "rule_name": "Privileged Account Activity Anomaly",
+                    "description": "Detect unusual activity from privileged accounts",
+                    "severity": "High",
+                    "tactics": ["Privilege Escalation", "Lateral Movement"],
+                    "techniques": ["T1078.004"],
+                    "query": "AuditLogs\n| where TimeGenerated > ago(1h)\n| where OperationName has_any ('Add member to role', 'Remove member from role', 'Update role')\n| where Result == 'success'\n| extend TargetResources = todynamic(TargetResources)\n| mv-expand TargetResources\n| extend RoleName = tostring(TargetResources.displayName)\n| where RoleName has_any ('Global Administrator', 'Security Administrator', 'Application Administrator')\n| extend InitiatedByUser = tostring(InitiatedBy.user.userPrincipalName)\n| extend TargetUser = tostring(TargetResources.userPrincipalName)\n| project TimeGenerated, OperationName, InitiatedByUser, TargetUser, RoleName, AdditionalDetails",
+                    "query_frequency": "PT15M",
+                    "query_period": "PT1H",
+                    "trigger_operator": "GreaterThan",
+                    "trigger_threshold": 0
+                  },
+                  {
+                    "rule_name": "Suspicious Resource Creation",
+                    "description": "Detect creation of suspicious Azure resources",
+                    "severity": "Medium",
+                    "tactics": ["Defense Evasion", "Persistence"],
+                    "techniques": ["T1562", "T1078"],
+                    "query": "AzureActivity\n| where TimeGenerated > ago(1h)\n| where OperationNameValue == 'Microsoft.Compute/virtualMachines/write'\n| where ActivityStatusValue == 'Success'\n| extend ResourceId = tostring(Properties.resource)\n| extend Caller = tostring(Caller)\n| join kind=inner (\n    AzureActivity\n    | where TimeGenerated > ago(1d)\n    | where Caller != ''\n    | summarize ResourceCount = count() by Caller\n    | where ResourceCount < 5\n) on Caller\n| project TimeGenerated, Caller, ResourceId, ResourceGroup, SubscriptionId",
+                    "query_frequency": "PT30M",
+                    "query_period": "PT1H",
+                    "trigger_operator": "GreaterThan",
+                    "trigger_threshold": 0
+                  }
+                ],
+                "hunting_queries": [
+                  {
+                    "query_name": "Anomalous Azure AD Application Permissions",
+                    "category": "Persistence",
+                    "description": "Hunt for applications granted high-risk permissions",
+                    "query": "AuditLogs\n| where OperationName == 'Consent to application'\n| extend AppDisplayName = tostring(TargetResources[0].displayName)\n| extend Permissions = tostring(TargetResources[0].modifiedProperties[0].newValue)\n| where Permissions has_any ('Directory.ReadWrite.All', 'User.ReadWrite.All', 'Mail.ReadWrite')\n| project TimeGenerated, AppDisplayName, Permissions, InitiatedBy",
+                    "techniques": ["T1098"]
+                  },
+                  {
+                    "query_name": "Rare Network Connections",
+                    "category": "Command and Control",
+                    "description": "Hunt for rare network connections from Azure resources",
+                    "query": "AzureNetworkAnalytics_CL\n| where FlowDirection_s == 'O'\n| summarize ConnectionCount = count() by DestIP_s\n| where ConnectionCount < 5\n| join kind=inner (\n    AzureNetworkAnalytics_CL\n    | where FlowDirection_s == 'O'\n) on DestIP_s\n| project TimeGenerated, SrcIP_s, DestIP_s, DestPort_d, ConnectionCount",
+                    "techniques": ["T1071"]
+                  }
+                ],
+                "automated_response_playbooks": [
+                  {
+                    "playbook_name": "Incident Response - Account Compromise",
+                    "trigger": "High severity alert involving user account",
+                    "actions": [
+                      {
+                        "action": "Disable user account",
+                        "service": "Azure AD",
+                        "automated": true
+                      },
+                      {
+                        "action": "Force sign-out from all sessions",
+                        "service": "Azure AD",
+                        "automated": true
+                      },
+                      {
+                        "action": "Create high-priority incident",
+                        "service": "Azure Sentinel",
+                        "automated": true
+                      },
+                      {
+                        "action": "Notify SOC team",
+                        "service": "Microsoft Teams",
+                        "automated": true
+                      },
+                      {
+                        "action": "Initiate forensic data collection",
+                        "service": "Azure Security Center",
+                        "automated": false,
+                        "approval_required": true
+                      }
+                    ]
+                  },
+                  {
+                    "playbook_name": "Malware Detection Response",
+                    "trigger": "Malware detected in Azure Storage or Compute",
+                    "actions": [
+                      {
+                        "action": "Isolate affected resource",
+                        "service": "Azure Network Security Groups",
+                        "automated": true
+                      },
+                      {
+                        "action": "Create snapshot for forensics",
+                        "service": "Azure Snapshots",
+                        "automated": true
+                      },
+                      {
+                        "action": "Update threat intelligence feeds",
+                        "service": "Microsoft Threat Intelligence",
+                        "automated": true
+                      },
+                      {
+                        "action": "Notify security team with details",
+                        "service": "Email/Teams",
+                        "automated": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Deploys enterprise SIEM with advanced threat detection, hunting, and automated response"
+            }
+          ],
+          "validation": [
+            "Verify Security Center provides comprehensive security posture visibility",
+            "Test Sentinel analytics rules detect simulated security incidents",
+            "Confirm automated response playbooks execute correctly",
+            "Validate threat hunting queries identify suspicious activities"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Advanced Application Security: WAF to Application Gateway Security",
+      "estimated_time": "45 minutes",
+      "description": "Implement comprehensive application layer security and protection",
+      "aws_context": {
+        "service": "AWS WAF + Shield Advanced",
+        "description": "Application layer protection with advanced threat mitigation",
+        "key_features": [
+          "WAF with OWASP rule sets and custom security rules",
+          "Shield Advanced for enhanced DDoS protection and response",
+          "Rate limiting and geographic blocking capabilities",
+          "Bot management with behavioral analysis",
+          "Integration with CloudFront and Application Load Balancer"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Application Gateway WAF + DDoS Protection",
+        "description": "Comprehensive application security with intelligent threat protection",
+        "key_features": [
+          "WAF v2 with OWASP rules and custom security policies",
+          "DDoS Protection Standard and Premium with mitigation",
+          "Bot protection with machine learning detection",
+          "Geo-filtering and rate limiting with custom rules",
+          "Integration with Azure Security Center and Sentinel"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Advanced Application Security with Intelligent Protection",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Application Gateway WAF with advanced security rules",
+              "application_gateway_waf": {
+                "waf_configuration": {
+                  "firewall_mode": "Prevention",
+                  "rule_set_type": "OWASP",
+                  "rule_set_version": "3.2",
+                  "request_body_check": true,
+                  "max_request_body_size_in_kb": 128,
+                  "file_upload_limit_in_mb": 100,
+                  "exclusions": [
+                    {
+                      "match_variable": "RequestArgNames",
+                      "selector_match_operator": "Equals",
+                      "selector": "legitimate_parameter"
+                    }
+                  ]
+                },
+                "custom_rules": [
+                  {
+                    "name": "BlockMaliciousUserAgents",
+                    "priority": 100,
+                    "rule_type": "MatchRule",
+                    "action": "Block",
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "RequestHeaders",
+                            "selector": "User-Agent"
+                          }
+                        ],
+                        "operator": "Contains",
+                        "negation_condition": false,
+                        "match_values": [
+                          "sqlmap",
+                          "nmap", 
+                          "nikto",
+                          "dirb",
+                          "masscan",
+                          "nessus",
+                          "openvas",
+                          "w3af",
+                          "burpsuite"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RateLimitingPerIP",
+                    "priority": 200,
+                    "rule_type": "RateLimitRule",
+                    "action": "Block",
+                    "rate_limit_duration_in_minutes": 1,
+                    "rate_limit_threshold": 100,
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "RemoteAddr"
+                          }
+                        ],
+                        "operator": "IPMatch",
+                        "negation_condition": false,
+                        "match_values": ["0.0.0.0/0"]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "GeoBlockHighRiskCountries",
+                    "priority": 300,
+                    "rule_type": "MatchRule",
+                    "action": "Block",
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "RemoteAddr"
+                          }
+                        ],
+                        "operator": "GeoMatch",
+                        "negation_condition": false,
+                        "match_values": ["CN", "RU", "KP", "IR", "SY"]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SQLInjectionProtection",
+                    "priority": 400,
+                    "rule_type": "MatchRule",
+                    "action": "Block",
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "QueryString"
+                          },
+                          {
+                            "variable_name": "PostArgs"
+                          }
+                        ],
+                        "operator": "Regex",
+                        "negation_condition": false,
+                        "match_values": [
+                          "(?i)(union\\s+select|select\\s+.*\\s+from|insert\\s+into|delete\\s+from|drop\\s+table)",
+                          "(?i)(or\\s+1=1|and\\s+1=1|\\'\\s+or\\s+\\'|\\\"\\s+or\\s+\\\")"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "managed_rule_sets": [
+                  {
+                    "rule_set_type": "OWASP",
+                    "rule_set_version": "3.2",
+                    "rule_group_overrides": [
+                      {
+                        "rule_group_name": "REQUEST-942-APPLICATION-ATTACK-SQLI",
+                        "disabled_rules": [],
+                        "rules": [
+                          {
+                            "rule_id": "942100",
+                            "enabled": true,
+                            "action": "Block"
+                          },
+                          {
+                            "rule_id": "942200",
+                            "enabled": true,
+                            "action": "Block"
+                          }
+                        ]
+                      },
+                      {
+                        "rule_group_name": "REQUEST-931-APPLICATION-ATTACK-RFI",
+                        "disabled_rules": [],
+                        "rules": [
+                          {
+                            "rule_id": "931100",
+                            "enabled": true,
+                            "action": "Block"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "rule_set_type": "Microsoft_BotManagerRuleSet",
+                    "rule_set_version": "0.1",
+                    "rule_group_overrides": [
+                      {
+                        "rule_group_name": "BadBots",
+                        "rules": [
+                          {
+                            "rule_id": "200002",
+                            "enabled": true,
+                            "action": "Block"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Deploys comprehensive WAF protection with advanced security rules and bot management"
+            }
+          ],
+          "validation": [
+            "Verify WAF blocks malicious requests and attack patterns",
+            "Test rate limiting prevents abuse and DDoS attempts",
+            "Confirm geo-blocking restricts access from high-risk countries",
+            "Validate bot protection identifies and blocks malicious bots"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Advanced Encryption and Key Management",
+      "estimated_time": "30 minutes",
+      "description": "Implement enterprise-scale encryption and key management",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise Key Management with HSM Integration",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure Key Vault with managed HSM and advanced encryption",
+              "key_vault_configuration": {
+                "key_vault_setup": {
+                  "name": "kv-securebank-encryption",
+                  "sku": "Premium",
+                  "tenant_id": "securebank-tenant-id",
+                  "soft_delete_retention_days": 90,
+                  "purge_protection": true,
+                  "network_acls": {
+                    "default_action": "Deny",
+                    "bypass": "AzureServices",
+                    "virtual_network_rules": [
+                      {
+                        "subnet_id": "/subscriptions/.../subnets/secure-subnet",
+                        "ignore_missing_vnet_service_endpoint": false
+                      }
+                    ],
+                    "ip_rules": [
+                      {
+                        "value": "203.0.113.0/24",
+                        "action": "Allow"
+                      }
+                    ]
+                  }
+                },
+                "managed_hsm": {
+                  "name": "hsm-securebank-premium",
+                  "sku": "Standard_B1",
+                  "administrator_object_ids": [
+                    "security-admin-object-id",
+                    "key-management-admin-object-id"
+                  ],
+                  "soft_delete_retention_days": 90,
+                  "purge_protection": true,
+                  "public_network_access": "Disabled",
+                  "network_acls": {
+                    "default_action": "Deny",
+                    "virtual_network_rules": [
+                      {
+                        "subnet_id": "/subscriptions/.../subnets/hsm-subnet"
+                      }
+                    ]
+                  }
+                },
+                "encryption_keys": [
+                  {
+                    "key_name": "database-encryption-key",
+                    "key_type": "RSA-HSM",
+                    "key_size": 4096,
+                    "key_operations": ["encrypt", "decrypt", "wrapKey", "unwrapKey"],
+                    "expiration_date": "2025-12-31",
+                    "rotation_policy": {
+                      "lifetime_actions": [
+                        {
+                          "trigger": {
+                            "time_after_create": "P90D"
+                          },
+                          "action": {
+                            "type": "Rotate"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "key_name": "application-signing-key",
+                    "key_type": "EC-HSM",
+                    "curve": "P-256",
+                    "key_operations": ["sign", "verify"],
+                    "expiration_date": "2026-12-31"
+                  }
+                ],
+                "access_policies": [
+                  {
+                    "tenant_id": "securebank-tenant-id",
+                    "object_id": "banking-app-service-principal",
+                    "permissions": {
+                      "keys": ["get", "decrypt", "encrypt"],
+                      "secrets": ["get"],
+                      "certificates": ["get"]
+                    }
+                  },
+                  {
+                    "tenant_id": "securebank-tenant-id", 
+                    "object_id": "database-service-principal",
+                    "permissions": {
+                      "keys": ["get", "wrapKey", "unwrapKey"],
+                      "secrets": ["get"]
+                    }
+                  }
+                ],
+                "private_endpoint": {
+                  "enabled": true,
+                  "subnet_id": "/subscriptions/.../subnets/private-endpoints-subnet",
+                  "private_dns_zone_id": "/subscriptions/.../privateDnsZones/privatelink.vaultcore.azure.net"
+                }
+              },
+              "explanation": "Establishes enterprise-grade key management with HSM protection and network isolation"
+            }
+          ],
+          "validation": [
+            "Verify Key Vault properly isolates and protects encryption keys",
+            "Test managed HSM provides hardware-level key protection",
+            "Confirm access policies enforce least privilege key access",
+            "Validate key rotation policies work automatically"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Identity and Access Management",
+      "aws_comparison": "Multiple identity services with separate licensing and management overhead",
+      "azure_model": "Unified Azure AD platform with integrated identity governance",
+      "optimization_strategies": [
+        "Consolidate identity management in Azure AD Premium",
+        "Use conditional access to reduce VPN infrastructure needs",
+        "Implement automated access reviews to reduce manual governance overhead",
+        "Leverage built-in compliance monitoring to reduce audit costs"
+      ],
+      "estimated_savings": "40-60% reduction in identity management and governance costs"
+    },
+    {
+      "area": "Security Monitoring and Response",
+      "aws_comparison": "Multiple security tools with separate licensing and correlation challenges",
+      "azure_model": "Integrated Security Center and Sentinel platform",
+      "optimization_strategies": [
+        "Consolidate security monitoring in Azure Sentinel",
+        "Use built-in Microsoft threat intelligence to reduce third-party feed costs",
+        "Implement automated response playbooks to reduce manual SOC effort",
+        "Leverage integrated compliance dashboards for regulatory reporting"
+      ],
+      "estimated_savings": "35-55% reduction in security tooling and operational costs"
+    },
+    {
+      "area": "Application Security",
+      "aws_comparison": "Separate WAF, DDoS protection, and bot management solutions",
+      "azure_model": "Integrated Application Gateway with comprehensive protection",
+      "optimization_strategies": [
+        "Consolidate application security in Application Gateway WAF",
+        "Use built-in DDoS protection to eliminate separate service costs",
+        "Implement intelligent bot protection to reduce manual management",
+        "Leverage Azure Front Door for global application acceleration and protection"
+      ],
+      "estimated_savings": "30-45% reduction in application security infrastructure costs"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Identity Security",
+      "practices": [
+        "Implement zero trust identity with conditional access and risk-based authentication",
+        "Use Privileged Identity Management for all administrative access",
+        "Enable comprehensive identity protection with real-time risk detection",
+        "Implement regular access reviews and automated lifecycle management"
+      ]
+    },
+    {
+      "category": "Threat Protection", 
+      "practices": [
+        "Deploy comprehensive threat detection with Security Center and Sentinel",
+        "Implement automated incident response with intelligent playbooks",
+        "Enable advanced threat hunting with custom analytics and hunting queries",
+        "Integrate threat intelligence feeds for enhanced detection capabilities"
+      ]
+    },
+    {
+      "category": "Application Security",
+      "practices": [
+        "Use Application Gateway WAF with OWASP rules and custom security policies",
+        "Implement DDoS protection with automated mitigation and response",
+        "Enable bot protection with machine learning-based detection",
+        "Configure geo-filtering and rate limiting for enhanced protection"
+      ]
+    },
+    {
+      "category": "Data Protection",
+      "practices": [
+        "Use Azure Key Vault with managed HSM for enterprise key management",
+        "Implement customer-managed encryption keys for sensitive data",
+        "Enable automatic key rotation and lifecycle management",
+        "Use private endpoints for secure key vault access"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Security Assessment and Planning",
+      "tasks": [
+        "Assess current AWS IAM, Organizations, and SSO configurations",
+        "Document current GuardDuty, Security Hub, and WAF implementations",
+        "Analyze current KMS and Secrets Manager usage patterns",
+        "Plan Azure AD architecture with identity governance requirements",
+        "Design comprehensive Azure security architecture and threat protection"
+      ]
+    },
+    {
+      "phase": "Azure Security Foundation",
+      "tasks": [
+        "Deploy Azure AD Premium with advanced identity features",
+        "Configure Security Center with comprehensive threat protection",
+        "Set up Azure Sentinel with advanced analytics and threat hunting",
+        "Implement Application Gateway WAF with custom security rules",
+        "Deploy Azure Key Vault with managed HSM and encryption keys"
+      ]
+    },
+    {
+      "phase": "Security Migration",
+      "tasks": [
+        "Migrate IAM policies and roles to Azure AD with conditional access",
+        "Convert GuardDuty rules to Sentinel analytics and hunting queries",
+        "Transform WAF rules and Shield configurations to Application Gateway",
+        "Migrate KMS keys and Secrets Manager to Azure Key Vault",
+        "Implement automated security monitoring and response workflows"
+      ]
+    },
+    {
+      "phase": "Security Validation and Testing",
+      "tasks": [
+        "Test identity and access management with simulated attack scenarios",
+        "Validate threat detection and response with security testing",
+        "Conduct penetration testing of application security controls",
+        "Verify encryption and key management functionality",
+        "Perform compliance validation and audit preparation"
+      ]
+    },
+    {
+      "phase": "Security Operations and Optimization",
+      "tasks": [
+        "Optimize security policies and detection rules based on operational experience",
+        "Implement advanced threat hunting and investigation procedures",
+        "Establish security metrics and continuous improvement processes",
+        "Train security teams on Azure security tools and best practices",
+        "Implement ongoing compliance monitoring and reporting"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Conditional Access Policy Conflicts",
+      "symptoms": [
+        "Users unable to access applications despite having appropriate permissions",
+        "Inconsistent policy enforcement across different scenarios",
+        "MFA prompts appearing unexpectedly or not appearing when required"
+      ],
+      "solutions": [
+        "Review conditional access policy ordering and priority",
+        "Check for conflicting policies that may be blocking access",
+        "Use Azure AD sign-in logs to troubleshoot specific access scenarios",
+        "Validate user and application assignments in conditional access policies",
+        "Test policies in report-only mode before enforcement"
+      ]
+    },
+    {
+      "issue": "Sentinel Analytics Rule False Positives",
+      "symptoms": [
+        "High volume of security alerts with low fidelity",
+        "Analytics rules triggering on legitimate business activities",
+        "SOC team overwhelmed with false positive incidents"
+      ],
+      "solutions": [
+        "Tune analytics rule thresholds and time windows",
+        "Add allowlist conditions for known legitimate activities",
+        "Implement machine learning-based anomaly detection",
+        "Review and update threat intelligence feeds",
+        "Use hunting queries to validate analytics rule effectiveness"
+      ]
+    },
+    {
+      "issue": "Application Gateway WAF Blocking Legitimate Traffic",
+      "symptoms": [
+        "Applications not functioning correctly for legitimate users",
+        "WAF blocking normal business transactions",
+        "High number of false positive security rule matches"
+      ],
+      "solutions": [
+        "Review WAF logs to identify specific rules causing blocks",
+        "Configure rule exclusions for legitimate application patterns",
+        "Tune custom rules and OWASP rule set configurations",
+        "Implement application-specific allowlists",
+        "Use WAF policy testing mode before enforcement"
+      ]
+    },
+    {
+      "issue": "Key Vault Access Issues",
+      "symptoms": [
+        "Applications unable to retrieve keys or secrets from Key Vault",
+        "Authentication failures when accessing Key Vault",
+        "Network connectivity issues with Key Vault private endpoints"
+      ],
+      "solutions": [
+        "Verify service principal permissions and access policies",
+        "Check network security group rules for Key Vault subnets",
+        "Validate private endpoint DNS resolution",
+        "Review Key Vault firewall and virtual network settings",
+        "Monitor Key Vault access logs for detailed error information"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure AD documentation - https://docs.microsoft.com/en-us/azure/active-directory/",
+        "Azure Security Center documentation - https://docs.microsoft.com/en-us/azure/security-center/",
+        "Azure Sentinel documentation - https://docs.microsoft.com/en-us/azure/sentinel/",
+        "Application Gateway WAF documentation - https://docs.microsoft.com/en-us/azure/web-application-firewall/"
+      ]
+    },
+    {
+      "type": "Security Best Practices",
+      "links": [
+        "Azure security best practices and patterns",
+        "Zero trust architecture implementation guides",
+        "Identity and access management security frameworks",
+        "Threat detection and response automation strategies"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS to Azure security migration patterns and strategies",
+        "Identity and access management migration planning guides",
+        "Security monitoring and SIEM migration best practices",
+        "Application security migration and optimization techniques"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure AD Identity Governance for advanced lifecycle management",
+    "Set up Azure Information Protection for data classification and protection",
+    "Configure Microsoft Cloud App Security for SaaS application protection",
+    "Explore Azure Confidential Computing for sensitive workload protection",
+    "Implement Azure Attestation for trusted computing environments",
+    "Set up Azure Dedicated HSM for highest level key protection requirements"
+  ]
+}

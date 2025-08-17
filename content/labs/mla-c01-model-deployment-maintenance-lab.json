@@ -1,0 +1,313 @@
+{
+  "id": "mla-c01-model-deployment-maintenance-lab",
+  "title": "AWS SageMaker to Azure ML: Model Deployment, Inference, and Production Maintenance",
+  "category": "ml-deployment-maintenance",
+  "difficulty": "advanced", 
+  "estimatedTime": "130 minutes",
+  "awsCertification": "MLA-C01",
+  "certificationWeight": "22% - Model Deployment & Maintenance Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master machine learning model deployment by implementing production ML inference with SageMaker endpoints and migrating to Azure ML equivalents with real-time serving, batch inference, model monitoring, and automated maintenance workflows.",
+
+  "learningObjectives": [
+    "Implement production ML model deployment with SageMaker endpoints and Azure ML endpoints",
+    "Build real-time and batch inference workflows with auto-scaling and monitoring",
+    "Create model monitoring and drift detection for production ML systems", 
+    "Design A/B testing and canary deployments for ML model updates",
+    "Implement model maintenance and automated retraining workflows",
+    "Build multi-model endpoints and inference optimization strategies"
+  ],
+
+  "prerequisites": [
+    "Completion of previous MLA-C01 labs (Data Engineering, EDA, Model Development)",
+    "Understanding of ML model serving and production deployment concepts",
+    "Experience with containerization, Docker, and cloud deployment strategies",
+    "Familiarity with monitoring, logging, and DevOps practices for ML systems"
+  ],
+
+  "awsServices": [
+    "Amazon SageMaker Endpoints",
+    "Amazon SageMaker Multi-Model Endpoints", 
+    "Amazon SageMaker Batch Transform",
+    "Amazon SageMaker Model Monitor",
+    "Amazon SageMaker Clarify",
+    "Amazon SageMaker Pipelines",
+    "Amazon API Gateway",
+    "AWS Lambda",
+    "Amazon CloudWatch",
+    "Amazon EventBridge"
+  ],
+
+  "azureServices": [
+    "Azure Machine Learning Endpoints",
+    "Azure ML Batch Endpoints",
+    "Azure ML Model Monitoring",
+    "Azure ML Responsible AI",
+    "Azure ML Pipelines", 
+    "Azure API Management",
+    "Azure Functions",
+    "Azure Monitor",
+    "Azure Event Grid"
+  ],
+
+  "businessScenario": "DeployAI Solutions provides production ML services for real-time fraud detection, recommendation systems, and predictive maintenance across enterprise clients. Their MLOps team needs comprehensive model deployment and maintenance capabilities including auto-scaling inference, model monitoring, A/B testing, and automated retraining. They must master both AWS SageMaker and Azure ML platforms to ensure reliable, high-performance ML services in production.",
+
+  "sections": [
+    {
+      "title": "Production Model Deployment and Inference",
+      "duration": "35 minutes", 
+      "topics": [
+        "Real-time model serving with SageMaker endpoints and Azure ML endpoints",
+        "Batch inference workflows and large-scale model processing",
+        "Multi-model endpoints and inference optimization strategies",
+        "Auto-scaling configuration and traffic management for ML endpoints",
+        "Model serving containers and custom inference logic"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Production ML Deployment Infrastructure",
+          "description": "Build scalable ML inference with real-time and batch capabilities",
+          "steps": [
+            "Configure SageMaker real-time endpoints with auto-scaling and load balancing",
+            "Setup Azure ML endpoints with equivalent real-time inference capabilities",
+            "Implement SageMaker Batch Transform for large-scale batch inference",
+            "Configure Azure ML batch endpoints with parallel processing workflows",
+            "Setup multi-model endpoints for efficient model serving and resource utilization", 
+            "Implement custom inference containers and optimization strategies"
+          ],
+          "deliverables": [
+            "SageMaker real-time endpoints with auto-scaling configuration",
+            "Azure ML endpoints setup with load balancing and monitoring",
+            "Batch inference workflows for large-scale model processing",
+            "Multi-model endpoints and custom inference optimization"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Model Monitoring and Drift Detection",
+      "duration": "30 minutes",
+      "topics": [
+        "Comprehensive model monitoring with SageMaker Model Monitor and Azure ML monitoring",
+        "Data drift and model performance drift detection workflows",
+        "Model bias monitoring and fairness evaluation in production",
+        "Real-time alerting and automated remediation for model issues",
+        "Model performance metrics and business impact tracking"
+      ],
+      "tasks": [
+        {
+          "title": "Build Model Monitoring and Drift Detection Platform",
+          "description": "Implement comprehensive model monitoring with automated drift detection",
+          "steps": [
+            "Configure SageMaker Model Monitor for data quality and model drift detection",
+            "Setup Azure ML monitoring with equivalent drift detection capabilities",
+            "Implement model bias monitoring and fairness evaluation workflows",
+            "Configure real-time alerting and automated remediation for model degradation",
+            "Setup model performance tracking and business impact measurement",
+            "Create model monitoring dashboards and executive reporting"
+          ],
+          "deliverables": [
+            "SageMaker Model Monitor configuration with drift detection",
+            "Azure ML monitoring setup with bias and fairness evaluation",
+            "Real-time alerting and automated remediation workflows",
+            "Model performance dashboards and business impact tracking"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "A/B Testing and Canary Deployments",
+      "duration": "35 minutes",
+      "topics": [
+        "A/B testing frameworks for ML model comparison in production",
+        "Canary deployment strategies and traffic splitting for model updates",
+        "Blue-green deployments and zero-downtime model updates",
+        "Statistical significance testing and automated rollback procedures", 
+        "Multi-variant testing and champion-challenger model frameworks"
+      ],
+      "tasks": [
+        {
+          "title": "Implement A/B Testing and Deployment Strategies",
+          "description": "Build advanced deployment strategies with statistical validation",
+          "steps": [
+            "Configure A/B testing frameworks for model comparison and validation",
+            "Implement canary deployment strategies with gradual traffic increase",
+            "Setup blue-green deployments for zero-downtime model updates",
+            "Configure statistical significance testing and automated decision making",
+            "Implement multi-variant testing and champion-challenger frameworks",
+            "Create automated rollback procedures and deployment safety mechanisms"
+          ],
+          "deliverables": [
+            "A/B testing framework with statistical validation",
+            "Canary and blue-green deployment strategies",
+            "Multi-variant testing and champion-challenger implementation",
+            "Automated rollback and deployment safety mechanisms"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Model Maintenance and Automated Retraining",
+      "duration": "30 minutes",
+      "topics": [
+        "Automated model retraining workflows and trigger mechanisms",
+        "Model versioning and artifact management for production systems",
+        "Model performance degradation detection and remediation",
+        "Continuous integration and deployment (CI/CD) for ML models",
+        "Model lifecycle management and retirement strategies"
+      ],
+      "tasks": [
+        {
+          "title": "Build Model Maintenance and Retraining Automation",
+          "description": "Implement automated model maintenance with CI/CD workflows",
+          "steps": [
+            "Configure automated model retraining triggers and workflows",
+            "Implement model versioning and artifact management systems",
+            "Setup model performance degradation detection and automated remediation",
+            "Configure CI/CD pipelines for ML model development and deployment",
+            "Implement model lifecycle management and retirement procedures",
+            "Create model governance and compliance automation workflows"
+          ],
+          "deliverables": [
+            "Automated model retraining and trigger mechanisms",
+            "Model versioning and lifecycle management system",
+            "CI/CD pipelines for ML model deployment",
+            "Model governance and compliance automation"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Real-Time Fraud Detection System Deployment",
+      "description": "Deploy production fraud detection system with real-time inference and monitoring",
+      "steps": [
+        "Deploy fraud detection model with real-time SageMaker endpoints and auto-scaling",
+        "Implement real-time model monitoring and fraud pattern drift detection",
+        "Configure A/B testing for fraud detection model improvements",
+        "Build automated retraining workflows based on new fraud patterns",
+        "Implement comprehensive model governance and compliance monitoring",
+        "Test end-to-end system with simulated fraud scenarios and performance validation"
+      ],
+      "expectedOutcome": "Production fraud detection system with real-time inference and automated maintenance"
+    },
+    {
+      "title": "Recommendation System Multi-Model Deployment",
+      "description": "Build scalable recommendation system with multiple models and optimization",
+      "steps": [
+        "Deploy recommendation models using multi-model endpoints for resource efficiency",
+        "Implement batch inference for large-scale recommendation generation",
+        "Configure model monitoring for recommendation quality and user engagement",
+        "Build A/B testing framework for recommendation algorithm comparison",
+        "Implement automated model updates based on user behavior and feedback",
+        "Test recommendation system with real-world user interaction patterns"
+      ],
+      "expectedOutcome": "Scalable recommendation system with multi-model deployment and optimization"
+    },
+    {
+      "title": "Computer Vision Model Production Pipeline",
+      "description": "Deploy computer vision models with edge deployment and monitoring",
+      "steps": [
+        "Deploy computer vision models for real-time image processing and analysis",
+        "Implement model monitoring for image quality and prediction accuracy",
+        "Configure canary deployments for computer vision model updates",
+        "Build automated retraining workflows for new image data and scenarios",
+        "Implement model optimization for edge deployment and latency requirements",
+        "Test computer vision pipeline with various image types and performance benchmarks"
+      ],
+      "expectedOutcome": "Production computer vision pipeline with edge deployment and automated optimization"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Model endpoint latency and throughput issues under high load",
+      "solution": "Implement auto-scaling policies, optimize model inference code, use model compilation and optimization, implement caching strategies, and use load balancing"
+    },
+    {
+      "issue": "Model drift detection false positives and monitoring accuracy",
+      "solution": "Tune drift detection thresholds, implement statistical validation, use domain expertise for drift interpretation, implement feedback loops, and use ensemble drift detection"
+    },
+    {
+      "issue": "Complex deployment rollbacks and model version management",
+      "solution": "Implement comprehensive versioning, use blue-green deployments, create automated rollback procedures, implement health checks, and use traffic splitting strategies"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Production Model Deployment",
+      "criteria": [
+        "Can implement scalable real-time and batch model inference",
+        "Understands auto-scaling and traffic management for ML endpoints",
+        "Can configure multi-model endpoints and optimization strategies",
+        "Demonstrates custom inference containers and performance optimization"
+      ]
+    },
+    {
+      "category": "Model Monitoring and Drift Detection",
+      "criteria": [
+        "Can implement comprehensive model monitoring and drift detection",
+        "Understands model bias monitoring and fairness evaluation",
+        "Can configure real-time alerting and automated remediation",
+        "Demonstrates model performance tracking and business impact measurement"
+      ]
+    },
+    {
+      "category": "Advanced Deployment Strategies",
+      "criteria": [
+        "Can implement A/B testing and statistical validation for models",
+        "Understands canary and blue-green deployment strategies",
+        "Can configure multi-variant testing and champion-challenger frameworks",
+        "Demonstrates automated rollback and deployment safety mechanisms"
+      ]
+    },
+    {
+      "category": "Model Maintenance and Automation",
+      "criteria": [
+        "Can implement automated model retraining and maintenance workflows",
+        "Understands model versioning and lifecycle management",
+        "Can configure CI/CD pipelines for ML model deployment",
+        "Demonstrates model governance and compliance automation"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "MLA-C01": {
+      "domain": "Model Deployment & Maintenance", 
+      "weight": "22%",
+      "coverage": [
+        "Build machine learning solutions for performance, availability, scalability, resiliency, and fault tolerance",
+        "Recommend and implement the appropriate machine learning services and features for a given problem",
+        "Apply basic AWS security practices to machine learning solutions",
+        "Deploy and operationalize machine learning solutions",
+        "Monitor machine learning solutions"
+      ],
+      "examTopics": [
+        "SageMaker endpoint deployment and auto-scaling configuration",
+        "Model monitoring and drift detection with SageMaker Model Monitor",
+        "A/B testing and canary deployment strategies for ML models",
+        "Batch inference with SageMaker Batch Transform",
+        "Multi-model endpoints and inference optimization"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement production ML deployment with real-time and batch inference",
+    "Demonstrates ability to build model monitoring and drift detection systems",
+    "Shows understanding of A/B testing and advanced deployment strategies",
+    "Can create automated model maintenance and retraining workflows",
+    "Understands ML model lifecycle management and production operations"
+  ],
+
+  "nextSteps": [
+    "Proceed to MLA-C01 ML Operations & MLOps Lab (16% domain weight)",
+    "Gain hands-on experience with advanced ML deployment and monitoring techniques",
+    "Practice implementing production ML systems with comprehensive monitoring",
+    "Explore advanced MLOps practices and automation strategies"
+  ]
+}

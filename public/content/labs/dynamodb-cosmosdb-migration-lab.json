@@ -1,0 +1,303 @@
+{
+  "id": "dynamodb-cosmosdb-migration-lab",
+  "title": "DynamoDB to Cosmos DB: NoSQL Database Migration and Performance Optimization",
+  "difficulty": "advanced",
+  "estimated_time": "180 minutes",
+  "aws_prerequisite": "Experience with DynamoDB tables, partitioning, global secondary indexes, and DynamoDB Streams",
+  "azure_target": "Master Cosmos DB multi-model capabilities, partitioning strategies, and global distribution",
+  "learning_objectives": [
+    "Compare DynamoDB and Cosmos DB data models and APIs",
+    "Migrate DynamoDB tables to Cosmos DB containers with optimal partitioning",
+    "Implement global secondary indexes and composite indexes",
+    "Configure consistency levels and global distribution",
+    "Optimize performance and cost with Request Units (RU/s)",
+    "Implement change feed patterns similar to DynamoDB Streams",
+    "Design for multi-region deployments and automatic failover"
+  ],
+  "aws_context": {
+    "equivalent_service": "DynamoDB, DynamoDB Streams, Global Tables",
+    "key_concepts": [
+      "DynamoDB Tables → Cosmos DB Containers",
+      "Partition Key → Partition Key",
+      "Sort Key → Combined with Partition Key or separate field",
+      "Global Secondary Index → Composite Indexes",
+      "Local Secondary Index → Composite Indexes with same partition",
+      "DynamoDB Streams → Change Feed",
+      "Auto Scaling → Autoscale or Serverless",
+      "Global Tables → Multi-region writes",
+      "Eventually Consistent → Multiple consistency levels",
+      "Point-in-time Recovery → Continuous backup"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Understanding NoSQL Data Models",
+      "content": "DynamoDB and Cosmos DB are both NoSQL databases but with different approaches. DynamoDB is a key-value and document database, while Cosmos DB is multi-model supporting key-value, document, graph, column-family, and table APIs. Cosmos DB's flexibility allows you to choose the best API for your use case.",
+      "comparison_table": {
+        "data_models": {
+          "aws": "DynamoDB: Key-value and document store",
+          "azure": "Cosmos DB: Multi-model (Document, Key-value, Graph, Column-family)",
+          "use_case": "Choose API based on application needs"
+        },
+        "apis_supported": {
+          "aws": "DynamoDB API only",
+          "azure": "SQL API, MongoDB API, Cassandra API, Gremlin API, Table API",
+          "use_case": "Migration flexibility and compatibility"
+        },
+        "max_item_size": {
+          "aws": "400KB per item",
+          "azure": "2MB per document (SQL API)",
+          "use_case": "Large document storage"
+        },
+        "partitioning": {
+          "aws": "Hash key (Partition key) + Range key (Sort key)",
+          "azure": "Partition key (can be hierarchical or synthetic)",
+          "use_case": "Data distribution strategy"
+        },
+        "indexing": {
+          "aws": "Primary key, GSI (5 max), LSI (5 max)",
+          "azure": "Automatic indexing on all properties, custom composite indexes",
+          "use_case": "Query flexibility and performance"
+        }
+      },
+      "code_examples": {
+        "table_to_container_migration": {
+          "language": "python",
+          "title": "DynamoDB Table to Cosmos DB Container Migration",
+          "code": "# DynamoDB Table Structure\nimport boto3\n\ndynamodb = boto3.resource('dynamodb')\ntable = dynamodb.create_table(\n    TableName='Orders',\n    KeySchema=[\n        {'AttributeName': 'CustomerId', 'KeyType': 'HASH'},  # Partition key\n        {'AttributeName': 'OrderId', 'KeyType': 'RANGE'}     # Sort key\n    ],\n    AttributeDefinitions=[\n        {'AttributeName': 'CustomerId', 'AttributeType': 'S'},\n        {'AttributeName': 'OrderId', 'AttributeType': 'S'},\n        {'AttributeName': 'OrderDate', 'AttributeType': 'S'},\n        {'AttributeName': 'Status', 'AttributeType': 'S'}\n    ],\n    GlobalSecondaryIndexes=[{\n        'IndexName': 'OrderDateIndex',\n        'Keys': [\n            {'AttributeName': 'OrderDate', 'KeyType': 'HASH'},\n            {'AttributeName': 'Status', 'KeyType': 'RANGE'}\n        ],\n        'Projection': {'ProjectionType': 'ALL'}\n    }],\n    BillingMode='PAY_PER_REQUEST'\n)\n\n# Cosmos DB Container Equivalent\nfrom azure.cosmos import CosmosClient, PartitionKey\n\nclient = CosmosClient(url, credential)\ndatabase = client.create_database_if_not_exists('OrdersDB')\n\n# Create container with hierarchical partition key for better distribution\ncontainer = database.create_container_if_not_exists(\n    id='Orders',\n    partition_key=PartitionKey(\n        path='/customerId',  # Primary partition\n        kind='Hash'\n    ),\n    indexing_policy={\n        'indexingMode': 'consistent',\n        'includedPaths': [{'path': '/*'}],\n        'excludedPaths': [{'path': '/\\\"_etag\\\"/'}],\n        'compositeIndexes': [\n            # Equivalent to GSI for OrderDate + Status\n            [\n                {'path': '/orderDate', 'order': 'ascending'},\n                {'path': '/status', 'order': 'ascending'}\n            ],\n            # Additional index for CustomerId + OrderId (sort key equivalent)\n            [\n                {'path': '/customerId', 'order': 'ascending'},\n                {'path': '/orderId', 'order': 'ascending'}\n            ]\n        ]\n    },\n    # Throughput settings (equivalent to DynamoDB capacity)\n    offer_throughput=400  # 400 RU/s minimum\n)"
+        },
+        "data_migration_pattern": {
+          "language": "python",
+          "title": "Migrating Data from DynamoDB to Cosmos DB",
+          "code": "import boto3\nimport json\nfrom azure.cosmos import CosmosClient\nfrom decimal import Decimal\n\nclass DynamoToCosmossMigrator:\n    def __init__(self, dynamo_table_name, cosmos_url, cosmos_key, cosmos_db, cosmos_container):\n        # DynamoDB setup\n        self.dynamodb = boto3.resource('dynamodb')\n        self.dynamo_table = self.dynamodb.Table(dynamo_table_name)\n        \n        # Cosmos DB setup\n        self.cosmos_client = CosmosClient(cosmos_url, cosmos_key)\n        self.cosmos_db = self.cosmos_client.get_database_client(cosmos_db)\n        self.cosmos_container = self.cosmos_db.get_container_client(cosmos_container)\n    \n    def decimal_to_float(self, obj):\n        \"\"\"Convert DynamoDB Decimal types to float for Cosmos DB\"\"\"\n        if isinstance(obj, Decimal):\n            return float(obj)\n        elif isinstance(obj, dict):\n            return {k: self.decimal_to_float(v) for k, v in obj.items()}\n        elif isinstance(obj, list):\n            return [self.decimal_to_float(v) for v in obj]\n        return obj\n    \n    def transform_item(self, dynamo_item):\n        \"\"\"Transform DynamoDB item to Cosmos DB document\"\"\"\n        # Convert Decimals to floats\n        cosmos_doc = self.decimal_to_float(dynamo_item)\n        \n        # Rename keys to match Cosmos DB conventions\n        cosmos_doc['id'] = cosmos_doc.get('OrderId', str(uuid.uuid4()))\n        cosmos_doc['customerId'] = cosmos_doc.get('CustomerId')\n        cosmos_doc['orderId'] = cosmos_doc.get('OrderId')\n        cosmos_doc['orderDate'] = cosmos_doc.get('OrderDate')\n        cosmos_doc['status'] = cosmos_doc.get('Status')\n        \n        # Add Cosmos DB specific fields\n        cosmos_doc['_partitionKey'] = cosmos_doc['customerId']\n        \n        # Clean up DynamoDB specific fields\n        for key in ['CustomerId', 'OrderId', 'OrderDate', 'Status']:\n            cosmos_doc.pop(key, None)\n        \n        return cosmos_doc\n    \n    def migrate_with_pagination(self, batch_size=25):\n        \"\"\"Migrate data in batches with pagination\"\"\"\n        last_evaluated_key = None\n        total_migrated = 0\n        \n        while True:\n            # Scan DynamoDB table\n            if last_evaluated_key:\n                response = self.dynamo_table.scan(\n                    Limit=batch_size,\n                    ExclusiveStartKey=last_evaluated_key\n                )\n            else:\n                response = self.dynamo_table.scan(Limit=batch_size)\n            \n            items = response.get('Items', [])\n            \n            # Transform and insert into Cosmos DB\n            for item in items:\n                try:\n                    cosmos_doc = self.transform_item(item)\n                    self.cosmos_container.upsert_item(cosmos_doc)\n                    total_migrated += 1\n                    \n                    if total_migrated % 100 == 0:\n                        print(f'Migrated {total_migrated} items...')\n                \n                except Exception as e:\n                    print(f'Error migrating item: {e}')\n                    print(f'Item: {json.dumps(self.decimal_to_float(item), indent=2)}')\n            \n            # Check if more items to process\n            last_evaluated_key = response.get('LastEvaluatedKey')\n            if not last_evaluated_key:\n                break\n        \n        print(f'Migration complete! Total items migrated: {total_migrated}')\n        return total_migrated\n\n# Usage\nmigrator = DynamoToCosmossMigrator(\n    dynamo_table_name='Orders',\n    cosmos_url='https://myaccount.documents.azure.com',\n    cosmos_key='your-cosmos-key',\n    cosmos_db='OrdersDB',\n    cosmos_container='Orders'\n)\n\nmigrator.migrate_with_pagination(batch_size=50)"
+        }
+      }
+    },
+    {
+      "title": "Partitioning Strategies and Performance",
+      "content": "Both DynamoDB and Cosmos DB use partitioning for scalability, but Cosmos DB offers more flexibility with partition key design. Understanding Request Units (RU/s) in Cosmos DB is crucial for performance optimization, similar to Read/Write Capacity Units in DynamoDB.",
+      "comparison_table": {
+        "capacity_model": {
+          "aws": "Read Capacity Units (RCU) and Write Capacity Units (WCU)",
+          "azure": "Request Units (RU/s) - unified currency for all operations",
+          "use_case": "Capacity planning and cost optimization"
+        },
+        "scaling": {
+          "aws": "Auto Scaling with target utilization",
+          "azure": "Autoscale (4000-40000 RU/s) or Serverless",
+          "use_case": "Automatic capacity management"
+        },
+        "partition_limits": {
+          "aws": "10GB per partition, 3000 RCU, 1000 WCU",
+          "azure": "20GB logical partition, 10000 RU/s per physical partition",
+          "use_case": "Hot partition avoidance"
+        },
+        "pricing_model": {
+          "aws": "Pay per provisioned capacity or on-demand",
+          "azure": "Pay per RU/s provisioned or serverless consumption",
+          "use_case": "Cost optimization strategies"
+        }
+      },
+      "code_examples": {
+        "partition_key_strategies": {
+          "language": "python",
+          "title": "Optimal Partition Key Design",
+          "code": "# Poor Partition Key Design (Hot Partitions)\n# DynamoDB - Using date as partition key\ntable = dynamodb.create_table(\n    TableName='Events',\n    KeySchema=[\n        {'AttributeName': 'EventDate', 'KeyType': 'HASH'},  # Hot partition!\n        {'AttributeName': 'EventId', 'KeyType': 'RANGE'}\n    ]\n)\n\n# Better Design - Synthetic/Composite Partition Key\n# Cosmos DB - Using synthetic key for better distribution\nfrom datetime import datetime\nimport hashlib\n\nclass OptimalPartitionDesign:\n    @staticmethod\n    def create_synthetic_partition_key(date, event_type):\n        \"\"\"Create synthetic partition key for even distribution\"\"\"\n        # Combine date with event type and add hash suffix\n        date_str = date.strftime('%Y-%m-%d')\n        base_key = f\"{date_str}#{event_type}\"\n        \n        # Add hash suffix for better distribution (0-99)\n        hash_suffix = int(hashlib.md5(base_key.encode()).hexdigest(), 16) % 100\n        return f\"{base_key}#{hash_suffix:02d}\"\n    \n    @staticmethod\n    def create_hierarchical_partition_key(tenant_id, region, category):\n        \"\"\"Hierarchical partition key for multi-tenant scenarios\"\"\"\n        # Cosmos DB supports hierarchical partition keys (preview)\n        return {\n            'level1': tenant_id,\n            'level2': region,\n            'level3': category\n        }\n\n# Example: Creating container with optimal partitioning\ncontainer = database.create_container_if_not_exists(\n    id='Events',\n    partition_key=PartitionKey(\n        path='/syntheticKey',  # Synthetic key for distribution\n        kind='Hash'\n    ),\n    # Set throughput with autoscale for efficiency\n    offer_throughput={\n        'offerThroughput': None,\n        'autoScaleSettings': {\n            'maxThroughput': 10000  # Scale between 1000-10000 RU/s\n        }\n    }\n)\n\n# Inserting with synthetic key\nevent = {\n    'id': str(uuid.uuid4()),\n    'syntheticKey': OptimalPartitionDesign.create_synthetic_partition_key(\n        datetime.now(),\n        'USER_LOGIN'\n    ),\n    'eventDate': datetime.now().isoformat(),\n    'eventType': 'USER_LOGIN',\n    'userId': 'user123',\n    'details': {...}\n}\n\ncontainer.create_item(event)"
+        },
+        "performance_optimization": {
+          "language": "python",
+          "title": "Request Unit Optimization and Monitoring",
+          "code": "from azure.cosmos import CosmosClient, exceptions\nimport time\n\nclass CosmosPerformanceOptimizer:\n    def __init__(self, client, database_name, container_name):\n        self.client = client\n        self.database = client.get_database_client(database_name)\n        self.container = self.database.get_container_client(container_name)\n    \n    def measure_operation_cost(self, operation_func, *args, **kwargs):\n        \"\"\"Measure RU consumption for an operation\"\"\"\n        try:\n            result = operation_func(*args, **kwargs)\n            \n            # Get RU charge from response headers\n            if hasattr(result, 'headers'):\n                ru_charge = float(result.headers.get('x-ms-request-charge', 0))\n                return result, ru_charge\n            return result, 0\n        \n        except exceptions.CosmosHttpResponseError as e:\n            print(f\"Operation failed: {e.message}\")\n            if hasattr(e, 'headers'):\n                ru_charge = float(e.headers.get('x-ms-request-charge', 0))\n                print(f\"RU charge for failed operation: {ru_charge}\")\n            raise\n    \n    def optimize_query(self, query, parameters=None):\n        \"\"\"Optimize query and measure performance\"\"\"\n        # Enable query metrics\n        query_options = {\n            'enable_cross_partition_query': True,\n            'max_item_count': 100,\n            'populate_query_metrics': True\n        }\n        \n        start_time = time.time()\n        items = list(self.container.query_items(\n            query=query,\n            parameters=parameters,\n            **query_options\n        ))\n        execution_time = time.time() - start_time\n        \n        # Get query metrics from response\n        print(f\"Query: {query}\")\n        print(f\"Execution time: {execution_time:.3f} seconds\")\n        print(f\"Items returned: {len(items)}\")\n        \n        return items\n    \n    def batch_operations_optimization(self, items):\n        \"\"\"Optimize batch operations for better RU consumption\"\"\"\n        from azure.cosmos import PartitionKey\n        \n        total_rus = 0\n        batch_size = 100  # Cosmos DB batch limit\n        \n        for i in range(0, len(items), batch_size):\n            batch = items[i:i + batch_size]\n            \n            # Group by partition key for transactional batch\n            partitioned_batches = {}\n            for item in batch:\n                pk = item.get('partitionKey')\n                if pk not in partitioned_batches:\n                    partitioned_batches[pk] = []\n                partitioned_batches[pk].append(item)\n            \n            # Execute transactional batch per partition\n            for partition_key, partition_items in partitioned_batches.items():\n                batch_operations = []\n                \n                for item in partition_items:\n                    batch_operations.append({\n                        'operation': 'upsert',\n                        'document': item\n                    })\n                \n                try:\n                    # Transactional batch (all succeed or all fail)\n                    response = self.container.execute_transactional_batch(\n                        operations=batch_operations,\n                        partition_key=partition_key\n                    )\n                    \n                    # Calculate RU consumption\n                    batch_rus = sum(op.get('requestCharge', 0) for op in response)\n                    total_rus += batch_rus\n                    \n                except Exception as e:\n                    print(f\"Batch failed for partition {partition_key}: {e}\")\n        \n        print(f\"Total RUs consumed: {total_rus}\")\n        return total_rus\n    \n    def implement_caching_strategy(self):\n        \"\"\"Implement caching to reduce RU consumption\"\"\"\n        from functools import lru_cache\n        import hashlib\n        \n        @lru_cache(maxsize=1000)\n        def cached_point_read(item_id, partition_key):\n            \"\"\"Cache point reads to reduce RU consumption\"\"\"\n            return self.container.read_item(\n                item=item_id,\n                partition_key=partition_key\n            )\n        \n        # Example: Multiple reads of same item\n        item_id = 'order-123'\n        partition_key = 'customer-456'\n        \n        # First read - consumes RUs\n        item1, rus1 = self.measure_operation_cost(\n            cached_point_read,\n            item_id,\n            partition_key\n        )\n        print(f\"First read: {rus1} RUs\")\n        \n        # Second read - from cache, 0 RUs\n        item2 = cached_point_read(item_id, partition_key)\n        print(f\"Second read: 0 RUs (from cache)\")\n        \n        return cached_point_read\n\n# Usage Example\noptimizer = CosmosPerformanceOptimizer(\n    client=cosmos_client,\n    database_name='OrdersDB',\n    container_name='Orders'\n)\n\n# Measure query cost\nquery = \"SELECT * FROM c WHERE c.status = @status AND c.orderDate > @date\"\nparams = [\n    {'name': '@status', 'value': 'PENDING'},\n    {'name': '@date', 'value': '2024-01-01'}\n]\n\nitems = optimizer.optimize_query(query, params)"
+        }
+      }
+    },
+    {
+      "title": "Global Distribution and Consistency",
+      "content": "Cosmos DB offers turnkey global distribution with multiple consistency levels, providing more flexibility than DynamoDB's eventually consistent and strongly consistent reads. This allows fine-tuning between consistency, availability, and performance.",
+      "comparison_table": {
+        "consistency_levels": {
+          "aws": "Eventually consistent, Strongly consistent reads",
+          "azure": "Strong, Bounded Staleness, Session, Consistent Prefix, Eventual",
+          "use_case": "Balance between consistency and performance"
+        },
+        "global_distribution": {
+          "aws": "Global Tables with eventual consistency",
+          "azure": "Multi-region writes with conflict resolution",
+          "use_case": "Global applications with local performance"
+        },
+        "failover": {
+          "aws": "Manual or automatic with Global Tables",
+          "azure": "Automatic failover with configurable priorities",
+          "use_case": "High availability and disaster recovery"
+        },
+        "conflict_resolution": {
+          "aws": "Last writer wins",
+          "azure": "Last writer wins, Custom with stored procedures, Manual",
+          "use_case": "Handle concurrent updates across regions"
+        }
+      },
+      "code_examples": {
+        "multi_region_setup": {
+          "language": "python",
+          "title": "Configure Multi-Region Cosmos DB",
+          "code": "from azure.cosmos import CosmosClient, ConsistencyLevel\nfrom azure.mgmt.cosmosdb import CosmosDBManagementClient\nfrom azure.mgmt.cosmosdb.models import DatabaseAccountCreateUpdateParameters, Location\n\nclass MultiRegionCosmosSetup:\n    def __init__(self, subscription_id, resource_group, account_name):\n        self.subscription_id = subscription_id\n        self.resource_group = resource_group\n        self.account_name = account_name\n        \n        # Management client for account operations\n        self.mgmt_client = CosmosDBManagementClient(\n            credential=DefaultAzureCredential(),\n            subscription_id=subscription_id\n        )\n    \n    def create_multi_region_account(self):\n        \"\"\"Create Cosmos DB account with multiple regions\"\"\"\n        params = DatabaseAccountCreateUpdateParameters(\n            location='East US',  # Primary region\n            locations=[\n                Location(\n                    location_name='East US',\n                    failover_priority=0,  # Primary\n                    is_zone_redundant=True\n                ),\n                Location(\n                    location_name='West US',\n                    failover_priority=1,  # Secondary\n                    is_zone_redundant=True\n                ),\n                Location(\n                    location_name='North Europe',\n                    failover_priority=2,  # Tertiary\n                    is_zone_redundant=True\n                )\n            ],\n            # Enable multi-region writes (similar to DynamoDB Global Tables)\n            enable_multiple_write_locations=True,\n            \n            # Set default consistency level\n            consistency_policy={\n                'defaultConsistencyLevel': 'Session',\n                'maxStalenessPrefix': 100,\n                'maxIntervalInSeconds': 5\n            },\n            \n            # Enable automatic failover\n            enable_automatic_failover=True,\n            \n            # Conflict resolution policy\n            conflict_resolution_policy={\n                'mode': 'LastWriterWins',\n                'conflictResolutionPath': '/_ts'  # Timestamp\n            }\n        )\n        \n        # Create or update account\n        async_operation = self.mgmt_client.database_accounts.begin_create_or_update(\n            self.resource_group,\n            self.account_name,\n            params\n        )\n        \n        account = async_operation.result()\n        print(f\"Multi-region account created: {account.name}\")\n        return account\n    \n    def configure_consistency_per_request(self):\n        \"\"\"Override consistency level per request\"\"\"\n        # Create client with default consistency\n        client = CosmosClient(\n            url=f'https://{self.account_name}.documents.azure.com',\n            credential=cosmos_key,\n            consistency_level=ConsistencyLevel.Session  # Default\n        )\n        \n        database = client.get_database_client('MyDatabase')\n        container = database.get_container_client('MyContainer')\n        \n        # Override consistency for specific operations\n        \n        # Strong consistency for critical reads\n        critical_item = container.read_item(\n            item='critical-id',\n            partition_key='partition1',\n            consistency_level=ConsistencyLevel.Strong\n        )\n        \n        # Eventual consistency for analytics queries\n        analytics_query = container.query_items(\n            query='SELECT * FROM c WHERE c.category = @category',\n            parameters=[{'name': '@category', 'value': 'analytics'}],\n            consistency_level=ConsistencyLevel.Eventual\n        )\n        \n        # Session consistency for user-specific data (default)\n        user_data = container.read_item(\n            item='user-123',\n            partition_key='user-123'\n            # Uses session consistency by default\n        )\n        \n        return critical_item, list(analytics_query), user_data\n    \n    def implement_conflict_resolution(self):\n        \"\"\"Custom conflict resolution with stored procedure\"\"\"\n        # Create stored procedure for custom conflict resolution\n        stored_procedure_definition = {\n            'id': 'conflictResolver',\n            'body': '''\n            function conflictResolver(incomingItem, existingItem, isTombstone, conflictingItems) {\n                // Custom logic to resolve conflicts\n                \n                // Example: Merge strategy based on version\n                if (incomingItem.version > existingItem.version) {\n                    return incomingItem;  // Use incoming\n                } else if (incomingItem.version < existingItem.version) {\n                    return existingItem;  // Keep existing\n                } else {\n                    // Same version - merge based on timestamp\n                    if (incomingItem._ts > existingItem._ts) {\n                        return incomingItem;\n                    }\n                    return existingItem;\n                }\n            }\n            '''\n        }\n        \n        container.scripts.create_stored_procedure(stored_procedure_definition)\n        \n        # Configure container with custom resolver\n        container_properties = {\n            'id': 'ConflictContainer',\n            'partitionKey': {'paths': ['/id']},\n            'conflictResolutionPolicy': {\n                'mode': 'Custom',\n                'conflictResolutionProcedure': 'dbs/MyDB/colls/MyContainer/sprocs/conflictResolver'\n            }\n        }\n        \n        return container_properties\n\n# Usage\nsetup = MultiRegionCosmosSetup(\n    subscription_id='your-subscription',\n    resource_group='cosmos-rg',\n    account_name='globalcosmosaccount'\n)\n\n# Create multi-region account\naccount = setup.create_multi_region_account()\n\n# Configure per-request consistency\nsetup.configure_consistency_per_request()"
+        }
+      }
+    },
+    {
+      "title": "Change Feed and Stream Processing",
+      "content": "Cosmos DB Change Feed provides similar functionality to DynamoDB Streams, enabling real-time processing of data changes. This is essential for event-driven architectures, real-time analytics, and data synchronization scenarios.",
+      "comparison_table": {
+        "change_capture": {
+          "aws": "DynamoDB Streams with 24-hour retention",
+          "azure": "Change Feed with configurable retention (default 7 days)",
+          "use_case": "Real-time data processing and synchronization"
+        },
+        "processing_models": {
+          "aws": "Lambda triggers, Kinesis adapter",
+          "azure": "Azure Functions triggers, Change Feed Processor",
+          "use_case": "Serverless stream processing"
+        },
+        "ordering_guarantees": {
+          "aws": "Ordered within a shard",
+          "azure": "Ordered within a logical partition",
+          "use_case": "Event ordering requirements"
+        }
+      },
+      "code_examples": {
+        "change_feed_processing": {
+          "language": "python",
+          "title": "Implement Change Feed Processing",
+          "code": "from azure.cosmos import CosmosClient\nimport asyncio\nimport json\nfrom datetime import datetime, timedelta\n\nclass ChangeFeedProcessor:\n    def __init__(self, cosmos_url, cosmos_key, database_name, container_name):\n        self.client = CosmosClient(cosmos_url, cosmos_key)\n        self.database = self.client.get_database_client(database_name)\n        self.container = self.database.get_container_client(container_name)\n        self.lease_container = None\n        \n    def setup_lease_container(self):\n        \"\"\"Create lease container for change feed processing\"\"\"\n        self.lease_container = self.database.create_container_if_not_exists(\n            id=f\"{self.container.id}-leases\",\n            partition_key={'paths': ['/id']},\n            offer_throughput=400\n        )\n        return self.lease_container\n    \n    def process_changes_simple(self, start_time=None):\n        \"\"\"Simple change feed processing from a point in time\"\"\"\n        if not start_time:\n            start_time = datetime.utcnow() - timedelta(hours=1)\n        \n        # Read change feed from specific time\n        response = self.container.query_items_change_feed(\n            start_time=start_time,\n            partition_key_range_id='0'  # Specific partition\n        )\n        \n        for change in response:\n            self.process_change(change)\n    \n    def process_change(self, change):\n        \"\"\"Process individual change\"\"\"\n        print(f\"Change detected: {json.dumps(change, indent=2, default=str)}\")\n        \n        # Determine change type based on metadata\n        if '_ts' in change and '_etag' in change:\n            if change.get('_deleted'):\n                print(f\"Document deleted: {change['id']}\")\n                self.handle_delete(change)\n            else:\n                # Check if insert or update based on version or custom field\n                if change.get('version', 1) == 1:\n                    print(f\"Document inserted: {change['id']}\")\n                    self.handle_insert(change)\n                else:\n                    print(f\"Document updated: {change['id']}\")\n                    self.handle_update(change)\n    \n    def handle_insert(self, item):\n        \"\"\"Handle new document insertion\"\"\"\n        # Example: Sync to another system\n        print(f\"Syncing new item {item['id']} to downstream systems\")\n        # Send to event hub, update cache, etc.\n        \n    def handle_update(self, item):\n        \"\"\"Handle document update\"\"\"\n        # Example: Update search index\n        print(f\"Updating search index for item {item['id']}\")\n        # Update Azure Cognitive Search, invalidate cache, etc.\n        \n    def handle_delete(self, item):\n        \"\"\"Handle document deletion\"\"\"\n        # Example: Cascade delete\n        print(f\"Cascading delete for item {item['id']}\")\n        # Remove from related systems\n    \n    async def process_changes_continuous(self, processor_name='processor1'):\n        \"\"\"Continuous change feed processing with checkpointing\"\"\"\n        from azure.cosmos.aio import CosmosClient as AsyncCosmosClient\n        \n        # Use async client for continuous processing\n        async_client = AsyncCosmosClient(self.client.client_connection.url_connection, \n                                         credential=self.client.client_connection.auth)\n        \n        database = async_client.get_database_client(self.database.id)\n        container = database.get_container_client(self.container.id)\n        \n        # Track last processed LSN per partition\n        checkpoints = {}\n        \n        while True:\n            try:\n                # Get all partition key ranges\n                partition_ranges = await container.read_partition_key_ranges()\n                \n                for partition_range in partition_ranges:\n                    partition_id = partition_range['id']\n                    \n                    # Get checkpoint for this partition\n                    continuation = checkpoints.get(partition_id)\n                    \n                    # Read changes for partition\n                    changes = container.query_items_change_feed(\n                        partition_key_range_id=partition_id,\n                        continuation=continuation,\n                        max_item_count=100\n                    )\n                    \n                    async for change in changes:\n                        # Process change\n                        await self.async_process_change(change)\n                        \n                        # Update checkpoint\n                        if hasattr(changes, 'continuation_token'):\n                            checkpoints[partition_id] = changes.continuation_token\n                            await self.save_checkpoint(processor_name, partition_id, \n                                                      changes.continuation_token)\n                \n                # Wait before next iteration\n                await asyncio.sleep(5)\n                \n            except Exception as e:\n                print(f\"Error in change feed processing: {e}\")\n                await asyncio.sleep(10)\n    \n    async def async_process_change(self, change):\n        \"\"\"Async change processing for better performance\"\"\"\n        # Implement async processing logic\n        print(f\"Processing change: {change.get('id')}\")\n        \n        # Example: Send to Event Hub\n        # await self.send_to_event_hub(change)\n        \n        # Example: Update materialized view\n        # await self.update_materialized_view(change)\n    \n    async def save_checkpoint(self, processor_name, partition_id, continuation):\n        \"\"\"Save checkpoint to lease container\"\"\"\n        if self.lease_container:\n            checkpoint_doc = {\n                'id': f\"{processor_name}-{partition_id}\",\n                'processorName': processor_name,\n                'partitionId': partition_id,\n                'continuation': continuation,\n                'timestamp': datetime.utcnow().isoformat()\n            }\n            await self.lease_container.upsert_item(checkpoint_doc)\n\n# Azure Function for Change Feed (Equivalent to Lambda + DynamoDB Streams)\n\"\"\"\n# function.json\n{\n  \"bindings\": [\n    {\n      \"type\": \"cosmosDBTrigger\",\n      \"name\": \"documents\",\n      \"direction\": \"in\",\n      \"connectionStringSetting\": \"CosmosDBConnection\",\n      \"databaseName\": \"OrdersDB\",\n      \"collectionName\": \"Orders\",\n      \"leaseCollectionName\": \"leases\",\n      \"createLeaseCollectionIfNotExists\": true,\n      \"startFromBeginning\": false\n    }\n  ]\n}\n\"\"\"\n\n# Azure Function implementation\nimport logging\nimport json\nimport azure.functions as func\n\ndef main(documents: func.DocumentList) -> None:\n    if documents:\n        logging.info(f'Change feed triggered with {len(documents)} documents')\n        \n        for document in documents:\n            doc_dict = document.to_dict()\n            \n            # Process each change\n            if doc_dict.get('status') == 'COMPLETED':\n                # Trigger order completion workflow\n                trigger_completion_workflow(doc_dict)\n            \n            elif doc_dict.get('status') == 'CANCELLED':\n                # Handle cancellation\n                handle_order_cancellation(doc_dict)\n            \n            # Log for monitoring\n            logging.info(f\"Processed document: {doc_dict.get('id')}\")\n\ndef trigger_completion_workflow(order):\n    \"\"\"Trigger downstream processes for completed orders\"\"\"\n    # Send to Service Bus for fulfillment\n    # Update inventory\n    # Send notification\n    pass\n\ndef handle_order_cancellation(order):\n    \"\"\"Handle order cancellation\"\"\"\n    # Reverse inventory allocation\n    # Process refund\n    # Send cancellation notification\n    pass"
+        }
+      }
+    },
+    {
+      "title": "Query Patterns and Indexing",
+      "content": "Cosmos DB provides automatic indexing on all properties by default, unlike DynamoDB which requires explicit GSI/LSI definition. This provides more query flexibility but requires careful index policy management for optimization.",
+      "comparison_table": {
+        "query_capability": {
+          "aws": "Query on partition key + sort key, or GSI",
+          "azure": "SQL-like queries on any property with automatic indexing",
+          "use_case": "Flexible query patterns"
+        },
+        "indexing": {
+          "aws": "Explicit GSI/LSI definition (max 5 each)",
+          "azure": "Automatic indexing with customizable policies",
+          "use_case": "Query optimization"
+        },
+        "query_languages": {
+          "aws": "DynamoDB Query API",
+          "azure": "SQL API, MongoDB query language (with MongoDB API)",
+          "use_case": "Developer familiarity"
+        }
+      },
+      "code_examples": {
+        "advanced_querying": {
+          "language": "python",
+          "title": "Advanced Query Patterns",
+          "code": "from azure.cosmos import CosmosClient\nimport time\n\nclass AdvancedQueryPatterns:\n    def __init__(self, container):\n        self.container = container\n    \n    def equivalent_to_dynamodb_query(self):\n        \"\"\"Queries equivalent to DynamoDB patterns\"\"\"\n        \n        # DynamoDB: Query with partition key and sort key range\n        # table.query(KeyConditionExpression=Key('pk').eq('USER#123') & Key('sk').begins_with('ORDER#'))\n        \n        # Cosmos DB equivalent\n        query = \"\"\"\n        SELECT * FROM c \n        WHERE c.partitionKey = @pk \n        AND STARTSWITH(c.sortKey, @sk_prefix)\n        ORDER BY c.sortKey\n        \"\"\"\n        \n        items = list(self.container.query_items(\n            query=query,\n            parameters=[\n                {'name': '@pk', 'value': 'USER#123'},\n                {'name': '@sk_prefix', 'value': 'ORDER#'}\n            ],\n            enable_cross_partition_query=False  # Single partition query\n        ))\n        \n        return items\n    \n    def equivalent_to_gsi_query(self):\n        \"\"\"Query patterns equivalent to DynamoDB GSI\"\"\"\n        \n        # DynamoDB: GSI query\n        # table.query(IndexName='StatusIndex',\n        #            KeyConditionExpression=Key('status').eq('PENDING'))\n        \n        # Cosmos DB with composite index (defined in indexing policy)\n        query = \"\"\"\n        SELECT * FROM c \n        WHERE c.status = @status \n        ORDER BY c.createdDate DESC\n        \"\"\"\n        \n        # This uses the composite index we defined\n        items = list(self.container.query_items(\n            query=query,\n            parameters=[{'name': '@status', 'value': 'PENDING'}],\n            enable_cross_partition_query=True  # Cross-partition query\n        ))\n        \n        return items\n    \n    def complex_filtering(self):\n        \"\"\"Complex queries not possible in DynamoDB without scan\"\"\"\n        \n        # Complex query with multiple conditions - would require scan in DynamoDB\n        query = \"\"\"\n        SELECT \n            c.id,\n            c.customerId,\n            c.total,\n            c.items,\n            ARRAY_LENGTH(c.items) as itemCount\n        FROM c\n        WHERE c.total > @min_total\n        AND c.status IN ('PENDING', 'PROCESSING')\n        AND EXISTS(SELECT VALUE i FROM i IN c.items WHERE i.category = @category)\n        AND c.createdDate > @start_date\n        ORDER BY c.total DESC\n        OFFSET 0 LIMIT 20\n        \"\"\"\n        \n        items = list(self.container.query_items(\n            query=query,\n            parameters=[\n                {'name': '@min_total', 'value': 100},\n                {'name': '@category', 'value': 'electronics'},\n                {'name': '@start_date', 'value': '2024-01-01'}\n            ],\n            enable_cross_partition_query=True\n        ))\n        \n        return items\n    \n    def aggregation_queries(self):\n        \"\"\"Aggregation queries (not directly available in DynamoDB)\"\"\"\n        \n        # Aggregation query\n        query = \"\"\"\n        SELECT \n            c.status,\n            COUNT(1) as count,\n            SUM(c.total) as totalRevenue,\n            AVG(c.total) as avgOrderValue,\n            MIN(c.total) as minOrder,\n            MAX(c.total) as maxOrder\n        FROM c\n        WHERE c.createdDate > @start_date\n        GROUP BY c.status\n        \"\"\"\n        \n        results = list(self.container.query_items(\n            query=query,\n            parameters=[{'name': '@start_date', 'value': '2024-01-01'}],\n            enable_cross_partition_query=True\n        ))\n        \n        return results\n    \n    def optimize_with_indexing_policy(self):\n        \"\"\"Optimize queries with custom indexing policy\"\"\"\n        \n        # Update container with optimized indexing policy\n        indexing_policy = {\n            'indexingMode': 'consistent',\n            'automatic': True,\n            'includedPaths': [\n                {\n                    'path': '/customerId/?',\n                    'indexes': [\n                        {'kind': 'Hash', 'dataType': 'String', 'precision': -1}\n                    ]\n                },\n                {\n                    'path': '/status/?',\n                    'indexes': [\n                        {'kind': 'Hash', 'dataType': 'String', 'precision': -1}\n                    ]\n                },\n                {\n                    'path': '/total/?',\n                    'indexes': [\n                        {'kind': 'Range', 'dataType': 'Number', 'precision': -1}\n                    ]\n                },\n                {\n                    'path': '/createdDate/?',\n                    'indexes': [\n                        {'kind': 'Range', 'dataType': 'String', 'precision': -1}\n                    ]\n                }\n            ],\n            'excludedPaths': [\n                {'path': '/items/*'},  # Exclude large array from indexing\n                {'path': '/metadata/*'}  # Exclude metadata\n            ],\n            'compositeIndexes': [\n                # For status + date queries\n                [\n                    {'path': '/status', 'order': 'ascending'},\n                    {'path': '/createdDate', 'order': 'descending'}\n                ],\n                # For customer + total queries\n                [\n                    {'path': '/customerId', 'order': 'ascending'},\n                    {'path': '/total', 'order': 'descending'}\n                ]\n            ],\n            'spatialIndexes': [\n                {'path': '/location/*', 'types': ['Point', 'Polygon']}\n            ]\n        }\n        \n        return indexing_policy\n\n# Performance comparison\ndef performance_comparison():\n    \"\"\"Compare query performance\"\"\"\n    \n    patterns = AdvancedQueryPatterns(container)\n    \n    # Test 1: Simple partition key query\n    start = time.time()\n    items = patterns.equivalent_to_dynamodb_query()\n    print(f\"Partition query: {len(items)} items in {time.time()-start:.3f}s\")\n    \n    # Test 2: Cross-partition query (like GSI)\n    start = time.time()\n    items = patterns.equivalent_to_gsi_query()\n    print(f\"Cross-partition query: {len(items)} items in {time.time()-start:.3f}s\")\n    \n    # Test 3: Complex filtering\n    start = time.time()\n    items = patterns.complex_filtering()\n    print(f\"Complex query: {len(items)} items in {time.time()-start:.3f}s\")\n    \n    # Test 4: Aggregation\n    start = time.time()\n    results = patterns.aggregation_queries()\n    print(f\"Aggregation: {len(results)} groups in {time.time()-start:.3f}s\")"
+        }
+      }
+    }
+  ],
+  "exercise": {
+    "scenario": "Your company is migrating a high-traffic e-commerce platform from DynamoDB to Cosmos DB. The platform has a product catalog with 10 million items, order processing system handling 100,000 orders/day, and requires global distribution across 3 regions with <100ms latency.",
+    "steps": [
+      {
+        "step": 1,
+        "title": "Create Cosmos DB Account with Optimal Settings",
+        "aws_equivalent": "Creating DynamoDB tables with Global Tables",
+        "instructions": "Set up a multi-region Cosmos DB account with appropriate consistency and throughput settings",
+        "code": {
+          "cli": "# Create resource group\naz group create --name CosmosLabRG --location eastus\n\n# Create Cosmos DB account with multiple regions\naz cosmosdb create \\\n  --resource-group CosmosLabRG \\\n  --name ecommerce-cosmos-$RANDOM \\\n  --kind GlobalDocumentDB \\\n  --locations regionName=eastus failoverPriority=0 isZoneRedundant=True \\\n  --locations regionName=westus failoverPriority=1 isZoneRedundant=True \\\n  --locations regionName=northeurope failoverPriority=2 isZoneRedundant=True \\\n  --default-consistency-level Session \\\n  --enable-multiple-write-locations true \\\n  --enable-automatic-failover true",
+          "portal": "Azure Portal → Cosmos DB → Create → Select Core (SQL) API → Configure multi-region with zone redundancy"
+        },
+        "explanation": "Multi-region setup with zone redundancy provides 99.999% availability SLA, similar to DynamoDB Global Tables but with more consistency options"
+      },
+      {
+        "step": 2,
+        "title": "Create Containers with Optimal Partition Strategy",
+        "aws_equivalent": "Creating DynamoDB tables with partition and sort keys",
+        "instructions": "Create containers with synthetic partition keys for even distribution",
+        "code": {
+          "cli": "# Create database\naz cosmosdb sql database create \\\n  --account-name ecommerce-cosmos \\\n  --resource-group CosmosLabRG \\\n  --name EcommerceDB\n\n# Create products container with autoscale\naz cosmosdb sql container create \\\n  --resource-group CosmosLabRG \\\n  --account-name ecommerce-cosmos \\\n  --database-name EcommerceDB \\\n  --name Products \\\n  --partition-key-path /categoryId \\\n  --max-throughput 10000\n\n# Create orders container\naz cosmosdb sql container create \\\n  --resource-group CosmosLabRG \\\n  --account-name ecommerce-cosmos \\\n  --database-name EcommerceDB \\\n  --name Orders \\\n  --partition-key-path /customerId \\\n  --max-throughput 20000",
+          "portal": "Cosmos DB account → Data Explorer → New Container → Configure partition key and autoscale"
+        }
+      },
+      {
+        "step": 3,
+        "title": "Migrate Data from DynamoDB",
+        "aws_equivalent": "DynamoDB export and import",
+        "instructions": "Use Azure Data Factory or custom migration script to transfer data",
+        "code": {
+          "cli": "# Option 1: Use Azure Data Factory\naz datafactory create \\\n  --resource-group CosmosLabRG \\\n  --name MigrationFactory\n\n# Create linked services and pipeline for migration\n# (Complex setup - see Azure Data Factory documentation)\n\n# Option 2: Custom migration script (Python)\npython migrate_dynamodb_to_cosmos.py \\\n  --source-table Orders \\\n  --target-container Orders \\\n  --batch-size 100 \\\n  --parallel-workers 10",
+          "portal": "Azure Data Factory → Author → Create pipeline with DynamoDB source and Cosmos DB sink"
+        }
+      },
+      {
+        "step": 4,
+        "title": "Implement Change Feed Processing",
+        "aws_equivalent": "DynamoDB Streams with Lambda",
+        "instructions": "Set up Azure Functions to process Cosmos DB change feed",
+        "code": {
+          "cli": "# Create Function App\naz functionapp create \\\n  --resource-group CosmosLabRG \\\n  --consumption-plan-location eastus \\\n  --runtime python \\\n  --functions-version 4 \\\n  --name ordersprocessor$RANDOM \\\n  --storage-account ordersstorage$RANDOM\n\n# Configure Cosmos DB connection\naz functionapp config appsettings set \\\n  --resource-group CosmosLabRG \\\n  --name ordersprocessor \\\n  --settings CosmosDBConnection=\"AccountEndpoint=https://...\"",
+          "portal": "Function App → Functions → Create → Cosmos DB trigger template"
+        }
+      },
+      {
+        "step": 5,
+        "title": "Performance Testing and Optimization",
+        "aws_equivalent": "DynamoDB capacity planning and monitoring",
+        "instructions": "Test performance and optimize RU allocation",
+        "code": {
+          "cli": "# Run performance test\naz cosmosdb sql container throughput show \\\n  --resource-group CosmosLabRG \\\n  --account-name ecommerce-cosmos \\\n  --database-name EcommerceDB \\\n  --name Orders\n\n# Monitor metrics\naz monitor metrics list \\\n  --resource /subscriptions/{sub}/resourceGroups/CosmosLabRG/providers/Microsoft.DocumentDB/databaseAccounts/ecommerce-cosmos \\\n  --metric TotalRequestUnits \\\n  --interval PT1M",
+          "portal": "Cosmos DB account → Metrics → Monitor RU consumption, latency, and availability"
+        }
+      }
+    ]
+  },
+  "validation_steps": [
+    {
+      "step": "Verify data migration completeness",
+      "command": "az cosmosdb sql container show --resource-group CosmosLabRG --account-name ecommerce-cosmos --database-name EcommerceDB --name Orders --query resource.statistics",
+      "expected": "Document count matches source DynamoDB table"
+    },
+    {
+      "step": "Test multi-region replication",
+      "command": "az cosmosdb show --resource-group CosmosLabRG --name ecommerce-cosmos --query writeLocations",
+      "expected": "All configured regions show as write-enabled"
+    },
+    {
+      "step": "Validate query performance",
+      "command": "Run test queries and check RU consumption in metrics",
+      "expected": "Queries complete within target latency with acceptable RU consumption"
+    },
+    {
+      "step": "Verify change feed processing",
+      "command": "az functionapp function show --resource-group CosmosLabRG --name ordersprocessor --function-name ProcessOrders",
+      "expected": "Function executions show successful processing of changes"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all resources to avoid charges",
+    "command": "az group delete --name CosmosLabRG --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Cosmos DB offers more flexibility with multi-model APIs compared to DynamoDB's single API",
+    "Automatic indexing in Cosmos DB provides query flexibility but requires careful management for cost",
+    "Request Units (RU/s) provide a unified currency for all operations unlike separate RCU/WCU in DynamoDB",
+    "Multiple consistency levels in Cosmos DB allow fine-tuning between consistency and performance",
+    "Synthetic partition keys are crucial for avoiding hot partitions in both systems",
+    "Change Feed provides similar functionality to DynamoDB Streams with longer retention",
+    "Global distribution in Cosmos DB offers more control over failover and consistency",
+    "Cosmos DB's SQL API makes complex queries easier compared to DynamoDB's limited query capabilities"
+  ],
+  "next_steps": [
+    "Explore Cosmos DB's other APIs (MongoDB, Cassandra, Gremlin) for specific use cases",
+    "Learn about Cosmos DB analytical store for hybrid transactional/analytical processing",
+    "Study advanced partitioning strategies including hierarchical partition keys",
+    "Implement custom conflict resolution for multi-region write scenarios",
+    "Explore Cosmos DB serverless tier for variable workloads"
+  ]
+}

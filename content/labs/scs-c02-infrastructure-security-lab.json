@@ -1,0 +1,318 @@
+{
+  "id": "scs-c02-infrastructure-security-lab",
+  "title": "AWS Infrastructure Security to Azure Infrastructure Protection: Comprehensive Network and Compute Security",
+  "category": "infrastructure-security",
+  "difficulty": "expert",
+  "estimatedTime": "160 minutes",
+  "awsCertification": "SCS-C02",
+  "certificationWeight": "20% - Infrastructure Security Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master enterprise infrastructure security by implementing comprehensive AWS network, compute, and infrastructure protection, then migrating to Azure security equivalents with advanced threat protection, network security, and infrastructure hardening for enterprise environments.",
+
+  "learningObjectives": [
+    "Implement comprehensive network security architecture and micro-segmentation",
+    "Build advanced compute security with container and serverless protection",
+    "Create infrastructure threat protection and real-time security monitoring",
+    "Design secure infrastructure automation and configuration management",
+    "Implement infrastructure compliance and security governance frameworks",
+    "Build incident response and infrastructure security operations capabilities"
+  ],
+
+  "prerequisites": [
+    "Strong understanding of cloud infrastructure and networking concepts",
+    "Experience with security frameworks and enterprise security requirements",
+    "Familiarity with threat modeling and security architecture principles",
+    "Basic knowledge of compliance frameworks and regulatory requirements"
+  ],
+
+  "awsServices": [
+    "Amazon VPC",
+    "AWS Security Groups",
+    "AWS Network ACLs",
+    "AWS WAF",
+    "AWS Shield",
+    "AWS Network Firewall",
+    "Amazon GuardDuty",
+    "AWS Config",
+    "AWS Systems Manager",
+    "AWS Inspector",
+    "AWS Security Hub",
+    "AWS Organizations"
+  ],
+
+  "azureServices": [
+    "Azure Virtual Network",
+    "Network Security Groups",
+    "Azure Application Security Groups",
+    "Azure Web Application Firewall",
+    "Azure DDoS Protection",
+    "Azure Firewall",
+    "Microsoft Defender for Cloud",
+    "Azure Policy",
+    "Azure Automation",
+    "Microsoft Defender for Servers",
+    "Azure Security Center",
+    "Azure Management Groups"
+  ],
+
+  "businessScenario": "Enterprise Security Solutions provides comprehensive infrastructure security services for Fortune 500 companies requiring advanced threat protection, compliance management, and security operations. Their infrastructure security team needs expertise in network security, compute protection, threat detection, and security automation. They must master both AWS and Azure security platforms for comprehensive infrastructure protection and enterprise security excellence.",
+
+  "sections": [
+    {
+      "title": "Advanced Network Security and Micro-Segmentation",
+      "duration": "45 minutes",
+      "topics": [
+        "Enterprise network security architecture and zero-trust networking",
+        "Advanced micro-segmentation and network isolation strategies",
+        "Web application firewall and DDoS protection implementation",
+        "Network threat detection and automated response systems",
+        "Secure network connectivity and VPN management"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Enterprise Network Security Architecture",
+          "description": "Build comprehensive network security with advanced threat protection",
+          "steps": [
+            "Configure enterprise VPC architecture with Security Groups and NACLs",
+            "Implement Azure Virtual Network with NSGs and Application Security Groups",
+            "Setup advanced web application firewall with AWS WAF and Azure WAF",
+            "Configure DDoS protection with AWS Shield and Azure DDoS Protection",
+            "Implement network firewall with AWS Network Firewall and Azure Firewall",
+            "Setup network threat detection with GuardDuty and Defender for Cloud"
+          ],
+          "deliverables": [
+            "Enterprise network security architecture with micro-segmentation",
+            "Advanced web application firewall and DDoS protection",
+            "Network threat detection and automated response systems",
+            "Secure network connectivity and isolation implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Compute Security and Container Protection",
+      "duration": "40 minutes",
+      "topics": [
+        "Enterprise compute security and workload protection strategies",
+        "Container security and serverless function protection",
+        "Endpoint detection and response for cloud workloads",
+        "Vulnerability management and patch automation",
+        "Runtime security monitoring and threat detection"
+      ],
+      "tasks": [
+        {
+          "title": "Build Advanced Compute Security and Protection Platform",
+          "description": "Implement comprehensive compute security with container and serverless protection",
+          "steps": [
+            "Configure compute security with AWS Inspector and Azure Defender for Servers",
+            "Implement container security with AWS ECS/EKS security and Azure Container security",
+            "Setup serverless security with AWS Lambda security and Azure Functions protection",
+            "Configure endpoint detection and response with GuardDuty and Defender",
+            "Implement vulnerability management and automated patching",
+            "Setup runtime security monitoring and threat detection"
+          ],
+          "deliverables": [
+            "Advanced compute security and workload protection",
+            "Container security and serverless function protection",
+            "Endpoint detection and response for cloud workloads",
+            "Vulnerability management and automated patching systems"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Infrastructure Threat Protection and Security Monitoring",
+      "duration": "40 minutes",
+      "topics": [
+        "Advanced threat detection and behavioral analysis",
+        "Security information and event management (SIEM) integration",
+        "Automated incident response and threat hunting capabilities",
+        "Infrastructure security analytics and intelligence",
+        "Security orchestration and automated remediation"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Infrastructure Threat Protection and Monitoring Platform",
+          "description": "Build comprehensive threat detection with automated response capabilities",
+          "steps": [
+            "Configure advanced threat detection with GuardDuty and Defender for Cloud",
+            "Implement SIEM integration with AWS Security Hub and Azure Sentinel",
+            "Setup automated incident response and threat hunting workflows",
+            "Configure infrastructure security analytics and threat intelligence",
+            "Implement security orchestration and automated remediation",
+            "Setup security monitoring dashboards and executive reporting"
+          ],
+          "deliverables": [
+            "Advanced threat detection and behavioral analysis system",
+            "SIEM integration and security analytics platform",
+            "Automated incident response and threat hunting capabilities",
+            "Security orchestration and remediation automation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Infrastructure Security Automation and Compliance",
+      "duration": "35 minutes",
+      "topics": [
+        "Infrastructure as code security and configuration management",
+        "Automated security compliance and policy enforcement",
+        "Security governance and risk management frameworks",
+        "Continuous security monitoring and assessment",
+        "Security operations and incident management"
+      ],
+      "tasks": [
+        {
+          "title": "Build Infrastructure Security Automation and Compliance Platform",
+          "description": "Implement comprehensive security automation with compliance management",
+          "steps": [
+            "Configure infrastructure as code security with AWS Config and Azure Policy",
+            "Implement automated compliance monitoring and policy enforcement",
+            "Setup security governance and risk management frameworks",
+            "Configure continuous security assessment and monitoring",
+            "Implement security operations and incident management workflows",
+            "Setup automated compliance reporting and audit trails"
+          ],
+          "deliverables": [
+            "Infrastructure as code security and configuration management",
+            "Automated compliance monitoring and policy enforcement",
+            "Security governance and risk management frameworks",
+            "Continuous security assessment and operations platform"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Financial Services Infrastructure Security Platform",
+      "description": "Build comprehensive infrastructure security for financial services with regulatory compliance",
+      "steps": [
+        "Design enterprise infrastructure security architecture for financial services compliance",
+        "Implement advanced network security with micro-segmentation and zero-trust principles",
+        "Build comprehensive compute security with container and serverless protection",
+        "Configure advanced threat detection and automated incident response",
+        "Implement security automation and compliance management for financial regulations",
+        "Test platform with financial services security requirements and regulatory validation"
+      ],
+      "expectedOutcome": "Production-ready infrastructure security platform for financial services with compliance"
+    },
+    {
+      "title": "Healthcare Infrastructure Protection and HIPAA Compliance",
+      "description": "Implement healthcare infrastructure security with HIPAA compliance and patient data protection",
+      "steps": [
+        "Design healthcare infrastructure security architecture for HIPAA compliance",
+        "Implement advanced network security and medical device protection",
+        "Build comprehensive workload security with healthcare application protection",
+        "Configure healthcare-specific threat detection and response capabilities",
+        "Implement HIPAA compliance automation and audit trail management",
+        "Test platform with healthcare security requirements and compliance validation"
+      ],
+      "expectedOutcome": "Healthcare infrastructure security platform with HIPAA compliance and patient data protection"
+    },
+    {
+      "title": "Multi-Cloud Infrastructure Security and Governance",
+      "description": "Build unified infrastructure security platform spanning AWS and Azure",
+      "steps": [
+        "Design multi-cloud infrastructure security architecture with unified management",
+        "Implement cross-cloud network security and connectivity protection",
+        "Build unified compute security and workload protection across clouds",
+        "Configure multi-cloud threat detection and centralized incident response",
+        "Implement unified security governance and compliance across platforms",
+        "Test platform with complex multi-cloud scenarios and security requirements"
+      ],
+      "expectedOutcome": "Multi-cloud infrastructure security platform with unified governance and protection"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Network security performance impact and connectivity issues",
+      "solution": "Optimize security group rules and network ACLs, implement efficient firewall rules, use traffic flow monitoring for performance analysis, implement network security caching, and optimize security inspection points"
+    },
+    {
+      "issue": "Compute security agent conflicts and performance degradation",
+      "solution": "Implement agent consolidation strategies, optimize security scanning schedules, use agentless security where appropriate, implement resource-aware security policies, and monitor security tooling performance impact"
+    },
+    {
+      "issue": "Threat detection false positives and alert fatigue",
+      "solution": "Implement machine learning-based threat detection tuning, use contextual analysis for alert correlation, implement threat intelligence integration, use behavioral baselines for anomaly detection, and implement intelligent alert prioritization"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Network Security Excellence",
+      "criteria": [
+        "Can implement enterprise network security architecture with micro-segmentation",
+        "Understands advanced web application firewall and DDoS protection",
+        "Can configure network threat detection and automated response",
+        "Demonstrates secure network connectivity and isolation capabilities"
+      ]
+    },
+    {
+      "category": "Compute Security Mastery",
+      "criteria": [
+        "Can implement advanced compute security and workload protection",
+        "Understands container security and serverless function protection",
+        "Can configure endpoint detection and response for cloud workloads",
+        "Demonstrates vulnerability management and automated patching"
+      ]
+    },
+    {
+      "category": "Threat Protection Excellence",
+      "criteria": [
+        "Can implement advanced threat detection and behavioral analysis",
+        "Understands SIEM integration and security analytics",
+        "Can configure automated incident response and threat hunting",
+        "Demonstrates security orchestration and remediation automation"
+      ]
+    },
+    {
+      "category": "Security Automation and Compliance",
+      "criteria": [
+        "Can implement infrastructure as code security and configuration management",
+        "Understands automated compliance monitoring and policy enforcement",
+        "Can configure security governance and risk management",
+        "Demonstrates continuous security assessment and operations"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SCS-C02": {
+      "domain": "Infrastructure Security",
+      "weight": "20%",
+      "coverage": [
+        "Design and implement security controls for edge services",
+        "Design and implement security controls for compute workloads",
+        "Design and implement security controls for networking",
+        "Design and implement security controls for data at rest and in transit",
+        "Troubleshoot security issues related to infrastructure security"
+      ],
+      "examTopics": [
+        "Advanced network security and micro-segmentation with VPC and Security Groups",
+        "Compute security and container protection with Inspector and GuardDuty",
+        "Infrastructure threat detection and automated response systems",
+        "Security automation and compliance management with Config and Policy",
+        "Incident response and security operations for infrastructure protection"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement enterprise infrastructure security architecture with comprehensive protection",
+    "Demonstrates ability to build advanced network and compute security capabilities",
+    "Shows understanding of infrastructure threat detection and automated response",
+    "Can create security automation and compliance management frameworks",
+    "Understands infrastructure security operations and incident management"
+  ],
+
+  "nextSteps": [
+    "Proceed to SCS-C02 Security Logging & Monitoring Lab (18% domain weight)",
+    "Gain hands-on experience with enterprise infrastructure security in production environments",
+    "Practice implementing infrastructure security for various compliance frameworks",
+    "Explore advanced threat detection and security automation techniques"
+  ]
+}

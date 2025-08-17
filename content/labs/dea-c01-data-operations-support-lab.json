@@ -1,0 +1,314 @@
+{
+  "id": "dea-c01-data-operations-support-lab",
+  "title": "AWS Data Operations to Azure Data Management: Operations, Monitoring, and Support",
+  "category": "data-operations",
+  "difficulty": "advanced",
+  "estimatedTime": "130 minutes",
+  "awsCertification": "DEA-C01",
+  "certificationWeight": "22% - Data Operations & Support Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master data operations by implementing AWS data platform monitoring and support, then migrating to Azure data management equivalents with operational excellence, performance optimization, troubleshooting, and incident response for data systems.",
+  
+  "learningObjectives": [
+    "Implement comprehensive data platform monitoring with CloudWatch and Azure Monitor",
+    "Build data pipeline observability and troubleshooting workflows",
+    "Create automated data quality monitoring and alerting systems",
+    "Design data platform performance optimization and capacity planning",
+    "Implement data backup, recovery, and disaster response procedures",
+    "Build operational runbooks and incident response for data systems"
+  ],
+
+  "prerequisites": [
+    "Completion of DEA-C01 Data Ingestion and Data Store Management labs",
+    "Understanding of data pipeline operations and monitoring concepts",
+    "Basic knowledge of performance tuning and troubleshooting methodologies",
+    "Familiarity with incident response and operational procedures"
+  ],
+
+  "awsServices": [
+    "Amazon CloudWatch (Data Platform Monitoring)",
+    "AWS CloudTrail (Data Audit Logging)",
+    "AWS X-Ray (Data Pipeline Tracing)",
+    "Amazon SNS (Data Alerting)",
+    "AWS Systems Manager (Data Operations)",
+    "AWS Backup (Data Protection)",
+    "AWS Config (Data Configuration)",
+    "Amazon QuickSight (Operational Dashboards)",
+    "AWS Service Health Dashboard",
+    "AWS Personal Health Dashboard"
+  ],
+
+  "azureServices": [
+    "Azure Monitor (Data Platform Monitoring)",
+    "Azure Activity Log (Data Audit Logging)",
+    "Azure Application Insights (Data Pipeline Tracing)",
+    "Azure Action Groups (Data Alerting)",
+    "Azure Automation (Data Operations)",
+    "Azure Backup (Data Protection)",
+    "Azure Policy (Data Configuration)",
+    "Power BI (Operational Dashboards)",
+    "Azure Service Health",
+    "Azure Resource Health"
+  ],
+
+  "businessScenario": "DataOps Solutions operates mission-critical data platforms supporting real-time analytics and business intelligence for financial services. They need comprehensive operational excellence for their data engineering infrastructure, including proactive monitoring, rapid incident response, performance optimization, and disaster recovery. The team must master operational practices across AWS and Azure data platforms while ensuring 99.9% uptime and regulatory compliance.",
+
+  "sections": [
+    {
+      "title": "Data Platform Monitoring and Observability",
+      "duration": "35 minutes",
+      "topics": [
+        "Comprehensive data pipeline monitoring with CloudWatch and Azure Monitor",
+        "Data quality metrics and business KPI tracking",
+        "Real-time alerting and notification systems for data operations",
+        "Data lineage visualization and dependency monitoring",
+        "Cross-platform observability and correlation analysis"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Data Platform Monitoring",
+          "description": "Build enterprise-grade monitoring for all data platform components",
+          "steps": [
+            "Configure CloudWatch monitoring for all data services and pipelines",
+            "Setup Azure Monitor with equivalent data platform monitoring",
+            "Implement data quality metrics and business KPI tracking",
+            "Create real-time alerting and escalation procedures",
+            "Setup data lineage monitoring and dependency tracking",
+            "Build cross-platform observability and correlation dashboards"
+          ],
+          "deliverables": [
+            "CloudWatch monitoring configuration for data platform",
+            "Azure Monitor setup with data quality metrics",
+            "Real-time alerting and escalation framework",
+            "Data lineage and dependency monitoring system"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Performance Optimization and Capacity Planning",
+      "duration": "30 minutes",
+      "topics": [
+        "Data pipeline performance analysis and bottleneck identification",
+        "Resource utilization optimization and cost management",
+        "Capacity planning and auto-scaling for data workloads",
+        "Query performance optimization and tuning strategies",
+        "Data storage optimization and lifecycle management"
+      ],
+      "tasks": [
+        {
+          "title": "Build Performance Optimization Framework",
+          "description": "Implement comprehensive performance optimization and capacity planning",
+          "steps": [
+            "Configure performance monitoring and bottleneck identification",
+            "Implement resource utilization analysis and optimization recommendations",
+            "Setup capacity planning and predictive scaling for data workloads",
+            "Create query performance optimization and tuning workflows",
+            "Implement data storage optimization and automated lifecycle policies",
+            "Build performance benchmarking and continuous improvement processes"
+          ],
+          "deliverables": [
+            "Performance monitoring and bottleneck analysis framework",
+            "Resource optimization and capacity planning system",
+            "Query performance tuning and optimization workflows",
+            "Storage optimization and lifecycle management automation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Backup, Recovery, and Disaster Response",
+      "duration": "35 minutes",
+      "topics": [
+        "Comprehensive data backup strategies and automation",
+        "Disaster recovery planning and testing for data systems",
+        "Cross-region data replication and failover procedures",
+        "Point-in-time recovery and data restoration workflows",
+        "Business continuity planning for data operations"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Data Protection and Disaster Recovery",
+          "description": "Build comprehensive data protection with automated disaster recovery",
+          "steps": [
+            "Configure automated backup strategies for all data stores",
+            "Implement cross-region data replication and synchronization",
+            "Setup disaster recovery testing and validation procedures",
+            "Create point-in-time recovery and data restoration workflows",
+            "Implement business continuity planning and runbooks",
+            "Configure automated failover and recovery orchestration"
+          ],
+          "deliverables": [
+            "Automated backup and replication configuration",
+            "Disaster recovery testing and validation framework",
+            "Point-in-time recovery and restoration workflows",
+            "Business continuity planning and automated failover"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Incident Response and Operational Excellence",
+      "duration": "30 minutes",
+      "topics": [
+        "Data platform incident detection and classification",
+        "Automated incident response and escalation procedures",
+        "Root cause analysis and post-incident review processes",
+        "Operational runbooks and standard operating procedures",
+        "Continuous improvement and lessons learned implementation"
+      ],
+      "tasks": [
+        {
+          "title": "Build Data Operations Excellence Framework",
+          "description": "Implement comprehensive incident response and operational excellence",
+          "steps": [
+            "Configure automated incident detection and classification systems",
+            "Implement incident response workflows and escalation procedures",
+            "Create root cause analysis and post-incident review processes",
+            "Build comprehensive operational runbooks and procedures",
+            "Setup continuous improvement workflows and metrics tracking",
+            "Implement knowledge management and lessons learned systems"
+          ],
+          "deliverables": [
+            "Automated incident detection and response system",
+            "Root cause analysis and post-incident review framework",
+            "Comprehensive operational runbooks and procedures",
+            "Continuous improvement and knowledge management system"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Data Platform Operations Center Implementation",
+      "description": "Build comprehensive operations center for data platform management",
+      "steps": [
+        "Design data operations center architecture and workflows",
+        "Implement real-time monitoring and alerting for all data services",
+        "Create operational dashboards for different stakeholder audiences",
+        "Build automated incident response and escalation procedures",
+        "Implement performance optimization and capacity planning workflows",
+        "Test end-to-end operations with simulated incidents and recovery"
+      ],
+      "expectedOutcome": "Production-ready data operations center with comprehensive monitoring and response"
+    },
+    {
+      "title": "Multi-Region Data Disaster Recovery",
+      "description": "Implement comprehensive disaster recovery across multiple regions",
+      "steps": [
+        "Design multi-region data architecture with replication strategies",
+        "Implement automated backup and cross-region synchronization",
+        "Create disaster recovery testing and validation procedures",
+        "Build automated failover and recovery orchestration",
+        "Test disaster scenarios with RTO/RPO validation",
+        "Document recovery procedures and operational runbooks"
+      ],
+      "expectedOutcome": "Multi-region disaster recovery system with validated RTO/RPO compliance"
+    },
+    {
+      "title": "Data Quality Operations Framework",
+      "description": "Build comprehensive data quality monitoring and operations",
+      "steps": [
+        "Implement data quality monitoring across all data pipelines",
+        "Create automated data quality validation and alerting",
+        "Build data quality incident response and remediation workflows",
+        "Implement data quality metrics and executive reporting",
+        "Create data quality improvement and continuous monitoring",
+        "Test data quality operations with various failure scenarios"
+      ],
+      "expectedOutcome": "Comprehensive data quality operations with automated monitoring and response"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex data pipeline failures with cascading impacts across systems",
+      "solution": "Implement dependency mapping, use circuit breakers, create automated rollback procedures, implement comprehensive logging, and use distributed tracing"
+    },
+    {
+      "issue": "Performance degradation and capacity issues under high data loads",
+      "solution": "Implement predictive scaling, optimize data processing algorithms, use appropriate partitioning strategies, implement caching, and optimize resource allocation"
+    },
+    {
+      "issue": "Data quality issues and inconsistencies affecting business operations",
+      "solution": "Implement comprehensive data validation, use data quality frameworks, implement automated remediation, create data quality monitoring, and establish data contracts"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Data Platform Monitoring",
+      "criteria": [
+        "Can implement comprehensive data platform monitoring and observability",
+        "Understands data quality metrics and business KPI tracking",
+        "Can configure real-time alerting and notification systems",
+        "Demonstrates data lineage monitoring and dependency tracking"
+      ]
+    },
+    {
+      "category": "Performance Optimization",
+      "criteria": [
+        "Can implement performance monitoring and bottleneck identification",
+        "Understands resource optimization and capacity planning",
+        "Can configure query performance optimization and tuning",
+        "Demonstrates storage optimization and lifecycle management"
+      ]
+    },
+    {
+      "category": "Data Protection and Recovery",
+      "criteria": [
+        "Can implement comprehensive data backup and recovery strategies",
+        "Understands disaster recovery planning and testing procedures",
+        "Can configure cross-region replication and failover",
+        "Demonstrates business continuity planning and automation"
+      ]
+    },
+    {
+      "category": "Operational Excellence",
+      "criteria": [
+        "Can implement incident detection and response systems",
+        "Understands root cause analysis and post-incident procedures",
+        "Can create comprehensive operational runbooks",
+        "Demonstrates continuous improvement and knowledge management"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DEA-C01": {
+      "domain": "Data Operations & Support",
+      "weight": "22%",
+      "coverage": [
+        "Automate data processing systems",
+        "Monitor and troubleshoot data processing systems",
+        "Maintain and optimize data processing systems",
+        "Ensure data processing systems are reliable and scalable",
+        "Apply appropriate support procedures"
+      ],
+      "examTopics": [
+        "CloudWatch monitoring and alerting for data services",
+        "Data pipeline troubleshooting and performance optimization",
+        "Backup and recovery strategies for data systems",
+        "Operational procedures and incident response",
+        "Cost optimization and resource management for data workloads"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive data platform monitoring and observability",
+    "Demonstrates ability to build performance optimization and capacity planning",
+    "Shows understanding of data protection and disaster recovery strategies",
+    "Can create operational excellence frameworks for data systems",
+    "Understands incident response and continuous improvement practices"
+  ],
+
+  "nextSteps": [
+    "Proceed to DEA-C01 Data Security & Governance Lab (18% domain weight)",
+    "Gain hands-on experience with advanced data operations and monitoring tools",
+    "Practice implementing operational excellence in production data environments",
+    "Explore advanced data reliability and resilience engineering practices"
+  ]
+}

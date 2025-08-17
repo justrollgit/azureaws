@@ -1,0 +1,314 @@
+{
+  "id": "dva-c02-development-services-lab",
+  "title": "AWS Development Services to Azure Development: Application Development and Service Integration",
+  "category": "application-development",
+  "difficulty": "intermediate",
+  "estimatedTime": "120 minutes",
+  "awsCertification": "DVA-C02",
+  "certificationWeight": "32% - Development with AWS Services Domain (Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master AWS application development services and migrate to Azure development equivalents with hands-on service integration, API development, event-driven architecture, and application lifecycle management across both platforms.",
+  
+  "learningObjectives": [
+    "Develop applications using AWS SDK, CLI, and APIs with Azure SDK equivalents",
+    "Build serverless applications with AWS Lambda and Azure Functions",
+    "Create event-driven architectures using AWS and Azure messaging services",
+    "Implement data persistence with AWS DynamoDB and Azure Cosmos DB",
+    "Design API management solutions with AWS API Gateway and Azure API Management",
+    "Build application integration patterns across both cloud platforms"
+  ],
+
+  "prerequisites": [
+    "Completion of CLF-C02 certification labs or equivalent cloud fundamentals",
+    "Programming experience in Python, Node.js, or .NET",
+    "Basic understanding of REST APIs and web services",
+    "Familiarity with JSON and data serialization concepts"
+  ],
+
+  "awsServices": [
+    "AWS SDK for Python/JavaScript/.NET",
+    "AWS CLI (Command Line Interface)",
+    "AWS Lambda (Serverless Functions)",
+    "Amazon DynamoDB (NoSQL Database)",
+    "Amazon API Gateway",
+    "Amazon SNS (Simple Notification Service)",
+    "Amazon SQS (Simple Queue Service)",
+    "AWS CloudFormation",
+    "AWS X-Ray (Distributed Tracing)",
+    "Amazon EventBridge"
+  ],
+
+  "azureServices": [
+    "Azure SDK for Python/JavaScript/.NET",
+    "Azure CLI",
+    "Azure Functions (Serverless Functions)",
+    "Azure Cosmos DB (NoSQL Database)",
+    "Azure API Management",
+    "Azure Service Bus",
+    "Azure Event Grid",
+    "Azure Resource Manager (ARM) Templates",
+    "Azure Application Insights",
+    "Azure Logic Apps"
+  ],
+
+  "businessScenario": "TechStartup Inc. is developing a modern e-commerce platform with microservices architecture. They need to build APIs, implement serverless functions, manage data persistence, and create event-driven workflows. The development team must understand both AWS and Azure development services to make informed architectural decisions and potentially migrate between platforms while maintaining functionality and performance.",
+
+  "sections": [
+    {
+      "title": "AWS SDK and Development Tools",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS SDK setup and authentication across different languages",
+        "Azure SDK configuration and authentication methods",
+        "AWS CLI vs Azure CLI for development workflows",
+        "Service authentication: IAM roles vs Azure managed identities",
+        "Local development environment setup and best practices"
+      ],
+      "tasks": [
+        {
+          "title": "Setup Multi-Platform Development Environment",
+          "description": "Configure AWS and Azure development tools for cross-platform development",
+          "steps": [
+            "Install and configure AWS CLI with programmatic access",
+            "Setup Azure CLI and authenticate with service principal",
+            "Configure AWS SDK for chosen programming language (Python/Node.js/.NET)",
+            "Install Azure SDK packages and setup authentication",
+            "Create sample applications using both SDKs for service comparison",
+            "Implement credential management and security best practices"
+          ],
+          "deliverables": [
+            "Working development environment with both AWS and Azure tools",
+            "Sample SDK authentication code",
+            "Credential management strategy",
+            "Development workflow documentation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Serverless Application Development",
+      "duration": "35 minutes",
+      "topics": [
+        "AWS Lambda function development and deployment",
+        "Azure Functions creation and runtime management",
+        "Function triggers: HTTP, timer, event-driven",
+        "Environment variables and configuration management",
+        "Local development and testing strategies"
+      ],
+      "tasks": [
+        {
+          "title": "Build Serverless API Backend",
+          "description": "Create equivalent serverless functions on AWS Lambda and Azure Functions",
+          "steps": [
+            "Design simple REST API with CRUD operations",
+            "Implement AWS Lambda functions with different triggers",
+            "Create equivalent Azure Functions with corresponding triggers",
+            "Configure environment variables and secrets management",
+            "Implement error handling and logging in both platforms",
+            "Compare cold start performance and scaling behavior"
+          ],
+          "deliverables": [
+            "Working Lambda functions with HTTP and event triggers",
+            "Equivalent Azure Functions implementation",
+            "Performance comparison report",
+            "Error handling and monitoring setup"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Persistence and NoSQL Development",
+      "duration": "30 minutes",
+      "topics": [
+        "Amazon DynamoDB table design and operations",
+        "Azure Cosmos DB container and partition strategy",
+        "NoSQL data modeling best practices",
+        "Query optimization and performance tuning",
+        "Data consistency models and transaction support"
+      ],
+      "tasks": [
+        {
+          "title": "Implement NoSQL Data Layer",
+          "description": "Build data persistence layer using DynamoDB and Cosmos DB",
+          "steps": [
+            "Design DynamoDB table structure for e-commerce use case",
+            "Create equivalent Azure Cosmos DB container with proper partitioning",
+            "Implement CRUD operations using AWS SDK",
+            "Build equivalent operations using Azure Cosmos DB SDK",
+            "Optimize queries and implement pagination",
+            "Compare performance characteristics and consistency models"
+          ],
+          "deliverables": [
+            "DynamoDB table design and implementation",
+            "Cosmos DB container with equivalent functionality",
+            "CRUD operation code for both platforms",
+            "Performance and cost comparison analysis"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "API Management and Integration",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS API Gateway setup and configuration",
+        "Azure API Management service creation",
+        "API versioning and lifecycle management",
+        "Authentication: API keys, OAuth, JWT validation",
+        "Rate limiting, throttling, and usage analytics"
+      ],
+      "tasks": [
+        {
+          "title": "Design Enterprise API Management",
+          "description": "Implement comprehensive API management solution on both platforms",
+          "steps": [
+            "Create AWS API Gateway with Lambda integration",
+            "Setup Azure API Management with Function integration",
+            "Implement API authentication and authorization",
+            "Configure rate limiting and usage quotas",
+            "Setup API documentation and developer portal",
+            "Implement API versioning and deployment strategies"
+          ],
+          "deliverables": [
+            "AWS API Gateway configuration",
+            "Azure API Management setup",
+            "API security implementation",
+            "Developer documentation and portal"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Event-Driven E-commerce Platform",
+      "description": "Build complete event-driven application using both AWS and Azure services",
+      "steps": [
+        "Design microservices architecture for order processing system",
+        "Implement AWS version using Lambda, SNS, SQS, and DynamoDB",
+        "Create Azure equivalent using Functions, Service Bus, and Cosmos DB",
+        "Build event publishers and subscribers for order lifecycle",
+        "Implement saga pattern for distributed transactions",
+        "Compare performance, cost, and operational characteristics"
+      ],
+      "expectedOutcome": "Fully functional event-driven application on both platforms with detailed comparison"
+    },
+    {
+      "title": "Multi-Platform Development Workflow",
+      "description": "Create development workflow that supports both AWS and Azure deployment",
+      "steps": [
+        "Setup Infrastructure as Code templates (CloudFormation vs ARM)",
+        "Implement application code that abstracts cloud-specific dependencies",
+        "Create CI/CD pipeline supporting both platforms",
+        "Implement environment-specific configuration management",
+        "Build automated testing for both cloud environments",
+        "Document deployment and migration procedures"
+      ],
+      "expectedOutcome": "Portable application architecture with automated deployment to both platforms"
+    },
+    {
+      "title": "Performance Optimization Challenge",
+      "description": "Optimize application performance across AWS and Azure services",
+      "steps": [
+        "Profile baseline application performance on both platforms",
+        "Identify bottlenecks in compute, storage, and network operations",
+        "Implement caching strategies using AWS ElastiCache and Azure Cache",
+        "Optimize database queries and connection pooling",
+        "Configure auto-scaling and performance monitoring",
+        "Measure and compare optimization results"
+      ],
+      "expectedOutcome": "Performance-optimized applications with detailed metrics and improvement strategies"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complexity of managing credentials and authentication across multiple platforms",
+      "solution": "Use managed identities/IAM roles in cloud environments, implement credential abstraction layer, and use environment-specific configuration management"
+    },
+    {
+      "issue": "Different SDK patterns and error handling between AWS and Azure",
+      "solution": "Create wrapper classes or abstraction layers, implement consistent error handling patterns, and use platform-specific SDK best practices"
+    },
+    {
+      "issue": "Performance differences between equivalent services",
+      "solution": "Implement comprehensive monitoring, use platform-specific optimization techniques, and design for each platform's strengths"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Development Environment Setup",
+      "criteria": [
+        "Can configure AWS and Azure development tools correctly",
+        "Understands authentication and credential management",
+        "Can setup local development environment for both platforms",
+        "Demonstrates security best practices for development"
+      ]
+    },
+    {
+      "category": "Serverless Application Development",
+      "criteria": [
+        "Can build and deploy AWS Lambda functions",
+        "Can create equivalent Azure Functions",
+        "Understands different trigger types and use cases",
+        "Can implement error handling and monitoring"
+      ]
+    },
+    {
+      "category": "Data Persistence Implementation",
+      "criteria": [
+        "Can design and implement DynamoDB table operations",
+        "Can build equivalent Cosmos DB functionality",
+        "Understands NoSQL data modeling principles",
+        "Can optimize queries and performance"
+      ]
+    },
+    {
+      "category": "API Management and Integration",
+      "criteria": [
+        "Can setup and configure API Gateway/API Management",
+        "Understands API security and authentication patterns",
+        "Can implement rate limiting and usage controls",
+        "Demonstrates API lifecycle management knowledge"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DVA-C02": {
+      "domain": "Development with AWS Services",
+      "weight": "32%",
+      "coverage": [
+        "Develop code for applications hosted on AWS",
+        "Develop code for AWS Lambda",
+        "Use the AWS CLI, SDKs, and APIs",
+        "Use AWS developer tools",
+        "Apply AWS service APIs, AWS CLI, and SDKs to write applications"
+      ],
+      "examTopics": [
+        "AWS SDK usage and authentication patterns",
+        "Lambda function development and integration",
+        "DynamoDB operations and data modeling",
+        "API Gateway configuration and management",
+        "Event-driven architecture implementation"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can effectively use AWS SDK and Azure SDK for application development",
+    "Demonstrates ability to build serverless applications on both platforms",
+    "Shows understanding of NoSQL data modeling and operations",
+    "Can implement comprehensive API management solutions",
+    "Understands event-driven architecture patterns and implementation"
+  ],
+
+  "nextSteps": [
+    "Proceed to DVA-C02 Security Lab (26% domain weight)",
+    "Gain hands-on experience with advanced AWS developer services",
+    "Practice building production-ready applications with proper monitoring",
+    "Explore advanced Azure development services and integration patterns"
+  ]
+}

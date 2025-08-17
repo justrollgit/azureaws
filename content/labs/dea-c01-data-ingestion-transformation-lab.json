@@ -1,0 +1,314 @@
+{
+  "id": "dea-c01-data-ingestion-transformation-lab",
+  "title": "AWS Data Pipeline to Azure Data Factory: Data Ingestion and ETL Transformation",
+  "category": "data-engineering",
+  "difficulty": "advanced",
+  "estimatedTime": "150 minutes",
+  "awsCertification": "DEA-C01",
+  "certificationWeight": "34% - Data Ingestion & Transformation Domain (Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master data engineering by implementing AWS data ingestion and ETL pipelines, then migrating to Azure Data Factory equivalents with real-time streaming, batch processing, data transformation, and modern data architecture patterns.",
+  
+  "learningObjectives": [
+    "Build data ingestion pipelines using AWS Kinesis and Azure Event Hubs",
+    "Implement ETL workflows with AWS Glue and Azure Data Factory",
+    "Design real-time streaming analytics with Kinesis Analytics and Stream Analytics",
+    "Create data transformation workflows with Lambda and Azure Functions",
+    "Implement data quality validation and monitoring across both platforms",
+    "Build scalable data architectures supporting both batch and streaming workloads"
+  ],
+
+  "prerequisites": [
+    "Completion of Associate-level certification labs or equivalent experience",
+    "Understanding of data concepts, databases, and analytics",
+    "Basic knowledge of Python, SQL, and data transformation concepts",
+    "Familiarity with cloud storage and computing services"
+  ],
+
+  "awsServices": [
+    "Amazon Kinesis Data Streams",
+    "Amazon Kinesis Data Firehose",
+    "Amazon Kinesis Analytics",
+    "AWS Glue (ETL Service)",
+    "AWS Data Pipeline",
+    "AWS Lambda (Data Processing)",
+    "Amazon S3 (Data Lake)",
+    "Amazon EMR (Big Data Processing)",
+    "AWS Step Functions",
+    "Amazon CloudWatch (Data Monitoring)"
+  ],
+
+  "azureServices": [
+    "Azure Event Hubs",
+    "Azure Event Grid",
+    "Azure Stream Analytics",
+    "Azure Data Factory",
+    "Azure Synapse Analytics",
+    "Azure Functions (Data Processing)",
+    "Azure Data Lake Storage",
+    "Azure HDInsight",
+    "Azure Logic Apps",
+    "Azure Monitor (Data Pipeline Monitoring)"
+  ],
+
+  "businessScenario": "DataFlow Enterprises processes millions of real-time events from IoT devices, web applications, and business systems. They need to implement modern data engineering solutions supporting both real-time streaming and batch processing workloads. The data engineering team must master AWS and Azure data platforms to build scalable, reliable data pipelines with proper monitoring, quality validation, and cost optimization.",
+
+  "sections": [
+    {
+      "title": "Real-Time Data Ingestion and Streaming",
+      "duration": "40 minutes",
+      "topics": [
+        "Amazon Kinesis Data Streams for real-time data ingestion",
+        "Azure Event Hubs for high-throughput event streaming",
+        "Stream partitioning, scaling, and throughput optimization",
+        "Real-time data producers and consumers implementation",
+        "Stream monitoring and performance optimization"
+      ],
+      "tasks": [
+        {
+          "title": "Build Real-Time Data Ingestion Pipeline",
+          "description": "Implement high-throughput streaming data ingestion with monitoring",
+          "steps": [
+            "Configure Amazon Kinesis Data Streams with optimal shard configuration",
+            "Setup Azure Event Hubs with equivalent throughput and partitioning",
+            "Implement data producers for real-time event streaming",
+            "Build consumers for real-time data processing and transformation",
+            "Configure auto-scaling and throughput optimization policies",
+            "Setup monitoring and alerting for stream health and performance"
+          ],
+          "deliverables": [
+            "Kinesis Data Streams configuration with optimal sharding",
+            "Azure Event Hubs setup with partition and throughput units",
+            "Real-time data producers and consumers implementation",
+            "Stream monitoring and performance optimization framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ETL Pipeline Development and Orchestration",
+      "duration": "45 minutes",
+      "topics": [
+        "AWS Glue ETL jobs and data catalog management",
+        "Azure Data Factory pipeline development and orchestration",
+        "Data transformation logic and business rules implementation",
+        "Pipeline scheduling, dependencies, and error handling",
+        "Data lineage tracking and metadata management"
+      ],
+      "tasks": [
+        {
+          "title": "Develop Comprehensive ETL Workflows",
+          "description": "Create scalable ETL pipelines with orchestration and monitoring",
+          "steps": [
+            "Design AWS Glue ETL jobs with data catalog integration",
+            "Create Azure Data Factory pipelines with equivalent transformation logic",
+            "Implement complex data transformation and business rule processing",
+            "Configure pipeline orchestration with dependencies and scheduling",
+            "Setup error handling, retry logic, and failure recovery procedures",
+            "Implement data lineage tracking and metadata management"
+          ],
+          "deliverables": [
+            "AWS Glue ETL jobs with data catalog integration",
+            "Azure Data Factory pipelines with orchestration",
+            "Data transformation logic and business rules implementation",
+            "Pipeline monitoring and error handling framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Stream Processing and Real-Time Analytics",
+      "duration": "35 minutes",
+      "topics": [
+        "Amazon Kinesis Analytics for real-time stream processing",
+        "Azure Stream Analytics for complex event processing",
+        "Windowing functions and temporal analytics",
+        "Real-time aggregations and alerting",
+        "Integration with downstream systems and storage"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Real-Time Stream Analytics",
+          "description": "Build real-time analytics with complex event processing",
+          "steps": [
+            "Configure Amazon Kinesis Analytics for real-time stream processing",
+            "Setup Azure Stream Analytics with equivalent query logic",
+            "Implement windowing functions for temporal data analysis",
+            "Create real-time aggregations and business metric calculations",
+            "Configure real-time alerting and threshold monitoring",
+            "Setup integration with downstream storage and notification systems"
+          ],
+          "deliverables": [
+            "Kinesis Analytics configuration with stream processing logic",
+            "Azure Stream Analytics setup with complex event processing",
+            "Real-time analytics and aggregation implementation",
+            "Stream-to-storage integration and alerting framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Quality and Pipeline Monitoring",
+      "duration": "30 minutes",
+      "topics": [
+        "Data quality validation and anomaly detection",
+        "Pipeline performance monitoring and optimization",
+        "Data lineage visualization and impact analysis",
+        "Cost optimization and resource utilization tracking",
+        "Automated pipeline testing and validation"
+      ],
+      "tasks": [
+        {
+          "title": "Build Data Quality and Monitoring Framework",
+          "description": "Implement comprehensive data quality validation and pipeline monitoring",
+          "steps": [
+            "Implement data quality validation rules and anomaly detection",
+            "Configure pipeline performance monitoring and alerting",
+            "Setup data lineage visualization and impact analysis tools",
+            "Implement cost monitoring and resource optimization strategies",
+            "Create automated testing and validation frameworks for pipelines",
+            "Setup executive dashboards and operational reporting"
+          ],
+          "deliverables": [
+            "Data quality validation and anomaly detection framework",
+            "Pipeline performance monitoring and alerting system",
+            "Data lineage visualization and impact analysis tools",
+            "Cost optimization and automated testing implementation"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Multi-Source Data Integration Platform",
+      "description": "Build comprehensive data platform ingesting from multiple sources",
+      "steps": [
+        "Design data architecture supporting batch and streaming workloads",
+        "Implement multi-source data ingestion from APIs, databases, and files",
+        "Create unified data transformation and standardization workflows",
+        "Build real-time analytics and batch processing pipelines",
+        "Implement data quality monitoring and governance controls",
+        "Test end-to-end data flow with performance and reliability validation"
+      ],
+      "expectedOutcome": "Production-ready data platform supporting diverse ingestion and processing requirements"
+    },
+    {
+      "title": "Real-Time IoT Analytics Pipeline",
+      "description": "Build real-time analytics for IoT sensor data processing",
+      "steps": [
+        "Simulate IoT device data streams with realistic sensor patterns",
+        "Implement real-time data ingestion and stream processing",
+        "Create real-time anomaly detection and alerting systems",
+        "Build streaming aggregations and time-series analytics",
+        "Implement real-time dashboard and notification systems",
+        "Test scalability and performance under high-volume data loads"
+      ],
+      "expectedOutcome": "Real-time IoT analytics platform with anomaly detection and alerting"
+    },
+    {
+      "title": "Data Lake Architecture with Governance",
+      "description": "Implement modern data lake with comprehensive governance",
+      "steps": [
+        "Design data lake architecture with proper zone organization",
+        "Implement data ingestion with schema evolution and validation",
+        "Create data catalog and metadata management systems",
+        "Build data lineage tracking and impact analysis capabilities",
+        "Implement access control and data governance policies",
+        "Test data discovery, quality, and compliance workflows"
+      ],
+      "expectedOutcome": "Comprehensive data lake platform with governance and quality controls"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Stream processing lag and throughput bottlenecks in high-volume scenarios",
+      "solution": "Optimize partition strategies, implement auto-scaling, tune consumer group configurations, use appropriate instance types, and implement backpressure handling"
+    },
+    {
+      "issue": "ETL pipeline failures and data quality issues",
+      "solution": "Implement comprehensive error handling and retry logic, use data validation frameworks, implement pipeline testing, and create data quality monitoring"
+    },
+    {
+      "issue": "Complex data transformation logic causing performance issues",
+      "solution": "Optimize transformation algorithms, use appropriate processing frameworks, implement parallel processing, and optimize resource allocation"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Real-Time Data Ingestion",
+      "criteria": [
+        "Can implement high-throughput streaming data ingestion",
+        "Understands stream partitioning and scaling strategies",
+        "Can configure monitoring and performance optimization",
+        "Demonstrates real-time producer and consumer implementation"
+      ]
+    },
+    {
+      "category": "ETL Pipeline Development",
+      "criteria": [
+        "Can design and implement comprehensive ETL workflows",
+        "Understands data transformation and business rule processing",
+        "Can configure pipeline orchestration and error handling",
+        "Demonstrates data catalog and metadata management"
+      ]
+    },
+    {
+      "category": "Stream Processing Analytics",
+      "criteria": [
+        "Can implement real-time stream processing and analytics",
+        "Understands windowing functions and temporal processing",
+        "Can create real-time aggregations and alerting",
+        "Demonstrates integration with downstream systems"
+      ]
+    },
+    {
+      "category": "Data Quality and Monitoring",
+      "criteria": [
+        "Can implement data quality validation and monitoring",
+        "Understands pipeline performance optimization",
+        "Can setup data lineage and impact analysis",
+        "Demonstrates cost optimization and automated testing"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DEA-C01": {
+      "domain": "Data Ingestion & Transformation",
+      "weight": "34%",
+      "coverage": [
+        "Ingest data from various sources",
+        "Transform data to meet business requirements", 
+        "Orchestrate data pipelines",
+        "Apply programming concepts for data engineering",
+        "Monitor and troubleshoot data pipelines"
+      ],
+      "examTopics": [
+        "Kinesis Data Streams, Firehose, and Analytics implementation",
+        "AWS Glue ETL jobs and data catalog management",
+        "Lambda functions for data transformation",
+        "Step Functions for pipeline orchestration",
+        "Data pipeline monitoring and troubleshooting"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement high-throughput real-time data ingestion pipelines",
+    "Demonstrates ability to build comprehensive ETL workflows",
+    "Shows understanding of stream processing and real-time analytics",
+    "Can implement data quality validation and pipeline monitoring",
+    "Understands modern data architecture patterns and best practices"
+  ],
+
+  "nextSteps": [
+    "Proceed to DEA-C01 Data Store Management Lab (26% domain weight)",
+    "Gain hands-on experience with advanced data processing frameworks",
+    "Practice implementing data engineering solutions in production environments",
+    "Explore advanced data governance and compliance frameworks"
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "id": "soa-c02-deployment-provisioning-automation-lab",
+  "title": "AWS Infrastructure Automation to Azure ARM: Deployment, Provisioning, and Infrastructure as Code",
+  "category": "infrastructure-automation",
+  "difficulty": "intermediate",
+  "estimatedTime": "115 minutes",
+  "awsCertification": "SOA-C02",
+  "certificationWeight": "18% - Deployment, Provisioning & Automation Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master infrastructure automation by implementing AWS CloudFormation and Systems Manager automation, then migrating to Azure Resource Manager and Automation equivalents with Infrastructure as Code, configuration management, and operational automation.",
+  
+  "learningObjectives": [
+    "Implement Infrastructure as Code using AWS CloudFormation and Azure ARM templates",
+    "Build configuration management solutions with AWS Systems Manager and Azure Automation",
+    "Create automated provisioning workflows for complex infrastructure deployments",
+    "Design immutable infrastructure patterns and blue-green deployment strategies",
+    "Implement compliance automation and drift detection across both platforms",
+    "Build self-service infrastructure provisioning with governance controls"
+  ],
+
+  "prerequisites": [
+    "Completion of SOA-C02 Monitoring and Reliability labs",
+    "Understanding of infrastructure components and networking",
+    "Basic knowledge of YAML, JSON, and scripting languages",
+    "Familiarity with version control systems and CI/CD concepts"
+  ],
+
+  "awsServices": [
+    "AWS CloudFormation",
+    "AWS Systems Manager",
+    "AWS CodeDeploy",
+    "AWS OpsWorks",
+    "AWS Service Catalog",
+    "AWS Config",
+    "Amazon EC2 Image Builder",
+    "AWS Lambda (Infrastructure Automation)",
+    "AWS CloudWatch Events",
+    "AWS Step Functions"
+  ],
+
+  "azureServices": [
+    "Azure Resource Manager (ARM) Templates",
+    "Azure Automation",
+    "Azure DevOps Release Pipelines",
+    "Azure Desired State Configuration (DSC)",
+    "Azure Service Catalog",
+    "Azure Policy",
+    "Azure Image Builder",
+    "Azure Functions (Infrastructure Automation)",
+    "Azure Event Grid",
+    "Azure Logic Apps"
+  ],
+
+  "businessScenario": "AutoOps Industries needs to modernize their infrastructure provisioning from manual processes to fully automated Infrastructure as Code. They require consistent, repeatable deployments across development, staging, and production environments on both AWS and Azure platforms. The operations team must implement governance controls, compliance automation, and self-service capabilities while maintaining security and cost optimization.",
+
+  "sections": [
+    {
+      "title": "Infrastructure as Code Implementation",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CloudFormation template design and best practices",
+        "Azure Resource Manager (ARM) template development",
+        "Infrastructure versioning and template lifecycle management",
+        "Parameterization and environment-specific configurations",
+        "Cross-stack dependencies and nested template strategies"
+      ],
+      "tasks": [
+        {
+          "title": "Build Comprehensive Infrastructure as Code Solution",
+          "description": "Create modular and reusable infrastructure templates for multi-tier applications",
+          "steps": [
+            "Design AWS CloudFormation templates with proper modularization",
+            "Create equivalent Azure ARM templates with same infrastructure components",
+            "Implement parameterization for different environments and configurations",
+            "Setup template validation and testing procedures",
+            "Configure cross-stack dependencies and nested template strategies",
+            "Implement infrastructure versioning and rollback capabilities"
+          ],
+          "deliverables": [
+            "Modular CloudFormation templates with parameterization",
+            "Equivalent ARM templates with environment-specific configurations",
+            "Template validation and testing framework",
+            "Infrastructure versioning and dependency management strategy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Configuration Management and Automation",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS Systems Manager configuration management",
+        "Azure Automation and Desired State Configuration (DSC)",
+        "Automated patch management and compliance enforcement",
+        "Configuration drift detection and remediation",
+        "Secrets management and secure configuration deployment"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Automated Configuration Management",
+          "description": "Setup comprehensive configuration management with compliance automation",
+          "steps": [
+            "Configure AWS Systems Manager for automated configuration management",
+            "Setup Azure Automation with DSC for equivalent configuration control",
+            "Implement automated patch management and compliance enforcement",
+            "Configure configuration drift detection and automated remediation",
+            "Setup secrets management for secure configuration deployment",
+            "Create configuration compliance reporting and audit trails"
+          ],
+          "deliverables": [
+            "Systems Manager configuration management setup",
+            "Azure Automation and DSC implementation",
+            "Patch management and compliance automation",
+            "Configuration drift detection and remediation workflows"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Deployment Automation and Orchestration",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CodeDeploy deployment strategies and automation",
+        "Azure DevOps Release Pipeline automation",
+        "Blue-green and canary deployment implementations",
+        "Rolling deployment strategies with health checks",
+        "Deployment rollback and failure recovery procedures"
+      ],
+      "tasks": [
+        {
+          "title": "Build Advanced Deployment Automation",
+          "description": "Implement sophisticated deployment strategies with automated rollback",
+          "steps": [
+            "Configure AWS CodeDeploy with multiple deployment strategies",
+            "Setup Azure DevOps Release Pipelines with equivalent automation",
+            "Implement blue-green deployment with automated traffic switching",
+            "Configure canary deployments with gradual rollout and validation",
+            "Setup automated health checks and deployment validation",
+            "Implement automated rollback procedures for failed deployments"
+          ],
+          "deliverables": [
+            "CodeDeploy configuration with multiple deployment strategies",
+            "Azure DevOps Release Pipeline automation",
+            "Blue-green and canary deployment implementations",
+            "Automated rollback and failure recovery procedures"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Governance and Self-Service Automation",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS Service Catalog for self-service infrastructure provisioning",
+        "Azure Service Catalog and governance automation",
+        "Policy-driven automation and compliance enforcement",
+        "Cost optimization automation and resource lifecycle management",
+        "Approval workflows and change management integration"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Self-Service Infrastructure with Governance",
+          "description": "Create self-service capabilities with proper governance and compliance controls",
+          "steps": [
+            "Setup AWS Service Catalog with approved infrastructure templates",
+            "Configure Azure Service Catalog with equivalent self-service capabilities",
+            "Implement policy-driven automation for compliance enforcement",
+            "Configure cost optimization automation and resource lifecycle management",
+            "Setup approval workflows and change management integration",
+            "Create governance reporting and audit trail documentation"
+          ],
+          "deliverables": [
+            "Service Catalog setup with approved templates",
+            "Policy-driven automation and compliance enforcement",
+            "Cost optimization and resource lifecycle automation",
+            "Governance reporting and change management integration"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Enterprise Infrastructure Automation Platform",
+      "description": "Build complete infrastructure automation platform for enterprise use",
+      "steps": [
+        "Design modular infrastructure templates for different application tiers",
+        "Implement multi-environment deployment pipeline with proper governance",
+        "Create self-service portal with approval workflows and cost controls",
+        "Setup automated compliance checking and policy enforcement",
+        "Implement infrastructure monitoring and drift detection",
+        "Test end-to-end automation with complex deployment scenarios"
+      ],
+      "expectedOutcome": "Production-ready infrastructure automation platform with governance and self-service capabilities"
+    },
+    {
+      "title": "Immutable Infrastructure Implementation",
+      "description": "Implement immutable infrastructure patterns with automated image management",
+      "steps": [
+        "Design immutable infrastructure architecture using golden images",
+        "Implement automated image building and testing pipelines",
+        "Create blue-green deployment automation for immutable infrastructure",
+        "Setup automated security scanning and compliance validation",
+        "Implement automated image lifecycle management and cleanup",
+        "Test immutable deployment strategies with rollback procedures"
+      ],
+      "expectedOutcome": "Immutable infrastructure solution with automated image management and deployment"
+    },
+    {
+      "title": "Configuration Compliance Automation",
+      "description": "Build automated compliance checking and remediation system",
+      "steps": [
+        "Define configuration compliance standards and policies",
+        "Implement automated compliance scanning and reporting",
+        "Create automated remediation workflows for common compliance violations",
+        "Setup compliance dashboard and executive reporting",
+        "Implement continuous compliance monitoring and alerting",
+        "Test compliance automation with audit simulation scenarios"
+      ],
+      "expectedOutcome": "Automated compliance system with continuous monitoring and remediation capabilities"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex template dependencies causing deployment failures and circular references",
+      "solution": "Design proper template hierarchy, use nested templates judiciously, implement dependency mapping, use cross-stack references appropriately, and test templates in isolation"
+    },
+    {
+      "issue": "Configuration drift causing inconsistent environments and security vulnerabilities",
+      "solution": "Implement continuous compliance monitoring, use immutable infrastructure patterns, automate drift detection and remediation, and implement proper change management procedures"
+    },
+    {
+      "issue": "Deployment automation causing downtime and rollback complexity",
+      "solution": "Implement blue-green deployments, use health checks and validation gates, implement automated rollback procedures, and test deployment strategies thoroughly"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Infrastructure as Code Mastery",
+      "criteria": [
+        "Can create modular and reusable infrastructure templates",
+        "Understands template parameterization and environment management",
+        "Can implement proper template validation and testing",
+        "Demonstrates infrastructure versioning and dependency management"
+      ]
+    },
+    {
+      "category": "Configuration Management",
+      "criteria": [
+        "Can implement automated configuration management solutions",
+        "Understands configuration drift detection and remediation",
+        "Can setup automated patch management and compliance",
+        "Demonstrates secrets management and secure configuration"
+      ]
+    },
+    {
+      "category": "Deployment Automation",
+      "criteria": [
+        "Can implement advanced deployment strategies",
+        "Understands blue-green and canary deployment patterns",
+        "Can setup automated health checks and validation",
+        "Demonstrates automated rollback and failure recovery"
+      ]
+    },
+    {
+      "category": "Governance and Self-Service",
+      "criteria": [
+        "Can implement self-service infrastructure with governance",
+        "Understands policy-driven automation and compliance",
+        "Can setup cost optimization and resource lifecycle management",
+        "Demonstrates approval workflows and change management"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SOA-C02": {
+      "domain": "Deployment, Provisioning & Automation",
+      "weight": "18%",
+      "coverage": [
+        "Provision and maintain cloud resources using automation tools",
+        "Automate manual or repeatable processes",
+        "Implement automated deployment strategies",
+        "Configure automated monitoring and logging",
+        "Troubleshoot deployment and automation issues"
+      ],
+      "examTopics": [
+        "CloudFormation template design and best practices",
+        "Systems Manager automation and configuration management",
+        "CodeDeploy deployment strategies and automation",
+        "Service Catalog and self-service infrastructure",
+        "Infrastructure compliance and drift detection"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive Infrastructure as Code solutions",
+    "Demonstrates ability to build automated configuration management",
+    "Shows understanding of advanced deployment strategies and automation",
+    "Can create self-service infrastructure with proper governance controls",
+    "Understands compliance automation and operational excellence practices"
+  ],
+
+  "nextSteps": [
+    "Proceed to SOA-C02 Security & Compliance Lab (16% domain weight)",
+    "Gain hands-on experience with advanced automation and orchestration tools",
+    "Practice implementing infrastructure automation in production environments",
+    "Explore advanced Infrastructure as Code patterns and best practices"
+  ]
+}

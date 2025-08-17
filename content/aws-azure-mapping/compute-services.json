@@ -1,0 +1,75 @@
+{
+  "category": "Compute Services",
+  "description": "Virtual machines, containers, and serverless compute services",
+  "services": [
+    {
+      "aws": {
+        "name": "Amazon EC2",
+        "description": "Virtual servers in the cloud",
+        "use_cases": ["Web applications", "Development environments", "High-performance computing"],
+        "pricing_model": "Pay-per-hour/second"
+      },
+      "azure": {
+        "name": "Azure Virtual Machines",
+        "description": "On-demand scalable computing resources",
+        "use_cases": ["Web applications", "Development environments", "High-performance computing"],
+        "pricing_model": "Pay-as-you-go"
+      },
+      "migration_notes": [
+        "VM sizes differ between platforms - use Azure VM sizing tool",
+        "Security groups (AWS) → Network Security Groups (Azure)",
+        "Key pairs (AWS) → SSH keys or passwords (Azure)"
+      ],
+      "learning_resources": [
+        "Azure VM quickstart guide",
+        "EC2 to Azure VM comparison chart"
+      ]
+    },
+    {
+      "aws": {
+        "name": "AWS Lambda",
+        "description": "Serverless compute service",
+        "use_cases": ["Event-driven processing", "API backends", "Data processing"],
+        "pricing_model": "Pay-per-request"
+      },
+      "azure": {
+        "name": "Azure Functions",
+        "description": "Event-driven serverless compute",
+        "use_cases": ["Event-driven processing", "API backends", "Data processing"],
+        "pricing_model": "Consumption-based"
+      },
+      "migration_notes": [
+        "Runtime support varies - check Azure Functions runtime versions",
+        "Trigger types are similar but configuration differs",
+        "Cold start performance characteristics differ"
+      ],
+      "learning_resources": [
+        "Azure Functions developer guide",
+        "Lambda to Functions migration guide"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon ECS",
+        "description": "Container orchestration service",
+        "use_cases": ["Microservices", "Batch processing", "Web applications"],
+        "pricing_model": "Pay for underlying resources"
+      },
+      "azure": {
+        "name": "Azure Container Instances",
+        "description": "Containers without managing servers",
+        "use_cases": ["Microservices", "Batch processing", "CI/CD"],
+        "pricing_model": "Pay-per-second"
+      },
+      "migration_notes": [
+        "ACI is simpler than ECS but less feature-rich",
+        "For production workloads, consider Azure Kubernetes Service",
+        "Networking and storage configurations differ"
+      ],
+      "learning_resources": [
+        "Azure Container Instances quickstart",
+        "Container migration best practices"
+      ]
+    }
+  ]
+}

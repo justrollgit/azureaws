@@ -1,0 +1,341 @@
+{
+  "id": "elasticache-cloudfront-optimization-lab",
+  "title": "ElastiCache/CloudFront to Azure Cache/CDN: Advanced Performance Optimization and Global Distribution",
+  "category": "performance",
+  "difficulty": "expert",
+  "estimated_time": "210 minutes",
+  "description": "Master advanced performance optimization through caching strategies and global content distribution, migrating from AWS ElastiCache/CloudFront to Azure Cache for Redis/Azure CDN with advanced optimization patterns",
+  "aws_services": [
+    "ElastiCache",
+    "CloudFront",
+    "Global Accelerator",
+    "Route 53",
+    "WAF",
+    "Lambda@Edge",
+    "S3",
+    "CloudWatch"
+  ],
+  "azure_services": [
+    "Azure Cache for Redis",
+    "Azure CDN",
+    "Azure Front Door",
+    "Traffic Manager",
+    "Web Application Firewall",
+    "Azure Functions",
+    "Blob Storage",
+    "Azure Monitor"
+  ],
+  "learning_objectives": [
+    "Migrate Redis caching from ElastiCache to Azure Cache for Redis",
+    "Transform CloudFront distributions to Azure CDN with optimization",
+    "Implement advanced caching strategies and cache invalidation patterns",
+    "Configure global traffic management and geo-distribution",
+    "Set up performance monitoring and analytics",
+    "Optimize cache hit ratios and reduce latency",
+    "Implement security policies and WAF rules",
+    "Configure edge computing with serverless functions"
+  ],
+  "prerequisites": [
+    "AWS ElastiCache experience",
+    "Understanding of CDN concepts",
+    "Knowledge of caching strategies",
+    "Basic understanding of performance optimization"
+  ],
+  "lab_overview": {
+    "scenario": "Migrate a high-performance web application from AWS to Azure while maintaining sub-100ms response times globally and achieving 95%+ cache hit ratios.",
+    "business_case": "Organization needs to optimize global performance while reducing infrastructure costs and improving user experience across all regions.",
+    "performance_targets": {
+      "cache_hit_ratio": "95%+",
+      "global_latency": "<100ms P95",
+      "availability": "99.99%",
+      "cost_reduction": "30%+"
+    }
+  },
+  "service_comparison": {
+    "redis_caching": {
+      "aws": {
+        "service": "ElastiCache for Redis",
+        "description": "Managed in-memory data store with Redis engine",
+        "key_features": [
+          "Multi-AZ deployments",
+          "Automatic failover",
+          "Read replicas",
+          "Cluster mode",
+          "Redis AUTH",
+          "Encryption in transit/at rest"
+        ]
+      },
+      "azure": {
+        "service": "Azure Cache for Redis",
+        "description": "Fully managed Redis service with enterprise features",
+        "key_features": [
+          "Zone redundancy",
+          "Active geo-replication",
+          "Data persistence",
+          "Clustering",
+          "Azure AD integration",
+          "Premium tier features"
+        ]
+      },
+      "migration_considerations": [
+        "Redis version compatibility",
+        "Cluster configuration migration",
+        "Network security group rules",
+        "Performance tier mapping",
+        "Backup and restore procedures"
+      ]
+    },
+    "content_delivery": {
+      "aws": {
+        "service": "CloudFront",
+        "description": "Global content delivery network with edge locations",
+        "key_features": [
+          "Global edge network",
+          "Lambda@Edge compute",
+          "Origin failover",
+          "Real-time metrics",
+          "WAF integration",
+          "HTTP/2 and HTTP/3 support"
+        ]
+      },
+      "azure": {
+        "service": "Azure CDN / Front Door",
+        "description": "Global CDN with intelligent routing and WAF",
+        "key_features": [
+          "Global PoP network",
+          "Rules engine",
+          "Health probes",
+          "Advanced analytics",
+          "Integrated WAF",
+          "SSL/TLS optimization"
+        ]
+      },
+      "migration_considerations": [
+        "Edge location coverage mapping",
+        "Cache behavior migration",
+        "Custom domain and certificate setup",
+        "Rules engine transformation",
+        "Origin configuration"
+      ]
+    },
+    "global_acceleration": {
+      "aws": {
+        "service": "Global Accelerator",
+        "description": "Network layer service for improved global performance",
+        "key_features": [
+          "Anycast IP addresses",
+          "AWS global network",
+          "Health checking",
+          "Traffic dial controls",
+          "Regional failover"
+        ]
+      },
+      "azure": {
+        "service": "Azure Front Door",
+        "description": "Application delivery network with global load balancing",
+        "key_features": [
+          "Global HTTP load balancing",
+          "SSL offloading",
+          "Session affinity",
+          "Backend health monitoring",
+          "Path-based routing"
+        ]
+      },
+      "migration_considerations": [
+        "Anycast IP to Front Door IP mapping",
+        "Health check configuration",
+        "Failover policies",
+        "SSL termination setup"
+      ]
+    }
+  },
+  "hands_on_sections": [
+    {
+      "section_id": "redis_migration",
+      "title": "ElastiCache to Azure Cache for Redis Migration",
+      "estimated_time": "60 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Create Azure Cache for Redis with High Availability",
+          "instructions": [
+            "Create a Premium tier Azure Cache for Redis",
+            "Configure zone redundancy for high availability",
+            "Set up data persistence and backup policies"
+          ],
+          "code_example": {
+            "language": "bicep",
+            "code": "// Azure Cache for Redis with Premium features\nparam location string = resourceGroup().location\nparam environmentName string = 'prod'\nparam redisCacheName string = 'redis-${environmentName}-${uniqueString(resourceGroup().id)}'\n\n// Virtual Network for cache isolation\nresource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {\n  name: 'vnet-redis-${environmentName}'\n  location: location\n  properties: {\n    addressSpace: {\n      addressPrefixes: [\n        '10.0.0.0/16'\n      ]\n    }\n    subnets: [\n      {\n        name: 'redis-subnet'\n        properties: {\n          addressPrefix: '10.0.1.0/24'\n          serviceEndpoints: [\n            {\n              service: 'Microsoft.Cache'\n            }\n          ]\n        }\n      }\n    ]\n  }\n}\n\n// Azure Cache for Redis - Premium with clustering\nresource redisCache 'Microsoft.Cache/redis@2021-06-01' = {\n  name: redisCacheName\n  location: location\n  properties: {\n    sku: {\n      name: 'Premium'\n      family: 'P'\n      capacity: 1\n    }\n    enableNonSslPort: false\n    minimumTlsVersion: '1.2'\n    publicNetworkAccess: 'Disabled'\n    redisConfiguration: {\n      'maxclients': '1000'\n      'maxmemory-reserved': '50'\n      'maxfragmentationmemory-reserved': '50'\n      'maxmemory-delta': '50'\n    }\n    redisVersion: '6'\n    subnetId: vnet.properties.subnets[0].id\n    staticIP: '10.0.1.4'\n    zones: [\n      '1'\n      '2'\n      '3'\n    ]\n  }\n}\n\n// Private endpoint for secure access\nresource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {\n  name: 'pe-${redisCacheName}'\n  location: location\n  properties: {\n    subnet: {\n      id: vnet.properties.subnets[0].id\n    }\n    privateLinkServiceConnections: [\n      {\n        name: 'redis-connection'\n        properties: {\n          privateLinkServiceId: redisCache.id\n          groupIds: [\n            'redisCache'\n          ]\n        }\n      }\n    ]\n  }\n}\n\n// Data persistence configuration\nresource redisPersistence 'Microsoft.Cache/redis/patchSchedules@2021-06-01' = {\n  name: 'default'\n  parent: redisCache\n  properties: {\n    scheduleEntries: [\n      {\n        dayOfWeek: 'Sunday'\n        startHourUtc: 2\n        maintenanceWindow: 'PT2H'\n      }\n    ]\n  }\n}\n\noutput redisHostName string = redisCache.properties.hostName\noutput redisPrimaryKey string = listKeys(redisCache.id, redisCache.apiVersion).primaryKey\noutput redisPort int = redisCache.properties.port\noutput redisSslPort int = redisCache.properties.sslPort"
+          }
+        },
+        {
+          "step": 2,
+          "title": "Implement Advanced Caching Patterns",
+          "instructions": [
+            "Configure cache-aside pattern with automatic failover",
+            "Implement cache warming strategies",
+            "Set up cache invalidation patterns"
+          ],
+          "code_example": {
+            "language": "javascript",
+            "code": "// Advanced Redis caching service with Azure Cache for Redis\nconst redis = require('redis');\nconst { DefaultAzureCredential } = require('@azure/identity');\nconst { SecretClient } = require('@azure/keyvault-secrets');\n\nclass AzureRedisCacheService {\n  constructor(connectionString, options = {}) {\n    this.connectionString = connectionString;\n    this.options = {\n      retryDelayOnFailover: 100,\n      maxRetriesPerRequest: 3,\n      enableOfflineQueue: false,\n      lazyConnect: true,\n      ...options\n    };\n    \n    this.primaryClient = null;\n    this.secondaryClient = null;\n    this.isConnected = false;\n    this.metrics = {\n      hits: 0,\n      misses: 0,\n      errors: 0,\n      operations: 0\n    };\n  }\n\n  async connect() {\n    try {\n      // Primary connection\n      this.primaryClient = redis.createClient({\n        url: this.connectionString,\n        socket: {\n          tls: true,\n          rejectUnauthorized: false\n        },\n        ...this.options\n      });\n\n      this.primaryClient.on('error', (err) => {\n        console.error('Redis primary client error:', err);\n        this.metrics.errors++;\n      });\n\n      this.primaryClient.on('connect', () => {\n        console.log('Connected to Azure Cache for Redis (Primary)');\n        this.isConnected = true;\n      });\n\n      await this.primaryClient.connect();\n      \n      // Configure failover detection\n      this.setupHealthCheck();\n      \n      console.log('Azure Redis Cache service initialized successfully');\n    } catch (error) {\n      console.error('Failed to connect to Azure Redis Cache:', error);\n      throw error;\n    }\n  }\n\n  setupHealthCheck() {\n    setInterval(async () => {\n      try {\n        await this.primaryClient.ping();\n      } catch (error) {\n        console.error('Redis health check failed:', error);\n        this.isConnected = false;\n        // Implement reconnection logic\n        await this.reconnect();\n      }\n    }, 30000); // Check every 30 seconds\n  }\n\n  async reconnect() {\n    try {\n      if (this.primaryClient) {\n        await this.primaryClient.disconnect();\n      }\n      await this.connect();\n    } catch (error) {\n      console.error('Redis reconnection failed:', error);\n    }\n  }\n\n  // Cache-aside pattern with automatic failover\n  async get(key, fallbackFunction = null) {\n    try {\n      this.metrics.operations++;\n      \n      if (!this.isConnected) {\n        throw new Error('Redis not connected');\n      }\n\n      const cachedValue = await this.primaryClient.get(key);\n      \n      if (cachedValue !== null) {\n        this.metrics.hits++;\n        return JSON.parse(cachedValue);\n      }\n\n      this.metrics.misses++;\n      \n      // Cache miss - use fallback function if provided\n      if (fallbackFunction) {\n        const freshData = await fallbackFunction();\n        await this.set(key, freshData, 3600); // Cache for 1 hour\n        return freshData;\n      }\n      \n      return null;\n    } catch (error) {\n      console.error('Redis GET error:', error);\n      this.metrics.errors++;\n      \n      // Fallback to database if cache fails\n      if (fallbackFunction) {\n        return await fallbackFunction();\n      }\n      \n      throw error;\n    }\n  }\n\n  async set(key, value, ttlSeconds = 3600) {\n    try {\n      this.metrics.operations++;\n      \n      if (!this.isConnected) {\n        throw new Error('Redis not connected');\n      }\n\n      const serializedValue = JSON.stringify(value);\n      await this.primaryClient.setEx(key, ttlSeconds, serializedValue);\n      \n      return true;\n    } catch (error) {\n      console.error('Redis SET error:', error);\n      this.metrics.errors++;\n      throw error;\n    }\n  }\n\n  // Multi-key cache warming\n  async warmCache(keyValuePairs) {\n    try {\n      const pipeline = this.primaryClient.multi();\n      \n      for (const { key, value, ttl = 3600 } of keyValuePairs) {\n        pipeline.setEx(key, ttl, JSON.stringify(value));\n      }\n      \n      await pipeline.exec();\n      console.log(`Cache warmed with ${keyValuePairs.length} entries`);\n    } catch (error) {\n      console.error('Cache warming error:', error);\n      throw error;\n    }\n  }\n\n  // Pattern-based cache invalidation\n  async invalidatePattern(pattern) {\n    try {\n      const keys = await this.primaryClient.keys(pattern);\n      \n      if (keys.length > 0) {\n        await this.primaryClient.del(keys);\n        console.log(`Invalidated ${keys.length} cache entries matching pattern: ${pattern}`);\n      }\n      \n      return keys.length;\n    } catch (error) {\n      console.error('Cache invalidation error:', error);\n      throw error;\n    }\n  }\n\n  // Cache metrics for monitoring\n  getMetrics() {\n    const hitRatio = this.metrics.operations > 0 \n      ? (this.metrics.hits / (this.metrics.hits + this.metrics.misses)) * 100 \n      : 0;\n      \n    return {\n      ...this.metrics,\n      hitRatio: hitRatio.toFixed(2) + '%',\n      isConnected: this.isConnected\n    };\n  }\n\n  async disconnect() {\n    try {\n      if (this.primaryClient) {\n        await this.primaryClient.disconnect();\n      }\n      this.isConnected = false;\n      console.log('Disconnected from Azure Redis Cache');\n    } catch (error) {\n      console.error('Error disconnecting from Redis:', error);\n    }\n  }\n}\n\n// Usage example\nasync function initializeCaching() {\n  const connectionString = process.env.AZURE_REDIS_CONNECTION_STRING;\n  const cacheService = new AzureRedisCacheService(connectionString);\n  \n  await cacheService.connect();\n  \n  // Example: Cache user profiles with fallback to database\n  const getUserProfile = async (userId) => {\n    return await cacheService.get(\n      `user:${userId}`,\n      async () => {\n        // Fallback function - fetch from database\n        console.log(`Cache miss for user ${userId}, fetching from database`);\n        return await fetchUserFromDatabase(userId);\n      }\n    );\n  };\n  \n  // Example: Cache warming on application startup\n  const popularUsers = await getPopularUsers();\n  const cacheEntries = popularUsers.map(user => ({\n    key: `user:${user.id}`,\n    value: user,\n    ttl: 7200 // 2 hours for popular users\n  }));\n  \n  await cacheService.warmCache(cacheEntries);\n  \n  return cacheService;\n}\n\nmodule.exports = { AzureRedisCacheService, initializeCaching };"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "cdn_migration",
+      "title": "CloudFront to Azure CDN/Front Door Migration",
+      "estimated_time": "75 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Create Azure Front Door with Premium Features",
+          "instructions": [
+            "Set up Azure Front Door Standard/Premium",
+            "Configure multiple origins with health probes",
+            "Implement Web Application Firewall (WAF) policies"
+          ],
+          "code_example": {
+            "language": "bicep",
+            "code": "// Azure Front Door with advanced features\nparam environmentName string = 'prod'\nparam frontDoorName string = 'fd-${environmentName}-${uniqueString(resourceGroup().id)}'\nparam originHostName string\nparam customDomainName string\n\n// Front Door Profile - Standard/Premium tier\nresource frontDoorProfile 'Microsoft.Cdn/profiles@2021-12-01' = {\n  name: frontDoorName\n  location: 'Global'\n  sku: {\n    name: 'Premium_AzureFrontDoor'\n  }\n  properties: {}\n}\n\n// WAF Policy for security\nresource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@2022-05-01' = {\n  name: 'waf-${frontDoorName}'\n  location: 'Global'\n  sku: {\n    name: 'Premium_AzureFrontDoor'\n  }\n  properties: {\n    policySettings: {\n      enabledState: 'Enabled'\n      mode: 'Prevention'\n      redirectUrl: 'https://${customDomainName}/blocked'\n      customBlockResponseStatusCode: 403\n      customBlockResponseBody: base64('Access denied by security policy')\n    }\n    customRules: {\n      rules: [\n        {\n          name: 'RateLimitRule'\n          priority: 1\n          enabledState: 'Enabled'\n          ruleType: 'RateLimitRule'\n          rateLimitDurationInMinutes: 1\n          rateLimitThreshold: 100\n          matchConditions: [\n            {\n              matchVariable: 'RemoteAddr'\n              operator: 'IPMatch'\n              negateCondition: false\n              matchValue: [\n                '0.0.0.0/0'\n              ]\n            }\n          ]\n          action: 'Block'\n        }\n        {\n          name: 'GeoBlockRule'\n          priority: 2\n          enabledState: 'Enabled'\n          ruleType: 'MatchRule'\n          matchConditions: [\n            {\n              matchVariable: 'RemoteAddr'\n              operator: 'GeoMatch'\n              negateCondition: false\n              matchValue: [\n                'CN'\n                'RU'\n              ]\n            }\n          ]\n          action: 'Block'\n        }\n      ]\n    }\n    managedRules: {\n      managedRuleSets: [\n        {\n          ruleSetType: 'Microsoft_DefaultRuleSet'\n          ruleSetVersion: '2.0'\n          exclusions: []\n          ruleGroupOverrides: []\n        }\n        {\n          ruleSetType: 'Microsoft_BotManagerRuleSet'\n          ruleSetVersion: '1.0'\n          exclusions: []\n          ruleGroupOverrides: []\n        }\n      ]\n    }\n  }\n}\n\n// Origin Group with health probes\nresource originGroup 'Microsoft.Cdn/profiles/originGroups@2021-12-01' = {\n  name: 'default-origin-group'\n  parent: frontDoorProfile\n  properties: {\n    loadBalancingSettings: {\n      sampleSize: 4\n      successfulSamplesRequired: 3\n      additionalLatencyInMilliseconds: 50\n    }\n    healthProbeSettings: {\n      probePath: '/health'\n      probeRequestType: 'HEAD'\n      probeProtocol: 'Https'\n      probeIntervalInSeconds: 100\n    }\n    sessionAffinityState: 'Disabled'\n  }\n}\n\n// Primary Origin\nresource primaryOrigin 'Microsoft.Cdn/profiles/originGroups/origins@2021-12-01' = {\n  name: 'primary-origin'\n  parent: originGroup\n  properties: {\n    hostName: originHostName\n    httpPort: 80\n    httpsPort: 443\n    originHostHeader: originHostName\n    priority: 1\n    weight: 1000\n    enabledState: 'Enabled'\n    enforceCertificateNameCheck: true\n  }\n}\n\n// Security Policy linking WAF to endpoint\nresource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2021-12-01' = {\n  name: 'security-policy'\n  parent: frontDoorProfile\n  properties: {\n    parameters: {\n      type: 'WebApplicationFirewall'\n      wafPolicy: {\n        id: wafPolicy.id\n      }\n      associations: [\n        {\n          domains: [\n            {\n              id: frontDoorEndpoint.id\n            }\n          ]\n          patternsToMatch: [\n            '/*'\n          ]\n        }\n      ]\n    }\n  }\n}\n\n// Front Door Endpoint\nresource frontDoorEndpoint 'Microsoft.Cdn/profiles/afdEndpoints@2021-12-01' = {\n  name: 'endpoint-${environmentName}'\n  parent: frontDoorProfile\n  location: 'Global'\n  properties: {\n    enabledState: 'Enabled'\n  }\n}\n\n// Route Configuration with caching rules\nresource route 'Microsoft.Cdn/profiles/afdEndpoints/routes@2021-12-01' = {\n  name: 'default-route'\n  parent: frontDoorEndpoint\n  properties: {\n    customDomains: [\n      {\n        id: customDomain.id\n      }\n    ]\n    originGroup: {\n      id: originGroup.id\n    }\n    ruleSets: [\n      {\n        id: ruleSet.id\n      }\n    ]\n    supportedProtocols: [\n      'Http'\n      'Https'\n    ]\n    patternsToMatch: [\n      '/*'\n    ]\n    forwardingProtocol: 'HttpsOnly'\n    linkToDefaultDomain: 'Enabled'\n    httpsRedirect: 'Enabled'\n    enabledState: 'Enabled'\n    cacheConfiguration: {\n      queryStringCachingBehavior: 'IgnoreSpecifiedQueryStrings'\n      queryParameters: 'utm_source,utm_medium,utm_campaign'\n      compressionSettings: {\n        contentTypesToCompress: [\n          'application/eot'\n          'application/font'\n          'application/font-sfnt'\n          'application/javascript'\n          'application/json'\n          'application/opentype'\n          'application/otf'\n          'application/pkcs7-mime'\n          'application/truetype'\n          'application/ttf'\n          'application/vnd.ms-fontobject'\n          'application/xhtml+xml'\n          'application/xml'\n          'application/xml+rss'\n          'application/x-font-opentype'\n          'application/x-font-truetype'\n          'application/x-font-ttf'\n          'application/x-httpd-cgi'\n          'application/x-mpegurl'\n          'application/x-opentype'\n          'application/x-otf'\n          'application/x-perl'\n          'application/x-ttf'\n          'application/x-javascript'\n          'font/eot'\n          'font/ttf'\n          'font/otf'\n          'font/opentype'\n          'image/svg+xml'\n          'text/css'\n          'text/csv'\n          'text/html'\n          'text/javascript'\n          'text/js'\n          'text/plain'\n          'text/richtext'\n          'text/tab-separated-values'\n          'text/xml'\n          'text/x-script'\n          'text/x-component'\n          'text/x-java-source'\n        ]\n        isCompressionEnabled: true\n      }\n    }\n  }\n}\n\n// Custom Domain\nresource customDomain 'Microsoft.Cdn/profiles/customDomains@2021-12-01' = {\n  name: replace(customDomainName, '.', '-')\n  parent: frontDoorProfile\n  properties: {\n    hostName: customDomainName\n    tlsSettings: {\n      certificateType: 'ManagedCertificate'\n      minimumTlsVersion: 'TLS12'\n    }\n  }\n}\n\n// Rules Engine for advanced routing\nresource ruleSet 'Microsoft.Cdn/profiles/ruleSets@2021-12-01' = {\n  name: 'performance-rules'\n  parent: frontDoorProfile\n}\n\n// Performance optimization rule\nresource performanceRule 'Microsoft.Cdn/profiles/ruleSets/rules@2021-12-01' = {\n  name: 'cache-optimization'\n  parent: ruleSet\n  properties: {\n    order: 1\n    conditions: [\n      {\n        name: 'UrlFileExtension'\n        parameters: {\n          operator: 'Equal'\n          negateCondition: false\n          matchValues: [\n            'jpg'\n            'jpeg'\n            'png'\n            'gif'\n            'ico'\n            'css'\n            'js'\n            'woff'\n            'woff2'\n            'ttf'\n            'eot'\n          ]\n          transforms: [\n            'Lowercase'\n          ]\n          typeName: 'DeliveryRuleUrlFileExtensionMatchConditionParameters'\n        }\n      }\n    ]\n    actions: [\n      {\n        name: 'CacheExpiration'\n        parameters: {\n          cacheBehavior: 'Override'\n          cacheType: 'All'\n          cacheDuration: '30.00:00:00' // 30 days\n          typeName: 'DeliveryRuleCacheExpirationActionParameters'\n        }\n      }\n      {\n        name: 'ModifyResponseHeader'\n        parameters: {\n          headerAction: 'Append'\n          headerName: 'Cache-Control'\n          value: 'public, max-age=2592000, immutable'\n          typeName: 'DeliveryRuleHeaderActionParameters'\n        }\n      }\n    ]\n  }\n}\n\noutput frontDoorEndpointHostName string = frontDoorEndpoint.properties.hostName\noutput customDomainValidationToken string = customDomain.properties.validationProperties.validationToken\noutput frontDoorId string = frontDoorProfile.id"
+          }
+        },
+        {
+          "step": 2,
+          "title": "Implement Advanced CDN Optimization",
+          "instructions": [
+            "Configure intelligent caching rules",
+            "Set up compression and image optimization",
+            "Implement cache purging and preloading strategies"
+          ],
+          "code_example": {
+            "language": "javascript",
+            "code": "// Advanced CDN management service for Azure Front Door\nconst { DefaultAzureCredential } = require('@azure/identity');\nconst { CdnManagementClient } = require('@azure/arm-cdn');\nconst axios = require('axios');\n\nclass AzureCDNOptimizationService {\n  constructor(subscriptionId, resourceGroupName, profileName) {\n    this.subscriptionId = subscriptionId;\n    this.resourceGroupName = resourceGroupName;\n    this.profileName = profileName;\n    this.cdnClient = new CdnManagementClient(\n      new DefaultAzureCredential(),\n      subscriptionId\n    );\n    \n    this.cacheStrategies = {\n      static: {\n        extensions: ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.woff', '.woff2'],\n        ttl: 2592000, // 30 days\n        headers: {\n          'Cache-Control': 'public, max-age=2592000, immutable',\n          'Expires': new Date(Date.now() + 2592000000).toUTCString()\n        }\n      },\n      dynamic: {\n        paths: ['/api/', '/search/', '/user/'],\n        ttl: 300, // 5 minutes\n        headers: {\n          'Cache-Control': 'public, max-age=300, must-revalidate',\n          'Vary': 'Accept-Encoding, Authorization'\n        }\n      },\n      personalized: {\n        paths: ['/dashboard/', '/profile/', '/settings/'],\n        ttl: 0, // No cache\n        headers: {\n          'Cache-Control': 'private, no-cache, no-store, must-revalidate',\n          'Pragma': 'no-cache',\n          'Expires': '0'\n        }\n      }\n    };\n  }\n\n  // Intelligent cache purging with pattern matching\n  async purgeCache(patterns = [], options = {}) {\n    try {\n      const {\n        purgeType = 'selective', // 'selective' or 'full'\n        waitForCompletion = true,\n        notifyWebhook = false\n      } = options;\n\n      console.log(`Starting ${purgeType} cache purge for patterns:`, patterns);\n      \n      if (purgeType === 'full') {\n        // Full cache purge\n        await this.cdnClient.afdCustomDomains.beginPurgeContentAndWait(\n          this.resourceGroupName,\n          this.profileName,\n          'default-endpoint',\n          {\n            contentPaths: ['/*']\n          }\n        );\n      } else {\n        // Selective purge based on patterns\n        const contentPaths = patterns.length > 0 ? patterns : ['/*'];\n        \n        await this.cdnClient.afdCustomDomains.beginPurgeContentAndWait(\n          this.resourceGroupName,\n          this.profileName,\n          'default-endpoint',\n          {\n            contentPaths\n          }\n        );\n      }\n\n      console.log('Cache purge completed successfully');\n      \n      // Optional webhook notification\n      if (notifyWebhook && process.env.PURGE_WEBHOOK_URL) {\n        await this.notifyPurgeComplete(patterns, purgeType);\n      }\n      \n      return { success: true, patterns, purgeType };\n    } catch (error) {\n      console.error('Cache purge failed:', error);\n      throw error;\n    }\n  }\n\n  // Cache preloading for critical content\n  async preloadContent(urls, options = {}) {\n    try {\n      const {\n        priority = 'normal', // 'high', 'normal', 'low'\n        headers = {},\n        validateResponse = true\n      } = options;\n\n      console.log(`Preloading ${urls.length} URLs with ${priority} priority`);\n      \n      const results = [];\n      const batchSize = priority === 'high' ? 5 : 10;\n      \n      for (let i = 0; i < urls.length; i += batchSize) {\n        const batch = urls.slice(i, i + batchSize);\n        \n        const batchPromises = batch.map(async (url) => {\n          try {\n            const response = await axios.get(url, {\n              headers: {\n                'User-Agent': 'Azure-CDN-Preloader/1.0',\n                'Cache-Control': 'no-cache',\n                ...headers\n              },\n              timeout: 30000,\n              validateStatus: validateResponse ? (status) => status < 400 : () => true\n            });\n            \n            return {\n              url,\n              status: 'success',\n              statusCode: response.status,\n              size: response.headers['content-length'] || 'unknown',\n              responseTime: response.headers['x-response-time'] || 'unknown'\n            };\n          } catch (error) {\n            return {\n              url,\n              status: 'error',\n              error: error.message,\n              statusCode: error.response?.status || 'unknown'\n            };\n          }\n        });\n        \n        const batchResults = await Promise.all(batchPromises);\n        results.push(...batchResults);\n        \n        // Rate limiting between batches\n        if (i + batchSize < urls.length) {\n          await new Promise(resolve => setTimeout(resolve, priority === 'high' ? 100 : 500));\n        }\n      }\n      \n      const successful = results.filter(r => r.status === 'success').length;\n      const failed = results.filter(r => r.status === 'error').length;\n      \n      console.log(`Preloading completed: ${successful} successful, ${failed} failed`);\n      \n      return {\n        summary: { total: urls.length, successful, failed },\n        details: results\n      };\n    } catch (error) {\n      console.error('Content preloading failed:', error);\n      throw error;\n    }\n  }\n\n  // Dynamic cache strategy based on content analysis\n  async optimizeCacheStrategy(url, content, options = {}) {\n    try {\n      const {\n        contentType = 'text/html',\n        userAgent = '',\n        geolocation = 'US',\n        personalized = false\n      } = options;\n\n      // Analyze content characteristics\n      const analysis = this.analyzeContent(content, contentType, url);\n      \n      // Determine optimal caching strategy\n      let strategy = 'dynamic'; // default\n      \n      if (analysis.isStatic) {\n        strategy = 'static';\n      } else if (personalized || analysis.hasUserData) {\n        strategy = 'personalized';\n      } else if (analysis.changeFrequency === 'low') {\n        strategy = 'dynamic';\n      }\n      \n      const cacheConfig = this.cacheStrategies[strategy];\n      \n      // Generate cache headers\n      const headers = {\n        ...cacheConfig.headers,\n        'X-Cache-Strategy': strategy,\n        'X-Content-Analysis': JSON.stringify(analysis),\n        'Vary': this.generateVaryHeader(analysis, userAgent, geolocation)\n      };\n      \n      // Edge case handling\n      if (analysis.containsSensitiveData) {\n        headers['Cache-Control'] = 'private, no-cache, no-store';\n        strategy = 'no-cache';\n      }\n      \n      if (analysis.isApiEndpoint && analysis.hasParameters) {\n        headers['Vary'] += ', Accept, Authorization';\n      }\n      \n      return {\n        strategy,\n        ttl: cacheConfig.ttl,\n        headers,\n        analysis,\n        recommendations: this.generateRecommendations(analysis)\n      };\n    } catch (error) {\n      console.error('Cache strategy optimization failed:', error);\n      throw error;\n    }\n  }\n\n  analyzeContent(content, contentType, url) {\n    const analysis = {\n      size: Buffer.byteLength(content, 'utf8'),\n      contentType,\n      isStatic: false,\n      isApiEndpoint: false,\n      hasUserData: false,\n      containsSensitiveData: false,\n      changeFrequency: 'medium',\n      hasParameters: false,\n      compressionRatio: 0,\n      cacheability: 'cacheable'\n    };\n    \n    // URL analysis\n    const urlLower = url.toLowerCase();\n    analysis.isStatic = /\\.(js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf|eot|svg)$/.test(urlLower);\n    analysis.isApiEndpoint = urlLower.includes('/api/') || urlLower.includes('/v1/') || urlLower.includes('/graphql');\n    analysis.hasParameters = url.includes('?') || url.includes('&');\n    \n    // Content analysis\n    if (typeof content === 'string') {\n      analysis.hasUserData = /\\b(user|profile|account|dashboard|private)\\b/i.test(content);\n      analysis.containsSensitiveData = /\\b(password|token|secret|key|ssn|credit.*card)\\b/i.test(content);\n      \n      // Estimate change frequency based on content patterns\n      if (/\\b(news|feed|live|real.*time|updated)\\b/i.test(content)) {\n        analysis.changeFrequency = 'high';\n      } else if (/\\b(static|permanent|archive|documentation)\\b/i.test(content)) {\n        analysis.changeFrequency = 'low';\n      }\n    }\n    \n    // Compression analysis\n    if (contentType.includes('text/') || contentType.includes('application/json')) {\n      const compressed = require('zlib').gzipSync(content);\n      analysis.compressionRatio = (1 - compressed.length / analysis.size) * 100;\n    }\n    \n    // Cacheability determination\n    if (analysis.containsSensitiveData || analysis.hasUserData) {\n      analysis.cacheability = 'private';\n    } else if (analysis.isApiEndpoint && analysis.hasParameters) {\n      analysis.cacheability = 'conditional';\n    } else if (analysis.isStatic) {\n      analysis.cacheability = 'highly-cacheable';\n    }\n    \n    return analysis;\n  }\n\n  generateVaryHeader(analysis, userAgent, geolocation) {\n    const varyHeaders = ['Accept-Encoding'];\n    \n    if (analysis.hasUserData) {\n      varyHeaders.push('Authorization', 'Cookie');\n    }\n    \n    if (userAgent && /mobile/i.test(userAgent)) {\n      varyHeaders.push('User-Agent');\n    }\n    \n    if (geolocation && analysis.isApiEndpoint) {\n      varyHeaders.push('CloudFront-Viewer-Country');\n    }\n    \n    return varyHeaders.join(', ');\n  }\n\n  generateRecommendations(analysis) {\n    const recommendations = [];\n    \n    if (analysis.compressionRatio > 70) {\n      recommendations.push('Enable Brotli compression for better compression ratios');\n    }\n    \n    if (analysis.size > 1024 * 1024) { // 1MB\n      recommendations.push('Consider implementing progressive loading or chunking');\n    }\n    \n    if (analysis.isStatic && analysis.changeFrequency === 'low') {\n      recommendations.push('Implement versioned URLs for better cache invalidation');\n    }\n    \n    if (analysis.isApiEndpoint && !analysis.hasParameters) {\n      recommendations.push('Consider longer cache TTL for parameterless API endpoints');\n    }\n    \n    return recommendations;\n  }\n\n  async notifyPurgeComplete(patterns, purgeType) {\n    try {\n      await axios.post(process.env.PURGE_WEBHOOK_URL, {\n        event: 'cache_purge_complete',\n        timestamp: new Date().toISOString(),\n        patterns,\n        purgeType,\n        service: 'azure-front-door'\n      });\n    } catch (error) {\n      console.error('Failed to send purge notification:', error);\n    }\n  }\n\n  // Performance monitoring and analytics\n  async getPerformanceMetrics(timeRange = '24h') {\n    try {\n      // This would integrate with Azure Monitor to get real metrics\n      // For now, returning mock structure\n      return {\n        cacheHitRatio: 94.2,\n        averageLatency: 89,\n        totalRequests: 1250000,\n        bandwidthSaved: '2.3TB',\n        topMissedUrls: [\n          { url: '/api/user/profile', misses: 15420 },\n          { url: '/search?q=products', misses: 8760 }\n        ],\n        recommendations: [\n          'Increase cache TTL for /api/user/profile endpoint',\n          'Implement cache warming for search results'\n        ]\n      };\n    } catch (error) {\n      console.error('Failed to retrieve performance metrics:', error);\n      throw error;\n    }\n  }\n}\n\nmodule.exports = { AzureCDNOptimizationService };"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "performance_monitoring",
+      "title": "Performance Monitoring and Analytics",
+      "estimated_time": "45 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Set up Comprehensive Performance Monitoring",
+          "instructions": [
+            "Configure Azure Monitor for CDN and cache metrics",
+            "Set up custom dashboards and alerts",
+            "Implement real-time performance tracking"
+          ],
+          "code_example": {
+            "language": "bicep",
+            "code": "// Performance monitoring setup\nparam logAnalyticsWorkspaceName string\nparam frontDoorProfileId string\nparam redisCacheId string\n\n// Log Analytics Workspace for centralized logging\nresource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {\n  name: logAnalyticsWorkspaceName\n  location: resourceGroup().location\n  properties: {\n    sku: {\n      name: 'PerGB2018'\n    }\n    retentionInDays: 90\n    features: {\n      searchVersion: 1\n      legacy: 0\n      enableLogAccessUsingOnlyResourcePermissions: true\n    }\n  }\n}\n\n// Diagnostic settings for Front Door\nresource frontDoorDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {\n  name: 'frontdoor-diagnostics'\n  scope: resourceId('Microsoft.Cdn/profiles', split(frontDoorProfileId, '/')[8])\n  properties: {\n    workspaceId: logAnalyticsWorkspace.id\n    logs: [\n      {\n        category: 'FrontDoorAccessLog'\n        enabled: true\n        retentionPolicy: {\n          enabled: true\n          days: 90\n        }\n      }\n      {\n        category: 'FrontDoorHealthProbeLog'\n        enabled: true\n        retentionPolicy: {\n          enabled: true\n          days: 90\n        }\n      }\n    ]\n    metrics: [\n      {\n        category: 'AllMetrics'\n        enabled: true\n        retentionPolicy: {\n          enabled: true\n          days: 90\n        }\n      }\n    ]\n  }\n}\n\n// Diagnostic settings for Redis Cache\nresource redisDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {\n  name: 'redis-diagnostics'\n  scope: resourceId('Microsoft.Cache/redis', split(redisCacheId, '/')[8])\n  properties: {\n    workspaceId: logAnalyticsWorkspace.id\n    logs: [\n      {\n        category: 'ConnectedClientList'\n        enabled: true\n        retentionPolicy: {\n          enabled: true\n          days: 30\n        }\n      }\n    ]\n    metrics: [\n      {\n        category: 'AllMetrics'\n        enabled: true\n        retentionPolicy: {\n          enabled: true\n          days: 90\n        }\n      }\n    ]\n  }\n}\n\n// Action Group for alerts\nresource actionGroup 'Microsoft.Insights/actionGroups@2021-09-01' = {\n  name: 'performance-alerts'\n  location: 'Global'\n  properties: {\n    groupShortName: 'PerfAlerts'\n    enabled: true\n    emailReceivers: [\n      {\n        name: 'DevOps Team'\n        emailAddress: 'devops@company.com'\n        useCommonAlertSchema: true\n      }\n    ]\n    webhookReceivers: [\n      {\n        name: 'Slack Integration'\n        serviceUri: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'\n        useCommonAlertSchema: true\n      }\n    ]\n  }\n}\n\n// Cache Hit Ratio Alert\nresource cacheHitRatioAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {\n  name: 'cache-hit-ratio-low'\n  location: 'Global'\n  properties: {\n    description: 'Alert when cache hit ratio drops below 90%'\n    severity: 2\n    enabled: true\n    scopes: [\n      redisCacheId\n    ]\n    evaluationFrequency: 'PT5M'\n    windowSize: 'PT15M'\n    criteria: {\n      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'\n      allOf: [\n        {\n          name: 'CacheHitRatio'\n          metricName: 'cachehits'\n          dimensions: []\n          operator: 'LessThan'\n          threshold: 90\n          timeAggregation: 'Average'\n          criterionType: 'StaticThresholdCriterion'\n        }\n      ]\n    }\n    actions: [\n      {\n        actionGroupId: actionGroup.id\n      }\n    ]\n  }\n}\n\n// CDN Response Time Alert\nresource cdnLatencyAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {\n  name: 'cdn-high-latency'\n  location: 'Global'\n  properties: {\n    description: 'Alert when CDN response time exceeds 200ms'\n    severity: 2\n    enabled: true\n    scopes: [\n      frontDoorProfileId\n    ]\n    evaluationFrequency: 'PT5M'\n    windowSize: 'PT10M'\n    criteria: {\n      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'\n      allOf: [\n        {\n          name: 'ResponseTime'\n          metricName: 'OriginLatency'\n          dimensions: []\n          operator: 'GreaterThan'\n          threshold: 200\n          timeAggregation: 'Average'\n          criterionType: 'StaticThresholdCriterion'\n        }\n      ]\n    }\n    actions: [\n      {\n        actionGroupId: actionGroup.id\n      }\n    ]\n  }\n}\n\n// Error Rate Alert\nresource errorRateAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {\n  name: 'high-error-rate'\n  location: 'Global'\n  properties: {\n    description: 'Alert when error rate exceeds 1%'\n    severity: 1\n    enabled: true\n    scopes: [\n      frontDoorProfileId\n    ]\n    evaluationFrequency: 'PT1M'\n    windowSize: 'PT5M'\n    criteria: {\n      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'\n      allOf: [\n        {\n          name: 'ErrorRate'\n          metricName: 'Percentage4XX'\n          dimensions: []\n          operator: 'GreaterThan'\n          threshold: 1\n          timeAggregation: 'Average'\n          criterionType: 'StaticThresholdCriterion'\n        }\n      ]\n    }\n    actions: [\n      {\n        actionGroupId: actionGroup.id\n      }\n    ]\n  }\n}\n\n// Custom workbook for performance dashboard\nresource performanceDashboard 'Microsoft.Insights/workbooks@2021-03-08' = {\n  name: guid('performance-dashboard')\n  location: resourceGroup().location\n  kind: 'shared'\n  properties: {\n    displayName: 'Performance Optimization Dashboard'\n    serializedData: '${json('{\n      \"version\": \"Notebook/1.0\",\n      \"items\": [\n        {\n          \"type\": 1,\n          \"content\": {\n            \"json\": \"# Performance Optimization Dashboard\\\\n\\\\nThis dashboard provides insights into cache performance, CDN metrics, and overall application performance.\"\n          }\n        },\n        {\n          \"type\": 3,\n          \"content\": {\n            \"version\": \"KqlItem/1.0\",\n            \"query\": \"AzureMetrics\\\\n| where ResourceProvider == \\\\\"MICROSOFT.CACHE\\\\\"\\\\n| where MetricName == \\\\\"cachehits\\\\\"\\\\n| summarize avg(Average) by bin(TimeGenerated, 5m)\\\\n| render timechart\",\n            \"size\": 0,\n            \"title\": \"Cache Hit Ratio Over Time\"\n          }\n        },\n        {\n          \"type\": 3,\n          \"content\": {\n            \"version\": \"KqlItem/1.0\",\n            \"query\": \"AzureDiagnostics\\\\n| where ResourceProvider == \\\\\"MICROSOFT.CDN\\\\\"\\\\n| where Category == \\\\\"FrontDoorAccessLog\\\\\"\\\\n| summarize RequestCount = count() by bin(TimeGenerated, 5m), s_result_code = resultCode_s\\\\n| render columnchart\",\n            \"size\": 0,\n            \"title\": \"CDN Response Codes Distribution\"\n          }\n        }\n      ]\n    }')}\n    sourceId: logAnalyticsWorkspace.id\n    category: 'workbook'\n  }\n}\n\noutput logAnalyticsWorkspaceId string = logAnalyticsWorkspace.id\noutput actionGroupId string = actionGroup.id"
+          }
+        }
+      ]
+    },
+    {
+      "section_id": "optimization_automation",
+      "title": "Automated Performance Optimization",
+      "estimated_time": "30 minutes",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Implement Automated Performance Tuning",
+          "instructions": [
+            "Create Azure Functions for automatic cache optimization",
+            "Set up intelligent cache preloading",
+            "Implement automated performance reports"
+          ],
+          "code_example": {
+            "language": "javascript",
+            "code": "// Azure Function for automated performance optimization\nconst { app } = require('@azure/functions');\nconst { DefaultAzureCredential } = require('@azure/identity');\nconst { MonitorQueryClient, LogsQueryResultStatus } = require('@azure/monitor-query');\nconst { AzureCDNOptimizationService } = require('./cdn-optimization-service');\nconst { AzureRedisCacheService } = require('./redis-cache-service');\n\n// Timer function that runs every hour for performance optimization\napp.timer('performanceOptimizer', {\n  schedule: '0 0 * * * *', // Every hour\n  handler: async (myTimer, context) => {\n    try {\n      context.log('Starting automated performance optimization...');\n      \n      const optimizer = new PerformanceOptimizer();\n      const results = await optimizer.optimize();\n      \n      context.log('Performance optimization completed:', results);\n      \n      // Send results to monitoring system\n      await optimizer.reportResults(results);\n      \n    } catch (error) {\n      context.log.error('Performance optimization failed:', error);\n      throw error;\n    }\n  }\n});\n\nclass PerformanceOptimizer {\n  constructor() {\n    this.credential = new DefaultAzureCredential();\n    this.monitorClient = new MonitorQueryClient(this.credential);\n    this.cdnService = new AzureCDNOptimizationService(\n      process.env.AZURE_SUBSCRIPTION_ID,\n      process.env.RESOURCE_GROUP_NAME,\n      process.env.FRONT_DOOR_PROFILE_NAME\n    );\n    this.cacheService = new AzureRedisCacheService(\n      process.env.AZURE_REDIS_CONNECTION_STRING\n    );\n    \n    this.optimizationRules = {\n      cacheHitRatio: {\n        threshold: 95,\n        action: 'warmCache',\n        priority: 'high'\n      },\n      responseTime: {\n        threshold: 100, // ms\n        action: 'optimizeRouting',\n        priority: 'medium'\n      },\n      errorRate: {\n        threshold: 0.5, // %\n        action: 'investigateErrors',\n        priority: 'critical'\n      },\n      bandwidthUsage: {\n        threshold: 85, // % of allocated\n        action: 'enableCompression',\n        priority: 'medium'\n      }\n    };\n  }\n\n  async optimize() {\n    const results = {\n      timestamp: new Date().toISOString(),\n      optimizations: [],\n      metrics: {},\n      recommendations: []\n    };\n\n    try {\n      // 1. Analyze current performance metrics\n      const metrics = await this.analyzePerformance();\n      results.metrics = metrics;\n\n      // 2. Apply optimization rules\n      for (const [metricName, rule] of Object.entries(this.optimizationRules)) {\n        const currentValue = metrics[metricName];\n        \n        if (this.shouldOptimize(currentValue, rule)) {\n          const optimization = await this.applyOptimization(metricName, rule, currentValue);\n          results.optimizations.push(optimization);\n        }\n      }\n\n      // 3. Proactive optimizations\n      const proactiveOptimizations = await this.proactiveOptimizations(metrics);\n      results.optimizations.push(...proactiveOptimizations);\n\n      // 4. Generate recommendations\n      results.recommendations = await this.generateRecommendations(metrics);\n\n      return results;\n    } catch (error) {\n      console.error('Optimization process failed:', error);\n      throw error;\n    }\n  }\n\n  async analyzePerformance() {\n    const timeRange = {\n      startTime: new Date(Date.now() - 60 * 60 * 1000), // Last hour\n      endTime: new Date()\n    };\n\n    const queries = {\n      cacheHitRatio: `\n        AzureMetrics\n        | where ResourceProvider == \"MICROSOFT.CACHE\"\n        | where MetricName in (\"cachehits\", \"cachemisses\")\n        | summarize \n            hits = sum(iif(MetricName == \"cachehits\", Average, 0)),\n            misses = sum(iif(MetricName == \"cachemisses\", Average, 0))\n        | extend hitRatio = hits / (hits + misses) * 100\n        | project hitRatio\n      `,\n      \n      responseTime: `\n        AzureDiagnostics\n        | where ResourceProvider == \"MICROSOFT.CDN\"\n        | where Category == \"FrontDoorAccessLog\"\n        | summarize avgResponseTime = avg(timeTaken_s * 1000)\n        | project avgResponseTime\n      `,\n      \n      errorRate: `\n        AzureDiagnostics\n        | where ResourceProvider == \"MICROSOFT.CDN\"\n        | where Category == \"FrontDoorAccessLog\"\n        | summarize \n            totalRequests = count(),\n            errorRequests = countif(httpStatusCode_s >= \"400\")\n        | extend errorRate = errorRequests * 100.0 / totalRequests\n        | project errorRate\n      `,\n      \n      bandwidthUsage: `\n        AzureMetrics\n        | where ResourceProvider == \"MICROSOFT.CDN\"\n        | where MetricName == \"ByteHitRatio\"\n        | summarize avgBandwidthUsage = avg(Average)\n        | project avgBandwidthUsage\n      `\n    };\n\n    const metrics = {};\n    \n    for (const [metricName, query] of Object.entries(queries)) {\n      try {\n        const response = await this.monitorClient.queryWorkspace(\n          process.env.LOG_ANALYTICS_WORKSPACE_ID,\n          query,\n          timeRange\n        );\n\n        if (response.status === LogsQueryResultStatus.Success) {\n          const tables = response.tables;\n          if (tables.length > 0 && tables[0].rows.length > 0) {\n            metrics[metricName] = tables[0].rows[0][0];\n          } else {\n            metrics[metricName] = 0;\n          }\n        }\n      } catch (error) {\n        console.error(`Failed to query ${metricName}:`, error);\n        metrics[metricName] = 0;\n      }\n    }\n\n    return metrics;\n  }\n\n  shouldOptimize(currentValue, rule) {\n    if (rule.action === 'warmCache' || rule.action === 'enableCompression') {\n      return currentValue < rule.threshold;\n    } else {\n      return currentValue > rule.threshold;\n    }\n  }\n\n  async applyOptimization(metricName, rule, currentValue) {\n    const optimization = {\n      metric: metricName,\n      action: rule.action,\n      priority: rule.priority,\n      currentValue,\n      threshold: rule.threshold,\n      timestamp: new Date().toISOString(),\n      status: 'pending'\n    };\n\n    try {\n      switch (rule.action) {\n        case 'warmCache':\n          await this.warmCriticalContent();\n          optimization.status = 'completed';\n          optimization.details = 'Critical content preloaded to improve cache hit ratio';\n          break;\n          \n        case 'optimizeRouting':\n          await this.optimizeRouting();\n          optimization.status = 'completed';\n          optimization.details = 'Routing rules optimized to reduce response time';\n          break;\n          \n        case 'investigateErrors':\n          const errorAnalysis = await this.analyzeErrors();\n          optimization.status = 'completed';\n          optimization.details = `Error investigation completed: ${errorAnalysis.summary}`;\n          break;\n          \n        case 'enableCompression':\n          await this.optimizeCompression();\n          optimization.status = 'completed';\n          optimization.details = 'Compression settings optimized';\n          break;\n          \n        default:\n          optimization.status = 'skipped';\n          optimization.details = 'Unknown optimization action';\n      }\n    } catch (error) {\n      optimization.status = 'failed';\n      optimization.error = error.message;\n    }\n\n    return optimization;\n  }\n\n  async proactiveOptimizations(metrics) {\n    const optimizations = [];\n\n    // Proactive cache warming based on access patterns\n    if (new Date().getHours() === 7) { // 7 AM - prepare for daily traffic\n      optimizations.push(await this.schedulePreloadForPeakHours());\n    }\n\n    // Weekend optimization\n    const isWeekend = [0, 6].includes(new Date().getDay());\n    if (isWeekend && metrics.cacheHitRatio > 98) {\n      optimizations.push(await this.optimizeForLowTraffic());\n    }\n\n    return optimizations;\n  }\n\n  async warmCriticalContent() {\n    // Identify critical URLs from access logs\n    const criticalUrls = await this.identifyCriticalUrls();\n    \n    await this.cdnService.preloadContent(criticalUrls, {\n      priority: 'high',\n      validateResponse: true\n    });\n  }\n\n  async identifyCriticalUrls() {\n    // Query access logs to find most requested URLs\n    const query = `\n      AzureDiagnostics\n      | where ResourceProvider == \"MICROSOFT.CDN\"\n      | where Category == \"FrontDoorAccessLog\"\n      | where TimeGenerated > ago(24h)\n      | summarize requestCount = count() by requestUri_s\n      | top 50 by requestCount\n      | project url = requestUri_s\n    `;\n\n    try {\n      const response = await this.monitorClient.queryWorkspace(\n        process.env.LOG_ANALYTICS_WORKSPACE_ID,\n        query,\n        { startTime: new Date(Date.now() - 24 * 60 * 60 * 1000), endTime: new Date() }\n      );\n\n      if (response.status === LogsQueryResultStatus.Success) {\n        return response.tables[0].rows.map(row => `${process.env.WEBSITE_URL}${row[0]}`);\n      }\n    } catch (error) {\n      console.error('Failed to identify critical URLs:', error);\n    }\n\n    // Fallback to predefined critical URLs\n    return [\n      `${process.env.WEBSITE_URL}/`,\n      `${process.env.WEBSITE_URL}/api/health`,\n      `${process.env.WEBSITE_URL}/products`,\n      `${process.env.WEBSITE_URL}/search`\n    ];\n  }\n\n  async optimizeRouting() {\n    // Implement intelligent routing optimization\n    console.log('Optimizing routing rules based on current performance');\n    // This would involve updating Front Door routing rules\n  }\n\n  async analyzeErrors() {\n    const query = `\n      AzureDiagnostics\n      | where ResourceProvider == \"MICROSOFT.CDN\"\n      | where Category == \"FrontDoorAccessLog\"\n      | where httpStatusCode_s >= \"400\"\n      | summarize errorCount = count() by httpStatusCode_s, requestUri_s\n      | top 10 by errorCount\n    `;\n\n    try {\n      const response = await this.monitorClient.queryWorkspace(\n        process.env.LOG_ANALYTICS_WORKSPACE_ID,\n        query,\n        { startTime: new Date(Date.now() - 60 * 60 * 1000), endTime: new Date() }\n      );\n\n      if (response.status === LogsQueryResultStatus.Success) {\n        const errors = response.tables[0].rows;\n        return {\n          summary: `Found ${errors.length} error patterns`,\n          details: errors\n        };\n      }\n    } catch (error) {\n      console.error('Failed to analyze errors:', error);\n    }\n\n    return { summary: 'Error analysis completed', details: [] };\n  }\n\n  async optimizeCompression() {\n    console.log('Optimizing compression settings');\n    // Implementation would update Front Door compression rules\n  }\n\n  async schedulePreloadForPeakHours() {\n    return {\n      action: 'schedulePreload',\n      status: 'completed',\n      details: 'Scheduled cache preloading for peak hours'\n    };\n  }\n\n  async optimizeForLowTraffic() {\n    return {\n      action: 'lowTrafficOptimization',\n      status: 'completed',\n      details: 'Applied low-traffic optimizations'\n    };\n  }\n\n  async generateRecommendations(metrics) {\n    const recommendations = [];\n\n    if (metrics.cacheHitRatio < 95) {\n      recommendations.push({\n        type: 'performance',\n        priority: 'high',\n        title: 'Improve Cache Hit Ratio',\n        description: `Current hit ratio is ${metrics.cacheHitRatio.toFixed(1)}%. Consider implementing cache warming strategies.`,\n        actions: ['Implement proactive cache warming', 'Review cache TTL settings', 'Analyze cache miss patterns']\n      });\n    }\n\n    if (metrics.responseTime > 100) {\n      recommendations.push({\n        type: 'performance',\n        priority: 'medium',\n        title: 'Optimize Response Time',\n        description: `Average response time is ${metrics.responseTime.toFixed(0)}ms. Consider edge optimization.`,\n        actions: ['Enable edge computing', 'Optimize origin server performance', 'Review routing rules']\n      });\n    }\n\n    if (metrics.errorRate > 0.5) {\n      recommendations.push({\n        type: 'reliability',\n        priority: 'critical',\n        title: 'Address High Error Rate',\n        description: `Error rate is ${metrics.errorRate.toFixed(2)}%. Immediate investigation required.`,\n        actions: ['Investigate error patterns', 'Check origin server health', 'Review WAF rules']\n      });\n    }\n\n    return recommendations;\n  }\n\n  async reportResults(results) {\n    // Send results to monitoring dashboard or notification system\n    console.log('Performance optimization results:', JSON.stringify(results, null, 2));\n    \n    // Optional: Send to external monitoring system\n    if (process.env.MONITORING_WEBHOOK_URL) {\n      try {\n        await fetch(process.env.MONITORING_WEBHOOK_URL, {\n          method: 'POST',\n          headers: { 'Content-Type': 'application/json' },\n          body: JSON.stringify({\n            service: 'performance-optimizer',\n            timestamp: results.timestamp,\n            summary: {\n              optimizations: results.optimizations.length,\n              recommendations: results.recommendations.length,\n              status: results.optimizations.every(o => o.status === 'completed') ? 'success' : 'partial'\n            },\n            details: results\n          })\n        });\n      } catch (error) {\n        console.error('Failed to send monitoring report:', error);\n      }\n    }\n  }\n}\n\nmodule.exports = { PerformanceOptimizer };"
+          }
+        }
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "common_issues": [
+      {
+        "issue": "Low cache hit ratio",
+        "cause": "Incorrect cache TTL settings or cache-busting parameters",
+        "solution": "Review cache headers, implement proper cache warming, and optimize query parameters"
+      },
+      {
+        "issue": "High CDN latency",
+        "cause": "Suboptimal routing or origin server performance",
+        "solution": "Optimize origin server, review Front Door routing rules, and consider edge computing"
+      },
+      {
+        "issue": "Redis connection failures",
+        "cause": "Network connectivity or authentication issues",
+        "solution": "Check VNet configuration, verify connection strings, and review firewall rules"
+      },
+      {
+        "issue": "Cache invalidation delays",
+        "cause": "CDN propagation time or incorrect purge patterns",
+        "solution": "Use specific purge patterns, implement versioned URLs, and monitor purge completion"
+      },
+      {
+        "issue": "High bandwidth costs",
+        "cause": "Inefficient compression or cache misses",
+        "solution": "Enable Brotli compression, optimize images, and implement intelligent caching"
+      }
+    ]
+  },
+  "best_practices": [
+    "Implement intelligent cache warming strategies",
+    "Use versioned URLs for static assets",
+    "Set appropriate TTL values based on content type",
+    "Monitor cache hit ratios and optimize accordingly",
+    "Implement proper error handling and fallback mechanisms",
+    "Use compression for all text-based content",
+    "Set up comprehensive monitoring and alerting",
+    "Implement security best practices with WAF",
+    "Use geo-distributed caching for global performance",
+    "Regularly review and optimize caching strategies"
+  ],
+  "performance_targets": {
+    "cache_hit_ratio": "95%+",
+    "global_latency_p95": "<100ms",
+    "global_latency_p99": "<200ms",
+    "availability": "99.99%",
+    "error_rate": "<0.1%",
+    "bandwidth_efficiency": "80%+ savings"
+  },
+  "next_steps": [
+    "Implement machine learning-based cache optimization",
+    "Set up A/B testing for performance optimizations",
+    "Integrate with real user monitoring (RUM)",
+    "Implement intelligent image optimization",
+    "Set up automated performance regression testing",
+    "Implement progressive web app caching strategies",
+    "Add synthetic monitoring from multiple regions",
+    "Implement edge computing with Azure Functions"
+  ],
+  "additional_resources": [
+    {
+      "title": "Azure Cache for Redis Documentation",
+      "url": "https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/",
+      "description": "Complete guide to Azure Cache for Redis"
+    },
+    {
+      "title": "Azure Front Door Documentation",
+      "url": "https://docs.microsoft.com/en-us/azure/frontdoor/",
+      "description": "Azure Front Door configuration and optimization"
+    },
+    {
+      "title": "Performance Optimization Best Practices",
+      "url": "https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching",
+      "description": "Caching strategies and performance optimization"
+    },
+    {
+      "title": "Azure Monitor for Performance Tracking",
+      "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/",
+      "description": "Monitoring and analytics for Azure services"
+    }
+  ]
+}

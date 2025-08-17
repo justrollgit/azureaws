@@ -1,0 +1,769 @@
+{
+  "lab_metadata": {
+    "id": "developer-tools-lab",
+    "title": "AWS Developer Tools to Azure DevOps: Integrated Development Environment and Productivity Platform",
+    "category": "development",
+    "difficulty": "intermediate",
+    "estimated_time": "90 minutes",
+    "description": "Master developer productivity by migrating from AWS Cloud9, CodeStar, and CodeGuru to Azure DevOps, GitHub Codespaces, and Application Insights with comprehensive development workflows",
+    "aws_services": ["Cloud9", "CodeStar", "CodeGuru", "CodeCommit", "CodeArtifact", "X-Ray"],
+    "azure_services": ["DevOps", "GitHub Codespaces", "Application Insights", "Repos", "Artifacts", "Monitor"],
+    "tags": ["development", "productivity", "devops", "collaboration", "quality", "saa-c03"],
+    "prerequisites": [
+      "Understanding of software development lifecycle",
+      "Knowledge of version control systems (Git)",
+      "Familiarity with CI/CD concepts and practices",
+      "Basic understanding of code quality and performance monitoring",
+      "Knowledge of collaborative development workflows"
+    ],
+    "learning_objectives": [
+      "Migrate AWS Cloud9 IDE to GitHub Codespaces for cloud development",
+      "Transform AWS CodeStar projects to Azure DevOps integrated workflows",
+      "Convert AWS CodeGuru to Azure Application Insights for code intelligence",
+      "Implement collaborative development with Azure Repos and GitHub integration",
+      "Set up comprehensive code quality and security scanning",
+      "Configure developer productivity metrics and insights",
+      "Establish integrated development and deployment pipelines"
+    ]
+  },
+  "scenario": {
+    "title": "Enterprise Development Platform Modernization",
+    "description": "DevCorp Technologies manages development for 200+ developers across 15 global teams, using AWS developer tools for cloud-based development, code collaboration, and quality monitoring. They need to migrate to Azure while improving developer experience, implementing modern DevOps practices, and enhancing code quality insights.",
+    "business_requirements": [
+      "Cloud-based development environment for global distributed teams",
+      "Integrated project management and development workflows",
+      "Comprehensive code quality monitoring and improvement recommendations",
+      "Secure package management and dependency tracking",
+      "Real-time collaboration and pair programming capabilities",
+      "Advanced analytics for development productivity and code health",
+      "Integration with existing enterprise tools and security systems"
+    ],
+    "current_aws_architecture": [
+      "Cloud9 for cloud-based development environments",
+      "CodeStar for project templates and team management",
+      "CodeGuru for code quality reviews and performance insights",
+      "CodeCommit for private Git repositories",
+      "CodeArtifact for package management",
+      "X-Ray for application performance monitoring"
+    ],
+    "target_azure_architecture": [
+      "GitHub Codespaces for cloud development environments",
+      "Azure DevOps for integrated project management",
+      "Application Insights for application performance monitoring",
+      "Azure Repos for enterprise Git repositories",
+      "Azure Artifacts for package and dependency management",
+      "Azure Monitor for comprehensive development analytics"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Cloud Development Environment: Cloud9 to GitHub Codespaces",
+      "estimated_time": "30 minutes",
+      "description": "Transform cloud-based development experience",
+      "aws_context": {
+        "service": "AWS Cloud9",
+        "description": "Cloud-based integrated development environment",
+        "key_features": [
+          "Browser-based code editor with collaboration features",
+          "Pre-configured development environments",
+          "Terminal access and debugging capabilities",
+          "Integration with AWS services",
+          "Real-time collaborative editing"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "GitHub Codespaces",
+        "description": "Cloud-powered development environment in your browser",
+        "key_features": [
+          "VS Code experience in the browser",
+          "Configurable development containers",
+          "Pre-built and custom development environments",
+          "Seamless GitHub integration",
+          "GPU and high-performance computing options"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Set Up Enterprise Development Environment with Codespaces",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create standardized development container configuration",
+              "aws_context": "Similar to Cloud9 environment templates",
+              "devcontainer_setup": {
+                "devcontainer_json": {
+                  "name": "DevCorp Full-Stack Development",
+                  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+                  "features": {
+                    "ghcr.io/devcontainers/features/node:1": {"version": "18"},
+                    "ghcr.io/devcontainers/features/python:1": {"version": "3.11"},
+                    "ghcr.io/devcontainers/features/dotnet:1": {"version": "7.0"},
+                    "ghcr.io/devcontainers/features/azure-cli:1": {},
+                    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+                  },
+                  "customizations": {
+                    "vscode": {
+                      "extensions": [
+                        "ms-vscode.vscode-typescript-next",
+                        "ms-python.python",
+                        "ms-dotnettools.csharp",
+                        "ms-azuretools.vscode-azureappservice",
+                        "github.copilot",
+                        "sonarsource.sonarlint-vscode"
+                      ],
+                      "settings": {
+                        "editor.formatOnSave": true,
+                        "editor.codeActionsOnSave": {"source.organizeImports": true}
+                      }
+                    }
+                  },
+                  "forwardPorts": [3000, 5000, 8000, 8080],
+                  "postCreateCommand": "npm install -g typescript eslint prettier"
+                },
+                "dockerfile": "FROM mcr.microsoft.com/devcontainers/universal:2-linux\\n\\n# Install additional tools\\nRUN apt-get update && apt-get install -y \\\\\\n    postgresql-client \\\\\\n    redis-tools \\\\\\n    && rm -rf /var/lib/apt/lists/*"
+              },
+              "explanation": "Creates consistent, reproducible development environments for all team members"
+            },
+            {
+              "step": 2,
+              "description": "Configure organization-wide Codespaces policies",
+              "enterprise_configuration": {
+                "organization_settings": {
+                  "allowed_regions": ["US East", "EU West", "Asia Pacific"],
+                  "machine_types": {
+                    "default": "2-core",
+                    "performance": "4-core", 
+                    "gpu_enabled": "8-core-gpu"
+                  },
+                  "timeout_policies": {
+                    "idle_timeout": "30 minutes",
+                    "max_session": "8 hours"
+                  }
+                },
+                "cost_management": {
+                  "spending_limit": "$10,000/month",
+                  "per_user_limit": "$200/month",
+                  "auto_suspend": "enabled"
+                },
+                "security_policies": {
+                  "repository_access": "organization_repositories_only",
+                  "secrets_access": "repository_secrets_only",
+                  "network_access": "public_with_vpn_option"
+                }
+              },
+              "explanation": "Establishes governance and cost controls for enterprise Codespaces usage"
+            },
+            {
+              "step": 3,
+              "description": "Implement collaborative development workflows",
+              "collaboration_features": {
+                "live_share_integration": {
+                  "real_time_editing": "Multiple developers editing same codebase",
+                  "shared_debugging": "Collaborative debugging sessions",
+                  "voice_chat": "Integrated voice communication",
+                  "session_recording": "Record pair programming sessions"
+                },
+                "development_workflows": [
+                  {
+                    "scenario": "Feature Development",
+                    "workflow": [
+                      "Create feature branch from main",
+                      "Launch Codespace for feature branch",
+                      "Develop with real-time collaboration",
+                      "Run tests and quality checks",
+                      "Create pull request with integrated review"
+                    ]
+                  },
+                  {
+                    "scenario": "Bug Investigation",
+                    "workflow": [
+                      "Launch Codespace with production data snapshot",
+                      "Use debugging tools and profilers",
+                      "Collaborate with team on root cause analysis",
+                      "Implement and test fix",
+                      "Deploy through automated pipeline"
+                    ]
+                  }
+                ],
+                "productivity_features": {
+                  "github_copilot": "AI-powered code completion and suggestions",
+                  "intellisense": "Advanced code intelligence and navigation",
+                  "integrated_terminal": "Multiple terminals with persistent sessions",
+                  "port_forwarding": "Access development services from anywhere"
+                }
+              },
+              "explanation": "Enables seamless collaboration and productivity for distributed development teams"
+            }
+          ],
+          "validation": [
+            "Verify Codespaces launch with correct development environment",
+            "Test collaborative editing and debugging capabilities",
+            "Confirm organization policies are enforced",
+            "Validate development workflows are streamlined and efficient"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Project Management Integration: CodeStar to Azure DevOps",
+      "estimated_time": "25 minutes",
+      "description": "Integrate development with comprehensive project management",
+      "aws_context": {
+        "service": "AWS CodeStar",
+        "description": "Unified interface for managing software development projects",
+        "key_features": [
+          "Project templates for common application types",
+          "Integrated development toolchain",
+          "Team member management and permissions",
+          "Project dashboard with metrics",
+          "Issue tracking and project planning"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure DevOps",
+        "description": "Complete DevOps solution for planning, developing, and deploying",
+        "key_features": [
+          "Work item tracking with Agile and Scrum processes",
+          "Advanced project planning and portfolio management",
+          "Integrated Git repositories and pull request workflows",
+          "Comprehensive CI/CD pipelines",
+          "Rich analytics and reporting capabilities"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Create Integrated Development and Project Management Workflow",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Azure DevOps organization and projects",
+              "aws_context": "Similar to creating CodeStar projects",
+              "azure_devops_setup": {
+                "organization": "devcorp-technologies",
+                "projects": [
+                  {
+                    "name": "Customer Portal",
+                    "process": "Agile",
+                    "visibility": "Private",
+                    "description": "Customer-facing web application"
+                  },
+                  {
+                    "name": "Mobile App",
+                    "process": "Scrum",
+                    "visibility": "Private", 
+                    "description": "iOS and Android mobile applications"
+                  },
+                  {
+                    "name": "Data Platform",
+                    "process": "Basic",
+                    "visibility": "Private",
+                    "description": "Analytics and data processing platform"
+                  }
+                ],
+                "team_configuration": {
+                  "administrators": ["dev-leads", "project-managers"],
+                  "contributors": ["developers", "qa-engineers"],
+                  "readers": ["stakeholders", "business-analysts"]
+                }
+              },
+              "explanation": "Establishes structured project organization with appropriate access controls"
+            },
+            {
+              "step": 2,
+              "description": "Configure work item tracking and Agile planning",
+              "agile_planning": {
+                "work_item_types": [
+                  {
+                    "type": "Epic",
+                    "purpose": "Large feature or business initiative",
+                    "fields": ["Business Value", "Effort", "Start Date", "Target Date"]
+                  },
+                  {
+                    "type": "User Story",
+                    "purpose": "User-focused feature requirement",
+                    "fields": ["Acceptance Criteria", "Story Points", "Priority"]
+                  },
+                  {
+                    "type": "Task",
+                    "purpose": "Development work item",
+                    "fields": ["Original Estimate", "Remaining Work", "Activity"]
+                  },
+                  {
+                    "type": "Bug",
+                    "purpose": "Defect tracking",
+                    "fields": ["Severity", "Priority", "Steps to Reproduce"]
+                  }
+                ],
+                "sprint_planning": {
+                  "sprint_duration": "2 weeks",
+                  "capacity_planning": "Story points with team velocity tracking",
+                  "burndown_tracking": "Daily progress monitoring",
+                  "retrospectives": "Built-in retrospective templates"
+                },
+                "portfolio_management": {
+                  "roadmap_planning": "Multi-project timeline visualization",
+                  "dependency_tracking": "Cross-project dependency management",
+                  "resource_allocation": "Team capacity across projects"
+                }
+              },
+              "explanation": "Implements comprehensive Agile project management with enterprise-scale planning"
+            },
+            {
+              "step": 3,
+              "description": "Integrate development workflow with work items",
+              "development_integration": {
+                "branch_policies": {
+                  "pull_request_required": true,
+                  "work_item_linking": "Required for all pull requests",
+                  "minimum_reviewers": 2,
+                  "build_validation": "Required before merge"
+                },
+                "automated_workflows": [
+                  {
+                    "trigger": "Pull request creation",
+                    "actions": [
+                      "Link to work item automatically",
+                      "Run automated tests",
+                      "Perform security scanning",
+                      "Check code quality gates"
+                    ]
+                  },
+                  {
+                    "trigger": "Work item state change",
+                    "actions": [
+                      "Notify assigned developers",
+                      "Update sprint burndown",
+                      "Trigger status reports",
+                      "Update project dashboards"
+                    ]
+                  }
+                ],
+                "traceability": {
+                  "requirements_to_code": "Full traceability from user story to implementation",
+                  "test_coverage": "Link test cases to user stories",
+                  "deployment_tracking": "Track which work items are in each release"
+                }
+              },
+              "explanation": "Creates seamless integration between planning and development activities"
+            }
+          ],
+          "validation": [
+            "Verify work item tracking captures all project activities",
+            "Test integration between development workflow and project planning",
+            "Confirm traceability from requirements to deployment",
+            "Validate project dashboards provide meaningful insights"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Code Intelligence: CodeGuru to Application Insights",
+      "estimated_time": "25 minutes",
+      "description": "Transform code quality and performance monitoring",
+      "aws_context": {
+        "service": "AWS CodeGuru",
+        "description": "Machine learning-powered code reviews and application performance monitoring",
+        "key_features": [
+          "Automated code reviews with ML recommendations",
+          "Application performance profiling",
+          "Security vulnerability detection",
+          "Cost optimization recommendations",
+          "Integration with development workflows"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Application Insights + SonarCloud",
+        "description": "Application performance monitoring with integrated code quality analysis",
+        "key_features": [
+          "Real-time application performance monitoring",
+          "Advanced code quality and security analysis",
+          "Intelligent performance recommendations",
+          "User experience and business impact analysis",
+          "Integration with development and deployment pipelines"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Implement Comprehensive Code Intelligence Platform",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Application Insights for performance monitoring",
+              "application_insights_setup": {
+                "resource_creation": "az monitor app-insights component create --app devcorp-insights --location eastus --resource-group rg-monitoring",
+                "application_integration": {
+                  "dotnet_apps": {
+                    "package": "Microsoft.ApplicationInsights.AspNetCore",
+                    "configuration": "Automatic instrumentation with OpenTelemetry",
+                    "custom_telemetry": "Business-specific metrics and events"
+                  },
+                  "node_apps": {
+                    "package": "@azure/monitor-opentelemetry-exporter",
+                    "configuration": "Auto-instrumentation for Express.js",
+                    "performance_counters": "Custom performance metrics"
+                  },
+                  "python_apps": {
+                    "package": "azure-monitor-opentelemetry-exporter",
+                    "configuration": "Flask/Django integration",
+                    "dependency_tracking": "Database and external service calls"
+                  }
+                },
+                "monitoring_configuration": {
+                  "performance_counters": ["CPU usage", "Memory consumption", "Request rates", "Response times"],
+                  "dependency_tracking": ["Database calls", "HTTP requests", "Redis operations"],
+                  "custom_events": ["Business KPIs", "User actions", "Feature usage"]
+                }
+              },
+              "explanation": "Establishes comprehensive application performance and business intelligence monitoring"
+            },
+            {
+              "step": 2,
+              "description": "Configure SonarCloud for code quality analysis",
+              "code_quality_setup": {
+                "sonarcloud_integration": {
+                  "organization": "devcorp-technologies",
+                  "quality_gates": {
+                    "coverage_threshold": "80%",
+                    "maintainability_rating": "A",
+                    "reliability_rating": "A",
+                    "security_rating": "A",
+                    "duplicated_lines": "<3%"
+                  },
+                  "analysis_scope": [
+                    "Code coverage analysis",
+                    "Security vulnerability detection",
+                    "Code smell identification",
+                    "Technical debt measurement",
+                    "Duplicated code detection"
+                  ]
+                },
+                "pipeline_integration": {
+                  "pull_request_analysis": "Automatic analysis on PR creation",
+                  "quality_gate_enforcement": "Block merges that fail quality gates",
+                  "trend_analysis": "Track code quality metrics over time",
+                  "developer_feedback": "Inline comments in pull requests"
+                }
+              },
+              "explanation": "Implements automated code quality monitoring with enforcement"
+            },
+            {
+              "step": 3,
+              "description": "Create intelligent monitoring and alerting",
+              "intelligent_monitoring": {
+                "smart_detection": {
+                  "anomaly_detection": "ML-powered detection of performance anomalies",
+                  "failure_analysis": "Automatic root cause analysis for failures",
+                  "user_impact_assessment": "Business impact of performance issues",
+                  "proactive_alerts": "Predict issues before they impact users"
+                },
+                "custom_analytics": {
+                  "kusto_queries": [
+                    "Performance trending analysis",
+                    "User behavior patterns",
+                    "Feature adoption metrics",
+                    "Error correlation analysis"
+                  ],
+                  "dashboards": [
+                    {
+                      "name": "Application Health",
+                      "metrics": ["Availability", "Performance", "Error rates", "User satisfaction"],
+                      "audience": "Operations team"
+                    },
+                    {
+                      "name": "Developer Insights",
+                      "metrics": ["Code quality trends", "Deployment frequency", "Lead time", "MTTR"],
+                      "audience": "Development team"
+                    },
+                    {
+                      "name": "Business Intelligence",
+                      "metrics": ["Feature usage", "User engagement", "Conversion rates", "Revenue impact"],
+                      "audience": "Product management"
+                    }
+                  ]
+                },
+                "automated_actions": {
+                  "auto_scaling": "Scale resources based on performance metrics",
+                  "circuit_breaker": "Automatic circuit breaker activation for failing dependencies",
+                  "incident_creation": "Automatic incident creation for critical issues",
+                  "notification_routing": "Smart notification routing based on issue type and severity"
+                }
+              },
+              "explanation": "Provides intelligent insights and automated responses for optimal application health"
+            }
+          ],
+          "validation": [
+            "Verify Application Insights captures comprehensive telemetry",
+            "Test SonarCloud quality gates prevent low-quality code merges",
+            "Confirm smart detection identifies real performance issues",
+            "Validate automated actions respond appropriately to incidents"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Package Management: CodeArtifact to Azure Artifacts",
+      "estimated_time": "10 minutes",
+      "description": "Implement enterprise package and dependency management",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Configure Enterprise Package Management",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Set up Azure Artifacts with organizational feeds",
+              "artifacts_configuration": {
+                "feed_creation": [
+                  {
+                    "name": "devcorp-packages",
+                    "visibility": "organization",
+                    "upstream_sources": ["npmjs.org", "nuget.org", "pypi.org"],
+                    "purpose": "Central package repository for all teams"
+                  },
+                  {
+                    "name": "devcorp-private",
+                    "visibility": "private",
+                    "upstream_sources": [],
+                    "purpose": "Internal libraries and components"
+                  }
+                ],
+                "security_policies": {
+                  "vulnerability_scanning": "Automatic scanning of all packages",
+                  "license_compliance": "Track and approve package licenses",
+                  "access_control": "Role-based access to different feeds",
+                  "retention_policies": "Automatic cleanup of old package versions"
+                }
+              },
+              "explanation": "Creates secure, governed package management for enterprise development"
+            },
+            {
+              "step": 2,
+              "description": "Integrate package management with development workflow",
+              "workflow_integration": {
+                "build_pipeline": {
+                  "package_restore": "Automatic package restoration from Azure Artifacts",
+                  "dependency_analysis": "Scan dependencies for vulnerabilities",
+                  "license_checking": "Validate license compliance",
+                  "package_publishing": "Publish internal packages automatically"
+                },
+                "developer_experience": {
+                  "ide_integration": "Seamless package installation from Visual Studio/VS Code",
+                  "credential_management": "Automatic authentication to private feeds",
+                  "offline_support": "Local caching for offline development",
+                  "version_management": "Intelligent version resolution and updates"
+                }
+              },
+              "explanation": "Ensures seamless integration of package management with development workflows"
+            }
+          ],
+          "validation": [
+            "Verify Azure Artifacts feeds contain required packages",
+            "Test package installation and dependency resolution",
+            "Confirm security scanning identifies vulnerabilities",
+            "Validate build pipelines use correct package sources"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Development Environment Costs",
+      "aws_comparison": "Cloud9 charges for EC2 instances and storage",
+      "azure_model": "Codespaces offers usage-based pricing with auto-suspend",
+      "optimization_strategies": [
+        "Use auto-suspend features to minimize idle environment costs",
+        "Right-size machine types based on development workload requirements",
+        "Implement organization-wide spending limits and user quotas",
+        "Use prebuilt containers to reduce environment setup time and costs"
+      ],
+      "estimated_savings": "30-50% through intelligent usage management and auto-suspend"
+    },
+    {
+      "area": "Project Management and Collaboration",
+      "aws_comparison": "CodeStar plus additional tools for complete project management",
+      "azure_model": "Azure DevOps provides integrated solution with competitive pricing",
+      "optimization_strategies": [
+        "Use Azure DevOps integrated features instead of multiple point solutions",
+        "Leverage GitHub integration for open source projects",
+        "Optimize license allocation based on actual user activity",
+        "Use free tiers for small teams and open source projects"
+      ],
+      "estimated_savings": "25-40% through integrated tooling and efficient licensing"
+    },
+    {
+      "area": "Monitoring and Code Quality",
+      "aws_comparison": "CodeGuru plus additional monitoring tools",
+      "azure_model": "Application Insights with SonarCloud integration",
+      "optimization_strategies": [
+        "Use built-in Application Insights features instead of custom solutions",
+        "Leverage SonarCloud free tier for open source projects",
+        "Optimize data retention policies for telemetry data",
+        "Use intelligent sampling to reduce ingestion costs"
+      ],
+      "estimated_savings": "20-35% through integrated monitoring and smart data management"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Development Environment Security",
+      "practices": [
+        "Implement organization-wide security policies for Codespaces",
+        "Use secrets management for sensitive configuration",
+        "Restrict network access and repository permissions",
+        "Regular security scanning of development container images"
+      ]
+    },
+    {
+      "category": "Code and Artifact Security",
+      "practices": [
+        "Enable branch protection policies with required reviews",
+        "Implement automated security scanning in CI/CD pipelines",
+        "Use package vulnerability scanning and license compliance",
+        "Regular audit of repository access and permissions"
+      ]
+    },
+    {
+      "category": "Monitoring and Compliance",
+      "practices": [
+        "Implement comprehensive audit logging for all development activities",
+        "Use Application Insights for security event monitoring",
+        "Regular review of user access and activity patterns",
+        "Compliance reporting for regulatory requirements"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment",
+      "tasks": [
+        "Audit current AWS developer tool usage and workflows",
+        "Document existing project structures and team processes",
+        "Assess integration requirements with enterprise tools",
+        "Plan user training and adoption strategy",
+        "Design Azure DevOps organization and project structure"
+      ]
+    },
+    {
+      "phase": "Azure DevOps Setup",
+      "tasks": [
+        "Create Azure DevOps organization and configure security",
+        "Set up GitHub Codespaces with standardized development containers",
+        "Configure Application Insights and SonarCloud for quality monitoring",
+        "Establish Azure Artifacts feeds and package management",
+        "Implement CI/CD pipelines with integrated quality gates"
+      ]
+    },
+    {
+      "phase": "Migration and Integration",
+      "tasks": [
+        "Migrate repositories and project data to Azure DevOps",
+        "Transfer development environments to Codespaces",
+        "Configure monitoring and alerting for applications",
+        "Set up package feeds and dependency management",
+        "Test and validate all integrated workflows"
+      ]
+    },
+    {
+      "phase": "Training and Optimization",
+      "tasks": [
+        "Train development teams on new tools and workflows",
+        "Optimize development processes based on usage patterns",
+        "Configure advanced analytics and reporting",
+        "Establish governance and compliance procedures",
+        "Implement continuous improvement processes"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Codespaces Performance Issues",
+      "symptoms": [
+        "Slow environment startup times",
+        "Poor IDE responsiveness",
+        "Timeout issues during development"
+      ],
+      "solutions": [
+        "Optimize development container image size and layers",
+        "Use prebuild configurations for faster startup",
+        "Right-size machine types for workload requirements",
+        "Review extension usage and disable unnecessary ones",
+        "Check network connectivity and regional placement"
+      ]
+    },
+    {
+      "issue": "Azure DevOps Integration Problems",
+      "symptoms": [
+        "Work item linking failures",
+        "Build pipeline authentication issues",
+        "Repository synchronization problems"
+      ],
+      "solutions": [
+        "Verify Azure DevOps service connections and permissions",
+        "Check branch policies and pull request configurations",
+        "Review work item process templates and field mappings",
+        "Validate integration between Azure DevOps and external tools",
+        "Monitor service health and regional availability"
+      ]
+    },
+    {
+      "issue": "Application Insights Data Issues",
+      "symptoms": [
+        "Missing telemetry data",
+        "Incorrect performance metrics",
+        "Query failures in analytics"
+      ],
+      "solutions": [
+        "Verify Application Insights SDK configuration and version",
+        "Check sampling settings and data retention policies",
+        "Review custom telemetry implementation and naming",
+        "Validate network connectivity from applications",
+        "Monitor Application Insights service status and quotas"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "GitHub Codespaces documentation - https://docs.github.com/en/codespaces",
+        "Azure DevOps documentation - https://docs.microsoft.com/en-us/azure/devops/",
+        "Application Insights documentation - https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview",
+        "Azure Artifacts documentation - https://docs.microsoft.com/en-us/azure/devops/artifacts/"
+      ]
+    },
+    {
+      "type": "Migration Guides",
+      "links": [
+        "AWS Cloud9 to Codespaces migration guide",
+        "CodeStar to Azure DevOps migration patterns",
+        "CodeGuru to Application Insights transition strategies",
+        "Developer productivity optimization best practices"
+      ]
+    },
+    {
+      "type": "Training Resources",
+      "links": [
+        "Azure DevOps fundamentals training",
+        "GitHub Codespaces development workflows",
+        "Application Insights monitoring and analytics",
+        "DevOps culture and practice transformation"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement GitHub Advanced Security for comprehensive security scanning",
+    "Set up Azure DevOps Extensions for specialized workflow automation",
+    "Configure Power BI integration for advanced project analytics", 
+    "Explore Azure Machine Learning for intelligent development insights",
+    "Implement Azure Key Vault integration for secure secrets management",
+    "Set up Azure Resource Manager for infrastructure as code"
+  ]
+}

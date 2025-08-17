@@ -1,0 +1,314 @@
+{
+  "id": "soa-c02-monitoring-logging-remediation-lab",
+  "title": "AWS CloudWatch to Azure Monitor: System Monitoring, Logging, and Automated Remediation",
+  "category": "systems-monitoring",
+  "difficulty": "intermediate",
+  "estimatedTime": "130 minutes",
+  "awsCertification": "SOA-C02",
+  "certificationWeight": "20% - Monitoring, Logging, and Remediation Domain (Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master comprehensive system monitoring by implementing AWS CloudWatch monitoring and migrating to Azure Monitor equivalents with automated logging, alerting, remediation workflows, and operational intelligence across both platforms.",
+  
+  "learningObjectives": [
+    "Implement comprehensive monitoring with AWS CloudWatch and Azure Monitor",
+    "Design centralized logging strategies using CloudWatch Logs and Azure Log Analytics",
+    "Build automated alerting and notification systems across both platforms",
+    "Create automated remediation workflows for common operational issues",
+    "Implement operational dashboards and reporting for infrastructure health",
+    "Design incident response and escalation procedures with automation"
+  ],
+
+  "prerequisites": [
+    "Completion of DVA-C02 certification labs or equivalent development experience",
+    "Understanding of infrastructure monitoring concepts",
+    "Basic knowledge of scripting (PowerShell, Python, or Bash)",
+    "Familiarity with infrastructure components and system administration"
+  ],
+
+  "awsServices": [
+    "Amazon CloudWatch (Metrics and Monitoring)",
+    "AWS CloudWatch Logs",
+    "AWS CloudWatch Alarms",
+    "AWS CloudWatch Events/EventBridge",
+    "AWS SNS (Simple Notification Service)",
+    "AWS Systems Manager",
+    "AWS Lambda (Automated Remediation)",
+    "AWS Config (Configuration Monitoring)",
+    "AWS CloudTrail (API Auditing)",
+    "AWS X-Ray (Application Tracing)"
+  ],
+
+  "azureServices": [
+    "Azure Monitor (Metrics and Monitoring)",
+    "Azure Log Analytics",
+    "Azure Monitor Alerts",
+    "Azure Event Grid",
+    "Azure Action Groups",
+    "Azure Automation",
+    "Azure Functions (Automated Remediation)",
+    "Azure Policy (Configuration Monitoring)",
+    "Azure Activity Log",
+    "Azure Application Insights"
+  ],
+
+  "businessScenario": "OpsTech Solutions manages a complex multi-tier application infrastructure supporting 24/7 operations for critical business services. They need to implement comprehensive monitoring, centralized logging, proactive alerting, and automated remediation to ensure high availability and rapid incident response. The operations team must master both AWS and Azure monitoring ecosystems to support hybrid cloud deployments and potential platform migrations while maintaining operational excellence.",
+
+  "sections": [
+    {
+      "title": "Infrastructure Monitoring and Metrics Collection",
+      "duration": "35 minutes",
+      "topics": [
+        "AWS CloudWatch metrics: custom and default metrics collection",
+        "Azure Monitor metrics: platform and custom metrics integration",
+        "System performance monitoring: CPU, memory, disk, network",
+        "Application performance metrics and business KPIs",
+        "Multi-dimensional metrics and advanced filtering"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Infrastructure Monitoring",
+          "description": "Setup detailed monitoring for infrastructure components and applications",
+          "steps": [
+            "Configure AWS CloudWatch agents for detailed system metrics collection",
+            "Setup Azure Monitor agents with equivalent metric collection",
+            "Implement custom metrics for business-critical application components",
+            "Create multi-dimensional metrics with proper tagging and dimensions",
+            "Configure cross-platform metric correlation and comparison",
+            "Setup metric retention policies and cost optimization strategies"
+          ],
+          "deliverables": [
+            "CloudWatch agent configuration with custom metrics",
+            "Azure Monitor agent setup with equivalent data collection",
+            "Custom application metrics implementation",
+            "Multi-platform monitoring correlation framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Centralized Logging and Log Analytics",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CloudWatch Logs: log groups, streams, and retention",
+        "Azure Log Analytics: workspace design and log ingestion",
+        "Structured logging and log parsing strategies",
+        "Log aggregation from multiple sources and services",
+        "Advanced log querying and analysis techniques"
+      ],
+      "tasks": [
+        {
+          "title": "Design Centralized Logging Architecture",
+          "description": "Implement comprehensive logging strategy with advanced analytics",
+          "steps": [
+            "Setup AWS CloudWatch Logs with proper log group organization",
+            "Configure Azure Log Analytics workspace with equivalent structure",
+            "Implement structured logging across applications and infrastructure",
+            "Configure log forwarding from multiple sources and regions",
+            "Create advanced log queries using CloudWatch Insights and KQL",
+            "Setup log-based metrics and automated log analysis"
+          ],
+          "deliverables": [
+            "CloudWatch Logs architecture with organized log groups",
+            "Log Analytics workspace with structured data ingestion",
+            "Advanced log query libraries and saved searches",
+            "Log-based metrics and analysis automation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Alerting and Notification Systems",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CloudWatch Alarms: threshold and anomaly detection",
+        "Azure Monitor Alerts: metric, log, and activity alerts",
+        "Multi-channel notification strategies and escalation",
+        "Alert correlation and suppression to reduce noise",
+        "Intelligent alerting with machine learning capabilities"
+      ],
+      "tasks": [
+        {
+          "title": "Build Intelligent Alerting Framework",
+          "description": "Create comprehensive alerting system with smart notifications",
+          "steps": [
+            "Configure AWS CloudWatch Alarms with threshold and anomaly detection",
+            "Setup Azure Monitor Alerts with equivalent detection capabilities",
+            "Implement multi-channel notifications using SNS and Action Groups",
+            "Configure alert correlation and suppression rules",
+            "Setup escalation procedures with time-based routing",
+            "Implement intelligent alerting using machine learning anomaly detection"
+          ],
+          "deliverables": [
+            "CloudWatch Alarms with anomaly detection configuration",
+            "Azure Monitor Alerts with intelligent detection",
+            "Multi-channel notification and escalation framework",
+            "Alert correlation and noise reduction implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Automated Remediation and Self-Healing",
+      "duration": "35 minutes",
+      "topics": [
+        "AWS Lambda for automated incident response",
+        "Azure Functions and Automation Runbooks for remediation",
+        "Event-driven automation using CloudWatch Events and Event Grid",
+        "Self-healing infrastructure patterns and implementations",
+        "Automated scaling and resource optimization responses"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Automated Remediation Workflows",
+          "description": "Create self-healing systems with automated incident response",
+          "steps": [
+            "Design automated remediation workflows for common infrastructure issues",
+            "Implement AWS Lambda functions for automated incident response",
+            "Create Azure Functions and Automation Runbooks for equivalent remediation",
+            "Configure event-driven automation using CloudWatch Events and Event Grid",
+            "Setup automated scaling responses based on performance metrics",
+            "Implement safety controls and manual override capabilities"
+          ],
+          "deliverables": [
+            "Automated remediation Lambda functions",
+            "Azure Automation Runbooks with equivalent functionality",
+            "Event-driven automation configuration",
+            "Self-healing infrastructure implementation with safety controls"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "24/7 Operations Monitoring Implementation",
+      "description": "Build complete monitoring solution for round-the-clock operations",
+      "steps": [
+        "Design monitoring strategy for critical business services",
+        "Implement comprehensive metric collection across all infrastructure tiers",
+        "Create operational dashboards for different stakeholder audiences",
+        "Setup 24/7 alerting with appropriate escalation procedures",
+        "Implement automated remediation for common operational issues",
+        "Test monitoring effectiveness with chaos engineering scenarios"
+      ],
+      "expectedOutcome": "Production-ready monitoring solution with automated response capabilities"
+    },
+    {
+      "title": "Log Analytics and Operational Intelligence",
+      "description": "Implement advanced log analytics for operational insights",
+      "steps": [
+        "Aggregate logs from all infrastructure and application components",
+        "Create advanced log queries for troubleshooting and analysis",
+        "Implement log-based alerting for security and operational events",
+        "Build automated log analysis for trend detection",
+        "Create operational reports and executive dashboards",
+        "Setup log retention and cost optimization policies"
+      ],
+      "expectedOutcome": "Advanced log analytics platform providing operational intelligence and insights"
+    },
+    {
+      "title": "Incident Response Automation Challenge",
+      "description": "Build automated incident response system with escalation procedures",
+      "steps": [
+        "Define incident categories and appropriate response procedures",
+        "Implement automated detection and classification of incidents",
+        "Create automated remediation workflows for each incident type",
+        "Setup escalation procedures with human intervention when needed",
+        "Implement incident tracking and post-mortem automation",
+        "Test incident response system with simulated outages"
+      ],
+      "expectedOutcome": "Comprehensive incident response automation with proper escalation and tracking"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Alert fatigue due to excessive or irrelevant notifications",
+      "solution": "Implement alert correlation and suppression, use statistical anomaly detection, create tiered alerting based on severity, and regularly tune alert thresholds based on historical data"
+    },
+    {
+      "issue": "High monitoring and logging costs with large data volumes",
+      "solution": "Implement intelligent data sampling, use appropriate retention policies, optimize log structure, implement cost-aware alerting, and use compression and archival strategies"
+    },
+    {
+      "issue": "Automated remediation causing unintended side effects or cascading failures",
+      "solution": "Implement safety controls and circuit breakers, use gradual rollout for automation changes, implement comprehensive testing, and maintain manual override capabilities"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Monitoring Implementation",
+      "criteria": [
+        "Can implement comprehensive infrastructure and application monitoring",
+        "Understands custom metrics and multi-dimensional monitoring",
+        "Can configure cross-platform monitoring correlation",
+        "Demonstrates cost-effective monitoring strategies"
+      ]
+    },
+    {
+      "category": "Logging and Analytics",
+      "criteria": [
+        "Can design centralized logging architecture",
+        "Understands advanced log querying and analysis",
+        "Can implement log-based metrics and alerting",
+        "Demonstrates structured logging and data organization"
+      ]
+    },
+    {
+      "category": "Alerting and Notification",
+      "criteria": [
+        "Can build intelligent alerting systems",
+        "Understands alert correlation and noise reduction",
+        "Can implement multi-channel notification strategies",
+        "Demonstrates anomaly detection and machine learning integration"
+      ]
+    },
+    {
+      "category": "Automated Remediation",
+      "criteria": [
+        "Can implement automated incident response workflows",
+        "Understands self-healing infrastructure patterns",
+        "Can create event-driven automation systems",
+        "Demonstrates safety controls and override capabilities"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SOA-C02": {
+      "domain": "Monitoring, Logging, and Remediation",
+      "weight": "20%",
+      "coverage": [
+        "Implement monitoring solutions using AWS services",
+        "Implement logging solutions",
+        "Implement remediation solutions based on monitoring and availability metrics",
+        "Configure automated notifications and responses",
+        "Troubleshoot monitoring and logging issues"
+      ],
+      "examTopics": [
+        "CloudWatch monitoring, metrics, and custom metric implementation",
+        "CloudWatch Logs configuration and log analytics",
+        "CloudWatch Alarms and notification strategies",
+        "Automated remediation using Lambda and Systems Manager",
+        "Operational dashboards and reporting implementation"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive monitoring across both AWS and Azure platforms",
+    "Demonstrates ability to build centralized logging and analytics solutions",
+    "Shows understanding of intelligent alerting and notification strategies",
+    "Can create automated remediation workflows with appropriate safety controls",
+    "Understands operational excellence practices and incident response automation"
+  ],
+
+  "nextSteps": [
+    "Proceed to SOA-C02 Reliability & Business Continuity Lab (16% domain weight)",
+    "Gain hands-on experience with advanced monitoring and observability tools",
+    "Practice implementing monitoring solutions in production environments",
+    "Explore chaos engineering and resilience testing methodologies"
+  ]
+}

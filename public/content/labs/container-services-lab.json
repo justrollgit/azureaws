@@ -1,0 +1,290 @@
+{
+  "id": "container-services-lab",
+  "title": "AWS Container Services to Azure: ECS/EKS to ACI/AKS Migration Lab",
+  "difficulty": "advanced",
+  "estimated_time": "120 minutes",
+  "aws_prerequisite": "Experience with Docker, ECS, EKS, and container orchestration",
+  "azure_target": "Deploy and manage containers using Azure Container Instances, Container Apps, and Azure Kubernetes Service",
+  "learning_objectives": [
+    "Understand Azure container service offerings vs AWS",
+    "Migrate from ECS to Azure Container Instances and Container Apps",
+    "Convert EKS clusters to Azure Kubernetes Service (AKS)",
+    "Implement container security and networking in Azure",
+    "Set up CI/CD pipelines for container deployment",
+    "Configure monitoring and logging for containerized applications",
+    "Implement scaling and load balancing strategies"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "ecs": "Azure Container Instances + Container Apps",
+      "eks": "Azure Kubernetes Service (AKS)",
+      "fargate": "Azure Container Instances (serverless containers)",
+      "ecr": "Azure Container Registry",
+      "app_mesh": "Azure Service Mesh (Istio on AKS)",
+      "codebuild": "Azure DevOps + Container Registry Tasks"
+    },
+    "key_concepts": [
+      "ECS Tasks → Container Instances / Container Apps",
+      "ECS Services → Container Apps with scaling",
+      "EKS Clusters → AKS Clusters",
+      "Fargate → Serverless containers (ACI/Container Apps)",
+      "ECR → Azure Container Registry (ACR)",
+      "ECS Task Definitions → Container App revisions",
+      "EKS Node Groups → AKS Node Pools",
+      "AWS Load Balancer → Azure Load Balancer / Application Gateway"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Container Services Architecture Comparison",
+      "content": "Understanding the differences between AWS and Azure container service architectures.",
+      "comparison_table": {
+        "simple_containers": {
+          "aws": "ECS with Fargate for serverless containers",
+          "azure": "Container Instances (ACI) + Container Apps for serverless",
+          "difference": "Azure Container Apps provide more built-in features (scaling, ingress, Dapr)"
+        },
+        "orchestrated_containers": {
+          "aws": "ECS with EC2 or EKS for Kubernetes",
+          "azure": "AKS (Azure Kubernetes Service)",
+          "difference": "AKS control plane is free, more integrated with Azure services"
+        },
+        "container_registry": {
+          "aws": "ECR with vulnerability scanning",
+          "azure": "ACR with security scanning and geo-replication",
+          "difference": "ACR provides better geo-replication and integrated security features"
+        },
+        "serverless_containers": {
+          "aws": "Fargate abstraction over ECS/EKS",
+          "azure": "Native serverless with Container Apps and ACI",
+          "difference": "Azure provides more serverless container options with different capabilities"
+        },
+        "networking": {
+          "aws": "VPC integration, service discovery via Route 53",
+          "azure": "VNet integration, built-in service discovery in Container Apps",
+          "difference": "Azure Container Apps provide simpler networking and service discovery"
+        }
+      }
+    },
+    {
+      "title": "Azure Container Registry Setup",
+      "content": "Create container registry equivalent to Amazon ECR.",
+      "code_examples": {
+        "create_acr": {
+          "language": "bash",
+          "title": "Create Azure Container Registry",
+          "code": "# Create resource group for container services\naz group create \\\n  --name container-lab-rg \\\n  --location eastus\n\n# Create Azure Container Registry\naz acr create \\\n  --resource-group container-lab-rg \\\n  --name containerlabacr$RANDOM \\\n  --sku Premium \\\n  --location eastus \\\n  --admin-enabled true\n\n# Get ACR details\nACR_NAME=$(az acr list --resource-group container-lab-rg --query '[0].name' -o tsv)\nACR_LOGIN_SERVER=$(az acr show --name $ACR_NAME --query loginServer -o tsv)\nACR_USERNAME=$(az acr credential show --name $ACR_NAME --query username -o tsv)\nACR_PASSWORD=$(az acr credential show --name $ACR_NAME --query passwords[0].value -o tsv)\n\necho \"ACR Name: $ACR_NAME\"\necho \"Login Server: $ACR_LOGIN_SERVER\"\necho \"Username: $ACR_USERNAME\"\necho \"Password: [REDACTED]\"\n\n# Enable geo-replication (Premium feature)\naz acr replication create \\\n  --registry $ACR_NAME \\\n  --location westus2\n\n# Enable vulnerability scanning\naz acr task create \\\n  --registry $ACR_NAME \\\n  --name security-scan \\\n  --context /dev/null \\\n  --schedule \"0 2 * * *\" \\\n  --cmd \"echo 'Security scan placeholder - integrate with security tools'\""
+        },
+        "build_sample_image": {
+          "language": "bash",
+          "title": "Build and Push Sample Container Image",
+          "code": "# Create sample Node.js application\nmkdir sample-webapp && cd sample-webapp\n\n# Create package.json\ncat > package.json << 'EOF'\n{\n  \"name\": \"sample-webapp\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Sample web app for container lab\",\n  \"main\": \"server.js\",\n  \"scripts\": {\n    \"start\": \"node server.js\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.18.0\"\n  }\n}\nEOF\n\n# Create server.js\ncat > server.js << 'EOF'\nconst express = require('express');\nconst app = express();\nconst port = process.env.PORT || 3000;\n\napp.get('/', (req, res) => {\n  res.json({\n    message: 'Hello from Azure Container!',\n    hostname: require('os').hostname(),\n    timestamp: new Date().toISOString(),\n    environment: process.env.NODE_ENV || 'development'\n  });\n});\n\napp.get('/health', (req, res) => {\n  res.json({ status: 'healthy', timestamp: new Date().toISOString() });\n});\n\napp.listen(port, () => {\n  console.log(`Server running on port ${port}`);\n});\nEOF\n\n# Create Dockerfile\ncat > Dockerfile << 'EOF'\nFROM node:18-alpine\n\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci --only=production\n\nCOPY . .\n\nEXPOSE 3000\n\nUSER node\n\nCMD [\"npm\", \"start\"]\nEOF\n\n# Build and push image using ACR Build (equivalent to ECR build)\naz acr build \\\n  --registry $ACR_NAME \\\n  --image sample-webapp:v1 \\\n  --file Dockerfile \\\n  .\n\n# Alternative: Build locally and push\n# docker build -t $ACR_LOGIN_SERVER/sample-webapp:v1 .\n# az acr login --name $ACR_NAME\n# docker push $ACR_LOGIN_SERVER/sample-webapp:v1\n\ncd .."
+        }
+      ]
+    },
+    {
+      "title": "Azure Container Instances (ACI) - ECS Fargate Alternative",
+      "content": "Deploy simple containers using Azure Container Instances equivalent to ECS with Fargate.",
+      "code_examples": {
+        "deploy_single_container": {
+          "language": "bash",
+          "title": "Deploy Single Container to ACI",
+          "code": "# Deploy container to ACI (equivalent to ECS Fargate task)\naz container create \\\n  --resource-group container-lab-rg \\\n  --name sample-webapp-aci \\\n  --image $ACR_LOGIN_SERVER/sample-webapp:v1 \\\n  --registry-login-server $ACR_LOGIN_SERVER \\\n  --registry-username $ACR_USERNAME \\\n  --registry-password $ACR_PASSWORD \\\n  --dns-name-label sample-webapp-$RANDOM \\\n  --ports 3000 \\\n  --cpu 1 \\\n  --memory 1 \\\n  --environment-variables NODE_ENV=production \\\n  --restart-policy OnFailure\n\n# Get container details\naz container show \\\n  --resource-group container-lab-rg \\\n  --name sample-webapp-aci \\\n  --query '{FQDN:ipAddress.fqdn, State:containers[0].instanceView.currentState.state}'\n\n# Test the deployed container\nFQDN=$(az container show --resource-group container-lab-rg --name sample-webapp-aci --query ipAddress.fqdn -o tsv)\ncurl http://$FQDN:3000"
+        },
+        "deploy_multi_container": {
+          "language": "bash",
+          "title": "Deploy Multi-Container Group (Sidecar Pattern)",
+          "code": "# Create multi-container deployment YAML (similar to ECS task definition)\ncat > multi-container.yaml << EOF\napiVersion: 2021-07-01\nlocation: eastus\nname: webapp-with-sidecar\nproperties:\n  containers:\n  - name: webapp\n    properties:\n      image: $ACR_LOGIN_SERVER/sample-webapp:v1\n      resources:\n        requests:\n          cpu: 0.5\n          memoryInGB: 0.5\n      ports:\n      - port: 3000\n      environmentVariables:\n      - name: NODE_ENV\n        value: production\n  - name: nginx-proxy\n    properties:\n      image: nginx:alpine\n      resources:\n        requests:\n          cpu: 0.5\n          memoryInGB: 0.5\n      ports:\n      - port: 80\n      volumeMounts:\n      - name: nginx-config\n        mountPath: /etc/nginx/conf.d\n  osType: Linux\n  restartPolicy: OnFailure\n  ipAddress:\n    type: Public\n    ports:\n    - protocol: tcp\n      port: 80\n    - protocol: tcp\n      port: 3000\n    dnsNameLabel: webapp-sidecar-$RANDOM\n  volumes:\n  - name: nginx-config\n    configMap:\n      items:\n      - key: default.conf\n        path: default.conf\n  imageRegistryCredentials:\n  - server: $ACR_LOGIN_SERVER\n    username: $ACR_USERNAME\n    password: $ACR_PASSWORD\nEOF\n\n# Create nginx config\nmkdir nginx-config\ncat > nginx-config/default.conf << 'EOF'\nserver {\n    listen 80;\n    location / {\n        proxy_pass http://localhost:3000;\n        proxy_set_header Host \\$host;\n        proxy_set_header X-Real-IP \\$remote_addr;\n    }\n}\nEOF\n\n# Deploy using ARM template (YAML approach requires conversion)\necho \"Multi-container group template created. Deploy via Azure portal or convert to ARM template.\""
+        }
+      }
+    },
+    {
+      "title": "Azure Container Apps - Modern ECS Alternative", 
+      "content": "Deploy applications using Azure Container Apps with built-in scaling and ingress.",
+      "code_examples": {
+        "create_container_app_environment": {
+          "language": "bash",
+          "title": "Create Container Apps Environment",
+          "code": "# Install Container Apps extension\naz extension add --name containerapp --upgrade\n\n# Register required providers\naz provider register --namespace Microsoft.App\naz provider register --namespace Microsoft.OperationalInsights\n\n# Create Log Analytics workspace for Container Apps\naz monitor log-analytics workspace create \\\n  --resource-group container-lab-rg \\\n  --workspace-name container-apps-logs \\\n  --location eastus\n\nLOG_ANALYTICS_WORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group container-lab-rg \\\n  --workspace-name container-apps-logs \\\n  --query customerId --output tsv)\n\nLOG_ANALYTICS_WORKSPACE_KEY=$(az monitor log-analytics workspace get-shared-keys \\\n  --resource-group container-lab-rg \\\n  --workspace-name container-apps-logs \\\n  --query primarySharedKey --output tsv)\n\n# Create Container Apps environment\naz containerapp env create \\\n  --name container-apps-env \\\n  --resource-group container-lab-rg \\\n  --location eastus \\\n  --logs-workspace-id $LOG_ANALYTICS_WORKSPACE_ID \\\n  --logs-workspace-key $LOG_ANALYTICS_WORKSPACE_KEY"
+        },
+        "deploy_container_app": {
+          "language": "bash",
+          "title": "Deploy Container App with Auto-scaling",
+          "code": "# Deploy container app (equivalent to ECS service with auto-scaling)\naz containerapp create \\\n  --name sample-webapp \\\n  --resource-group container-lab-rg \\\n  --environment container-apps-env \\\n  --image $ACR_LOGIN_SERVER/sample-webapp:v1 \\\n  --registry-server $ACR_LOGIN_SERVER \\\n  --registry-username $ACR_USERNAME \\\n  --registry-password $ACR_PASSWORD \\\n  --target-port 3000 \\\n  --ingress external \\\n  --min-replicas 1 \\\n  --max-replicas 10 \\\n  --cpu 0.5 \\\n  --memory 1Gi \\\n  --env-vars NODE_ENV=production APP_VERSION=1.0\n\n# Configure scaling rules (equivalent to ECS service scaling)\naz containerapp update \\\n  --name sample-webapp \\\n  --resource-group container-lab-rg \\\n  --scale-rule-name \"http-requests\" \\\n  --scale-rule-http-concurrency 10\n\n# Add custom scaling rule based on metrics\naz containerapp update \\\n  --name sample-webapp \\\n  --resource-group container-lab-rg \\\n  --scale-rule-name \"cpu-utilization\" \\\n  --scale-rule-type \"cpu\" \\\n  --scale-rule-metadata \"type=Utilization\" \"value=70\"\n\n# Get app URL\nAPP_URL=$(az containerapp show \\\n  --resource-group container-lab-rg \\\n  --name sample-webapp \\\n  --query properties.configuration.ingress.fqdn -o tsv)\n\necho \"Container App URL: https://$APP_URL\"\ncurl https://$APP_URL"
+        },
+        "deploy_microservices": {
+          "language": "bash",
+          "title": "Deploy Microservices Architecture",
+          "code": "# Create API service\naz containerapp create \\\n  --name api-service \\\n  --resource-group container-lab-rg \\\n  --environment container-apps-env \\\n  --image $ACR_LOGIN_SERVER/sample-webapp:v1 \\\n  --registry-server $ACR_LOGIN_SERVER \\\n  --registry-username $ACR_USERNAME \\\n  --registry-password $ACR_PASSWORD \\\n  --target-port 3000 \\\n  --ingress internal \\\n  --min-replicas 2 \\\n  --max-replicas 5 \\\n  --cpu 0.25 \\\n  --memory 0.5Gi \\\n  --env-vars NODE_ENV=production SERVICE_NAME=api\n\n# Create frontend service that calls API service\naz containerapp create \\\n  --name frontend-service \\\n  --resource-group container-lab-rg \\\n  --environment container-apps-env \\\n  --image $ACR_LOGIN_SERVER/sample-webapp:v1 \\\n  --registry-server $ACR_LOGIN_SERVER \\\n  --registry-username $ACR_USERNAME \\\n  --registry-password $ACR_PASSWORD \\\n  --target-port 3000 \\\n  --ingress external \\\n  --min-replicas 1 \\\n  --max-replicas 3 \\\n  --cpu 0.25 \\\n  --memory 0.5Gi \\\n  --env-vars NODE_ENV=production SERVICE_NAME=frontend API_URL=http://api-service\n\n# List all container apps\naz containerapp list \\\n  --resource-group container-lab-rg \\\n  --output table"
+        }
+      }
+    },
+    {
+      "title": "Azure Kubernetes Service (AKS) - EKS Alternative",
+      "content": "Create and configure AKS cluster equivalent to Amazon EKS.",
+      "code_examples": {
+        "create_aks_cluster": {
+          "language": "bash",
+          "title": "Create AKS Cluster with Advanced Configuration",
+          "code": "# Create AKS cluster (equivalent to EKS cluster)\naz aks create \\\n  --resource-group container-lab-rg \\\n  --name container-lab-aks \\\n  --location eastus \\\n  --node-count 3 \\\n  --node-vm-size Standard_D2s_v3 \\\n  --kubernetes-version 1.27.3 \\\n  --generate-ssh-keys \\\n  --attach-acr $ACR_NAME \\\n  --enable-managed-identity \\\n  --enable-cluster-autoscaler \\\n  --min-count 1 \\\n  --max-count 5 \\\n  --network-plugin azure \\\n  --service-cidr 10.0.0.0/16 \\\n  --dns-service-ip 10.0.0.10 \\\n  --enable-addons monitoring \\\n  --workspace-resource-id \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/container-lab-rg/providers/Microsoft.OperationalInsights/workspaces/container-apps-logs\"\n\n# Get AKS credentials\naz aks get-credentials \\\n  --resource-group container-lab-rg \\\n  --name container-lab-aks \\\n  --overwrite-existing\n\n# Verify cluster connection\nkubectl get nodes\nkubectl get namespaces"
+        },
+        "add_node_pools": {
+          "language": "bash",
+          "title": "Add Additional Node Pools (Equivalent to EKS Node Groups)",
+          "code": "# Add spot instances node pool for cost optimization\naz aks nodepool add \\\n  --resource-group container-lab-rg \\\n  --cluster-name container-lab-aks \\\n  --name spotpool \\\n  --node-count 2 \\\n  --node-vm-size Standard_D2s_v3 \\\n  --priority Spot \\\n  --eviction-policy Delete \\\n  --spot-max-price -1 \\\n  --enable-cluster-autoscaler \\\n  --min-count 0 \\\n  --max-count 3 \\\n  --node-taints kubernetes.azure.com/scalesetpriority=spot:NoSchedule\n\n# Add GPU node pool for ML workloads\naz aks nodepool add \\\n  --resource-group container-lab-rg \\\n  --cluster-name container-lab-aks \\\n  --name gpupool \\\n  --node-count 1 \\\n  --node-vm-size Standard_NC6s_v3 \\\n  --kubernetes-version 1.27.3 \\\n  --node-taints sku=gpu:NoSchedule\n\n# List node pools\naz aks nodepool list \\\n  --resource-group container-lab-rg \\\n  --cluster-name container-lab-aks \\\n  --output table"
+        },
+        "deploy_to_aks": {
+          "language": "bash",
+          "title": "Deploy Applications to AKS",
+          "code": "# Create namespace\nkubectl create namespace webapp\n\n# Create deployment YAML\ncat > webapp-deployment.yaml << EOF\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: sample-webapp\n  namespace: webapp\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: sample-webapp\n  template:\n    metadata:\n      labels:\n        app: sample-webapp\n    spec:\n      containers:\n      - name: webapp\n        image: $ACR_LOGIN_SERVER/sample-webapp:v1\n        ports:\n        - containerPort: 3000\n        env:\n        - name: NODE_ENV\n          value: production\n        resources:\n          requests:\n            cpu: 100m\n            memory: 128Mi\n          limits:\n            cpu: 200m\n            memory: 256Mi\n        livenessProbe:\n          httpGet:\n            path: /health\n            port: 3000\n          initialDelaySeconds: 30\n          periodSeconds: 10\n        readinessProbe:\n          httpGet:\n            path: /health\n            port: 3000\n          initialDelaySeconds: 5\n          periodSeconds: 5\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: sample-webapp-service\n  namespace: webapp\nspec:\n  selector:\n    app: sample-webapp\n  ports:\n  - port: 80\n    targetPort: 3000\n  type: ClusterIP\n---\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: sample-webapp-ingress\n  namespace: webapp\n  annotations:\n    kubernetes.io/ingress.class: azure/application-gateway\nspec:\n  rules:\n  - http:\n      paths:\n      - path: /\n        pathType: Prefix\n        backend:\n          service:\n            name: sample-webapp-service\n            port:\n              number: 80\nEOF\n\n# Apply deployment\nkubectl apply -f webapp-deployment.yaml\n\n# Wait for deployment to be ready\nkubectl rollout status deployment/sample-webapp -n webapp\n\n# Get pods\nkubectl get pods -n webapp"
+        },
+        "configure_hpa": {
+          "language": "bash",\n          \"title\": \"Configure Horizontal Pod Autoscaler\",\n          \"code\": \"# Create HPA (equivalent to ECS service auto-scaling)\nkubectl autoscale deployment sample-webapp -n webapp --cpu-percent=70 --min=2 --max=10\n\n# Create custom HPA with memory metrics\ncat > webapp-hpa.yaml << 'EOF'\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: sample-webapp-hpa\n  namespace: webapp\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: sample-webapp\n  minReplicas: 2\n  maxReplicas: 10\n  metrics:\n  - type: Resource\n    resource:\n      name: cpu\n      target:\n        type: Utilization\n        averageUtilization: 70\n  - type: Resource\n    resource:\n      name: memory\n      target:\n        type: Utilization\n        averageUtilization: 80\nEOF\n\nkubectl apply -f webapp-hpa.yaml\n\n# Check HPA status\nkubectl get hpa -n webapp\""
+        }
+      ]
+    },
+    {
+      "title": "Container Security and Networking",
+      "content": "Implement container security and networking equivalent to AWS container security features.",
+      "code_examples": {
+        "aks_security_configuration": {
+          "language": "bash",
+          "title": "Configure AKS Security Features",
+          "code": "# Enable Azure Policy for AKS\naz aks enable-addons \\\n  --resource-group container-lab-rg \\\n  --name container-lab-aks \\\n  --addons azure-policy\n\n# Create pod security policy\ncat > pod-security-policy.yaml << 'EOF'\napiVersion: policy/v1beta1\nkind: PodSecurityPolicy\nmetadata:\n  name: restricted-psp\nspec:\n  privileged: false\n  allowPrivilegeEscalation: false\n  requiredDropCapabilities:\n    - ALL\n  volumes:\n    - 'configMap'\n    - 'emptyDir'\n    - 'projected'\n    - 'secret'\n    - 'downwardAPI'\n    - 'persistentVolumeClaim'\n  runAsUser:\n    rule: 'MustRunAsNonRoot'\n  seLinux:\n    rule: 'RunAsAny'\n  fsGroup:\n    rule: 'RunAsAny'\nEOF\n\nkubectl apply -f pod-security-policy.yaml\n\n# Create network policy for micro-segmentation\ncat > network-policy.yaml << 'EOF'\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: webapp-network-policy\n  namespace: webapp\nspec:\n  podSelector:\n    matchLabels:\n      app: sample-webapp\n  policyTypes:\n  - Ingress\n  - Egress\n  ingress:\n  - from:\n    - namespaceSelector:\n        matchLabels:\n          name: webapp\n    ports:\n    - protocol: TCP\n      port: 3000\n  egress:\n  - to: []\n    ports:\n    - protocol: TCP\n      port: 443\n    - protocol: TCP\n      port: 80\nEOF\n\nkubectl apply -f network-policy.yaml"
+        },
+        "secret_management": {
+          "language": "bash",
+          "title": "Configure Secrets and ConfigMaps",
+          "code": "# Create Azure Key Vault for secrets\naz keyvault create \\\n  --name container-lab-kv-$RANDOM \\\n  --resource-group container-lab-rg \\\n  --location eastus\n\nKEY_VAULT_NAME=$(az keyvault list --resource-group container-lab-rg --query '[0].name' -o tsv)\n\n# Store secrets in Key Vault\naz keyvault secret set \\\n  --vault-name $KEY_VAULT_NAME \\\n  --name database-connection \\\n  --value \"Server=db.example.com;Database=webapp;User=admin;Password=SecurePass123!\"\n\n# Enable Key Vault integration for AKS\naz aks addon enable \\\n  --addon azure-keyvault-secrets-provider \\\n  --name container-lab-aks \\\n  --resource-group container-lab-rg\n\n# Create service principal for Key Vault access\nKEY_VAULT_ID=$(az keyvault show --name $KEY_VAULT_NAME --query id -o tsv)\naz aks update \\\n  --resource-group container-lab-rg \\\n  --name container-lab-aks \\\n  --enable-managed-identity\n\n# Create SecretProviderClass for Key Vault integration\ncat > secret-provider.yaml << EOF\napiVersion: secrets-store.csi.x-k8s.io/v1\nkind: SecretProviderClass\nmetadata:\n  name: app-secrets\n  namespace: webapp\nspec:\n  provider: azure\n  parameters:\n    usePodIdentity: \"false\"\n    useVMManagedIdentity: \"true\"\n    userAssignedIdentityClientID: \"\"\n    keyvaultName: $KEY_VAULT_NAME\n    objects: |\n      array:\n        - |\n          objectName: database-connection\n          objectType: secret\n          objectVersion: \"\"\n    tenantId: $(az account show --query tenantId -o tsv)\nEOF\n\nkubectl apply -f secret-provider.yaml"
+        }
+      ]
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Migrate a complete containerized microservices application from AWS ECS/EKS to Azure",
+    "requirements": [
+      "Set up Azure Container Registry with geo-replication",
+      "Deploy simple containers using Container Instances (Fargate equivalent)",
+      "Deploy scalable microservices using Container Apps",
+      "Create production AKS cluster with multiple node pools",
+      "Implement container security and networking policies",
+      "Set up monitoring and logging for all container services"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify ACR creation and image push",
+        "command": "az acr repository list --name $ACR_NAME",
+        "expected": "Should list sample-webapp repository"
+      },
+      {
+        "step": "Test Container Instance deployment",
+        "command": "az container show --resource-group container-lab-rg --name sample-webapp-aci --query containers[0].instanceView.currentState.state",
+        "expected": "Should return 'Running'"
+      },
+      {
+        "step": "Verify Container App scaling",
+        "command": "az containerapp revision list --name sample-webapp --resource-group container-lab-rg --query 'length(@)'",
+        "expected": "Should return at least 1 active revision"
+      },
+      {
+        "step": "Check AKS cluster health",
+        "command": "kubectl get nodes --no-headers | wc -l",
+        "expected": "Should return number of nodes in cluster"
+      },
+      {
+        "step": "Verify application deployment in AKS",
+        "command": "kubectl get pods -n webapp -l app=sample-webapp --field-selector=status.phase=Running --no-headers | wc -l",
+        "expected": "Should return number of running pods"
+      },
+      {
+        "step": "Test HPA configuration",
+        "command": "kubectl get hpa -n webapp sample-webapp-hpa --no-headers",
+        "expected": "Should show HPA status with current/target metrics"
+      }
+    ]
+  },
+  "migration_strategies": {
+    "lift_and_shift": {
+      "description": "Direct migration from ECS to ACI/Container Apps",
+      "steps": [
+        "Export ECS task definitions",
+        "Convert to Container Apps specifications",
+        "Migrate container images to ACR",
+        "Deploy with equivalent resource allocations",
+        "Update DNS and load balancer configurations"
+      ],
+      "timeframe": "1-2 weeks",
+      "complexity": "Low"
+    },
+    "modernization": {
+      "description": "Re-architect to leverage Azure Container Apps features",
+      "steps": [
+        "Analyze current ECS services and dependencies",
+        "Design microservices architecture with Container Apps",
+        "Implement Dapr for service communication",
+        "Add auto-scaling and ingress capabilities",
+        "Integrate with Azure monitoring and security services"
+      ],
+      "timeframe": "4-8 weeks",
+      "complexity": "Medium"
+    },
+    "kubernetes_migration": {
+      "description": "Migrate EKS clusters to AKS with enhancements",
+      "steps": [
+        "Assess current EKS cluster configuration",
+        "Plan AKS cluster with equivalent or better specifications",
+        "Migrate Kubernetes manifests and Helm charts",
+        "Implement Azure-specific integrations (ACR, Key Vault, Monitor)",
+        "Set up GitOps and CI/CD pipelines"
+      ],
+      "timeframe": "6-12 weeks",
+      "complexity": "High"
+    }
+  },
+  "cost_comparison": {
+    "container_instances": {
+      "aws_fargate": "Per-second billing, $0.04048 per vCPU per hour, $0.004445 per GB per hour",
+      "azure_aci": "Per-second billing, $0.0000012 per vCPU-second, $0.00000017 per GB-second",
+      "savings": "ACI typically 10-20% less expensive than Fargate"
+    },
+    "kubernetes": {
+      "aws_eks": "$0.10 per hour per cluster + node costs",
+      "azure_aks": "Free control plane + node costs only",
+      "savings": "AKS saves $72 per month per cluster on control plane costs"
+    },
+    "container_registry": {
+      "aws_ecr": "$0.10 per GB-month stored",
+      "azure_acr": "$0.167 per GB-month (Premium tier with geo-replication)",
+      "features": "ACR Premium includes geo-replication and advanced security scanning"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove all container resources to avoid ongoing charges",
+    "commands": [
+      "kubectl delete namespace webapp",
+      "az aks delete --resource-group container-lab-rg --name container-lab-aks --yes --no-wait",
+      "az containerapp delete --resource-group container-lab-rg --name sample-webapp --yes",
+      "az containerapp delete --resource-group container-lab-rg --name api-service --yes", 
+      "az containerapp delete --resource-group container-lab-rg --name frontend-service --yes",
+      "az containerapp env delete --resource-group container-lab-rg --name container-apps-env --yes",
+      "az container delete --resource-group container-lab-rg --name sample-webapp-aci --yes",
+      "az acr delete --resource-group container-lab-rg --name $ACR_NAME --yes",
+      "az group delete --name container-lab-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure offers more serverless container options than AWS (ACI + Container Apps)",
+    "AKS control plane is free, reducing costs compared to EKS",
+    "Container Apps provide built-in scaling, ingress, and Dapr integration",
+    "ACR Premium offers superior geo-replication and security features",
+    "Azure container services integrate better with Azure identity and monitoring",
+    "Azure provides more sophisticated networking options for containers"
+  ],
+  "next_steps": [
+    "Learn about Azure Service Mesh (Istio) for advanced traffic management",
+    "Explore Azure Arc for hybrid and multi-cloud Kubernetes management",
+    "Study Dapr (Distributed Application Runtime) for microservices patterns",
+    "Practice with Azure DevOps for container CI/CD pipelines",
+    "Learn about Azure Container Apps Jobs for event-driven workloads"
+  ]
+}

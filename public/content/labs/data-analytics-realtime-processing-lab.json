@@ -1,0 +1,227 @@
+{
+  "id": "data-analytics-realtime-processing-lab",
+  "title": "AWS Kinesis & Data Analytics to Azure Event Hubs & Stream Analytics: Real-time Data Processing Migration",
+  "difficulty": "expert",
+  "estimated_time": "330 minutes",
+  "aws_prerequisite": "Advanced experience with Amazon Kinesis (Data Streams, Analytics, Firehose), AWS Glue, Athena, EMR, and real-time data architecture patterns",
+  "azure_target": "Master Azure Event Hubs, Stream Analytics, Data Factory, Synapse Analytics, and comprehensive real-time data processing architectures",
+  "learning_objectives": [
+    "Design sophisticated real-time data ingestion architectures equivalent to AWS Kinesis",
+    "Implement complex stream processing with Azure Stream Analytics and custom solutions",
+    "Master data lake architectures with Azure Data Lake Storage Gen2 and Synapse",
+    "Set up advanced ETL/ELT pipelines with Azure Data Factory and Synapse pipelines",
+    "Implement real-time analytics dashboards with Power BI and Azure Monitor",
+    "Design event-driven architectures with Event Grid and Service Bus",
+    "Configure data governance and security for enterprise data platforms",
+    "Implement cost optimization strategies for data processing workloads"
+  ],
+  "aws_context": {
+    "data_services_mapping": {
+      "kinesis_data_streams": "Azure Event Hubs",
+      "kinesis_analytics": "Azure Stream Analytics",
+      "kinesis_firehose": "Azure Stream Analytics + Data Lake Storage Gen2",
+      "amazon_emr": "Azure Synapse Analytics (Apache Spark pools)",
+      "aws_glue": "Azure Data Factory + Azure Purview",
+      "amazon_athena": "Azure Synapse Analytics (Serverless SQL pool)",
+      "amazon_redshift": "Azure Synapse Analytics (Dedicated SQL pool)",
+      "amazon_quicksight": "Power BI",
+      "amazon_msk": "Azure Event Hubs (Premium/Dedicated)",
+      "aws_lambda": "Azure Functions + Logic Apps"
+    },
+    "architectural_patterns": {
+      "lambda_architecture": "Batch + Stream processing with Synapse and Stream Analytics",
+      "kappa_architecture": "Stream-only processing with Event Hubs and Functions",
+      "event_sourcing": "Event Hubs + Cosmos DB + Functions",
+      "cqrs_pattern": "Command Query Responsibility Segregation with multiple data stores"
+    },
+    "data_flow_patterns": {
+      "real_time_ingestion": "IoT Hub → Event Hubs → Stream Analytics → Power BI",
+      "batch_processing": "Data Factory → Data Lake → Synapse → Power BI",
+      "hybrid_processing": "Event Hubs → Stream Analytics + Data Lake → Synapse → Power BI"
+    }
+  },
+  "sections": [
+    {
+      "title": "Advanced Real-time Data Ingestion Architecture",
+      "content": "Design enterprise-scale data ingestion architectures equivalent to AWS Kinesis Data Streams with enhanced capabilities.",
+      "ingestion_architecture": {
+        "event_hubs_enterprise": {
+          "namespace_configuration": {
+            "tier": "Standard/Premium/Dedicated",
+            "throughput_units": "Auto-scale enabled (1-40 TUs)",
+            "max_retention": "7 days (Premium: up to 90 days)",
+            "partitions": "32 partitions for high throughput",
+            "consumer_groups": "Multiple consumer groups for different processing paths"
+          },
+          "advanced_features": {
+            "capture_feature": "Automatic data archival to Data Lake Storage",
+            "geo_disaster_recovery": "Cross-region replication and failover",
+            "virtual_network_integration": "Private endpoints and service endpoints",
+            "managed_identity": "Azure AD authentication and authorization"
+          }
+        },
+        "iot_hub_integration": {
+          "device_connectivity": "Support for MQTT, AMQP, and HTTP protocols",
+          "device_management": "Device twins, direct methods, and cloud-to-device messaging",
+          "routing_rules": "Message routing based on device properties and message content",
+          "integration_points": "Event Hubs, Service Bus, Storage, and Functions"
+        }
+      },
+      "code_examples": {
+        "create_enterprise_event_hubs": {
+          "language": "bash",
+          "title": "Create Enterprise Event Hubs Infrastructure",
+          "code": "# Create enterprise Event Hubs infrastructure for real-time data processing\n\necho \"Creating enterprise Event Hubs infrastructure...\"\n\n# Create resource group for data analytics\naz group create \\\n  --name data-analytics-rg \\\n  --location eastus \\\n  --tags Environment=Production BusinessUnit=DataPlatform CostCenter=DP001\n\n# Create Event Hubs namespace (Premium tier for enterprise features)\necho \"Creating Event Hubs namespace...\"\nEVENT_HUBS_NAMESPACE=\"eh-enterprise-$(openssl rand -hex 3)\"\naz eventhubs namespace create \\\n  --resource-group data-analytics-rg \\\n  --name $EVENT_HUBS_NAMESPACE \\\n  --location eastus \\\n  --sku Premium \\\n  --capacity 4 \\\n  --enable-auto-inflate true \\\n  --maximum-throughput-units 20 \\\n  --tags Environment=Production DataClassification=Confidential\n\n# Create Data Lake Storage Gen2 for data archival\necho \"Creating Data Lake Storage Gen2...\"\nDATA_LAKE_NAME=\"adlsgen2$(openssl rand -hex 3)\"\naz storage account create \\\n  --resource-group data-analytics-rg \\\n  --name $DATA_LAKE_NAME \\\n  --location eastus \\\n  --sku Standard_LRS \\\n  --kind StorageV2 \\\n  --hierarchical-namespace true \\\n  --encryption-services blob file \\\n  --tags Environment=Production DataClassification=Confidential\n\n# Create containers for different data types\necho \"Creating Data Lake containers...\"\naz storage fs create \\\n  --name raw-data \\\n  --account-name $DATA_LAKE_NAME \\\n  --auth-mode login\n\naz storage fs create \\\n  --name processed-data \\\n  --account-name $DATA_LAKE_NAME \\\n  --auth-mode login\n\naz storage fs create \\\n  --name curated-data \\\n  --account-name $DATA_LAKE_NAME \\\n  --auth-mode login\n\naz storage fs create \\\n  --name archived-data \\\n  --account-name $DATA_LAKE_NAME \\\n  --auth-mode login\n\n# Create multiple Event Hubs for different data streams\necho \"Creating specialized Event Hubs...\"\n\n# IoT sensor data stream\naz eventhubs eventhub create \\\n  --resource-group data-analytics-rg \\\n  --namespace-name $EVENT_HUBS_NAMESPACE \\\n  --name iot-sensor-data \\\n  --partition-count 32 \\\n  --message-retention 7 \\\n  --capture-enabled true \\\n  --capture-encoding Avro \\\n  --capture-interval 300 \\\n  --capture-size-limit 524288000 \\\n  --destination-name EventHubArchive.AzureBlockBlob \\\n  --storage-account $DATA_LAKE_NAME \\\n  --blob-container raw-data \\\n  --archive-name-format '{Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}'\n\n# Application logs stream\naz eventhubs eventhub create \\\n  --resource-group data-analytics-rg \\\n  --namespace-name $EVENT_HUBS_NAMESPACE \\\n  --name application-logs \\\n  --partition-count 16 \\\n  --message-retention 3 \\\n  --capture-enabled true \\\n  --capture-encoding Json \\\n  --capture-interval 300 \\\n  --capture-size-limit 314572800 \\\n  --destination-name EventHubArchive.AzureBlockBlob \\\n  --storage-account $DATA_LAKE_NAME \\\n  --blob-container raw-data\n\n# Business events stream\naz eventhubs eventhub create \\\n  --resource-group data-analytics-rg \\\n  --namespace-name $EVENT_HUBS_NAMESPACE \\\n  --name business-events \\\n  --partition-count 8 \\\n  --message-retention 7 \\\n  --capture-enabled true \\\n  --capture-encoding Avro \\\n  --capture-interval 900 \\\n  --capture-size-limit 104857600 \\\n  --destination-name EventHubArchive.AzureBlockBlob \\\n  --storage-account $DATA_LAKE_NAME \\\n  --blob-container raw-data\n\n# Create consumer groups for different processing scenarios\necho \"Creating consumer groups...\"\nfor hub in iot-sensor-data application-logs business-events; do\n  # Real-time processing consumer group\n  az eventhubs eventhub consumer-group create \\\n    --resource-group data-analytics-rg \\\n    --namespace-name $EVENT_HUBS_NAMESPACE \\\n    --eventhub-name $hub \\\n    --name realtime-processing\n  \n  # Batch processing consumer group\n  az eventhubs eventhub consumer-group create \\\n    --resource-group data-analytics-rg \\\n    --namespace-name $EVENT_HUBS_NAMESPACE \\\n    --eventhub-name $hub \\\n    --name batch-processing\n  \n  # Analytics consumer group\n  az eventhubs eventhub consumer-group create \\\n    --resource-group data-analytics-rg \\\n    --namespace-name $EVENT_HUBS_NAMESPACE \\\n    --eventhub-name $hub \\\n    --name analytics-processing\ndone\n\n# Create IoT Hub for device connectivity\necho \"Creating IoT Hub for device management...\"\nIOT_HUB_NAME=\"iothub-enterprise-$(openssl rand -hex 3)\"\naz iot hub create \\\n  --resource-group data-analytics-rg \\\n  --name $IOT_HUB_NAME \\\n  --location eastus \\\n  --sku S2 \\\n  --partition-count 4 \\\n  --tags Environment=Production DeviceManagement=Enabled\n\n# Configure IoT Hub routing to Event Hubs\necho \"Configuring IoT Hub message routing...\"\n\n# Add Event Hubs endpoint\naz iot hub routing-endpoint create \\\n  --resource-group data-analytics-rg \\\n  --hub-name $IOT_HUB_NAME \\\n  --endpoint-name iot-sensor-endpoint \\\n  --endpoint-type eventhub \\\n  --endpoint-resource-group data-analytics-rg \\\n  --endpoint-subscription-id $(az account show --query id -o tsv) \\\n  --connection-string $(az eventhubs eventhub authorization-rule keys list --resource-group data-analytics-rg --namespace-name $EVENT_HUBS_NAMESPACE --eventhub-name iot-sensor-data --name RootManageSharedAccessKey --query primaryConnectionString -o tsv)\n\n# Create routing rule\naz iot hub route create \\\n  --resource-group data-analytics-rg \\\n  --hub-name $IOT_HUB_NAME \\\n  --route-name sensor-data-route \\\n  --source DeviceMessages \\\n  --endpoint-name iot-sensor-endpoint \\\n  --enabled true \\\n  --condition \"true\"\n\necho \"Event Hubs infrastructure created successfully.\"\necho \"Event Hubs Namespace: $EVENT_HUBS_NAMESPACE\"\necho \"Data Lake Storage: $DATA_LAKE_NAME\"\necho \"IoT Hub: $IOT_HUB_NAME\""
+        },
+        "setup_stream_processing": {
+          "language": "bash",
+          "title": "Setup Advanced Stream Processing with Stream Analytics",
+          "code": "# Setup advanced stream processing with Azure Stream Analytics\n\necho \"Setting up Stream Analytics for real-time processing...\"\n\n# Create Stream Analytics job for IoT sensor data processing\necho \"Creating Stream Analytics jobs...\"\n\n# IoT sensor data processing job\nSA_JOB_IOT=\"sa-iot-processing\"\naz stream-analytics job create \\\n  --resource-group data-analytics-rg \\\n  --name $SA_JOB_IOT \\\n  --location eastus \\\n  --output-error-policy Drop \\\n  --out-of-order-policy Adjust \\\n  --out-of-order-max-delay 5 \\\n  --arrival-max-delay 5 \\\n  --data-locale en-US \\\n  --compatibility-level 1.2 \\\n  --tags Environment=Production DataProcessing=RealTime\n\n# Application logs processing job\nSA_JOB_LOGS=\"sa-logs-processing\"\naz stream-analytics job create \\\n  --resource-group data-analytics-rg \\\n  --name $SA_JOB_LOGS \\\n  --location eastus \\\n  --output-error-policy Drop \\\n  --out-of-order-policy Adjust \\\n  --out-of-order-max-delay 10 \\\n  --arrival-max-delay 10 \\\n  --data-locale en-US \\\n  --compatibility-level 1.2 \\\n  --tags Environment=Production DataProcessing=LogAnalytics\n\n# Business events processing job\nSA_JOB_EVENTS=\"sa-events-processing\"\naz stream-analytics job create \\\n  --resource-group data-analytics-rg \\\n  --name $SA_JOB_EVENTS \\\n  --location eastus \\\n  --output-error-policy Drop \\\n  --out-of-order-policy Adjust \\\n  --out-of-order-max-delay 2 \\\n  --arrival-max-delay 2 \\\n  --data-locale en-US \\\n  --compatibility-level 1.2 \\\n  --tags Environment=Production DataProcessing=BusinessIntelligence\n\n# Create Power BI workspace for real-time dashboards\necho \"Note: Power BI workspace should be created manually in Power BI service\"\necho \"Creating placeholder for Power BI integration...\"\n\n# Create SQL Database for processed data storage\necho \"Creating SQL Database for processed data...\"\nSQL_SERVER_NAME=\"sqlserver-analytics-$(openssl rand -hex 3)\"\naz sql server create \\\n  --resource-group data-analytics-rg \\\n  --name $SQL_SERVER_NAME \\\n  --location eastus \\\n  --admin-user sqladmin \\\n  --admin-password 'ComplexP@ssw0rd123!' \\\n  --enable-public-network false\n\n# Create SQL Database\naz sql db create \\\n  --resource-group data-analytics-rg \\\n  --server $SQL_SERVER_NAME \\\n  --name analytics-db \\\n  --edition Premium \\\n  --capacity 125 \\\n  --max-size 100GB\n\n# Create private endpoint for SQL Server\naz network private-endpoint create \\\n  --resource-group data-analytics-rg \\\n  --name sql-private-endpoint \\\n  --vnet-name data-vnet \\\n  --subnet private-endpoints \\\n  --private-connection-resource-id $(az sql server show --resource-group data-analytics-rg --name $SQL_SERVER_NAME --query id -o tsv) \\\n  --group-id sqlServer \\\n  --connection-name sql-connection || echo \"VNet not found, skipping private endpoint\"\n\n# Create Cosmos DB for real-time operational data\necho \"Creating Cosmos DB for operational data...\"\nCOSMOS_ACCOUNT_NAME=\"cosmos-analytics-$(openssl rand -hex 3)\"\naz cosmosdb create \\\n  --resource-group data-analytics-rg \\\n  --name $COSMOS_ACCOUNT_NAME \\\n  --locations regionName=eastus failoverPriority=0 isZoneRedundant=false \\\n  --locations regionName=westus2 failoverPriority=1 isZoneRedundant=false \\\n  --default-consistency-level Session \\\n  --enable-multiple-write-locations false \\\n  --enable-automatic-failover true\n\n# Create Cosmos DB database and containers\naz cosmosdb sql database create \\\n  --resource-group data-analytics-rg \\\n  --account-name $COSMOS_ACCOUNT_NAME \\\n  --name analytics-db\n\n# Container for IoT sensor readings\naz cosmosdb sql container create \\\n  --resource-group data-analytics-rg \\\n  --account-name $COSMOS_ACCOUNT_NAME \\\n  --database-name analytics-db \\\n  --name sensor-readings \\\n  --partition-key-path '/deviceId' \\\n  --throughput 1000\n\n# Container for aggregated metrics\naz cosmosdb sql container create \\\n  --resource-group data-analytics-rg \\\n  --account-name $COSMOS_ACCOUNT_NAME \\\n  --database-name analytics-db \\\n  --name aggregated-metrics \\\n  --partition-key-path '/metricType' \\\n  --throughput 400\n\necho \"Stream processing infrastructure created successfully.\"\necho \"Stream Analytics Jobs: $SA_JOB_IOT, $SA_JOB_LOGS, $SA_JOB_EVENTS\"\necho \"SQL Server: $SQL_SERVER_NAME\"\necho \"Cosmos DB: $COSMOS_ACCOUNT_NAME\""
+        },
+        "configure_complex_stream_queries": {
+          "language": "bash",
+          "title": "Configure Complex Stream Analytics Queries",
+          "code": "# Configure complex Stream Analytics queries for real-time processing\n\necho \"Configuring Stream Analytics inputs, outputs, and queries...\"\n\n# Configure IoT sensor data processing job\necho \"Configuring IoT sensor data Stream Analytics job...\"\n\n# Add Event Hubs input for IoT data\ncat > iot-input-config.json << 'EOF'\n{\n  \"properties\": {\n    \"type\": \"Stream\",\n    \"datasource\": {\n      \"type\": \"Microsoft.ServiceBus/EventHub\",\n      \"properties\": {\n        \"serviceBusNamespace\": \"EVENT_HUBS_NAMESPACE\",\n        \"eventHubName\": \"iot-sensor-data\",\n        \"sharedAccessPolicyName\": \"RootManageSharedAccessKey\",\n        \"consumerGroupName\": \"realtime-processing\"\n      }\n    },\n    \"serialization\": {\n      \"type\": \"Json\",\n      \"properties\": {\n        \"encoding\": \"UTF8\"\n      }\n    }\n  }\n}\nEOF\n\nsed -i \"s/EVENT_HUBS_NAMESPACE/$EVENT_HUBS_NAMESPACE/g\" iot-input-config.json\n\n# Add shared access key to input config\nEVENT_HUBS_KEY=$(az eventhubs namespace authorization-rule keys list \\\n  --resource-group data-analytics-rg \\\n  --namespace-name $EVENT_HUBS_NAMESPACE \\\n  --name RootManageSharedAccessKey \\\n  --query primaryKey -o tsv)\n\n# Create input for IoT data\naz stream-analytics input create \\\n  --resource-group data-analytics-rg \\\n  --job-name $SA_JOB_IOT \\\n  --name IoTSensorInput \\\n  --properties @iot-input-config.json\n\n# Configure outputs for IoT processing\necho \"Configuring outputs for IoT processing...\"\n\n# Power BI output configuration\ncat > powerbi-output-config.json << 'EOF'\n{\n  \"properties\": {\n    \"datasource\": {\n      \"type\": \"PowerBI\",\n      \"properties\": {\n        \"dataset\": \"IoTRealTimeData\",\n        \"table\": \"SensorMetrics\",\n        \"groupId\": \"POWERBI_GROUP_ID\",\n        \"groupName\": \"Analytics Workspace\"\n      }\n    }\n  }\n}\nEOF\n\n# Cosmos DB output configuration\ncat > cosmosdb-output-config.json << 'EOF'\n{\n  \"properties\": {\n    \"datasource\": {\n      \"type\": \"Microsoft.Storage/DocumentDB\",\n      \"properties\": {\n        \"accountId\": \"COSMOS_ACCOUNT_NAME\",\n        \"accountKey\": \"COSMOS_ACCOUNT_KEY\",\n        \"database\": \"analytics-db\",\n        \"collectionNamePattern\": \"sensor-readings\"\n      }\n    }\n  }\n}\nEOF\n\n# Get Cosmos DB account key\nCOSMOS_KEY=$(az cosmosdb keys list \\\n  --resource-group data-analytics-rg \\\n  --name $COSMOS_ACCOUNT_NAME \\\n  --query primaryMasterKey -o tsv)\n\nsed -i \"s/COSMOS_ACCOUNT_NAME/$COSMOS_ACCOUNT_NAME/g\" cosmosdb-output-config.json\nsed -i \"s/COSMOS_ACCOUNT_KEY/$COSMOS_KEY/g\" cosmosdb-output-config.json\n\n# Create Cosmos DB output\naz stream-analytics output create \\\n  --resource-group data-analytics-rg \\\n  --job-name $SA_JOB_IOT \\\n  --name CosmosDBOutput \\\n  --properties @cosmosdb-output-config.json\n\n# Data Lake output configuration\ncat > datalake-output-config.json << 'EOF'\n{\n  \"properties\": {\n    \"datasource\": {\n      \"type\": \"Microsoft.Storage/Blob\",\n      \"properties\": {\n        \"storageAccounts\": [\n          {\n            \"accountName\": \"DATA_LAKE_NAME\",\n            \"accountKey\": \"DATA_LAKE_KEY\"\n          }\n        ],\n        \"container\": \"processed-data\",\n        \"pathPattern\": \"iot-metrics/{date}/{time}\",\n        \"dateFormat\": \"yyyy/MM/dd\",\n        \"timeFormat\": \"HH\"\n      }\n    },\n    \"serialization\": {\n      \"type\": \"Json\",\n      \"properties\": {\n        \"encoding\": \"UTF8\",\n        \"format\": \"LineSeparated\"\n      }\n    }\n  }\n}\nEOF\n\n# Get Data Lake account key\nDATA_LAKE_KEY=$(az storage account keys list \\\n  --resource-group data-analytics-rg \\\n  --account-name $DATA_LAKE_NAME \\\n  --query '[0].value' -o tsv)\n\nsed -i \"s/DATA_LAKE_NAME/$DATA_LAKE_NAME/g\" datalake-output-config.json\nsed -i \"s/DATA_LAKE_KEY/$DATA_LAKE_KEY/g\" datalake-output-config.json\n\n# Create Data Lake output\naz stream-analytics output create \\\n  --resource-group data-analytics-rg \\\n  --job-name $SA_JOB_IOT \\\n  --name DataLakeOutput \\\n  --properties @datalake-output-config.json\n\n# Create complex Stream Analytics query for IoT data processing\necho \"Creating complex Stream Analytics query...\"\ncat > iot-processing-query.sql << 'EOF'\n-- Complex IoT sensor data processing query\nWITH \n-- Clean and parse incoming sensor data\nCleanSensorData AS (\n  SELECT \n    deviceId,\n    sensorType,\n    CAST(value AS FLOAT) AS sensorValue,\n    CAST(timestamp AS DATETIME) AS eventTime,\n    location,\n    System.Timestamp() AS processingTime\n  FROM IoTSensorInput\n  WHERE \n    deviceId IS NOT NULL \n    AND sensorType IS NOT NULL\n    AND TRY_CAST(value AS FLOAT) IS NOT NULL\n    AND timestamp IS NOT NULL\n),\n\n-- Detect anomalies using sliding window\nAnomalyDetection AS (\n  SELECT \n    deviceId,\n    sensorType,\n    sensorValue,\n    eventTime,\n    location,\n    AVG(sensorValue) OVER (\n      PARTITION BY deviceId, sensorType \n      ORDER BY eventTime \n      RANGE BETWEEN INTERVAL '15' MINUTE PRECEDING AND CURRENT ROW\n    ) AS avgValue,\n    STDEV(sensorValue) OVER (\n      PARTITION BY deviceId, sensorType \n      ORDER BY eventTime \n      RANGE BETWEEN INTERVAL '15' MINUTE PRECEDING AND CURRENT ROW\n    ) AS stdevValue,\n    processingTime\n  FROM CleanSensorData\n),\n\n-- Calculate Z-score for anomaly detection\nAnomalyScores AS (\n  SELECT \n    deviceId,\n    sensorType,\n    sensorValue,\n    eventTime,\n    location,\n    avgValue,\n    stdevValue,\n    CASE \n      WHEN stdevValue > 0 THEN ABS(sensorValue - avgValue) / stdevValue\n      ELSE 0\n    END AS zScore,\n    CASE \n      WHEN stdevValue > 0 AND ABS(sensorValue - avgValue) / stdevValue > 3 THEN 'ANOMALY'\n      WHEN stdevValue > 0 AND ABS(sensorValue - avgValue) / stdevValue > 2 THEN 'WARNING'\n      ELSE 'NORMAL'\n    END AS alertLevel,\n    processingTime\n  FROM AnomalyDetection\n  WHERE avgValue IS NOT NULL AND stdevValue IS NOT NULL\n),\n\n-- Aggregate metrics for real-time dashboard\nRealTimeMetrics AS (\n  SELECT \n    System.Timestamp() AS windowEnd,\n    deviceId,\n    sensorType,\n    location,\n    COUNT(*) AS messageCount,\n    AVG(sensorValue) AS avgValue,\n    MIN(sensorValue) AS minValue,\n    MAX(sensorValue) AS maxValue,\n    STDEV(sensorValue) AS stdevValue,\n    SUM(CASE WHEN alertLevel = 'ANOMALY' THEN 1 ELSE 0 END) AS anomalyCount,\n    SUM(CASE WHEN alertLevel = 'WARNING' THEN 1 ELSE 0 END) AS warningCount\n  FROM AnomalyScores\n  GROUP BY \n    deviceId, \n    sensorType, \n    location,\n    TumblingWindow(minute, 5)\n)\n\n-- Output to Power BI for real-time dashboard\nSELECT \n  windowEnd,\n  deviceId,\n  sensorType,\n  location,\n  messageCount,\n  avgValue,\n  minValue,\n  maxValue,\n  stdevValue,\n  anomalyCount,\n  warningCount\nINTO PowerBIOutput\nFROM RealTimeMetrics;\n\n-- Output detailed sensor readings to Cosmos DB\nSELECT \n  deviceId,\n  sensorType,\n  sensorValue,\n  eventTime,\n  location,\n  avgValue,\n  stdevValue,\n  zScore,\n  alertLevel,\n  processingTime\nINTO CosmosDBOutput\nFROM AnomalyScores\nWHERE alertLevel IN ('ANOMALY', 'WARNING');\n\n-- Output aggregated data to Data Lake for batch processing\nSELECT \n  windowEnd,\n  deviceId,\n  sensorType,\n  location,\n  messageCount,\n  avgValue,\n  minValue,\n  maxValue,\n  stdevValue,\n  anomalyCount,\n  warningCount,\n  'iot-metrics' AS dataType\nINTO DataLakeOutput\nFROM RealTimeMetrics;\nEOF\n\n# Upload query to Stream Analytics job\necho \"Uploading Stream Analytics query...\"\naz stream-analytics transformation create \\\n  --resource-group data-analytics-rg \\\n  --job-name $SA_JOB_IOT \\\n  --name IoTTransformation \\\n  --streaming-units 6 \\\n  --transformation-query \"$(cat iot-processing-query.sql)\"\n\necho \"Complex Stream Analytics queries configured successfully.\""
+        }
+      }
+    },
+    {
+      "title": "Advanced Data Lake Architecture and ETL Pipelines",
+      "content": "Implement sophisticated data lake architectures with Azure Synapse Analytics equivalent to AWS EMR and Glue capabilities.",
+      "code_examples": {
+        "create_synapse_analytics_workspace": {
+          "language": "bash",
+          "title": "Create Synapse Analytics Workspace with Advanced Configuration",
+          "code": "# Create Synapse Analytics workspace for advanced data processing\n\necho \"Creating Synapse Analytics workspace...\"\n\n# Create Synapse workspace\nSYNAPSE_WORKSPACE_NAME=\"synapse-analytics-$(openssl rand -hex 3)\"\naz synapse workspace create \\\n  --resource-group data-analytics-rg \\\n  --name $SYNAPSE_WORKSPACE_NAME \\\n  --storage-account $DATA_LAKE_NAME \\\n  --file-system processed-data \\\n  --sql-admin-login-user sqladmin \\\n  --sql-admin-login-password 'ComplexP@ssw0rd123!' \\\n  --location eastus \\\n  --tags Environment=Production DataProcessing=Advanced\n\n# Create Spark pool for big data processing\necho \"Creating Spark pool...\"\naz synapse spark pool create \\\n  --resource-group data-analytics-rg \\\n  --workspace-name $SYNAPSE_WORKSPACE_NAME \\\n  --name sparkpool \\\n  --node-count 3 \\\n  --node-size Medium \\\n  --min-node-count 3 \\\n  --max-node-count 10 \\\n  --enable-auto-scale true \\\n  --auto-pause-delay 15 \\\n  --spark-version 3.3 \\\n  --tags Environment=Production ComputeType=Spark\n\n# Create dedicated SQL pool\necho \"Creating dedicated SQL pool...\"\naz synapse sql pool create \\\n  --resource-group data-analytics-rg \\\n  --workspace-name $SYNAPSE_WORKSPACE_NAME \\\n  --name dedicatedsqlpool \\\n  --performance-level DW100c \\\n  --tags Environment=Production ComputeType=SQL\n\n# Create Data Factory for ETL orchestration\necho \"Creating Data Factory...\"\nDATA_FACTORY_NAME=\"adf-analytics-$(openssl rand -hex 3)\"\naz datafactory factory create \\\n  --resource-group data-analytics-rg \\\n  --factory-name $DATA_FACTORY_NAME \\\n  --location eastus\n\necho \"Synapse Analytics workspace created successfully.\"\necho \"Workspace Name: $SYNAPSE_WORKSPACE_NAME\"\necho \"Data Factory: $DATA_FACTORY_NAME\""
+        },
+        "create_advanced_etl_pipeline": {
+          "language": "bash",
+          "title": "Create Advanced ETL Pipeline with Data Factory",
+          "code": "# Create advanced ETL pipeline with Azure Data Factory\n\necho \"Creating advanced ETL pipeline...\"\n\n# Create linked services for data sources\necho \"Creating linked services...\"\n\n# Event Hubs linked service\ncat > eventhubs-linked-service.json << 'EOF'\n{\n  \"name\": \"EventHubsLinkedService\",\n  \"properties\": {\n    \"type\": \"AzureEventHubs\",\n    \"typeProperties\": {\n      \"connectionString\": \"EVENT_HUBS_CONNECTION_STRING\"\n    }\n  }\n}\nEOF\n\n# Data Lake linked service\ncat > datalake-linked-service.json << 'EOF'\n{\n  \"name\": \"DataLakeLinkedService\",\n  \"properties\": {\n    \"type\": \"AzureBlobFS\",\n    \"typeProperties\": {\n      \"url\": \"https://DATA_LAKE_NAME.dfs.core.windows.net\",\n      \"accountKey\": \"DATA_LAKE_KEY\"\n    }\n  }\n}\nEOF\n\n# Synapse linked service\ncat > synapse-linked-service.json << 'EOF'\n{\n  \"name\": \"SynapseLinkedService\",\n  \"properties\": {\n    \"type\": \"AzureSqlDW\",\n    \"typeProperties\": {\n      \"connectionString\": \"Server=tcp:SYNAPSE_WORKSPACE_NAME.sql.azuresynapse.net,1433;Database=dedicatedsqlpool;User ID=sqladmin;Password=ComplexP@ssw0rd123!;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;\"\n    }\n  }\n}\nEOF\n\n# Replace placeholders\nEVENT_HUBS_CONN_STRING=$(az eventhubs namespace authorization-rule keys list --resource-group data-analytics-rg --namespace-name $EVENT_HUBS_NAMESPACE --name RootManageSharedAccessKey --query primaryConnectionString -o tsv)\nsed -i \"s/EVENT_HUBS_CONNECTION_STRING/$(echo $EVENT_HUBS_CONN_STRING | sed 's/\\//\\\\\\//g')/g\" eventhubs-linked-service.json\nsed -i \"s/DATA_LAKE_NAME/$DATA_LAKE_NAME/g\" datalake-linked-service.json\nsed -i \"s/DATA_LAKE_KEY/$DATA_LAKE_KEY/g\" datalake-linked-service.json\nsed -i \"s/SYNAPSE_WORKSPACE_NAME/$SYNAPSE_WORKSPACE_NAME/g\" synapse-linked-service.json\n\n# Create datasets\necho \"Creating datasets...\"\n\n# Raw data dataset (Event Hubs capture files)\ncat > raw-data-dataset.json << 'EOF'\n{\n  \"name\": \"RawDataDataset\",\n  \"properties\": {\n    \"type\": \"DelimitedText\",\n    \"linkedServiceName\": {\n      \"referenceName\": \"DataLakeLinkedService\",\n      \"type\": \"LinkedServiceReference\"\n    },\n    \"typeProperties\": {\n      \"location\": {\n        \"type\": \"AzureBlobFSLocation\",\n        \"fileSystem\": \"raw-data\"\n      },\n      \"columnDelimiter\": \",\",\n      \"quoteChar\": \"\\\"\",\n      \"firstRowAsHeader\": true\n    }\n  }\n}\nEOF\n\n# Processed data dataset\ncat > processed-data-dataset.json << 'EOF'\n{\n  \"name\": \"ProcessedDataDataset\",\n  \"properties\": {\n    \"type\": \"Parquet\",\n    \"linkedServiceName\": {\n      \"referenceName\": \"DataLakeLinkedService\",\n      \"type\": \"LinkedServiceReference\"\n    },\n    \"typeProperties\": {\n      \"location\": {\n        \"type\": \"AzureBlobFSLocation\",\n        \"fileSystem\": \"processed-data\"\n      }\n    }\n  }\n}\nEOF\n\n# Synapse dataset\ncat > synapse-dataset.json << 'EOF'\n{\n  \"name\": \"SynapseDataset\",\n  \"properties\": {\n    \"type\": \"AzureSqlDWTable\",\n    \"linkedServiceName\": {\n      \"referenceName\": \"SynapseLinkedService\",\n      \"type\": \"LinkedServiceReference\"\n    },\n    \"typeProperties\": {\n      \"tableName\": \"dbo.ProcessedMetrics\"\n    }\n  }\n}\nEOF\n\n# Create ETL pipeline\necho \"Creating ETL pipeline...\"\ncat > etl-pipeline.json << 'EOF'\n{\n  \"name\": \"AdvancedETLPipeline\",\n  \"properties\": {\n    \"activities\": [\n      {\n        \"name\": \"CopyRawToProcessed\",\n        \"type\": \"Copy\",\n        \"typeProperties\": {\n          \"source\": {\n            \"type\": \"DelimitedTextSource\",\n            \"storeSettings\": {\n              \"type\": \"AzureBlobFSReadSettings\",\n              \"recursive\": true,\n              \"wildcardFolderPath\": \"*/*/*/*/*/*/*\",\n              \"wildcardFileName\": \"*.avro\"\n            }\n          },\n          \"sink\": {\n            \"type\": \"ParquetSink\",\n            \"storeSettings\": {\n              \"type\": \"AzureBlobFSWriteSettings\"\n            }\n          },\n          \"enableStaging\": false\n        },\n        \"inputs\": [\n          {\n            \"referenceName\": \"RawDataDataset\",\n            \"type\": \"DatasetReference\"\n          }\n        ],\n        \"outputs\": [\n          {\n            \"referenceName\": \"ProcessedDataDataset\",\n            \"type\": \"DatasetReference\"\n          }\n        ]\n      },\n      {\n        \"name\": \"ProcessWithSpark\",\n        \"type\": \"SynapseNotebook\",\n        \"dependsOn\": [\n          {\n            \"activity\": \"CopyRawToProcessed\",\n            \"dependencyConditions\": [\"Succeeded\"]\n          }\n        ],\n        \"typeProperties\": {\n          \"notebook\": {\n            \"referenceName\": \"DataProcessingNotebook\",\n            \"type\": \"NotebookReference\"\n          },\n          \"sparkPool\": {\n            \"referenceName\": \"sparkpool\",\n            \"type\": \"BigDataPoolReference\"\n          }\n        }\n      },\n      {\n        \"name\": \"LoadToSynapse\",\n        \"type\": \"Copy\",\n        \"dependsOn\": [\n          {\n            \"activity\": \"ProcessWithSpark\",\n            \"dependencyConditions\": [\"Succeeded\"]\n          }\n        ],\n        \"typeProperties\": {\n          \"source\": {\n            \"type\": \"ParquetSource\",\n            \"storeSettings\": {\n              \"type\": \"AzureBlobFSReadSettings\",\n              \"recursive\": true\n            }\n          },\n          \"sink\": {\n            \"type\": \"SqlDWSink\",\n            \"allowPolyBase\": true,\n            \"polyBaseSettings\": {\n              \"rejectType\": \"percentage\",\n              \"rejectValue\": 0.1\n            }\n          }\n        },\n        \"inputs\": [\n          {\n            \"referenceName\": \"ProcessedDataDataset\",\n            \"type\": \"DatasetReference\"\n          }\n        ],\n        \"outputs\": [\n          {\n            \"referenceName\": \"SynapseDataset\",\n            \"type\": \"DatasetReference\"\n          }\n        ]\n      }\n    ],\n    \"parameters\": {\n      \"ProcessingDate\": {\n        \"type\": \"string\",\n        \"defaultValue\": \"@formatDateTime(utcnow(), 'yyyy-MM-dd')\"\n      }\n    },\n    \"variables\": {\n      \"ProcessedFiles\": {\n        \"type\": \"Array\"\n      }\n    }\n  }\n}\nEOF\n\n# Note: In a real scenario, you would use Azure CLI or REST API to create these resources\necho \"ETL pipeline configuration files created.\"\necho \"Use Azure portal, Azure CLI, or ARM templates to deploy these configurations.\"\n\n# Create pipeline trigger\ncat > daily-trigger.json << 'EOF'\n{\n  \"name\": \"DailyETLTrigger\",\n  \"properties\": {\n    \"type\": \"ScheduleTrigger\",\n    \"typeProperties\": {\n      \"recurrence\": {\n        \"frequency\": \"Day\",\n        \"interval\": 1,\n        \"startTime\": \"2023-01-01T02:00:00Z\",\n        \"timeZone\": \"UTC\"\n      }\n    },\n    \"pipelines\": [\n      {\n        \"pipelineReference\": {\n          \"referenceName\": \"AdvancedETLPipeline\",\n          \"type\": \"PipelineReference\"\n        }\n      }\n    ]\n  }\n}\nEOF\n\necho \"Advanced ETL pipeline configuration completed.\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Design and implement enterprise-scale real-time data processing architecture",
+    "requirements": [
+      "Create Event Hubs infrastructure with multiple streams and auto-capture",
+      "Implement IoT Hub for device management and message routing",
+      "Set up Stream Analytics jobs with complex real-time processing queries",
+      "Create Synapse Analytics workspace with Spark and SQL pools",
+      "Build advanced ETL pipelines with Data Factory orchestration",
+      "Configure real-time dashboards with Power BI integration",
+      "Implement data governance with proper security and access controls",
+      "Set up monitoring and alerting for all data processing components"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify Event Hubs namespace creation",
+        "command": "az eventhubs namespace show --resource-group data-analytics-rg --name $EVENT_HUBS_NAMESPACE --query 'provisioningState'",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Check Event Hubs creation",
+        "command": "az eventhubs eventhub list --resource-group data-analytics-rg --namespace-name $EVENT_HUBS_NAMESPACE --query 'length(@)'",
+        "expected": "Should return count of created Event Hubs (minimum 3)"
+      },
+      {
+        "step": "Verify Stream Analytics jobs",
+        "command": "az stream-analytics job list --resource-group data-analytics-rg --query 'length(@)'",
+        "expected": "Should return count of Stream Analytics jobs (minimum 3)"
+      },
+      {
+        "step": "Check Synapse workspace",
+        "command": "az synapse workspace show --resource-group data-analytics-rg --name $SYNAPSE_WORKSPACE_NAME --query 'provisioningState'",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Verify Data Lake storage",
+        "command": "az storage fs list --account-name $DATA_LAKE_NAME --auth-mode login --query 'length(@)'",
+        "expected": "Should return count of containers (minimum 4)"
+      }
+    ]
+  },
+  "data_processing_patterns": {
+    "lambda_architecture": {
+      "description": "Batch and stream processing with unified serving layer",
+      "batch_layer": "Data Factory + Synapse Spark pools for historical data processing",
+      "speed_layer": "Stream Analytics + Event Hubs for real-time processing",
+      "serving_layer": "Synapse SQL pools + Power BI for unified querying"
+    },
+    "kappa_architecture": {
+      "description": "Stream-only processing with event sourcing",
+      "stream_processing": "Event Hubs + Stream Analytics + Azure Functions",
+      "event_store": "Event Hubs with extended retention + Data Lake Storage",
+      "serving_layer": "Cosmos DB + Azure Search for real-time queries"
+    },
+    "event_driven_architecture": {
+      "description": "Reactive system with event-driven microservices",
+      "event_backbone": "Event Grid + Service Bus + Event Hubs",
+      "processing_units": "Azure Functions + Logic Apps + Container Apps",
+      "state_management": "Cosmos DB + Redis Cache + SQL Database"
+    }
+  },
+  "cost_optimization_strategies": {
+    "event_hubs_optimization": {
+      "auto_inflate": "Dynamic scaling based on throughput requirements",
+      "retention_policies": "Optimize retention period based on downstream processing SLA",
+      "partition_strategy": "Right-size partitions for optimal throughput and cost"
+    },
+    "stream_analytics_optimization": {
+      "streaming_units": "Dynamic scaling based on input rate and query complexity",
+      "query_optimization": "Optimize queries for performance and resource usage",
+      "checkpoint_management": "Efficient checkpointing to minimize reprocessing costs"
+    },
+    "synapse_optimization": {
+      "pause_resume": "Automatic pause/resume for SQL pools during low usage",
+      "spark_auto_scale": "Dynamic Spark cluster scaling with auto-termination",
+      "storage_tiers": "Optimize Data Lake storage tiers based on access patterns"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove data analytics resources in proper order",
+    "commands": [
+      "# Stop Stream Analytics jobs",
+      "az stream-analytics job stop --resource-group data-analytics-rg --name $SA_JOB_IOT --no-wait",
+      "az stream-analytics job stop --resource-group data-analytics-rg --name $SA_JOB_LOGS --no-wait", 
+      "az stream-analytics job stop --resource-group data-analytics-rg --name $SA_JOB_EVENTS --no-wait",
+      "# Delete Synapse workspace (this will delete pools automatically)",
+      "az synapse workspace delete --resource-group data-analytics-rg --name $SYNAPSE_WORKSPACE_NAME --yes --no-wait",
+      "# Delete Data Factory",
+      "az datafactory factory delete --resource-group data-analytics-rg --factory-name $DATA_FACTORY_NAME --yes",
+      "# Delete Stream Analytics jobs",
+      "az stream-analytics job delete --resource-group data-analytics-rg --name $SA_JOB_IOT --no-wait",
+      "az stream-analytics job delete --resource-group data-analytics-rg --name $SA_JOB_LOGS --no-wait",
+      "az stream-analytics job delete --resource-group data-analytics-rg --name $SA_JOB_EVENTS --no-wait",
+      "# Delete databases",
+      "az cosmosdb delete --resource-group data-analytics-rg --name $COSMOS_ACCOUNT_NAME --yes",
+      "az sql db delete --resource-group data-analytics-rg --server $SQL_SERVER_NAME --name analytics-db --yes",
+      "az sql server delete --resource-group data-analytics-rg --name $SQL_SERVER_NAME --yes",
+      "# Delete IoT Hub",
+      "az iot hub delete --resource-group data-analytics-rg --name $IOT_HUB_NAME",
+      "# Delete Event Hubs namespace",
+      "az eventhubs namespace delete --resource-group data-analytics-rg --name $EVENT_HUBS_NAMESPACE",
+      "# Delete Data Lake storage",
+      "az storage account delete --resource-group data-analytics-rg --name $DATA_LAKE_NAME --yes",
+      "# Delete resource group",
+      "az group delete --name data-analytics-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure Event Hubs provide more enterprise features than AWS Kinesis Data Streams",
+    "Stream Analytics offers more complex query capabilities than Kinesis Analytics",
+    "Synapse Analytics combines data warehouse and big data processing better than separate AWS services",
+    "Azure Data Factory provides more visual ETL design compared to AWS Glue",
+    "Power BI integration with Azure services is more seamless than QuickSight with AWS",
+    "Event-driven architecture patterns are more mature in Azure with Event Grid",
+    "Cost optimization options are more granular in Azure data services"
+  ],
+  "next_steps": [
+    "Learn Azure Purview for comprehensive data governance and cataloging",
+    "Explore Azure Machine Learning for advanced analytics and AI integration",
+    "Study Azure Time Series Insights for IoT time-series data analysis",
+    "Practice with Azure Digital Twins for IoT device modeling and simulation",
+    "Learn Azure Cognitive Services for AI-powered data processing"
+  ]
+}

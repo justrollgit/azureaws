@@ -1,0 +1,1551 @@
+{
+  "lab_metadata": {
+    "id": "advanced-networking-security-lab",
+    "title": "AWS Advanced Networking to Azure Network Security: Enterprise Network Architecture and Zero Trust Security",
+    "category": "networking-security",
+    "difficulty": "expert",
+    "estimated_time": "190 minutes",
+    "description": "Master enterprise-scale network security by migrating from AWS advanced networking services to Azure network security solutions with zero trust architecture, advanced threat protection, and micro-segmentation",
+    "aws_services": ["VPC", "Transit Gateway", "AWS Network Firewall", "VPC Flow Logs", "GuardDuty", "WAF", "Shield Advanced", "PrivateLink"],
+    "azure_services": ["Virtual Networks", "Virtual WAN", "Azure Firewall Premium", "Network Security Groups", "Azure Sentinel", "Application Gateway WAF", "DDoS Protection", "Private Link"],
+    "tags": ["networking", "security", "zero-trust", "micro-segmentation", "firewall", "sap-c02-critical", "enterprise"],
+    "prerequisites": [
+      "Understanding of advanced networking concepts and enterprise network architecture",
+      "Knowledge of security frameworks and zero trust principles",
+      "Familiarity with network segmentation and micro-segmentation strategies",
+      "Experience with firewall policies and threat detection systems",
+      "Understanding of hybrid connectivity and private networking patterns"
+    ],
+    "learning_objectives": [
+      "Migrate AWS VPC and Transit Gateway architecture to Azure Virtual WAN",
+      "Transform AWS Network Firewall to Azure Firewall Premium with advanced threat protection",
+      "Implement VPC Flow Logs equivalent using Azure Network Watcher and traffic analytics",
+      "Convert GuardDuty network detection to Azure Sentinel with advanced analytics",
+      "Establish AWS WAF and Shield equivalent using Application Gateway WAF and DDoS Protection",
+      "Design PrivateLink connectivity patterns using Azure Private Link",
+      "Implement zero trust network architecture with micro-segmentation"
+    ]
+  },
+  "scenario": {
+    "title": "Global Financial Services Network Security Migration",
+    "description": "GlobalFinance operates a highly regulated financial services platform across 15 regions with strict security, compliance, and performance requirements. They need to migrate from AWS advanced networking to Azure while enhancing security posture, implementing zero trust architecture, and maintaining PCI DSS and SOX compliance with 99.99% availability.",
+    "business_requirements": [
+      "Zero trust network architecture with micro-segmentation across 15 global regions",
+      "Advanced threat protection with real-time detection and automated response",
+      "PCI DSS Level 1 and SOX compliance with comprehensive audit capabilities",
+      "High-performance networking supporting 10Gbps+ inter-region connectivity",
+      "Hybrid connectivity with 50+ branch offices and 5 data centers",
+      "Application-layer security with intelligent web application firewall",
+      "99.99% availability with automatic failover and disaster recovery"
+    ],
+    "current_aws_architecture": [
+      "Multi-VPC architecture with Transit Gateway for global connectivity",
+      "AWS Network Firewall for centralized traffic inspection and filtering",
+      "VPC Flow Logs with GuardDuty for network anomaly detection",
+      "AWS WAF and Shield Advanced for application-layer protection",
+      "PrivateLink for secure service connectivity without internet exposure",
+      "Direct Connect with multiple providers for hybrid connectivity"
+    ],
+    "target_azure_architecture": [
+      "Virtual WAN with secured hubs for global network connectivity",
+      "Azure Firewall Premium with advanced threat intelligence and IDPS",
+      "Network Watcher and Traffic Analytics for comprehensive flow monitoring",
+      "Azure Sentinel with advanced network analytics and threat hunting",
+      "Application Gateway WAF v2 with DDoS Protection for application security",
+      "Private Link for secure service access and hybrid connectivity patterns"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Advanced Network Architecture: Transit Gateway to Virtual WAN Migration",
+      "estimated_time": "55 minutes",
+      "description": "Design and implement enterprise-scale global network architecture",
+      "aws_context": {
+        "service": "AWS Transit Gateway",
+        "description": "Centralized connectivity hub for VPCs and on-premises networks",
+        "key_features": [
+          "Inter-VPC connectivity with centralized routing control",
+          "On-premises connectivity through VPN and Direct Connect",
+          "Route table management and traffic segmentation",
+          "Cross-region peering for global connectivity",
+          "Integration with AWS Network Firewall for traffic inspection"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Virtual WAN",
+        "description": "Global network architecture with optimized branch and cloud connectivity",
+        "key_features": [
+          "Hub-and-spoke architecture with automatic VNet peering",
+          "Integrated VPN and ExpressRoute connectivity",
+          "Built-in security with Azure Firewall and routing policies",
+          "Global transit architecture with optimized routing",
+          "Integration with third-party security solutions"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Global Virtual WAN with Advanced Security Architecture",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Virtual WAN with global hub architecture",
+              "aws_context": "Similar to Transit Gateway with regional hubs and cross-region connectivity",
+              "virtual_wan_deployment": {
+                "wan_configuration": {
+                  "name": "globalfinance-vwan",
+                  "type": "Standard",
+                  "allow_branch_to_branch_traffic": true,
+                  "allow_vnet_to_vnet_traffic": true,
+                  "office365_local_breakout_category": "OptimizeAndAllow"
+                },
+                "regional_hubs": [
+                  {
+                    "hub_name": "hub-eastus-prod",
+                    "location": "East US",
+                    "address_prefix": "10.0.0.0/16",
+                    "routing_preference": "Microsoft network",
+                    "hub_routing_preference": "ExpressRoute",
+                    "virtual_hub_capacity": 20,
+                    "services": {
+                      "azure_firewall": {
+                        "enabled": true,
+                        "sku": "Premium",
+                        "threat_intelligence": "Alert and Deny",
+                        "dns_proxy": true
+                      },
+                      "vpn_gateway": {
+                        "enabled": true,
+                        "scale_unit": 10,
+                        "routing_preference": "Microsoft network"
+                      },
+                      "expressroute_gateway": {
+                        "enabled": true,
+                        "scale_unit": 20,
+                        "min_scale_unit": 2
+                      }
+                    }
+                  },
+                  {
+                    "hub_name": "hub-westeurope-prod",
+                    "location": "West Europe",
+                    "address_prefix": "10.1.0.0/16",
+                    "routing_preference": "Microsoft network",
+                    "hub_routing_preference": "ExpressRoute",
+                    "virtual_hub_capacity": 15,
+                    "services": {
+                      "azure_firewall": {
+                        "enabled": true,
+                        "sku": "Premium",
+                        "threat_intelligence": "Alert and Deny",
+                        "dns_proxy": true
+                      },
+                      "vpn_gateway": {
+                        "enabled": true,
+                        "scale_unit": 8
+                      },
+                      "expressroute_gateway": {
+                        "enabled": true,
+                        "scale_unit": 15
+                      }
+                    }
+                  },
+                  {
+                    "hub_name": "hub-japaneast-prod",
+                    "location": "Japan East",
+                    "address_prefix": "10.2.0.0/16",
+                    "routing_preference": "Microsoft network",
+                    "hub_routing_preference": "ExpressRoute",
+                    "virtual_hub_capacity": 10,
+                    "services": {
+                      "azure_firewall": {
+                        "enabled": true,
+                        "sku": "Premium"
+                      },
+                      "expressroute_gateway": {
+                        "enabled": true,
+                        "scale_unit": 10
+                      }
+                    }
+                  }
+                ],
+                "azure_cli_deployment": "az network vwan create --name globalfinance-vwan --resource-group rg-network-global --type Standard && az network vhub create --name hub-eastus-prod --resource-group rg-network-global --vwan globalfinance-vwan --address-prefix 10.0.0.0/16 --location eastus --sku Standard"
+              },
+              "explanation": "Creates enterprise-scale global network architecture with integrated security and connectivity"
+            },
+            {
+              "step": 2,
+              "description": "Configure advanced routing and traffic segmentation",
+              "routing_configuration": {
+                "custom_route_tables": [
+                  {
+                    "route_table_name": "Production-Routes",
+                    "description": "Routing table for production workloads",
+                    "associated_connections": ["prod-spokes"],
+                    "propagation_connections": ["prod-spokes", "shared-services"],
+                    "routes": [
+                      {
+                        "name": "DefaultRoute",
+                        "destination": "0.0.0.0/0",
+                        "next_hop": "Azure Firewall"
+                      },
+                      {
+                        "name": "SharedServicesRoute",
+                        "destination": "10.10.0.0/16",
+                        "next_hop": "Hub-to-Hub",
+                        "description": "Route to shared services VNet"
+                      }
+                    ]
+                  },
+                  {
+                    "route_table_name": "Development-Routes",
+                    "description": "Isolated routing for development environments",
+                    "associated_connections": ["dev-spokes"],
+                    "propagation_connections": ["dev-spokes"],
+                    "routes": [
+                      {
+                        "name": "DefaultRoute",
+                        "destination": "0.0.0.0/0",
+                        "next_hop": "Azure Firewall"
+                      },
+                      {
+                        "name": "BlockProductionRoute",
+                        "destination": "10.100.0.0/16",
+                        "next_hop": "None",
+                        "description": "Block access to production networks"
+                      }
+                    ]
+                  },
+                  {
+                    "route_table_name": "Branch-Routes",
+                    "description": "Routing for branch office connectivity",
+                    "associated_connections": ["vpn-connections", "expressroute-connections"],
+                    "propagation_connections": ["prod-spokes", "shared-services"],
+                    "routes": [
+                      {
+                        "name": "InternetRoute",
+                        "destination": "0.0.0.0/0",
+                        "next_hop": "Azure Firewall",
+                        "description": "Internet traffic through central firewall"
+                      }
+                    ]
+                  }
+                ],
+                "network_segmentation": {
+                  "production_segment": {
+                    "address_space": "10.100.0.0/16",
+                    "security_level": "High",
+                    "allowed_communications": ["Shared Services", "Management"],
+                    "blocked_communications": ["Development", "Testing"]
+                  },
+                  "development_segment": {
+                    "address_space": "10.200.0.0/16",
+                    "security_level": "Medium",
+                    "allowed_communications": ["Shared Services"],
+                    "blocked_communications": ["Production", "External"]
+                  },
+                  "shared_services_segment": {
+                    "address_space": "10.10.0.0/16",
+                    "security_level": "High",
+                    "allowed_communications": ["All segments"],
+                    "services": ["DNS", "Monitoring", "Backup", "Identity"]
+                  }
+                },
+                "traffic_flow_policies": [
+                  {
+                    "policy_name": "Zero-Trust-East-West",
+                    "description": "All inter-VNet traffic must traverse firewall",
+                    "enforcement": "Mandatory",
+                    "exceptions": ["Management traffic within same security zone"]
+                  },
+                  {
+                    "policy_name": "Internet-Egress-Control",
+                    "description": "All internet traffic centrally inspected",
+                    "enforcement": "Mandatory",
+                    "exceptions": ["None"]
+                  }
+                ]
+              },
+              "explanation": "Implements advanced traffic segmentation with zero trust networking principles"
+            },
+            {
+              "step": 3,
+              "description": "Configure hybrid connectivity with advanced security",
+              "hybrid_connectivity": {
+                "expressroute_configuration": [
+                  {
+                    "circuit_name": "ER-Primary-NYC",
+                    "service_provider": "Equinix",
+                    "peering_location": "New York",
+                    "bandwidth": "10 Gbps",
+                    "sku": "Premium",
+                    "billing_model": "MeteredData",
+                    "peering_configuration": {
+                      "private_peering": {
+                        "enabled": true,
+                        "vlan_id": 100,
+                        "primary_subnet": "192.168.1.0/30",
+                        "secondary_subnet": "192.168.1.4/30",
+                        "asn": 65001
+                      },
+                      "microsoft_peering": {
+                        "enabled": true,
+                        "vlan_id": 200,
+                        "primary_subnet": "192.168.2.0/30",
+                        "secondary_subnet": "192.168.2.4/30",
+                        "advertised_public_prefixes": ["203.0.113.0/24"]
+                      }
+                    },
+                    "connection_monitoring": {
+                      "enabled": true,
+                      "threshold": 10,
+                      "evaluation_interval": 60
+                    }
+                  },
+                  {
+                    "circuit_name": "ER-Secondary-DC",
+                    "service_provider": "Verizon",
+                    "peering_location": "Washington DC",
+                    "bandwidth": "10 Gbps",
+                    "sku": "Premium",
+                    "billing_model": "UnlimitedData",
+                    "redundancy_role": "Secondary"
+                  }
+                ],
+                "vpn_configuration": [
+                  {
+                    "vpn_site_name": "Branch-London",
+                    "address_space": ["172.16.1.0/24"],
+                    "bgp_properties": {
+                      "asn": 65002,
+                      "bgp_peering_address": "172.16.1.1"
+                    },
+                    "device_properties": {
+                      "device_vendor": "Cisco",
+                      "device_model": "ASR1000",
+                      "link_speed": "1000"
+                    },
+                    "vpn_links": [
+                      {
+                        "name": "Primary-Link",
+                        "ip_address": "203.0.113.10",
+                        "bandwidth": 1000,
+                        "provider_name": "BT"
+                      },
+                      {
+                        "name": "Secondary-Link",
+                        "ip_address": "203.0.113.11",
+                        "bandwidth": 1000,
+                        "provider_name": "Virgin Media"
+                      }
+                    ]
+                  }
+                ],
+                "security_controls": {
+                  "connection_encryption": {
+                    "expressroute": "MACsec encryption at layer 2",
+                    "vpn": "IKEv2 with AES-256 and SHA-256"
+                  },
+                  "access_controls": {
+                    "network_access_control": "Azure Firewall rules for hybrid traffic",
+                    "identity_based_access": "Conditional access for hybrid resources",
+                    "privileged_access": "Just-in-time access for hybrid management"
+                  },
+                  "monitoring_and_logging": {
+                    "connection_health": "Real-time monitoring with automated alerting",
+                    "traffic_analytics": "Full packet inspection and flow analysis",
+                    "security_monitoring": "Integration with Azure Sentinel for threat detection"
+                  }
+                }
+              },
+              "explanation": "Establishes secure, redundant hybrid connectivity with comprehensive monitoring"
+            }
+          ],
+          "validation": [
+            "Verify Virtual WAN hubs provide global connectivity with optimal routing",
+            "Test traffic segmentation prevents unauthorized cross-segment communication",
+            "Confirm hybrid connectivity provides redundant, high-performance connections",
+            "Validate all traffic flows through appropriate security controls"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Advanced Firewall Security: Network Firewall to Azure Firewall Premium",
+      "estimated_time": "50 minutes",
+      "description": "Implement next-generation firewall with advanced threat protection",
+      "aws_context": {
+        "service": "AWS Network Firewall",
+        "description": "Managed firewall with stateful inspection and threat intelligence",
+        "key_features": [
+          "Stateful packet inspection with custom rules",
+          "Intrusion detection and prevention system (IDPS)",
+          "Domain-based filtering with threat intelligence",
+          "TLS inspection for encrypted traffic analysis",
+          "Integration with AWS Firewall Manager for centralized management"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Firewall Premium",
+        "description": "Next-generation firewall with advanced security capabilities",
+        "key_features": [
+          "IDPS with signature-based and anomaly-based detection",
+          "TLS inspection for end-to-end encrypted traffic analysis",
+          "URL filtering with web categorization",
+          "Threat intelligence integration with Microsoft threat feeds",
+          "Azure Firewall Manager for centralized policy management"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Azure Firewall Premium with Advanced Threat Protection",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Azure Firewall Premium with advanced security features",
+              "firewall_deployment": {
+                "firewall_configuration": {
+                  "name": "fw-globalfinance-premium",
+                  "sku": "AZFW_VNet",
+                  "tier": "Premium",
+                  "threat_intel_mode": "Alert and Deny",
+                  "zones": ["1", "2", "3"],
+                  "firewall_policy": {
+                    "name": "globalfinance-firewall-policy",
+                    "tier": "Premium",
+                    "threat_intelligence_mode": "Alert and Deny",
+                    "intrusion_detection": {
+                      "mode": "Alert and Deny",
+                      "configuration": {
+                        "signature_overrides": [
+                          {
+                            "id": "2024418",
+                            "mode": "Alert"
+                          }
+                        ],
+                        "bypass_traffic_settings": [
+                          {
+                            "name": "TrustedManagementTraffic",
+                            "protocol": "TCP",
+                            "source_addresses": ["10.10.0.0/24"],
+                            "destination_addresses": ["10.100.0.0/16"],
+                            "destination_ports": ["443", "22"]
+                          }
+                        ]
+                      }
+                    },
+                    "dns": {
+                      "servers": ["168.63.129.16", "8.8.8.8"],
+                      "enable_proxy": true
+                    },
+                    "explicit_proxy": {
+                      "enabled": true,
+                      "http_port": 8080,
+                      "https_port": 8443,
+                      "enable_pac_file": true,
+                      "pac_file_port": 8888
+                    }
+                  }
+                },
+                "advanced_features": {
+                  "tls_inspection": {
+                    "enabled": true,
+                    "certificate_authority": {
+                      "name": "GlobalFinance-CA",
+                      "key_vault_secret_id": "https://kv-globalfinance.vault.azure.net/secrets/ca-cert"
+                    },
+                    "inspection_configuration": {
+                      "inspect_inbound": true,
+                      "inspect_outbound": true,
+                      "bypass_categories": ["Financial Services", "Banking"],
+                      "bypass_fqdns": ["login.microsoftonline.com", "*.digicert.com"]
+                    }
+                  },
+                  "url_filtering": {
+                    "enabled": true,
+                    "web_categories": {
+                      "blocked_categories": [
+                        "Adult Content",
+                        "Gambling",
+                        "Social Media",
+                        "Personal File Storage",
+                        "Peer to Peer"
+                      ],
+                      "allowed_categories": [
+                        "Business",
+                        "Financial Services",
+                        "Government",
+                        "Technology"
+                      ]
+                    },
+                    "custom_url_lists": {
+                      "blocked_urls": [
+                        "*.torrent",
+                        "*.cryptocurrency",
+                        "*.malware-domain.com"
+                      ],
+                      "allowed_urls": [
+                        "*.globalfinance.com",
+                        "*.microsoft.com",
+                        "*.azure.com"
+                      ]
+                    }
+                  },
+                  "threat_intelligence": {
+                    "feeds": [
+                      "Microsoft Threat Intelligence",
+                      "Commercial Threat Feeds",
+                      "Industry-Specific Intelligence"
+                    ],
+                    "custom_indicators": {
+                      "ip_addresses": ["198.51.100.100", "203.0.113.0/24"],
+                      "domains": ["malicious-domain.com", "phishing-site.net"],
+                      "urls": ["/malicious-path", "/suspicious-endpoint"]
+                    }
+                  }
+                },
+                "azure_cli_deployment": "az network firewall create --name fw-globalfinance-premium --resource-group rg-firewall --location eastus --tier Premium --sku AZFW_VNet --vnet-name hub-eastus-vnet --public-ip fw-pip"
+              },
+              "explanation": "Deploys next-generation firewall with comprehensive threat protection and inspection capabilities"
+            },
+            {
+              "step": 2,
+              "description": "Configure comprehensive firewall rules and policies",
+              "firewall_rules": {
+                "network_rules": [
+                  {
+                    "rule_collection_group": "Production-Network-Rules",
+                    "priority": 1000,
+                    "rules": [
+                      {
+                        "name": "Allow-Production-to-SharedServices",
+                        "rule_type": "NetworkRule",
+                        "source_addresses": ["10.100.0.0/16"],
+                        "destination_addresses": ["10.10.0.0/16"],
+                        "destination_ports": ["53", "443", "22"],
+                        "ip_protocols": ["TCP", "UDP"],
+                        "action": "Allow"
+                      },
+                      {
+                        "name": "Block-Cross-Environment",
+                        "rule_type": "NetworkRule",
+                        "source_addresses": ["10.100.0.0/16"],
+                        "destination_addresses": ["10.200.0.0/16"],
+                        "destination_ports": ["*"],
+                        "ip_protocols": ["Any"],
+                        "action": "Deny"
+                      },
+                      {
+                        "name": "Allow-HTTPS-Outbound",
+                        "rule_type": "NetworkRule",
+                        "source_addresses": ["10.100.0.0/16", "10.200.0.0/16"],
+                        "destination_addresses": ["*"],
+                        "destination_ports": ["443"],
+                        "ip_protocols": ["TCP"],
+                        "action": "Allow"
+                      }
+                    ]
+                  }
+                ],
+                "application_rules": [
+                  {
+                    "rule_collection_group": "Production-Application-Rules",
+                    "priority": 2000,
+                    "rules": [
+                      {
+                        "name": "Allow-Business-Applications",
+                        "rule_type": "ApplicationRule",
+                        "source_addresses": ["10.100.0.0/16"],
+                        "protocols": [
+                          {
+                            "protocol_type": "Https",
+                            "port": 443
+                          }
+                        ],
+                        "target_fqdns": [
+                          "*.microsoft.com",
+                          "*.azure.com",
+                          "*.office.com",
+                          "*.globalfinance.com"
+                        ],
+                        "action": "Allow"
+                      },
+                      {
+                        "name": "Block-Social-Media",
+                        "rule_type": "ApplicationRule",
+                        "source_addresses": ["10.100.0.0/16", "10.200.0.0/16"],
+                        "protocols": [
+                          {
+                            "protocol_type": "Https",
+                            "port": 443
+                          }
+                        ],
+                        "web_categories": ["Social Media", "Entertainment"],
+                        "action": "Deny"
+                      },
+                      {
+                        "name": "Allow-Development-Tools",
+                        "rule_type": "ApplicationRule",
+                        "source_addresses": ["10.200.0.0/16"],
+                        "protocols": [
+                          {
+                            "protocol_type": "Https",
+                            "port": 443
+                          }
+                        ],
+                        "target_fqdns": [
+                          "*.github.com",
+                          "*.nuget.org",
+                          "*.docker.com",
+                          "*.npmjs.com"
+                        ],
+                        "action": "Allow"
+                      }
+                    ]
+                  }
+                ],
+                "nat_rules": [
+                  {
+                    "rule_collection_group": "Inbound-NAT-Rules",
+                    "priority": 3000,
+                    "rules": [
+                      {
+                        "name": "HTTPS-to-WebApp",
+                        "rule_type": "NatRule",
+                        "source_addresses": ["*"],
+                        "destination_addresses": ["40.112.72.205"],
+                        "destination_ports": ["443"],
+                        "ip_protocols": ["TCP"],
+                        "translated_address": "10.100.1.100",
+                        "translated_port": "443"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Implements comprehensive firewall policies with zero trust and defense-in-depth principles"
+            },
+            {
+              "step": 3,
+              "description": "Configure advanced monitoring and threat response",
+              "monitoring_configuration": {
+                "diagnostic_settings": {
+                  "enabled": true,
+                  "log_analytics_workspace": "law-globalfinance-security",
+                  "logs": [
+                    {
+                      "category": "AzureFirewallApplicationRule",
+                      "enabled": true,
+                      "retention_days": 90
+                    },
+                    {
+                      "category": "AzureFirewallNetworkRule",
+                      "enabled": true,
+                      "retention_days": 90
+                    },
+                    {
+                      "category": "AzureFirewallDnsProxy",
+                      "enabled": true,
+                      "retention_days": 90
+                    },
+                    {
+                      "category": "AZFWIdpsSignature",
+                      "enabled": true,
+                      "retention_days": 365
+                    },
+                    {
+                      "category": "AZFWThreatIntel",
+                      "enabled": true,
+                      "retention_days": 365
+                    }
+                  ],
+                  "metrics": [
+                    {
+                      "category": "AllMetrics",
+                      "enabled": true,
+                      "retention_days": 30
+                    }
+                  ]
+                },
+                "alert_rules": [
+                  {
+                    "alert_name": "High-Threat-Activity",
+                    "description": "Alert on high volume of threat intelligence matches",
+                    "severity": 1,
+                    "evaluation_frequency": "5 minutes",
+                    "window_size": "10 minutes",
+                    "criteria": {
+                      "metric_name": "ThreatIntelMatches",
+                      "operator": "GreaterThan",
+                      "threshold": 10,
+                      "aggregation": "Total"
+                    },
+                    "action_groups": ["ag-security-critical"]
+                  },
+                  {
+                    "alert_name": "IDPS-Signature-Matches",
+                    "description": "Alert on IDPS signature detections",
+                    "severity": 2,
+                    "evaluation_frequency": "5 minutes",
+                    "window_size": "15 minutes",
+                    "criteria": {
+                      "metric_name": "IDPSMatches",
+                      "operator": "GreaterThan",
+                      "threshold": 5,
+                      "aggregation": "Total"
+                    },
+                    "action_groups": ["ag-security-warning"]
+                  }
+                ],
+                "automated_response": {
+                  "incident_response_playbooks": [
+                    {
+                      "trigger": "High threat activity detected",
+                      "actions": [
+                        "Create high-priority incident in Azure Sentinel",
+                        "Notify security operations center",
+                        "Automatically block suspicious IP addresses",
+                        "Increase logging verbosity for affected resources"
+                      ]
+                    },
+                    {
+                      "trigger": "Multiple IDPS signatures from same source",
+                      "actions": [
+                        "Temporarily block source IP address",
+                        "Create investigation case",
+                        "Notify network security team",
+                        "Initiate forensic data collection"
+                      ]
+                    }
+                  ]
+                },
+                "performance_monitoring": {
+                  "throughput_monitoring": {
+                    "enabled": true,
+                    "thresholds": {
+                      "data_processed_warning": "80% of capacity",
+                      "data_processed_critical": "95% of capacity"
+                    }
+                  },
+                  "latency_monitoring": {
+                    "enabled": true,
+                    "thresholds": {
+                      "response_time_warning": "100ms",
+                      "response_time_critical": "500ms"
+                    }
+                  }
+                }
+              },
+              "explanation": "Establishes comprehensive monitoring with automated threat response and performance tracking"
+            }
+          ],
+          "validation": [
+            "Verify Azure Firewall Premium provides comprehensive threat protection",
+            "Test IDPS and TLS inspection detect and block malicious traffic",
+            "Confirm URL filtering and web categorization work correctly",
+            "Validate automated threat response and incident creation"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Network Analytics and Threat Detection: Flow Logs to Network Watcher",
+      "estimated_time": "40 minutes",
+      "description": "Implement comprehensive network monitoring and threat detection",
+      "aws_context": {
+        "service": "VPC Flow Logs + GuardDuty",
+        "description": "Network traffic analysis with machine learning-based threat detection",
+        "key_features": [
+          "VPC Flow Logs for detailed network traffic recording",
+          "GuardDuty for ML-based anomaly and threat detection",
+          "Integration with CloudWatch for monitoring and alerting",
+          "Threat intelligence feeds and IoC detection",
+          "DNS monitoring for malicious domain detection"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Network Watcher + Azure Sentinel",
+        "description": "Comprehensive network monitoring with advanced analytics and threat hunting",
+        "key_features": [
+          "NSG Flow Logs for detailed traffic analysis with Traffic Analytics",
+          "Azure Sentinel for advanced threat detection and hunting",
+          "Integration with Azure Monitor for comprehensive monitoring",
+          "Machine learning-based anomaly detection",
+          "Advanced threat intelligence and behavioral analytics"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Advanced Network Monitoring and Threat Detection",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure comprehensive network flow monitoring",
+              "network_monitoring": {
+                "nsg_flow_logs": {
+                  "configuration": {
+                    "enabled": true,
+                    "version": 2,
+                    "retention_days": 90,
+                    "storage_account": "saglobalfinancenetflow",
+                    "traffic_analytics": {
+                      "enabled": true,
+                      "workspace_id": "law-globalfinance-security",
+                      "interval": 10
+                    }
+                  },
+                  "enhanced_flow_logs": {
+                    "flow_timeout_in_minutes": 10,
+                    "enable_flow_timeout": true,
+                    "flow_logs_s2s_enabled": true
+                  },
+                  "scope": [
+                    "All production NSGs",
+                    "All development NSGs",
+                    "All shared services NSGs"
+                  ]
+                },
+                "traffic_analytics": {
+                  "advanced_analytics": {
+                    "geo_mapping": true,
+                    "security_analytics": true,
+                    "flow_distribution_analytics": true,
+                    "frequent_hosts_analytics": true
+                  },
+                  "custom_queries": [
+                    {
+                      "name": "Suspicious-External-Connections",
+                      "description": "Detect connections to known malicious IP ranges",
+                      "query": "AzureNetworkAnalytics_CL | where FlowDirection_s == 'O' | where DestIP_s in ('198.51.100.0', '203.0.113.0') | summarize Count=count() by SrcIP_s, DestIP_s",
+                      "frequency": "5 minutes"
+                    },
+                    {
+                      "name": "Unusual-Port-Activity",
+                      "description": "Detect connections to unusual or high-risk ports",
+                      "query": "AzureNetworkAnalytics_CL | where DestPort_d in (1433, 3389, 22, 21, 23) | where FlowDirection_s == 'I' | summarize Count=count() by SrcIP_s, DestPort_d",
+                      "frequency": "10 minutes"
+                    },
+                    {
+                      "name": "High-Volume-Data-Transfer",
+                      "description": "Detect unusually high data transfer volumes",
+                      "query": "AzureNetworkAnalytics_CL | summarize TotalBytes=sum(FlowCount_d) by SrcIP_s, DestIP_s | where TotalBytes > 1000000000",
+                      "frequency": "15 minutes"
+                    }
+                  ]
+                },
+                "network_watcher_tools": {
+                  "connection_monitor": {
+                    "monitors": [
+                      {
+                        "name": "Production-Connectivity-Monitor",
+                        "test_groups": [
+                          {
+                            "name": "WebTier-to-Database",
+                            "sources": ["web-vm-01", "web-vm-02"],
+                            "destinations": ["db-vm-01", "db-vm-02"],
+                            "test_configurations": [
+                              {
+                                "name": "SQL-Connectivity",
+                                "protocol": "TCP",
+                                "destination_port": 1433,
+                                "frequency": 60
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "packet_capture": {
+                    "automated_capture": {
+                      "trigger_conditions": [
+                        "Security alert triggered",
+                        "Unusual network pattern detected",
+                        "Performance threshold exceeded"
+                      ],
+                      "capture_duration": 300,
+                      "maximum_bytes_per_session": 1073741824,
+                      "maximum_bytes_per_packet": 262144
+                    }
+                  }
+                }
+              },
+              "explanation": "Establishes comprehensive network monitoring with advanced analytics and automated capture"
+            },
+            {
+              "step": 2,
+              "description": "Configure Azure Sentinel for advanced threat detection",
+              "sentinel_configuration": {
+                "workspace_configuration": {
+                  "name": "sentinel-globalfinance-security",
+                  "pricing_tier": "PerGB2018",
+                  "retention_days": 730,
+                  "daily_quota_gb": 50,
+                  "data_connectors": [
+                    "Azure Activity",
+                    "Azure Security Center",
+                    "Azure Firewall",
+                    "DNS",
+                    "Network Security Groups",
+                    "Azure Information Protection",
+                    "Microsoft Cloud App Security",
+                    "Azure Advanced Threat Protection"
+                  ]
+                },
+                "analytics_rules": [
+                  {
+                    "rule_name": "Suspicious-Network-Beacon",
+                    "description": "Detect potential C2 beaconing behavior",
+                    "severity": "High",
+                    "tactics": ["Command and Control"],
+                    "techniques": ["T1071", "T1573"],
+                    "query": "AzureNetworkAnalytics_CL | where TimeGenerated > ago(1h) | summarize count() by SrcIP_s, DestIP_s, bin(TimeGenerated, 5m) | where count_ > 10 | project SrcIP_s, DestIP_s, TimeGenerated, count_",
+                    "query_frequency": "PT5M",
+                    "query_period": "PT1H",
+                    "trigger_operator": "GreaterThan",
+                    "trigger_threshold": 0
+                  },
+                  {
+                    "rule_name": "Data-Exfiltration-Pattern",
+                    "description": "Detect potential data exfiltration based on traffic patterns",
+                    "severity": "High",
+                    "tactics": ["Exfiltration"],
+                    "techniques": ["T1041"],
+                    "query": "AzureNetworkAnalytics_CL | where FlowDirection_s == 'O' | summarize TotalBytes=sum(FlowCount_d) by SrcIP_s, DestIP_s, bin(TimeGenerated, 1h) | where TotalBytes > 5000000000",
+                    "query_frequency": "PT1H",
+                    "query_period": "PT6H",
+                    "trigger_operator": "GreaterThan",
+                    "trigger_threshold": 0
+                  },
+                  {
+                    "rule_name": "Lateral-Movement-Detection",
+                    "description": "Detect potential lateral movement within the network",
+                    "severity": "Medium",
+                    "tactics": ["Lateral Movement"],
+                    "techniques": ["T1570"],
+                    "query": "AzureNetworkAnalytics_CL | where FlowDirection_s == 'I' | where DestPort_d in (135, 445, 139, 3389, 5985, 5986) | summarize UniqueDestinations=dcount(DestIP_s) by SrcIP_s | where UniqueDestinations > 5",
+                    "query_frequency": "PT15M",
+                    "query_period": "PT1H",
+                    "trigger_operator": "GreaterThan",
+                    "trigger_threshold": 0
+                  }
+                ],
+                "hunting_queries": [
+                  {
+                    "query_name": "Rare-Process-Network-Connections",
+                    "category": "Network",
+                    "description": "Hunt for processes making unusual network connections",
+                    "query": "SecurityEvent | where EventID == 4688 | where ProcessName has_any ('cmd.exe', 'powershell.exe', 'wscript.exe') | join kind=inner (AzureNetworkAnalytics_CL | where FlowDirection_s == 'O') on $left.Computer == $right.VM_s",
+                    "techniques": ["T1059", "T1071"]
+                  },
+                  {
+                    "query_name": "Anomalous-DNS-Queries",
+                    "category": "DNS",
+                    "description": "Hunt for unusual DNS query patterns",
+                    "query": "DnsEvents | where Name has_any ('.tk', '.ml', '.ga', '.cf') or Name matches regex @'[a-f0-9]{32,}\\.' | summarize count() by Name, ClientIP",
+                    "techniques": ["T1071.004"]
+                  }
+                ],
+                "automation_playbooks": [
+                  {
+                    "playbook_name": "Incident-Response-Network-Isolation",
+                    "trigger": "High severity network security incident",
+                    "actions": [
+                      {
+                        "action": "Isolate affected VM",
+                        "method": "Update NSG to block all traffic except management"
+                      },
+                      {
+                        "action": "Collect forensic data",
+                        "method": "Trigger packet capture and memory dump"
+                      },
+                      {
+                        "action": "Notify security team",
+                        "method": "Send Teams/email notification with incident details"
+                      },
+                      {
+                        "action": "Create investigation case",
+                        "method": "Auto-create ServiceNow ticket with evidence"
+                      }
+                    ]
+                  },
+                  {
+                    "playbook_name": "Threat-Intelligence-Enrichment",
+                    "trigger": "New network indicators detected",
+                    "actions": [
+                      {
+                        "action": "Enrich with threat intelligence",
+                        "method": "Query VirusTotal, Shodan, and commercial feeds"
+                      },
+                      {
+                        "action": "Update firewall rules",
+                        "method": "Add malicious IPs to Azure Firewall threat intelligence"
+                      },
+                      {
+                        "action": "Update watchlists",
+                        "method": "Add indicators to Sentinel watchlists"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Implements advanced threat detection with machine learning and automated response capabilities"
+            }
+          ],
+          "validation": [
+            "Verify NSG Flow Logs capture comprehensive network traffic data",
+            "Test Azure Sentinel analytics rules detect simulated attacks",
+            "Confirm automated playbooks respond correctly to security incidents",
+            "Validate threat intelligence integration enhances detection capabilities"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Application Security: WAF and DDoS Protection",
+      "estimated_time": "45 minutes",
+      "description": "Implement advanced application-layer security and DDoS protection",
+      "aws_context": {
+        "service": "AWS WAF + Shield Advanced",
+        "description": "Application firewall with advanced DDoS protection",
+        "key_features": [
+          "AWS WAF for application-layer filtering and protection",
+          "Shield Advanced for enhanced DDoS protection",
+          "Rate limiting and geo-blocking capabilities",
+          "Bot management and OWASP rule sets",
+          "Integration with CloudFront and Application Load Balancer"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Application Gateway WAF + DDoS Protection",
+        "description": "Comprehensive application security with intelligent DDoS protection",
+        "key_features": [
+          "Application Gateway WAF v2 with OWASP and custom rules",
+          "DDoS Protection Standard and Premium for enhanced protection",
+          "Bot protection and rate limiting capabilities",
+          "Geographic filtering and IP reputation intelligence",
+          "Integration with Azure Front Door and Load Balancer"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Advanced Application Security and DDoS Protection",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Application Gateway with advanced WAF protection",
+              "application_gateway_configuration": {
+                "gateway_configuration": {
+                  "name": "appgw-globalfinance-prod",
+                  "sku": "WAF_v2",
+                  "tier": "WAF_v2",
+                  "capacity": {
+                    "min": 2,
+                    "max": 20,
+                    "default": 5
+                  },
+                  "zones": ["1", "2", "3"],
+                  "enable_http2": true,
+                  "public_ip": "pip-appgw-globalfinance"
+                },
+                "waf_configuration": {
+                  "enabled": true,
+                  "firewall_mode": "Prevention",
+                  "rule_set_type": "OWASP",
+                  "rule_set_version": "3.2",
+                  "disabled_rule_groups": [],
+                  "disabled_rules": [],
+                  "request_body_check": true,
+                  "max_request_body_size_in_kb": 128,
+                  "file_upload_limit_in_mb": 100
+                },
+                "custom_rules": [
+                  {
+                    "name": "BlockSuspiciousUserAgents",
+                    "priority": 100,
+                    "rule_type": "MatchRule",
+                    "action": "Block",
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "RequestHeaders",
+                            "selector": "User-Agent"
+                          }
+                        ],
+                        "operator": "Contains",
+                        "negation_condition": false,
+                        "match_values": ["sqlmap", "nmap", "nikto", "dirb", "masscan"]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RateLimitPerIP",
+                    "priority": 200,
+                    "rule_type": "RateLimitRule",
+                    "action": "Block",
+                    "rate_limit_duration_in_minutes": 1,
+                    "rate_limit_threshold": 100,
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "RemoteAddr"
+                          }
+                        ],
+                        "operator": "IPMatch",
+                        "negation_condition": false,
+                        "match_values": ["0.0.0.0/0"]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "GeoBlockHighRiskCountries",
+                    "priority": 300,
+                    "rule_type": "MatchRule",
+                    "action": "Block",
+                    "match_conditions": [
+                      {
+                        "match_variables": [
+                          {
+                            "variable_name": "RemoteAddr"
+                          }
+                        ],
+                        "operator": "GeoMatch",
+                        "negation_condition": false,
+                        "match_values": ["CN", "RU", "KP", "IR"]
+                      }
+                    ]
+                  }
+                ],
+                "managed_rule_sets": [
+                  {
+                    "rule_set_type": "OWASP",
+                    "rule_set_version": "3.2",
+                    "rule_group_overrides": [
+                      {
+                        "rule_group_name": "REQUEST-942-APPLICATION-ATTACK-SQLI",
+                        "rules": [
+                          {
+                            "rule_id": "942100",
+                            "enabled": true,
+                            "action": "Block"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "rule_set_type": "Microsoft_BotManagerRuleSet",
+                    "rule_set_version": "0.1",
+                    "rule_group_overrides": []
+                  }
+                ]
+              },
+              "explanation": "Deploys enterprise-grade application gateway with comprehensive WAF protection"
+            },
+            {
+              "step": 2,
+              "description": "Configure DDoS Protection Premium with advanced mitigation",
+              "ddos_protection": {
+                "ddos_protection_plan": {
+                  "name": "ddos-globalfinance-premium",
+                  "location": "Global",
+                  "sku": "Premium",
+                  "protected_resources": [
+                    "pip-appgw-globalfinance",
+                    "pip-firewall-globalfinance",
+                    "pip-vpngateway-globalfinance"
+                  ]
+                },
+                "protection_policies": [
+                  {
+                    "policy_name": "WebApplicationProtection",
+                    "resource_type": "PublicIP",
+                    "protection_mode": "VirtualNetworkInherited",
+                    "ddos_custom_policy": {
+                      "protocol_custom_settings": [
+                        {
+                          "protocol": "TCP",
+                          "trigger_rate_override": 25000,
+                          "source_rate_override": 10000,
+                          "trigger_sensitivity_override": "Relaxed"
+                        },
+                        {
+                          "protocol": "UDP",
+                          "trigger_rate_override": 10000,
+                          "source_rate_override": 5000,
+                          "trigger_sensitivity_override": "Default"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "monitoring_configuration": {
+                  "ddos_protection_notifications": {
+                    "notification_type": "Email",
+                    "email_addresses": ["security@globalfinance.com", "noc@globalfinance.com"]
+                  },
+                  "ddos_protection_telemetry": {
+                    "enabled": true,
+                    "log_analytics_workspace": "law-globalfinance-security",
+                    "metrics": [
+                      "DDoSProviderUnderAttack",
+                      "DDoSMitigationFlowLogs",
+                      "DDoSMitigationReports",
+                      "DDoSProtectionNotifications"
+                    ]
+                  }
+                },
+                "rapid_response": {
+                  "enabled": true,
+                  "contact_information": {
+                    "primary_contact": "security@globalfinance.com",
+                    "secondary_contact": "ciso@globalfinance.com",
+                    "phone": "+1-555-0199"
+                  },
+                  "escalation_policy": "Immediate escalation for attacks > 10 Gbps"
+                }
+              },
+              "explanation": "Implements premium DDoS protection with advanced monitoring and rapid response"
+            },
+            {
+              "step": 3,
+              "description": "Configure advanced monitoring and automated response",
+              "security_monitoring": {
+                "waf_monitoring": {
+                  "diagnostic_settings": {
+                    "enabled": true,
+                    "log_categories": [
+                      "ApplicationGatewayAccessLog",
+                      "ApplicationGatewayPerformanceLog",
+                      "ApplicationGatewayFirewallLog"
+                    ],
+                    "destination": "law-globalfinance-security",
+                    "retention_days": 90
+                  },
+                  "custom_analytics": [
+                    {
+                      "query_name": "WAF-Attack-Patterns",
+                      "description": "Identify attack patterns and sources",
+                      "query": "AzureDiagnostics | where Category == 'ApplicationGatewayFirewallLog' | where action_s == 'Blocked' | summarize AttackCount=count() by clientIP_s, ruleId_s | order by AttackCount desc",
+                      "frequency": "PT5M"
+                    },
+                    {
+                      "query_name": "Geographic-Attack-Analysis",
+                      "description": "Analyze attacks by geographic location",
+                      "query": "AzureDiagnostics | where Category == 'ApplicationGatewayFirewallLog' | where action_s == 'Blocked' | extend GeoInfo=geo_info_from_ip_address(clientIP_s) | summarize AttackCount=count() by tostring(GeoInfo.country) | order by AttackCount desc",
+                      "frequency": "PT15M"
+                    }
+                  ]
+                },
+                "automated_response": {
+                  "incident_response_automation": [
+                    {
+                      "trigger": "High volume of WAF blocks from single IP",
+                      "condition": "More than 100 blocks in 5 minutes",
+                      "actions": [
+                        "Add IP to custom WAF block list",
+                        "Create high-priority security incident",
+                        "Notify security operations center",
+                        "Initiate threat intelligence lookup"
+                      ]
+                    },
+                    {
+                      "trigger": "DDoS attack detected",
+                      "condition": "DDoS protection activation",
+                      "actions": [
+                        "Activate emergency response team",
+                        "Scale up Application Gateway capacity",
+                        "Enable additional monitoring and logging",
+                        "Prepare communication for stakeholders"
+                      ]
+                    }
+                  ],
+                  "threat_intelligence_integration": {
+                    "enabled": true,
+                    "feeds": [
+                      "Microsoft Threat Intelligence",
+                      "Commercial IP reputation feeds",
+                      "Industry-specific threat feeds"
+                    ],
+                    "update_frequency": "PT1H",
+                    "automatic_blocking": true
+                  }
+                },
+                "performance_monitoring": {
+                  "application_gateway_metrics": [
+                    "Throughput",
+                    "TotalRequests", 
+                    "FailedRequests",
+                    "ResponseStatus",
+                    "UnhealthyBackendCount"
+                  ],
+                  "alert_rules": [
+                    {
+                      "alert_name": "High-Error-Rate",
+                      "metric": "FailedRequests",
+                      "threshold": 100,
+                      "time_aggregation": "Total",
+                      "frequency": "PT5M",
+                      "severity": 2
+                    },
+                    {
+                      "alert_name": "Backend-Health-Issues",
+                      "metric": "UnhealthyBackendCount",
+                      "threshold": 1,
+                      "time_aggregation": "Average",
+                      "frequency": "PT1M",
+                      "severity": 1
+                    }
+                  ]
+                }
+              },
+              "explanation": "Establishes comprehensive security monitoring with automated threat response"
+            }
+          ],
+          "validation": [
+            "Verify Application Gateway WAF blocks malicious requests correctly",
+            "Test DDoS Protection activates during simulated attack scenarios",
+            "Confirm automated response systems react appropriately to threats",
+            "Validate performance monitoring provides accurate application health metrics"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "Network Security Consolidation",
+      "aws_comparison": "Separate costs for multiple security services and appliances",
+      "azure_model": "Integrated security services with centralized management",
+      "optimization_strategies": [
+        "Consolidate security functions into Azure Firewall Premium",
+        "Use Virtual WAN for centralized connectivity and reduced complexity",
+        "Implement Azure DDoS Protection Standard for basic protection",
+        "Leverage built-in WAF capabilities in Application Gateway"
+      ],
+      "estimated_savings": "30-50% reduction in network security infrastructure costs"
+    },
+    {
+      "area": "Monitoring and Analytics",
+      "aws_comparison": "Separate costs for VPC Flow Logs, GuardDuty, and CloudWatch",
+      "azure_model": "Integrated monitoring with Azure Monitor and Sentinel",
+      "optimization_strategies": [
+        "Use Traffic Analytics for comprehensive flow analysis",
+        "Implement Azure Sentinel for unified security monitoring",
+        "Leverage built-in network monitoring in Network Watcher",
+        "Optimize log retention and storage based on compliance requirements"
+      ],
+      "estimated_savings": "25-40% reduction in monitoring and analytics costs"
+    },
+    {
+      "area": "Global Connectivity",
+      "aws_comparison": "Multiple Transit Gateways and cross-region peering costs",
+      "azure_model": "Virtual WAN with optimized global routing",
+      "optimization_strategies": [
+        "Use Virtual WAN for optimized global connectivity",
+        "Implement ExpressRoute Global Reach for efficient routing",
+        "Leverage Azure backbone for inter-region traffic",
+        "Optimize bandwidth allocation based on actual usage patterns"
+      ],
+      "estimated_savings": "20-35% reduction in global connectivity costs"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Network Segmentation",
+      "practices": [
+        "Implement zero trust network architecture with micro-segmentation",
+        "Use Azure Firewall for centralized traffic inspection and filtering",
+        "Apply least privilege network access controls",
+        "Implement network security groups for defense in depth"
+      ]
+    },
+    {
+      "category": "Threat Detection",
+      "practices": [
+        "Enable comprehensive logging and monitoring across all network components",
+        "Use Azure Sentinel for advanced threat detection and response",
+        "Implement automated incident response and threat hunting",
+        "Integrate threat intelligence feeds for enhanced detection"
+      ]
+    },
+    {
+      "category": "Application Security",
+      "practices": [
+        "Use Application Gateway WAF for comprehensive application protection",
+        "Implement DDoS Protection Premium for critical applications",
+        "Enable bot protection and rate limiting",
+        "Regularly update and tune WAF rules based on threat landscape"
+      ]
+    },
+    {
+      "category": "Hybrid Security",
+      "practices": [
+        "Secure hybrid connectivity with ExpressRoute private peering",
+        "Implement conditional access for hybrid resource access",
+        "Use Azure Private Link for secure service connectivity",
+        "Monitor and audit all hybrid traffic flows"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Assessment",
+      "tasks": [
+        "Document current AWS network architecture and security configurations",
+        "Assess current firewall rules, WAF policies, and security controls",
+        "Analyze network traffic patterns and performance requirements",
+        "Review compliance and regulatory requirements",
+        "Plan Azure network architecture with security and performance optimization"
+      ]
+    },
+    {
+      "phase": "Azure Network Foundation",
+      "tasks": [
+        "Deploy Virtual WAN with regional hubs and security services",
+        "Configure Azure Firewall Premium with advanced threat protection",
+        "Set up Application Gateway with WAF and DDoS Protection",
+        "Implement Network Watcher and Traffic Analytics",
+        "Configure Azure Sentinel for network security monitoring"
+      ]
+    },
+    {
+      "phase": "Security Migration",
+      "tasks": [
+        "Migrate firewall rules and security policies to Azure Firewall",
+        "Configure WAF rules and DDoS protection policies",
+        "Set up network monitoring and analytics",
+        "Implement automated threat detection and response",
+        "Establish security monitoring and alerting"
+      ]
+    },
+    {
+      "phase": "Testing and Validation",
+      "tasks": [
+        "Test network connectivity and performance across all paths",
+        "Validate security controls and policy enforcement",
+        "Conduct penetration testing and security validation",
+        "Test disaster recovery and failover scenarios",
+        "Verify monitoring and alerting functionality"
+      ]
+    },
+    {
+      "phase": "Optimization and Operations",
+      "tasks": [
+        "Optimize network performance and security configurations",
+        "Implement continuous security monitoring and improvement",
+        "Establish operational procedures and documentation",
+        "Train teams on Azure network security management",
+        "Implement continuous compliance and audit processes"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Virtual WAN Connectivity Problems",
+      "symptoms": [
+        "Sites cannot connect to Virtual WAN hubs",
+        "Inter-hub connectivity issues",
+        "Routing problems between spokes"
+      ],
+      "solutions": [
+        "Verify Virtual WAN hub configurations and address spaces",
+        "Check route table configurations and propagation settings",
+        "Validate ExpressRoute and VPN gateway connectivity",
+        "Monitor Virtual WAN metrics and connection health",
+        "Review firewall rules that might block traffic"
+      ]
+    },
+    {
+      "issue": "Azure Firewall Performance Issues",
+      "symptoms": [
+        "High latency through firewall",
+        "Dropped connections or timeouts",
+        "Firewall CPU or memory utilization high"
+      ],
+      "solutions": [
+        "Review firewall rules for efficiency and optimization",
+        "Check firewall metrics and performance counters",
+        "Validate firewall sizing and scale requirements",
+        "Optimize rule processing order and complexity",
+        "Consider firewall policy optimization and tuning"
+      ]
+    },
+    {
+      "issue": "WAF False Positives",
+      "symptoms": [
+        "Legitimate traffic being blocked by WAF",
+        "Applications not functioning correctly",
+        "Excessive WAF alerts and blocks"
+      ],
+      "solutions": [
+        "Review WAF logs and blocked request details",
+        "Tune WAF rules and exclusions based on application requirements",
+        "Implement custom rules for application-specific patterns",
+        "Use WAF policy testing and monitoring tools",
+        "Regularly review and update WAF rule sets"
+      ]
+    },
+    {
+      "issue": "Network Monitoring Gaps",
+      "symptoms": [
+        "Missing network traffic data in logs",
+        "Incomplete threat detection coverage",
+        "Alert fatigue from false positives"
+      ],
+      "solutions": [
+        "Verify NSG Flow Logs configuration and retention",
+        "Check Traffic Analytics workspace connectivity",
+        "Review Azure Sentinel data connector configurations",
+        "Tune analytics rules and alert thresholds",
+        "Validate network monitoring coverage across all resources"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure Virtual WAN documentation - https://docs.microsoft.com/en-us/azure/virtual-wan/",
+        "Azure Firewall Premium documentation - https://docs.microsoft.com/en-us/azure/firewall/",
+        "Azure Application Gateway WAF documentation - https://docs.microsoft.com/en-us/azure/web-application-firewall/",
+        "Azure DDoS Protection documentation - https://docs.microsoft.com/en-us/azure/ddos-protection/"
+      ]
+    },
+    {
+      "type": "Best Practices Guides",
+      "links": [
+        "Zero trust network architecture design patterns and implementation",
+        "Azure network security best practices and configuration guidelines",
+        "Advanced threat detection and response strategies",
+        "Network performance optimization and troubleshooting techniques"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS to Azure network architecture migration patterns and strategies",
+        "Advanced networking security migration planning and execution",
+        "Network monitoring and analytics migration best practices",
+        "Application security and DDoS protection migration guidance"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Network Function Manager for advanced network services",
+    "Set up Azure Private DNS for hybrid name resolution",
+    "Configure Azure ExpressRoute Global Reach for optimized connectivity",
+    "Explore Azure Virtual Network Manager for centralized network management",
+    "Implement Azure Web Application Firewall policies at scale",
+    "Set up Azure Network Security Perimeter for advanced micro-segmentation"
+  ]
+}

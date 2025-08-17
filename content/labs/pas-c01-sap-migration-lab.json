@@ -1,0 +1,236 @@
+{
+  "id": "pas-c01-sap-migration-lab",
+  "title": "SAP Migration to AWS and Azure: Heterogeneous System Copy, Database Migration, and Cloud Transformation",
+  "category": "sap-migration",
+  "difficulty": "expert",
+  "estimatedTime": "260 minutes",
+  "description": "Master SAP migration strategies by executing complex migrations from on-premises to AWS using various migration methods, tools, and patterns, then implementing equivalent migration approaches on Azure with comprehensive assessment, planning, and execution.",
+  "awsCertification": "PAS-C01",
+  "certificationWeight": "25% - Migration of SAP Workloads to AWS Domain",
+  "awsServices": [
+    "AWS Migration Hub",
+    "AWS Application Discovery Service",
+    "CloudEndure Migration",
+    "AWS Database Migration Service",
+    "AWS DataSync",
+    "AWS Snow Family",
+    "AWS Direct Connect",
+    "AWS Storage Gateway",
+    "AWS Backup",
+    "EC2 Image Builder",
+    "Systems Manager",
+    "CloudFormation"
+  ],
+  "azureServices": [
+    "Azure Migrate",
+    "Azure Site Recovery",
+    "Azure Database Migration Service",
+    "Azure Data Box",
+    "Azure File Sync",
+    "ExpressRoute",
+    "Azure Backup",
+    "Azure Image Builder",
+    "Azure Automation",
+    "ARM Templates",
+    "Azure Center for SAP"
+  ],
+  "prerequisites": [
+    "Deep understanding of SAP system architecture",
+    "Experience with SAP Basis operations",
+    "Knowledge of database migration techniques",
+    "Understanding of SAP migration methodologies",
+    "Familiarity with cloud migration tools and patterns"
+  ],
+  "learningObjectives": [
+    "Plan and assess SAP migration to cloud platforms",
+    "Execute homogeneous and heterogeneous system copies",
+    "Perform SAP database migrations with minimal downtime",
+    "Implement SAP-specific migration tools and techniques",
+    "Design hybrid connectivity for phased migrations",
+    "Execute migration validation and cutover procedures",
+    "Implement post-migration optimization"
+  ],
+  "businessScenario": {
+    "description": "EnterpriseRetailCorp needs to migrate their complete SAP landscape including ECC 6.0, BW/4HANA, and multiple SAP applications from on-premises data centers to cloud, involving 50TB of data, 200+ interfaces, with maximum 4-hour downtime window.",
+    "requirements": [
+      "Migrate SAP ECC 6.0 (15TB) to cloud infrastructure",
+      "Migrate BW/4HANA (20TB) with Unicode conversion",
+      "Migrate 15+ SAP application servers",
+      "Maximum 4-hour downtime for production cutover",
+      "Maintain all integrations and interfaces",
+      "Ensure data integrity and compliance",
+      "Achieve 20% performance improvement post-migration"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Migration Assessment and Planning",
+      "content": "Conduct comprehensive SAP migration assessment with discovery, analysis, and detailed planning.",
+      "hands-on": {
+        "aws": "1. Deploy AWS Application Discovery Service\\n2. Use SAP Migration Evaluator for TCO analysis\\n3. Assess with SAP Readiness Check\\n4. Create migration wave planning\\n5. Design target architecture on AWS\\n6. Plan network connectivity strategy\\n7. Develop migration runbook",
+        "azure": "1. Deploy Azure Migrate for SAP discovery\\n2. Use Azure TCO Calculator for SAP\\n3. Run SAP assessment tools\\n4. Create phased migration strategy\\n5. Design target Azure architecture\\n6. Plan ExpressRoute connectivity\\n7. Develop detailed migration plan"
+      }
+    },
+    {
+      "title": "Database Migration Strategies",
+      "content": "Implement various SAP database migration techniques including homogeneous and heterogeneous migrations.",
+      "hands-on": {
+        "aws": "1. Configure SAP Database Migration Option (DMO)\\n2. Set up AWS DMS for SAP databases\\n3. Implement SAP HANA System Replication\\n4. Configure backup/restore migration\\n5. Execute R3load export/import\\n6. Perform SUM with DMO\\n7. Validate database consistency",
+        "azure": "1. Configure DMO for Azure migration\\n2. Set up Azure DMS for SAP\\n3. Implement HSR to Azure\\n4. Configure Azure Backup migration\\n5. Execute heterogeneous system copy\\n6. Perform SUM DMO migration\\n7. Validate data integrity"
+      }
+    },
+    {
+      "title": "Application Server Migration",
+      "content": "Migrate SAP application servers using various techniques including lift-and-shift and re-platforming.",
+      "hands-on": {
+        "aws": "1. Use CloudEndure for server replication\\n2. Configure EC2 Image Builder\\n3. Implement blue-green deployment\\n4. Migrate SAP kernel and profiles\\n5. Update SAP system configuration\\n6. Reconfigure SAP work processes\\n7. Validate application functionality",
+        "azure": "1. Configure Azure Site Recovery\\n2. Use Azure Image Builder\\n3. Implement staged migration\\n4. Migrate SAP executables\\n5. Update system profiles\\n6. Configure SAP on Azure VMs\\n7. Perform application testing"
+      }
+    },
+    {
+      "title": "Data Transfer and Synchronization",
+      "content": "Implement large-scale data transfer strategies with minimal downtime and continuous synchronization.",
+      "hands-on": {
+        "aws": "1. Configure AWS DataSync for file transfer\\n2. Set up AWS Snow devices for large data\\n3. Implement Direct Connect for transfer\\n4. Configure incremental data sync\\n5. Set up database log shipping\\n6. Implement change data capture\\n7. Validate data completeness",
+        "azure": "1. Configure Azure File Sync\\n2. Deploy Azure Data Box\\n3. Set up ExpressRoute transfer\\n4. Implement differential sync\\n5. Configure log shipping to Azure\\n6. Set up data replication\\n7. Verify data integrity"
+      }
+    },
+    {
+      "title": "System Integration and Interfaces",
+      "content": "Migrate and reconfigure SAP integrations, interfaces, and middleware components.",
+      "hands-on": {
+        "aws": "1. Reconfigure RFC connections\\n2. Update SAP PI/PO endpoints\\n3. Migrate SAP Web Dispatcher\\n4. Update external system connections\\n5. Reconfigure SSO and authentication\\n6. Update firewall and routing rules\\n7. Test all integration points",
+        "azure": "1. Update RFC destinations\\n2. Reconfigure integration endpoints\\n3. Migrate load balancer settings\\n4. Update connection strings\\n5. Configure Azure AD integration\\n6. Update network security rules\\n7. Validate all interfaces"
+      }
+    },
+    {
+      "title": "Cutover and Go-Live Procedures",
+      "content": "Execute production cutover with detailed procedures, validation, and rollback strategies.",
+      "hands-on": {
+        "aws": "1. Execute pre-cutover validation\\n2. Perform final data synchronization\\n3. Update DNS and routing\\n4. Execute cutover runbook\\n5. Perform smoke testing\\n6. Validate system performance\\n7. Implement rollback if needed",
+        "azure": "1. Run cutover readiness checks\\n2. Complete final data sync\\n3. Switch traffic to Azure\\n4. Execute go-live procedures\\n5. Perform validation testing\\n6. Monitor system metrics\\n7. Execute rollback plan if required"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Execute Complete SAP ECC Migration",
+      "description": "Perform end-to-end migration of SAP ECC system from on-premises to cloud with minimal downtime.",
+      "tasks": [
+        "Assess current SAP landscape and dependencies",
+        "Design target cloud architecture",
+        "Set up hybrid connectivity",
+        "Perform database migration with DMO",
+        "Migrate application servers",
+        "Reconfigure all interfaces and integrations",
+        "Execute cutover and validation"
+      ],
+      "validation": [
+        "Migration completed within 4-hour window",
+        "Zero data loss verified",
+        "All interfaces functioning correctly",
+        "20% performance improvement achieved",
+        "Successful user acceptance testing",
+        "Rollback procedures tested and documented"
+      ]
+    },
+    {
+      "title": "Implement SAP HANA Migration with HSR",
+      "description": "Migrate SAP HANA database using System Replication with near-zero downtime.",
+      "tasks": [
+        "Set up HANA System Replication to cloud",
+        "Configure synchronous replication",
+        "Implement network optimization",
+        "Plan and execute takeover",
+        "Update application connections",
+        "Validate data consistency",
+        "Perform performance testing"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "Database migration taking longer than maintenance window",
+        "solution": "Implement parallel export/import, optimize network bandwidth, use incremental migration approach"
+      },
+      {
+        "issue": "Application performance degradation after migration",
+        "solution": "Optimize instance sizing, configure proper storage IOPS, tune SAP parameters for cloud"
+      },
+      {
+        "issue": "Integration failures post-migration",
+        "solution": "Update all connection endpoints, reconfigure firewalls, validate certificate chains"
+      },
+      {
+        "issue": "Data inconsistency during migration",
+        "solution": "Implement proper change freeze, use consistent backup points, validate with SAP tools"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can plan and assess SAP migrations comprehensively",
+      "Can execute various database migration techniques",
+      "Can migrate SAP application servers with minimal downtime",
+      "Can handle large-scale data transfers efficiently",
+      "Can reconfigure complex SAP integrations",
+      "Can execute production cutover procedures"
+    ],
+    "certificationAlignment": {
+      "PAS-C01": {
+        "domain": "Migration of SAP Workloads to AWS",
+        "weight": "25%",
+        "keyTopics": [
+          "Migration assessment and planning",
+          "Database migration strategies",
+          "Application server migration",
+          "Data transfer methods",
+          "System integration migration",
+          "Cutover procedures",
+          "Post-migration validation"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "SAP-specific migration tool differences",
+      "Database migration service capabilities",
+      "Network connectivity and bandwidth options",
+      "Backup and recovery approaches",
+      "High availability setup during migration",
+      "Compliance and security requirements"
+    ],
+    "tools": [
+      "SAP Software Update Manager (SUM)",
+      "Database Migration Option (DMO)",
+      "SAP Migration Cockpit",
+      "Cloud migration assessment tools"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "Migration completed within planned window",
+      "Zero data loss during migration",
+      "All integrations successfully migrated",
+      "Performance targets met or exceeded",
+      "Successful DR testing post-migration",
+      "Security compliance maintained"
+    ],
+    "business": [
+      "20% reduction in operational costs",
+      "30% improvement in deployment speed",
+      "Minimal business disruption (< 4 hours)",
+      "Increased system availability to 99.95%",
+      "Enhanced disaster recovery capabilities",
+      "Improved scalability and flexibility"
+    ]
+  },
+  "nextSteps": [
+    "Explore SAP S/4HANA conversion strategies",
+    "Study SAP cloud-native transformation",
+    "Implement SAP DevOps and automation",
+    "Practice with complex migration scenarios"
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "id": "mla-c01-model-development-lab",
+  "title": "AWS SageMaker to Azure ML: Machine Learning Model Development and Training Optimization",
+  "category": "ml-model-development",
+  "difficulty": "advanced",
+  "estimatedTime": "160 minutes",
+  "awsCertification": "MLA-C01",
+  "certificationWeight": "26% - Model Development Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master machine learning model development by implementing ML model training, hyperparameter optimization, and model evaluation using SageMaker and migrating to Azure ML equivalents with advanced training techniques, automated ML workflows, and comprehensive model validation.",
+
+  "learningObjectives": [
+    "Implement comprehensive ML model training with SageMaker and Azure ML training compute",
+    "Build hyperparameter optimization and automated ML workflows",
+    "Create model evaluation and validation frameworks with cross-validation",
+    "Design distributed training and model scaling for large datasets",
+    "Implement model experimentation tracking and version management",
+    "Build automated model selection and ensemble methods"
+  ],
+
+  "prerequisites": [
+    "Completion of MLA-C01 Data Engineering for ML and Exploratory Data Analysis labs",
+    "Understanding of machine learning algorithms and model training concepts",
+    "Experience with Python, scikit-learn, TensorFlow, PyTorch, and ML frameworks",
+    "Familiarity with statistical validation and model evaluation techniques"
+  ],
+
+  "awsServices": [
+    "Amazon SageMaker Training Jobs",
+    "Amazon SageMaker Hyperparameter Tuning",
+    "Amazon SageMaker Autopilot",
+    "Amazon SageMaker Experiments",
+    "Amazon SageMaker Model Registry",
+    "Amazon SageMaker Processing",
+    "Amazon SageMaker Debugger",
+    "Amazon SageMaker Profiler",
+    "Amazon EC2 (Training Instances)",
+    "Amazon S3 (Model Artifacts)"
+  ],
+
+  "azureServices": [
+    "Azure Machine Learning Compute",
+    "Azure Machine Learning HyperDrive",
+    "Azure Automated Machine Learning",
+    "Azure ML Experiments",
+    "Azure ML Model Registry",
+    "Azure ML Pipelines",
+    "Azure ML Monitoring",
+    "Azure ML Insights",
+    "Azure Virtual Machines",
+    "Azure Blob Storage (Models)"
+  ],
+
+  "businessScenario": "ModelCraft AI develops machine learning solutions for predictive analytics, computer vision, and natural language processing across industries. Their ML engineering team needs comprehensive model development capabilities including automated training, hyperparameter optimization, distributed training, and robust model validation. They must master both AWS SageMaker and Azure ML platforms to build high-performing, production-ready ML models efficiently.",
+
+  "sections": [
+    {
+      "title": "ML Model Training and Compute Management",
+      "duration": "40 minutes",
+      "topics": [
+        "Comprehensive ML model training with SageMaker Training Jobs and Azure ML Compute",
+        "Training instance selection and compute optimization strategies",
+        "Custom training scripts and framework integration (TensorFlow, PyTorch, scikit-learn)",
+        "Distributed training and multi-GPU model development",
+        "Training job monitoring and resource optimization"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive ML Training Infrastructure",
+          "description": "Build scalable ML training with optimized compute and monitoring",
+          "steps": [
+            "Configure SageMaker Training Jobs with multiple frameworks and instance types",
+            "Setup Azure ML Compute with equivalent training capabilities and scaling",
+            "Implement custom training scripts for TensorFlow, PyTorch, and scikit-learn",
+            "Configure distributed training and multi-GPU training workflows",
+            "Setup training job monitoring and resource optimization automation",
+            "Implement training cost optimization and compute scheduling"
+          ],
+          "deliverables": [
+            "SageMaker Training Jobs configuration with multiple ML frameworks",
+            "Azure ML Compute setup with distributed training capabilities",
+            "Custom training scripts and framework integration",
+            "Training monitoring and resource optimization system"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hyperparameter Optimization and Automated ML",
+      "duration": "45 minutes",
+      "topics": [
+        "Advanced hyperparameter tuning with SageMaker Hyperparameter Tuning and Azure HyperDrive",
+        "Automated machine learning with SageMaker Autopilot and Azure AutoML",
+        "Bayesian optimization and advanced search strategies",
+        "Multi-objective optimization and Pareto frontier analysis",
+        "Automated feature selection and model architecture search"
+      ],
+      "tasks": [
+        {
+          "title": "Build Advanced Hyperparameter Optimization Platform",
+          "description": "Implement comprehensive hyperparameter tuning with automated ML",
+          "steps": [
+            "Configure SageMaker Hyperparameter Tuning with advanced search strategies",
+            "Setup Azure HyperDrive with equivalent optimization capabilities",
+            "Implement SageMaker Autopilot for automated model development",
+            "Configure Azure AutoML with comprehensive automated workflows",
+            "Setup multi-objective optimization and Pareto frontier analysis",
+            "Implement automated feature selection and neural architecture search"
+          ],
+          "deliverables": [
+            "SageMaker Hyperparameter Tuning with advanced search algorithms",
+            "Azure HyperDrive configuration with multi-objective optimization",
+            "Automated ML workflows with SageMaker Autopilot and Azure AutoML",
+            "Neural architecture search and automated feature selection"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Model Evaluation and Validation Frameworks",
+      "duration": "40 minutes",
+      "topics": [
+        "Comprehensive model evaluation and performance metrics",
+        "Cross-validation strategies and statistical significance testing",
+        "Model bias detection and fairness evaluation",
+        "A/B testing frameworks for model comparison",
+        "Model interpretability and explainability analysis"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Model Evaluation and Validation Platform",
+          "description": "Build comprehensive model evaluation with bias detection and interpretability",
+          "steps": [
+            "Configure comprehensive model evaluation metrics and validation frameworks",
+            "Implement cross-validation strategies and statistical significance testing",
+            "Setup model bias detection and fairness evaluation workflows",
+            "Configure A/B testing frameworks for model comparison and selection",
+            "Implement model interpretability and explainability analysis",
+            "Create automated model validation and approval workflows"
+          ],
+          "deliverables": [
+            "Comprehensive model evaluation and metrics framework",
+            "Cross-validation and statistical testing implementation",
+            "Model bias detection and fairness evaluation system",
+            "A/B testing and model interpretability platform"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Model Experimentation and Version Management",
+      "duration": "35 minutes",
+      "topics": [
+        "ML experimentation tracking with SageMaker Experiments and Azure ML Experiments",
+        "Model versioning and artifact management",
+        "Experiment comparison and performance tracking",
+        "Model lineage and reproducibility frameworks",
+        "Collaborative ML development and team workflows"
+      ],
+      "tasks": [
+        {
+          "title": "Build ML Experimentation and Version Control Platform",
+          "description": "Implement comprehensive experimentation tracking with model versioning",
+          "steps": [
+            "Configure SageMaker Experiments for comprehensive experiment tracking",
+            "Setup Azure ML Experiments with equivalent tracking and comparison",
+            "Implement model versioning and artifact management workflows",
+            "Configure experiment comparison and performance analysis dashboards",
+            "Setup model lineage tracking and reproducibility frameworks",
+            "Implement collaborative ML development and team workflow automation"
+          ],
+          "deliverables": [
+            "SageMaker Experiments configuration with comprehensive tracking",
+            "Azure ML Experiments setup with model versioning",
+            "Experiment comparison and performance tracking dashboards",
+            "Model lineage and collaborative development framework"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Computer Vision Model Development Pipeline",
+      "description": "Build comprehensive computer vision model development with advanced training and optimization",
+      "steps": [
+        "Design computer vision model architecture for image classification and detection",
+        "Implement distributed training with data parallelism and model optimization",
+        "Configure hyperparameter optimization for CNN architectures and training",
+        "Build model evaluation with accuracy, precision, recall, and visual validation",
+        "Implement transfer learning and fine-tuning workflows for domain adaptation",
+        "Test end-to-end pipeline with real-world image datasets and deployment"
+      ],
+      "expectedOutcome": "Production-ready computer vision model development pipeline with advanced optimization"
+    },
+    {
+      "title": "Natural Language Processing Model Training Platform",
+      "description": "Implement NLP model development with transformer architectures and optimization",
+      "steps": [
+        "Design transformer-based NLP model architecture for text classification and NER",
+        "Implement distributed training with gradient accumulation and mixed precision",
+        "Configure hyperparameter optimization for transformer models and tokenization",
+        "Build model evaluation with BLEU, ROUGE, perplexity, and semantic validation",
+        "Implement pre-trained model fine-tuning and domain adaptation workflows",
+        "Test platform with multilingual datasets and cross-lingual transfer learning"
+      ],
+      "expectedOutcome": "Comprehensive NLP model development platform with transformer optimization and evaluation"
+    },
+    {
+      "title": "Time Series Forecasting Model Development",
+      "description": "Build advanced time series forecasting with deep learning and statistical methods",
+      "steps": [
+        "Design time series forecasting architecture with LSTM, GRU, and Transformer models",
+        "Implement multi-step ahead forecasting with uncertainty quantification",
+        "Configure hyperparameter optimization for time series-specific parameters",
+        "Build model evaluation with MAE, RMSE, MAPE, and probabilistic metrics",
+        "Implement ensemble methods combining statistical and deep learning approaches",
+        "Test forecasting platform with financial, IoT, and demand forecasting scenarios"
+      ],
+      "expectedOutcome": "Advanced time series forecasting platform with ensemble methods and uncertainty quantification"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Training convergence issues and gradient instabilities in deep learning models",
+      "solution": "Implement proper weight initialization, use gradient clipping, optimize learning rate schedules, implement batch normalization, use mixed precision training, and monitor gradient norms"
+    },
+    {
+      "issue": "Overfitting and poor generalization in complex models with limited data",
+      "solution": "Implement regularization techniques, use data augmentation, implement early stopping, use dropout and batch normalization, implement cross-validation, and use transfer learning"
+    },
+    {
+      "issue": "Hyperparameter optimization convergence and resource management challenges",
+      "solution": "Use efficient search strategies (Bayesian optimization), implement early stopping for tuning jobs, use warm starting, implement resource scheduling, and use multi-fidelity optimization"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "ML Training Infrastructure",
+      "criteria": [
+        "Can implement scalable ML training with multiple frameworks",
+        "Understands distributed training and compute optimization",
+        "Can configure custom training scripts and monitoring",
+        "Demonstrates training cost optimization and resource management"
+      ]
+    },
+    {
+      "category": "Hyperparameter Optimization",
+      "criteria": [
+        "Can implement advanced hyperparameter tuning strategies",
+        "Understands automated ML and model architecture search",
+        "Can configure multi-objective optimization workflows",
+        "Demonstrates efficient search algorithms and early stopping"
+      ]
+    },
+    {
+      "category": "Model Evaluation and Validation",
+      "criteria": [
+        "Can implement comprehensive model evaluation frameworks",
+        "Understands statistical validation and cross-validation strategies",
+        "Can configure model bias detection and fairness evaluation",
+        "Demonstrates A/B testing and model interpretability analysis"
+      ]
+    },
+    {
+      "category": "Experimentation and Version Control",
+      "criteria": [
+        "Can implement ML experimentation tracking and comparison",
+        "Understands model versioning and artifact management",
+        "Can configure experiment analysis and performance tracking",
+        "Demonstrates collaborative ML development workflows"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "MLA-C01": {
+      "domain": "Model Development",
+      "weight": "26%",
+      "coverage": [
+        "Frame business problems as machine learning problems",
+        "Select the appropriate model(s) for a given machine learning problem",
+        "Train machine learning models",
+        "Perform hyperparameter optimization",
+        "Evaluate machine learning models"
+      ],
+      "examTopics": [
+        "SageMaker Training Jobs and distributed training configuration",
+        "Hyperparameter tuning with SageMaker and optimization strategies",
+        "Model evaluation techniques and cross-validation implementation",
+        "SageMaker Experiments and model versioning workflows",
+        "Automated ML with SageMaker Autopilot and model selection"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement scalable ML training infrastructure with multiple frameworks",
+    "Demonstrates ability to build advanced hyperparameter optimization workflows",
+    "Shows understanding of comprehensive model evaluation and validation",
+    "Can create ML experimentation tracking and version management systems",
+    "Understands distributed training and automated ML development practices"
+  ],
+
+  "nextSteps": [
+    "Proceed to MLA-C01 Model Deployment & Maintenance Lab (22% domain weight)",
+    "Gain hands-on experience with advanced model training and optimization techniques",
+    "Practice implementing ML development workflows in production environments",
+    "Explore advanced deep learning architectures and distributed training strategies"
+  ]
+}

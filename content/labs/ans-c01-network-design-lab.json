@@ -1,0 +1,314 @@
+{
+  "id": "ans-c01-network-design-lab",
+  "title": "AWS Advanced Networking to Azure Networking: Enterprise Network Design and Architecture",
+  "category": "advanced-networking",
+  "difficulty": "expert",
+  "estimatedTime": "180 minutes",
+  "awsCertification": "ANS-C01",
+  "certificationWeight": "30% - Network Design Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master advanced network design by implementing enterprise-grade network architectures with AWS advanced networking services and migrating to Azure networking equivalents with global connectivity, hybrid networking, and multi-region designs.",
+
+  "learningObjectives": [
+    "Design enterprise network architectures with AWS Transit Gateway and Azure Virtual WAN",
+    "Implement advanced hybrid connectivity with Direct Connect and ExpressRoute",
+    "Build multi-region network designs with global connectivity and traffic optimization",
+    "Create network segmentation and micro-segmentation strategies for security",
+    "Design scalable DNS and content delivery architectures across regions",
+    "Implement advanced load balancing and traffic management solutions"
+  ],
+
+  "prerequisites": [
+    "Strong understanding of networking fundamentals (OSI model, TCP/IP, routing, switching)",
+    "Experience with AWS VPC and Azure Virtual Network concepts",
+    "Familiarity with enterprise networking concepts and hybrid cloud architectures",
+    "Knowledge of network security principles and best practices"
+  ],
+
+  "awsServices": [
+    "AWS Transit Gateway",
+    "AWS Direct Connect",
+    "AWS PrivateLink",
+    "Amazon VPC",
+    "AWS Site-to-Site VPN",
+    "AWS Client VPN",
+    "Amazon Route 53",
+    "AWS Global Accelerator",
+    "Amazon CloudFront",
+    "AWS Network Firewall"
+  ],
+
+  "azureServices": [
+    "Azure Virtual WAN",
+    "Azure ExpressRoute",
+    "Azure Private Link",
+    "Azure Virtual Network",
+    "Azure VPN Gateway",
+    "Azure Point-to-Site VPN",
+    "Azure DNS",
+    "Azure Front Door",
+    "Azure CDN",
+    "Azure Firewall"
+  ],
+
+  "businessScenario": "GlobalTech Enterprise operates across multiple continents with complex networking requirements including hybrid cloud connectivity, multi-region deployments, strict security requirements, and high-performance applications. Their network architecture team needs to design scalable, secure, and high-performance network solutions that support business growth, regulatory compliance, and optimal user experience across AWS and Azure platforms.",
+
+  "sections": [
+    {
+      "title": "Enterprise Network Architecture and Transit Gateway Design",
+      "duration": "50 minutes",
+      "topics": [
+        "Advanced network architecture patterns with AWS Transit Gateway and Azure Virtual WAN",
+        "Hub-and-spoke vs mesh network topologies for enterprise scale",
+        "Multi-account and multi-subscription network design strategies",
+        "Network segmentation and isolation for compliance and security",
+        "Bandwidth planning and capacity management for enterprise networks"
+      ],
+      "tasks": [
+        {
+          "title": "Design Enterprise Transit Gateway Architecture",
+          "description": "Build scalable enterprise network architecture with advanced routing and segmentation",
+          "steps": [
+            "Design multi-region Transit Gateway architecture with hub-and-spoke topology",
+            "Configure Azure Virtual WAN with equivalent enterprise network design",
+            "Implement network segmentation strategies for different business units",
+            "Configure advanced routing policies and traffic isolation",
+            "Setup bandwidth allocation and QoS policies for different traffic types",
+            "Design network monitoring and observability for enterprise scale"
+          ],
+          "deliverables": [
+            "Multi-region Transit Gateway architecture with advanced routing",
+            "Azure Virtual WAN configuration with enterprise segmentation",
+            "Network segmentation and traffic isolation implementation",
+            "Bandwidth management and QoS policy configuration"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hybrid Connectivity and Direct Connect Design",
+      "duration": "45 minutes",
+      "topics": [
+        "Advanced hybrid connectivity with AWS Direct Connect and Azure ExpressRoute",
+        "Multi-path redundancy and failover strategies for critical connectivity",
+        "BGP routing optimization and traffic engineering",
+        "Network encryption and security for hybrid connections",
+        "Cost optimization strategies for dedicated connections"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Hybrid Connectivity Solutions",
+          "description": "Build enterprise-grade hybrid connectivity with redundancy and optimization",
+          "steps": [
+            "Design redundant Direct Connect architecture with multiple locations",
+            "Configure Azure ExpressRoute with equivalent redundancy and performance",
+            "Implement advanced BGP routing and traffic engineering policies",
+            "Configure network encryption and security for hybrid connections",
+            "Setup connection monitoring and automated failover mechanisms",
+            "Implement cost optimization and bandwidth management strategies"
+          ],
+          "deliverables": [
+            "Redundant Direct Connect architecture with multiple paths",
+            "Azure ExpressRoute configuration with advanced routing",
+            "BGP optimization and traffic engineering implementation",
+            "Hybrid connection monitoring and failover automation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Global Network Design and Content Delivery",
+      "duration": "45 minutes",
+      "topics": [
+        "Global network design with multi-region connectivity and optimization",
+        "Advanced content delivery and edge computing architectures",
+        "DNS design patterns and global load balancing strategies",
+        "Network performance optimization and latency reduction techniques",
+        "Global traffic management and geographic routing"
+      ],
+      "tasks": [
+        {
+          "title": "Build Global Network and Content Delivery Architecture",
+          "description": "Design global network with optimized content delivery and performance",
+          "steps": [
+            "Design global network architecture with multi-region connectivity",
+            "Configure AWS Global Accelerator and Azure Front Door for optimization",
+            "Implement advanced DNS strategies with Route 53 and Azure DNS",
+            "Setup global load balancing and traffic distribution policies",
+            "Configure edge computing and content delivery optimization",
+            "Implement global network monitoring and performance analytics"
+          ],
+          "deliverables": [
+            "Global network architecture with multi-region optimization",
+            "Content delivery and edge computing implementation",
+            "Advanced DNS and global load balancing configuration",
+            "Global network performance monitoring and analytics"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Network Security and Micro-Segmentation",
+      "duration": "40 minutes",
+      "topics": [
+        "Advanced network security architectures and zero-trust networking",
+        "Micro-segmentation strategies and implementation patterns",
+        "Network firewall design and distributed security architectures",
+        "Advanced threat detection and network security monitoring",
+        "Compliance-driven network design and audit requirements"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Network Security Architecture",
+          "description": "Build comprehensive network security with micro-segmentation and monitoring",
+          "steps": [
+            "Design zero-trust network architecture with comprehensive segmentation",
+            "Implement AWS Network Firewall and Azure Firewall with advanced policies",
+            "Configure micro-segmentation for application and data protection",
+            "Setup advanced threat detection and network security monitoring",
+            "Implement compliance-driven network controls and audit logging",
+            "Configure automated security response and incident management"
+          ],
+          "deliverables": [
+            "Zero-trust network architecture with micro-segmentation",
+            "Advanced firewall policies and distributed security",
+            "Network threat detection and security monitoring",
+            "Compliance controls and automated security response"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Multi-Cloud Enterprise Network Architecture",
+      "description": "Design and implement comprehensive enterprise network spanning AWS and Azure",
+      "steps": [
+        "Design multi-cloud network architecture with global connectivity requirements",
+        "Implement Transit Gateway and Virtual WAN with cross-cloud connectivity",
+        "Configure hybrid connectivity with Direct Connect and ExpressRoute redundancy",
+        "Setup advanced routing policies and traffic optimization across clouds",
+        "Implement comprehensive network security and monitoring across platforms",
+        "Test network performance, failover scenarios, and security controls"
+      ],
+      "expectedOutcome": "Production-ready multi-cloud enterprise network with advanced connectivity and security"
+    },
+    {
+      "title": "Global Content Delivery and Edge Network",
+      "description": "Build advanced global content delivery with edge computing capabilities",
+      "steps": [
+        "Design global network architecture for content delivery and edge computing",
+        "Implement CloudFront and Azure CDN with advanced caching and optimization",
+        "Configure Global Accelerator and Front Door for performance optimization",
+        "Setup advanced DNS and global load balancing for optimal routing",
+        "Implement edge computing and real-time content optimization",
+        "Test global performance, failover, and content delivery optimization"
+      ],
+      "expectedOutcome": "Global content delivery network with edge computing and performance optimization"
+    },
+    {
+      "title": "Zero-Trust Network Security Architecture",
+      "description": "Implement comprehensive zero-trust networking with advanced security controls",
+      "steps": [
+        "Design zero-trust network architecture with comprehensive micro-segmentation",
+        "Implement advanced firewall policies and distributed security controls",
+        "Configure network access controls and identity-based segmentation",
+        "Setup advanced threat detection and automated security response",
+        "Implement compliance monitoring and audit trail generation",
+        "Test security controls, threat detection, and incident response procedures"
+      ],
+      "expectedOutcome": "Zero-trust network architecture with advanced security and compliance monitoring"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex routing issues and BGP convergence problems in large-scale networks",
+      "solution": "Implement proper BGP communities and route filtering, use route dampening, configure proper AS-PATH prepending, implement route reflectors, and use comprehensive routing monitoring"
+    },
+    {
+      "issue": "Network performance bottlenecks and latency issues in global deployments",
+      "solution": "Implement traffic engineering and QoS policies, use Global Accelerator and Front Door, optimize DNS resolution, implement edge caching, and use performance monitoring"
+    },
+    {
+      "issue": "Security policy conflicts and network segmentation complexity",
+      "solution": "Implement hierarchical security policies, use automated policy validation, create clear segmentation boundaries, implement policy versioning, and use network simulation"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Enterprise Network Architecture",
+      "criteria": [
+        "Can design scalable enterprise network architectures with Transit Gateway and Virtual WAN",
+        "Understands network segmentation and isolation strategies for enterprise scale",
+        "Can implement advanced routing policies and traffic optimization",
+        "Demonstrates bandwidth management and capacity planning for enterprise networks"
+      ]
+    },
+    {
+      "category": "Hybrid Connectivity Design",
+      "criteria": [
+        "Can design redundant hybrid connectivity with Direct Connect and ExpressRoute",
+        "Understands BGP routing optimization and traffic engineering",
+        "Can implement network encryption and security for hybrid connections",
+        "Demonstrates cost optimization and performance management for dedicated connections"
+      ]
+    },
+    {
+      "category": "Global Network and Content Delivery",
+      "criteria": [
+        "Can design global network architectures with multi-region optimization",
+        "Understands content delivery and edge computing implementation",
+        "Can configure advanced DNS and global load balancing",
+        "Demonstrates global network performance monitoring and analytics"
+      ]
+    },
+    {
+      "category": "Advanced Network Security",
+      "criteria": [
+        "Can implement zero-trust network architectures with micro-segmentation",
+        "Understands advanced firewall policies and distributed security",
+        "Can configure network threat detection and security monitoring",
+        "Demonstrates compliance controls and automated security response"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "ANS-C01": {
+      "domain": "Network Design",
+      "weight": "30%",
+      "coverage": [
+        "Design and implement hybrid IT network architectures at scale",
+        "Design and implement AWS networks for compliance requirements",
+        "Design and implement network architectures for performance optimization",
+        "Design and implement network architectures for security",
+        "Design and implement network architectures for cost optimization"
+      ],
+      "examTopics": [
+        "Transit Gateway design and multi-account networking strategies",
+        "Direct Connect and hybrid connectivity architecture patterns",
+        "VPC design patterns and network segmentation strategies",
+        "DNS and global traffic management design",
+        "Network security design and compliance requirements"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can design enterprise-scale network architectures with advanced routing and segmentation",
+    "Demonstrates ability to implement hybrid connectivity solutions with redundancy",
+    "Shows understanding of global network design and content delivery optimization",
+    "Can create advanced network security architectures with micro-segmentation",
+    "Understands network performance optimization and cost management strategies"
+  ],
+
+  "nextSteps": [
+    "Proceed to ANS-C01 Network Implementation Lab (26% domain weight)",
+    "Gain hands-on experience with advanced networking protocols and optimization",
+    "Practice implementing enterprise network architectures in production environments",
+    "Explore advanced network automation and infrastructure as code techniques"
+  ]
+}

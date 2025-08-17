@@ -1,0 +1,317 @@
+{
+  "id": "dbs-c01-workload-specific-database-design-lab",
+  "title": "AWS Database Design to Azure Database Architecture: Workload-Specific Database Solutions and Design Patterns",
+  "category": "database-design",
+  "difficulty": "expert",
+  "estimatedTime": "180 minutes",
+  "awsCertification": "DBS-C01",
+  "certificationWeight": "26% - Workload-Specific Database Design Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master workload-specific database design by implementing comprehensive AWS database solutions and migrating to Azure database equivalents with advanced design patterns, performance optimization, and enterprise-grade database architecture for diverse workloads.",
+
+  "learningObjectives": [
+    "Implement workload-specific database selection and design strategies",
+    "Build high availability and disaster recovery database architectures",
+    "Create performance-optimized database solutions for diverse workloads",
+    "Design cost-effective database solutions with scalability considerations",
+    "Implement database compliance and governance frameworks",
+    "Build multi-region database architectures with global distribution"
+  ],
+
+  "prerequisites": [
+    "Strong understanding of database concepts and SQL fundamentals",
+    "Experience with relational and NoSQL database technologies",
+    "Familiarity with cloud database services and architecture patterns",
+    "Basic knowledge of performance optimization and scalability principles"
+  ],
+
+  "awsServices": [
+    "Amazon RDS",
+    "Amazon Aurora",
+    "Amazon DynamoDB",
+    "Amazon DocumentDB",
+    "Amazon Neptune",
+    "Amazon Redshift",
+    "Amazon ElastiCache",
+    "AWS Database Migration Service",
+    "Amazon CloudWatch",
+    "AWS KMS",
+    "Amazon VPC",
+    "AWS IAM"
+  ],
+
+  "azureServices": [
+    "Azure SQL Database",
+    "Azure Database for PostgreSQL",
+    "Azure Cosmos DB",
+    "Azure Database for MongoDB",
+    "Azure SQL Managed Instance",
+    "Azure Synapse Analytics",
+    "Azure Cache for Redis",
+    "Azure Database Migration Service",
+    "Azure Monitor",
+    "Azure Key Vault",
+    "Azure Virtual Network",
+    "Azure Active Directory"
+  ],
+
+  "businessScenario": "Database Solutions Architects provides enterprise database design and architecture services for organizations requiring sophisticated database solutions across OLTP, OLAP, NoSQL, and caching workloads. Their database architecture team needs expertise in workload-specific design, high availability strategies, performance optimization, and cost management. They must master both AWS and Azure database platforms for comprehensive database architecture excellence.",
+
+  "sections": [
+    {
+      "title": "Database Service Selection and Workload Analysis",
+      "duration": "50 minutes",
+      "topics": [
+        "Relational vs NoSQL database selection for specific workloads",
+        "OLTP vs OLAP workload characteristics and database requirements",
+        "Real-time analytics and data warehousing architecture patterns",
+        "Graph databases and time-series database use cases",
+        "Caching strategies and in-memory database implementations"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Database Selection and Architecture Platform",
+          "description": "Build workload-specific database solutions with optimal service selection",
+          "steps": [
+            "Configure OLTP solutions with RDS/Aurora and Azure SQL Database",
+            "Implement NoSQL solutions with DynamoDB and Azure Cosmos DB",
+            "Setup OLAP solutions with Redshift and Azure Synapse Analytics",
+            "Configure graph databases with Neptune and Azure Cosmos DB Gremlin API",
+            "Implement caching solutions with ElastiCache and Azure Cache for Redis",
+            "Setup time-series and document databases for specialized workloads"
+          ],
+          "deliverables": [
+            "OLTP database architecture with RDS/Aurora and Azure SQL",
+            "NoSQL database implementation with DynamoDB and Cosmos DB",
+            "OLAP data warehouse with Redshift and Azure Synapse",
+            "Specialized database solutions for graph and time-series workloads"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "High Availability and Disaster Recovery Architecture",
+      "duration": "45 minutes",
+      "topics": [
+        "Multi-AZ and cross-region high availability strategies",
+        "Read replicas and global database distribution patterns",
+        "Backup and recovery strategies for different database types",
+        "Failover automation and disaster recovery testing",
+        "RPO and RTO requirements and implementation strategies"
+      ],
+      "tasks": [
+        {
+          "title": "Build High Availability and Disaster Recovery Platform",
+          "description": "Implement comprehensive HA/DR solutions with automated failover",
+          "steps": [
+            "Configure Multi-AZ deployments with RDS and Azure SQL high availability",
+            "Implement cross-region read replicas and global database distribution",
+            "Setup automated backup and point-in-time recovery strategies",
+            "Configure failover automation and disaster recovery testing",
+            "Implement RPO/RTO optimization and recovery validation",
+            "Setup cross-cloud disaster recovery and business continuity"
+          ],
+          "deliverables": [
+            "Multi-AZ high availability architecture with automated failover",
+            "Cross-region read replicas and global database distribution",
+            "Automated backup and disaster recovery testing framework",
+            "RPO/RTO optimized recovery strategies and validation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Performance Optimization and Scalability Design",
+      "duration": "45 minutes",
+      "topics": [
+        "Database performance tuning and query optimization strategies",
+        "Horizontal and vertical scaling patterns for different workloads",
+        "Connection pooling and database proxy implementations",
+        "Indexing strategies and performance monitoring frameworks",
+        "Auto-scaling and elastic capacity management"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Performance Optimization and Scalability Platform",
+          "description": "Build high-performance database solutions with auto-scaling capabilities",
+          "steps": [
+            "Configure database performance tuning and query optimization",
+            "Implement horizontal and vertical scaling strategies",
+            "Setup connection pooling with RDS Proxy and Azure SQL intelligent proxy",
+            "Configure advanced indexing and performance monitoring",
+            "Implement auto-scaling and elastic capacity management",
+            "Setup performance benchmarking and optimization automation"
+          ],
+          "deliverables": [
+            "Database performance optimization with query tuning framework",
+            "Horizontal and vertical scaling implementation with auto-scaling",
+            "Connection pooling and database proxy configuration",
+            "Advanced indexing and performance monitoring platform"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cost Optimization and Database Economics",
+      "duration": "40 minutes",
+      "topics": [
+        "Database pricing models and cost optimization strategies",
+        "Reserved instances and savings plans for database workloads",
+        "Storage optimization and data lifecycle management",
+        "Database consolidation and multi-tenancy patterns",
+        "Cost monitoring and budget management for database resources"
+      ],
+      "tasks": [
+        {
+          "title": "Build Cost Optimization and Database Economics Platform",
+          "description": "Implement comprehensive cost management with optimization strategies",
+          "steps": [
+            "Configure database pricing optimization and reserved capacity",
+            "Implement storage optimization and data lifecycle management",
+            "Setup database consolidation and multi-tenancy strategies",
+            "Configure cost monitoring and budget alerting for database resources",
+            "Implement automated cost optimization and rightsizing recommendations",
+            "Setup cross-cloud cost comparison and optimization analytics"
+          ],
+          "deliverables": [
+            "Database pricing optimization with reserved capacity management",
+            "Storage optimization and automated data lifecycle policies",
+            "Database consolidation and multi-tenancy implementation",
+            "Cost monitoring and automated optimization recommendations"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "E-commerce Platform Database Architecture",
+      "description": "Build comprehensive database architecture for e-commerce platform with multi-workload requirements",
+      "steps": [
+        "Design multi-workload database architecture for e-commerce platform requirements",
+        "Implement OLTP databases for order processing and inventory management",
+        "Build OLAP solutions for analytics and business intelligence",
+        "Configure caching layers for high-performance user sessions and product catalogs",
+        "Implement high availability and disaster recovery for business continuity",
+        "Test platform with e-commerce workload scenarios and performance validation"
+      ],
+      "expectedOutcome": "Production-ready e-commerce database architecture with multi-workload optimization"
+    },
+    {
+      "title": "Financial Services Database Platform",
+      "description": "Implement financial services database platform with compliance and performance requirements",
+      "steps": [
+        "Design financial services database architecture for regulatory compliance",
+        "Implement high-performance OLTP systems for trading and transaction processing",
+        "Build real-time analytics for fraud detection and risk management",
+        "Configure disaster recovery and business continuity for financial regulations",
+        "Implement cost optimization strategies for large-scale financial data",
+        "Test platform with financial workload scenarios and compliance validation"
+      ],
+      "expectedOutcome": "Financial services database platform with regulatory compliance and high performance"
+    },
+    {
+      "title": "Multi-Cloud Database Federation and Global Distribution",
+      "description": "Build unified database platform spanning AWS and Azure with global distribution",
+      "steps": [
+        "Design multi-cloud database federation architecture with global distribution",
+        "Implement cross-cloud database synchronization and data consistency",
+        "Build unified high availability and disaster recovery across cloud platforms",
+        "Configure multi-cloud performance optimization and cost management",
+        "Implement global database distribution with regional optimization",
+        "Test platform with complex multi-cloud database scenarios"
+      ],
+      "expectedOutcome": "Multi-cloud database platform with global distribution and unified management"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Database selection complexity and workload requirement analysis challenges",
+      "solution": "Implement workload profiling and benchmarking, use decision matrices for database selection, implement proof-of-concept testing for workload validation, use performance modeling for capacity planning, and implement workload-specific optimization strategies"
+    },
+    {
+      "issue": "High availability complexity and failover automation challenges",
+      "solution": "Implement comprehensive HA testing and validation, use automated failover testing procedures, implement monitoring and alerting for HA components, use infrastructure as code for HA deployment, and implement cross-region DR automation"
+    },
+    {
+      "issue": "Performance optimization complexity and scaling challenges",
+      "solution": "Implement systematic performance testing and benchmarking, use automated performance tuning recommendations, implement workload-specific indexing strategies, use connection pooling and caching optimization, and implement auto-scaling with performance thresholds"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Database Selection Excellence",
+      "criteria": [
+        "Can implement workload-specific database selection and architecture design",
+        "Understands OLTP vs OLAP requirements and appropriate database choices",
+        "Can configure specialized databases for graph, time-series, and document workloads",
+        "Demonstrates caching strategies and in-memory database implementations"
+      ]
+    },
+    {
+      "category": "High Availability Mastery",
+      "criteria": [
+        "Can implement Multi-AZ and cross-region high availability solutions",
+        "Understands read replicas and global database distribution strategies",
+        "Can configure automated backup and disaster recovery frameworks",
+        "Demonstrates RPO/RTO optimization and recovery validation"
+      ]
+    },
+    {
+      "category": "Performance Optimization",
+      "criteria": [
+        "Can implement database performance tuning and query optimization",
+        "Understands horizontal and vertical scaling strategies",
+        "Can configure connection pooling and database proxy solutions",
+        "Demonstrates auto-scaling and elastic capacity management"
+      ]
+    },
+    {
+      "category": "Cost Management Excellence",
+      "criteria": [
+        "Can implement database pricing optimization and reserved capacity",
+        "Understands storage optimization and data lifecycle management",
+        "Can configure database consolidation and multi-tenancy strategies",
+        "Demonstrates cost monitoring and automated optimization"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DBS-C01": {
+      "domain": "Workload-Specific Database Design",
+      "weight": "26%",
+      "coverage": [
+        "Select appropriate database services for specific types of data and workloads",
+        "Determine strategies for disaster recovery and high availability",
+        "Design database solutions for performance, compliance, and scalability",
+        "Compare the costs of database solutions"
+      ],
+      "examTopics": [
+        "Database selection for OLTP, OLAP, NoSQL, and specialized workloads",
+        "High availability and disaster recovery architecture implementation",
+        "Performance optimization and scalability design patterns",
+        "Cost optimization and database economics management",
+        "Cross-platform database architecture and migration strategies"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement workload-specific database selection and architecture design",
+    "Demonstrates ability to build high availability and disaster recovery solutions",
+    "Shows understanding of performance optimization and scalability strategies",
+    "Can create cost-effective database solutions with optimization frameworks",
+    "Understands cross-platform database architecture and migration patterns"
+  ],
+
+  "nextSteps": [
+    "Proceed to DBS-C01 Deployment and Migration Lab (20% domain weight)",
+    "Gain hands-on experience with enterprise database architecture in production environments",
+    "Practice implementing database solutions for various workload requirements",
+    "Explore advanced database optimization and cost management techniques"
+  ]
+}

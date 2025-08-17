@@ -1,0 +1,314 @@
+{
+  "id": "dea-c01-data-security-governance-lab",
+  "title": "AWS Data Security to Azure Data Governance: Privacy, Compliance, and Data Protection",
+  "category": "data-security-governance",
+  "difficulty": "advanced",
+  "estimatedTime": "120 minutes",
+  "awsCertification": "DEA-C01",
+  "certificationWeight": "18% - Data Security & Governance Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master data security and governance by implementing AWS data protection and compliance frameworks, then migrating to Azure data governance equivalents with privacy controls, regulatory compliance, and comprehensive data protection strategies.",
+  
+  "learningObjectives": [
+    "Implement comprehensive data encryption and protection using AWS KMS and Azure Key Vault",
+    "Build data access controls and fine-grained permissions with IAM and Azure RBAC",
+    "Create data classification and sensitivity labeling with Macie and Purview",
+    "Design data privacy and compliance frameworks for GDPR, CCPA, and industry regulations",
+    "Implement data lineage tracking and audit trails for governance",
+    "Build automated compliance monitoring and reporting systems"
+  ],
+
+  "prerequisites": [
+    "Completion of all previous DEA-C01 labs (Ingestion, Storage, Operations)",
+    "Understanding of data security concepts and compliance frameworks",
+    "Basic knowledge of encryption, access controls, and privacy regulations",
+    "Familiarity with data governance principles and practices"
+  ],
+
+  "awsServices": [
+    "AWS KMS (Key Management Service)",
+    "Amazon Macie (Data Privacy and Security)",
+    "AWS IAM (Identity and Access Management)",
+    "AWS Lake Formation (Data Lake Governance)",
+    "AWS CloudTrail (Data Audit Logging)",
+    "AWS Config (Data Compliance)",
+    "Amazon GuardDuty (Data Threat Detection)",
+    "AWS Secrets Manager",
+    "AWS Certificate Manager",
+    "AWS Organizations (Data Governance)"
+  ],
+
+  "azureServices": [
+    "Azure Key Vault (Key Management)",
+    "Microsoft Purview (Data Governance)",
+    "Azure Active Directory (Identity Management)",
+    "Azure Data Share (Secure Data Sharing)",
+    "Azure Activity Log (Data Audit)",
+    "Azure Policy (Data Compliance)",
+    "Microsoft Defender for Cloud (Data Security)",
+    "Azure Key Vault HSM",
+    "Azure Certificate Service",
+    "Azure Management Groups"
+  ],
+
+  "businessScenario": "SecureData Financial operates in a highly regulated environment processing sensitive customer financial data across multiple jurisdictions. They must implement comprehensive data security and governance frameworks complying with GDPR, PCI DSS, SOX, and regional banking regulations. The data governance team needs to ensure data protection, privacy compliance, audit readiness, and secure data sharing across AWS and Azure platforms while maintaining operational efficiency.",
+
+  "sections": [
+    {
+      "title": "Data Encryption and Key Management",
+      "duration": "30 minutes",
+      "topics": [
+        "Comprehensive encryption strategies with AWS KMS and Azure Key Vault",
+        "Data encryption at rest and in transit across all data stores",
+        "Customer-managed encryption keys and key rotation policies",
+        "Database and file-level encryption implementation",
+        "Encryption key lifecycle management and compliance"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Data Encryption Strategy",
+          "description": "Build enterprise-grade encryption with centralized key management",
+          "steps": [
+            "Configure AWS KMS with customer-managed keys for all data services",
+            "Setup Azure Key Vault with equivalent encryption key management",
+            "Implement encryption at rest for all data stores and lakes",
+            "Configure encryption in transit for all data movement and APIs",
+            "Setup automated key rotation and lifecycle management policies",
+            "Implement encryption compliance monitoring and reporting"
+          ],
+          "deliverables": [
+            "KMS configuration with customer-managed encryption keys",
+            "Azure Key Vault setup with comprehensive key management",
+            "End-to-end encryption implementation across data platform",
+            "Key lifecycle management and compliance monitoring"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Access Controls and Identity Management",
+      "duration": "30 minutes",
+      "topics": [
+        "Fine-grained data access controls with IAM and Azure RBAC",
+        "Data lake security and column-level access permissions",
+        "Database security and row-level security implementation",
+        "API security and data service authentication",
+        "Privileged access management and just-in-time access"
+      ],
+      "tasks": [
+        {
+          "title": "Build Comprehensive Data Access Control Framework",
+          "description": "Implement fine-grained access controls and identity management",
+          "steps": [
+            "Configure AWS IAM with fine-grained data access policies",
+            "Setup Azure RBAC with equivalent data access controls",
+            "Implement Lake Formation security and column-level permissions",
+            "Configure database row-level security and access controls",
+            "Setup API authentication and authorization for data services",
+            "Implement privileged access management and audit controls"
+          ],
+          "deliverables": [
+            "IAM policies with fine-grained data access controls",
+            "Azure RBAC implementation with data permissions",
+            "Lake Formation security and column-level access",
+            "Database security and privileged access management"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Classification and Privacy Protection",
+      "duration": "35 minutes",
+      "topics": [
+        "Automated data discovery and classification with Macie and Purview",
+        "Sensitive data identification and privacy labeling",
+        "PII detection and data masking implementation",
+        "Data retention policies and right-to-be-forgotten compliance",
+        "Privacy impact assessments and consent management"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Data Classification and Privacy Framework",
+          "description": "Build automated data classification with privacy protection",
+          "steps": [
+            "Configure Amazon Macie for automated data discovery and classification",
+            "Setup Microsoft Purview with equivalent data classification capabilities",
+            "Implement PII detection and sensitive data identification",
+            "Configure data masking and anonymization for non-production environments",
+            "Setup data retention policies and automated data lifecycle management",
+            "Implement privacy compliance workflows and consent management"
+          ],
+          "deliverables": [
+            "Macie configuration with automated data classification",
+            "Purview setup with comprehensive data discovery",
+            "PII detection and data masking implementation",
+            "Privacy compliance and consent management framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Compliance Monitoring and Audit Management",
+      "duration": "25 minutes",
+      "topics": [
+        "Comprehensive audit logging and data lineage tracking",
+        "Regulatory compliance monitoring and reporting automation",
+        "Data governance policies and automated enforcement",
+        "Incident response and breach notification procedures",
+        "Continuous compliance validation and risk assessment"
+      ],
+      "tasks": [
+        {
+          "title": "Build Compliance and Audit Management System",
+          "description": "Implement comprehensive compliance monitoring with automated reporting",
+          "steps": [
+            "Configure comprehensive audit logging for all data operations",
+            "Setup automated compliance monitoring and violation detection",
+            "Implement data governance policies with automated enforcement",
+            "Create incident response procedures for data breaches",
+            "Setup continuous compliance validation and risk assessment",
+            "Build automated compliance reporting and executive dashboards"
+          ],
+          "deliverables": [
+            "Comprehensive audit logging and data lineage tracking",
+            "Automated compliance monitoring and violation detection",
+            "Data governance policies with enforcement automation",
+            "Incident response and continuous compliance validation"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Multi-Jurisdiction Data Compliance Platform",
+      "description": "Build comprehensive compliance platform supporting multiple regulatory frameworks",
+      "steps": [
+        "Design data governance architecture supporting GDPR, CCPA, and PCI DSS",
+        "Implement automated data classification and sensitivity labeling",
+        "Create compliance monitoring and violation detection systems",
+        "Build automated reporting for different regulatory requirements",
+        "Implement data subject rights and consent management workflows",
+        "Test compliance framework with audit simulation and validation"
+      ],
+      "expectedOutcome": "Multi-jurisdiction compliance platform with automated monitoring and reporting"
+    },
+    {
+      "title": "Zero-Trust Data Security Architecture",
+      "description": "Implement zero-trust security model for data platform",
+      "steps": [
+        "Design zero-trust architecture with comprehensive identity verification",
+        "Implement fine-grained access controls and continuous verification",
+        "Create data encryption and protection at every access point",
+        "Build real-time threat detection and response for data access",
+        "Implement comprehensive audit logging and behavioral analytics",
+        "Test zero-trust security with penetration testing and validation"
+      ],
+      "expectedOutcome": "Zero-trust data security architecture with comprehensive protection and monitoring"
+    },
+    {
+      "title": "Enterprise Data Governance Platform",
+      "description": "Build comprehensive data governance platform with automated policies",
+      "steps": [
+        "Design enterprise data governance framework and policy structure",
+        "Implement automated data discovery and cataloging across all systems",
+        "Create data quality monitoring and stewardship workflows",
+        "Build data lineage tracking and impact analysis capabilities",
+        "Implement automated policy enforcement and compliance validation",
+        "Test governance platform with complex data scenarios and workflows"
+      ],
+      "expectedOutcome": "Enterprise data governance platform with automated policy enforcement and compliance"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex compliance requirements across multiple jurisdictions and regulations",
+      "solution": "Implement flexible policy frameworks, use automated compliance monitoring, create jurisdiction-specific controls, implement data localization, and use comprehensive audit trails"
+    },
+    {
+      "issue": "Performance impact from encryption and security controls on data operations",
+      "solution": "Optimize encryption algorithms, use hardware security modules, implement intelligent caching, optimize key management, and use performance monitoring"
+    },
+    {
+      "issue": "Data privacy and access control conflicts in complex multi-tenant environments",
+      "solution": "Implement hierarchical access controls, use attribute-based access control, implement data isolation, create clear data ownership, and use automated conflict resolution"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Data Encryption and Protection",
+      "criteria": [
+        "Can implement comprehensive encryption strategies",
+        "Understands key management and lifecycle policies",
+        "Can configure encryption at rest and in transit",
+        "Demonstrates encryption compliance and monitoring"
+      ]
+    },
+    {
+      "category": "Access Controls and Identity Management",
+      "criteria": [
+        "Can implement fine-grained data access controls",
+        "Understands identity management and authentication",
+        "Can configure database and API security",
+        "Demonstrates privileged access management"
+      ]
+    },
+    {
+      "category": "Data Classification and Privacy",
+      "criteria": [
+        "Can implement automated data discovery and classification",
+        "Understands PII detection and data masking",
+        "Can configure data retention and lifecycle policies",
+        "Demonstrates privacy compliance and consent management"
+      ]
+    },
+    {
+      "category": "Compliance and Audit Management",
+      "criteria": [
+        "Can implement comprehensive audit logging",
+        "Understands regulatory compliance monitoring",
+        "Can configure automated policy enforcement",
+        "Demonstrates incident response and continuous validation"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DEA-C01": {
+      "domain": "Data Security & Governance",
+      "weight": "18%",
+      "coverage": [
+        "Apply data security and privacy controls",
+        "Apply data governance and compliance controls",
+        "Ensure appropriate data access and authorization",
+        "Implement data encryption and key management",
+        "Apply monitoring and auditing for data systems"
+      ],
+      "examTopics": [
+        "KMS encryption and key management for data services",
+        "IAM policies and access controls for data resources",
+        "Macie data classification and privacy protection",
+        "Lake Formation security and governance controls",
+        "CloudTrail auditing and compliance monitoring"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive data encryption and key management",
+    "Demonstrates ability to build fine-grained access controls",
+    "Shows understanding of data classification and privacy protection",
+    "Can create compliance monitoring and audit management systems",
+    "Understands regulatory compliance and governance frameworks"
+  ],
+
+  "nextSteps": [
+    "Complete DEA-C01 certification preparation and practice exams",
+    "Begin exploring specialty certifications (MLA-C01, ANS-C01, MLS-C01, SCS-C02)",
+    "Gain hands-on experience with advanced data governance and compliance tools",
+    "Practice implementing data security in production environments with regulatory requirements"
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "id": "dbs-c01-deployment-migration-lab",
+  "title": "AWS Database Migration to Azure Migration Services: Advanced Deployment and Database Migration Strategies",
+  "category": "database-migration",
+  "difficulty": "expert",
+  "estimatedTime": "160 minutes",
+  "awsCertification": "DBS-C01",
+  "certificationWeight": "20% - Deployment and Migration Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master database deployment and migration by implementing comprehensive AWS database migration solutions and migrating to Azure database services with advanced migration strategies, automation frameworks, and enterprise-grade migration validation.",
+
+  "learningObjectives": [
+    "Implement comprehensive database deployment automation and infrastructure as code",
+    "Build advanced database migration strategies for heterogeneous and homogeneous migrations",
+    "Create data preparation and validation frameworks for complex migration scenarios",
+    "Design migration automation and orchestration for enterprise-scale migrations",
+    "Implement migration testing and validation with minimal downtime strategies",
+    "Build cross-platform migration and hybrid database architectures"
+  ],
+
+  "prerequisites": [
+    "Completion of DBS-C01 Database Design Lab or equivalent database experience",
+    "Strong understanding of database administration and migration concepts",
+    "Experience with infrastructure as code and automation frameworks",
+    "Familiarity with data transformation and ETL processes"
+  ],
+
+  "awsServices": [
+    "AWS Database Migration Service",
+    "AWS Schema Conversion Tool",
+    "AWS CloudFormation",
+    "AWS DataSync",
+    "Amazon S3",
+    "AWS Lambda",
+    "Amazon CloudWatch",
+    "AWS Systems Manager",
+    "AWS Secrets Manager",
+    "Amazon VPC",
+    "AWS IAM",
+    "Amazon SNS"
+  ],
+
+  "azureServices": [
+    "Azure Database Migration Service",
+    "Azure Data Migration Assistant",
+    "Azure Resource Manager",
+    "Azure Data Factory",
+    "Azure Blob Storage",
+    "Azure Functions",
+    "Azure Monitor",
+    "Azure Automation",
+    "Azure Key Vault",
+    "Azure Virtual Network",
+    "Azure Active Directory",
+    "Azure Action Groups"
+  ],
+
+  "businessScenario": "Migration Solutions Enterprise provides comprehensive database migration and deployment services for organizations requiring large-scale database migrations, modernization, and cloud adoption. Their migration team needs expertise in automated deployment, heterogeneous migrations, data validation, and minimal downtime strategies. They must master both AWS and Azure migration platforms for comprehensive migration excellence.",
+
+  "sections": [
+    {
+      "title": "Database Deployment Automation and Infrastructure as Code",
+      "duration": "45 minutes",
+      "topics": [
+        "Infrastructure as code for database deployment automation",
+        "CloudFormation and ARM template development for database resources",
+        "Automated database provisioning and configuration management",
+        "Database parameter group and option group automation",
+        "Multi-environment deployment strategies and pipeline automation"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Database Deployment Automation Platform",
+          "description": "Build comprehensive deployment automation with infrastructure as code",
+          "steps": [
+            "Configure infrastructure as code with CloudFormation and ARM templates",
+            "Implement automated database provisioning and configuration management",
+            "Setup database parameter group and option group automation",
+            "Configure multi-environment deployment pipelines and promotion strategies",
+            "Implement deployment validation and rollback automation",
+            "Setup cross-platform deployment automation and resource management"
+          ],
+          "deliverables": [
+            "Infrastructure as code templates for database deployment automation",
+            "Automated database provisioning with configuration management",
+            "Multi-environment deployment pipelines with validation",
+            "Deployment rollback automation and error handling framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Database Migration Strategies",
+      "duration": "45 minutes",
+      "topics": [
+        "Homogeneous and heterogeneous database migration strategies",
+        "Schema conversion and data type mapping for cross-platform migrations",
+        "Change data capture and real-time replication strategies",
+        "Minimal downtime migration and blue-green deployment patterns",
+        "Large-scale migration orchestration and batch processing"
+      ],
+      "tasks": [
+        {
+          "title": "Build Advanced Database Migration Platform",
+          "description": "Implement comprehensive migration strategies with minimal downtime",
+          "steps": [
+            "Configure homogeneous migrations with DMS and Azure Database Migration Service",
+            "Implement heterogeneous migrations with Schema Conversion Tool and Data Migration Assistant",
+            "Setup change data capture and real-time replication strategies",
+            "Configure minimal downtime migration with blue-green deployment patterns",
+            "Implement large-scale migration orchestration and batch processing",
+            "Setup cross-platform migration validation and consistency checking"
+          ],
+          "deliverables": [
+            "Homogeneous and heterogeneous migration implementation",
+            "Schema conversion and data type mapping automation",
+            "Change data capture and real-time replication framework",
+            "Minimal downtime migration with blue-green deployment"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Preparation and Migration Validation",
+      "duration": "40 minutes",
+      "topics": [
+        "Pre-migration data assessment and preparation strategies",
+        "Data quality validation and cleansing automation",
+        "Migration testing and validation frameworks",
+        "Data consistency checking and reconciliation processes",
+        "Performance testing and optimization for migrated databases"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Data Preparation and Validation Platform",
+          "description": "Build comprehensive data preparation with migration validation",
+          "steps": [
+            "Configure pre-migration data assessment and preparation automation",
+            "Implement data quality validation and cleansing workflows",
+            "Setup migration testing and validation frameworks",
+            "Configure data consistency checking and reconciliation processes",
+            "Implement performance testing and optimization for migrated databases",
+            "Setup automated migration reporting and documentation"
+          ],
+          "deliverables": [
+            "Pre-migration data assessment and preparation automation",
+            "Data quality validation and cleansing workflow framework",
+            "Migration testing and validation with consistency checking",
+            "Performance testing and optimization for migrated systems"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Migration Orchestration and Enterprise Integration",
+      "duration": "30 minutes",
+      "topics": [
+        "Enterprise migration orchestration and workflow automation",
+        "Migration monitoring and alerting with real-time dashboards",
+        "Application integration and database dependency management",
+        "Migration rollback and disaster recovery strategies",
+        "Compliance and audit trail management for enterprise migrations"
+      ],
+      "tasks": [
+        {
+          "title": "Build Migration Orchestration and Integration Platform",
+          "description": "Implement enterprise-grade migration orchestration with monitoring",
+          "steps": [
+            "Configure enterprise migration orchestration and workflow automation",
+            "Implement migration monitoring and alerting with real-time dashboards",
+            "Setup application integration and database dependency management",
+            "Configure migration rollback and disaster recovery strategies",
+            "Implement compliance and audit trail management for migrations",
+            "Setup migration success metrics and continuous improvement"
+          ],
+          "deliverables": [
+            "Enterprise migration orchestration and workflow automation",
+            "Migration monitoring and alerting with real-time dashboards",
+            "Application integration and dependency management framework",
+            "Migration rollback and compliance audit trail system"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Enterprise ERP System Database Migration",
+      "description": "Migrate complex ERP database system from on-premises to cloud with minimal downtime",
+      "steps": [
+        "Design enterprise ERP database migration strategy with minimal downtime requirements",
+        "Implement heterogeneous migration from Oracle to PostgreSQL with schema conversion",
+        "Build data preparation and validation framework for ERP data integrity",
+        "Configure real-time replication and change data capture for business continuity",
+        "Implement migration orchestration with application integration and dependency management",
+        "Test migration with ERP workload scenarios and business process validation"
+      ],
+      "expectedOutcome": "Production-ready ERP database migration with minimal downtime and business continuity"
+    },
+    {
+      "title": "Financial Services Database Modernization",
+      "description": "Modernize legacy financial database system with regulatory compliance and data protection",
+      "steps": [
+        "Design financial services database modernization with regulatory compliance",
+        "Implement secure migration with encryption and compliance audit trails",
+        "Build data validation and reconciliation for financial data accuracy",
+        "Configure automated deployment and rollback strategies for financial systems",
+        "Implement migration monitoring and alerting for financial compliance",
+        "Test migration with financial workload scenarios and regulatory validation"
+      ],
+      "expectedOutcome": "Financial services database modernization with regulatory compliance and data protection"
+    },
+    {
+      "title": "Multi-Cloud Database Migration and Hybrid Architecture",
+      "description": "Build comprehensive multi-cloud migration platform with hybrid database architecture",
+      "steps": [
+        "Design multi-cloud database migration architecture with hybrid connectivity",
+        "Implement cross-cloud migration strategies with unified orchestration",
+        "Build hybrid database architecture with cross-platform synchronization",
+        "Configure multi-cloud migration validation and consistency management",
+        "Implement unified migration monitoring and management across platforms",
+        "Test platform with complex multi-cloud migration scenarios"
+      ],
+      "expectedOutcome": "Multi-cloud database migration platform with hybrid architecture and unified management"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Migration performance bottlenecks and data transfer optimization challenges",
+      "solution": "Implement parallel migration streams and batch optimization, use compression and delta migration strategies, optimize network bandwidth and connection pooling, implement efficient data partitioning and chunking, and use migration acceleration techniques"
+    },
+    {
+      "issue": "Schema conversion complexity and data type compatibility issues",
+      "solution": "Implement comprehensive schema mapping and validation, use automated schema conversion tools with manual validation, implement custom data type conversion functions, use incremental schema migration strategies, and implement schema version management"
+    },
+    {
+      "issue": "Migration validation accuracy and data consistency challenges",
+      "solution": "Implement comprehensive data validation and reconciliation frameworks, use checksums and hash validation for data integrity, implement automated consistency checking with statistical sampling, use business logic validation for complex scenarios, and implement continuous data quality monitoring"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Deployment Automation Excellence",
+      "criteria": [
+        "Can implement infrastructure as code for database deployment automation",
+        "Understands automated database provisioning and configuration management",
+        "Can configure multi-environment deployment pipelines with validation",
+        "Demonstrates deployment rollback automation and error handling"
+      ]
+    },
+    {
+      "category": "Migration Strategy Mastery",
+      "criteria": [
+        "Can implement homogeneous and heterogeneous migration strategies",
+        "Understands schema conversion and data type mapping automation",
+        "Can configure change data capture and real-time replication",
+        "Demonstrates minimal downtime migration with blue-green deployment"
+      ]
+    },
+    {
+      "category": "Data Validation Excellence",
+      "criteria": [
+        "Can implement pre-migration data assessment and preparation",
+        "Understands data quality validation and cleansing workflows",
+        "Can configure migration testing and validation frameworks",
+        "Demonstrates data consistency checking and reconciliation"
+      ]
+    },
+    {
+      "category": "Migration Orchestration",
+      "criteria": [
+        "Can implement enterprise migration orchestration and workflow automation",
+        "Understands migration monitoring and alerting with real-time dashboards",
+        "Can configure application integration and dependency management",
+        "Demonstrates migration rollback and compliance audit trails"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DBS-C01": {
+      "domain": "Deployment and Migration",
+      "weight": "20%",
+      "coverage": [
+        "Automate database solution deployments",
+        "Determine data preparation and migration strategies",
+        "Execute and validate data migration"
+      ],
+      "examTopics": [
+        "Database deployment automation with infrastructure as code",
+        "Advanced migration strategies for homogeneous and heterogeneous databases",
+        "Data preparation and validation frameworks for complex migrations",
+        "Migration orchestration and enterprise integration patterns",
+        "Cross-platform migration and hybrid database architectures"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive database deployment automation with infrastructure as code",
+    "Demonstrates ability to build advanced migration strategies for complex scenarios",
+    "Shows understanding of data preparation and validation frameworks",
+    "Can create migration orchestration and enterprise integration solutions",
+    "Understands cross-platform migration and hybrid database architectures"
+  ],
+
+  "nextSteps": [
+    "Proceed to DBS-C01 Management and Operations Lab (18% domain weight)",
+    "Gain hands-on experience with enterprise database migrations in production environments",
+    "Practice implementing migration strategies for various database platforms",
+    "Explore advanced migration automation and orchestration techniques"
+  ]
+}

@@ -1,0 +1,685 @@
+{
+  "exam_info": {
+    "exam_code": "SAP-C02",
+    "exam_name": "AWS Solutions Architect Professional",
+    "total_questions": "75 questions",
+    "passing_score": "750/1000",
+    "duration": "180 minutes",
+    "domains": 4,
+    "last_updated": "2024-08-14"
+  },
+  "domain_analysis": {
+    "domain_1": {
+      "name": "Design Solutions for Organizational Complexity",
+      "weight": "26%",
+      "sub_domains": {
+        "1.1": {
+          "topic": "Architect network connectivity strategies",
+          "aws_concepts": [
+            "Transit Gateway",
+            "Direct Connect",
+            "VPN connections",
+            "VPC Peering",
+            "AWS PrivateLink",
+            "Route 53 Resolver",
+            "Global Accelerator"
+          ],
+          "azure_equivalents": [
+            "Virtual WAN",
+            "ExpressRoute",
+            "VPN Gateway",
+            "VNet Peering",
+            "Private Link Service",
+            "Azure DNS Private Resolver",
+            "Front Door"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "advanced-networking-patterns-lab",
+              "hub-spoke-architecture-lab"
+            ],
+            "coverage_percentage": 95,
+            "gaps": [
+              "AWS PrivateLink to Azure Private Link detailed patterns"
+            ]
+          }
+        },
+        "1.2": {
+          "topic": "Prescribe security controls",
+          "aws_concepts": [
+            "AWS Organizations",
+            "Control Tower",
+            "Config Rules",
+            "CloudFormation StackSets",
+            "Service Control Policies",
+            "Cross-account roles"
+          ],
+          "azure_equivalents": [
+            "Management Groups",
+            "Azure Landing Zones",
+            "Azure Policy",
+            "Azure Resource Manager Templates",
+            "Azure Policy initiatives",
+            "Cross-tenant access"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "aws-organizations-advanced-lab",
+              "azure-landing-zones-lab",
+              "enterprise-governance-lab"
+            ],
+            "coverage_percentage": 95,
+            "gaps": [
+              "Cross-tenant access patterns detailed comparison"
+            ]
+          }
+        },
+        "1.3": {
+          "topic": "Design reliable and resilient architectures",
+          "aws_concepts": [
+            "Multi-region architectures",
+            "Disaster recovery strategies",
+            "Backup and restore",
+            "Cross-region replication",
+            "Fault isolation",
+            "Health checks and failover"
+          ],
+          "azure_equivalents": [
+            "Multi-region deployments",
+            "Azure Site Recovery",
+            "Azure Backup",
+            "Geo-replication",
+            "Fault domains",
+            "Health probes and failover"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "well-architected-framework-lab",
+              "hub-spoke-architecture-lab"
+            ],
+            "coverage_percentage": 60,
+            "gaps": [
+              "Multi-region disaster recovery patterns lab",
+              "Azure Site Recovery comprehensive migration",
+              "Cross-region backup strategies"
+            ]
+          }
+        },
+        "1.4": {
+          "topic": "Design a multi-account AWS environment",
+          "aws_concepts": [
+            "AWS Organizations structure",
+            "Account strategy",
+            "Billing and cost management",
+            "Cross-account resource sharing",
+            "Consolidated logging"
+          ],
+          "azure_equivalents": [
+            "Management Groups hierarchy",
+            "Subscription strategy",
+            "Cost Management + Billing",
+            "Cross-subscription sharing",
+            "Centralized logging"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "aws-organizations-advanced-lab"
+            ],
+            "coverage_percentage": 90,
+            "gaps": [
+              "Advanced billing and cost management patterns"
+            ]
+          }
+        },
+        "1.5": {
+          "topic": "Determine cost optimization and visibility strategies",
+          "aws_concepts": [
+            "Cost and Usage Reports",
+            "AWS Budgets",
+            "Cost Explorer",
+            "Reserved Instance optimization",
+            "Spot Instance strategies",
+            "Resource tagging for cost allocation"
+          ],
+          "azure_equivalents": [
+            "Cost Management exports",
+            "Azure Budgets",
+            "Cost analysis",
+            "Reserved Instance optimization",
+            "Spot VM strategies",
+            "Resource tagging for billing"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "aws-organizations-advanced-lab"
+            ],
+            "coverage_percentage": 40,
+            "gaps": [
+              "Cost and Usage Reports to Cost Management detailed migration",
+              "Advanced cost optimization strategies lab",
+              "Reserved Instance to Azure Reservations comprehensive comparison",
+              "Spot Instance to Spot VM migration patterns"
+            ]
+          }
+        }
+      }
+    },
+    "domain_2": {
+      "name": "Design for New Solutions",
+      "weight": "29%",
+      "sub_domains": {
+        "2.1": {
+          "topic": "Design a deployment strategy to meet business requirements",
+          "aws_concepts": [
+            "Blue/Green deployments",
+            "Canary deployments",
+            "Rolling deployments",
+            "CodePipeline",
+            "CodeDeploy",
+            "CloudFormation",
+            "CDK"
+          ],
+          "azure_equivalents": [
+            "Blue/Green deployments",
+            "Canary releases",
+            "Rolling deployments",
+            "Azure DevOps Pipelines",
+            "Azure Resource Manager",
+            "ARM Templates",
+            "Bicep"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "azure-landing-zones-lab"
+            ],
+            "coverage_percentage": 30,
+            "gaps": [
+              "CodePipeline to Azure DevOps comprehensive lab",
+              "Blue/Green deployment patterns comparison",
+              "CloudFormation to ARM Templates migration lab",
+              "CDK to Bicep transformation patterns"
+            ]
+          }
+        },
+        "2.2": {
+          "topic": "Design a solution to ensure business continuity",
+          "aws_concepts": [
+            "RTO and RPO requirements",
+            "Backup strategies",
+            "Cross-region replication",
+            "Database failover",
+            "Application resilience patterns"
+          ],
+          "azure_equivalents": [
+            "SLA and availability targets",
+            "Azure Backup strategies",
+            "Geo-replication",
+            "Database failover groups",
+            "Resilience patterns"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "database-migration-lab",
+              "well-architected-framework-lab"
+            ],
+            "coverage_percentage": 50,
+            "gaps": [
+              "Comprehensive disaster recovery scenarios lab",
+              "RTO/RPO planning and implementation",
+              "Cross-region failover strategies"
+            ]
+          }
+        },
+        "2.3": {
+          "topic": "Determine security controls based on requirements",
+          "aws_concepts": [
+            "Identity federation",
+            "Certificate management",
+            "Secrets management",
+            "Network security",
+            "Data encryption strategies",
+            "Compliance frameworks"
+          ],
+          "azure_equivalents": [
+            "Azure AD federation",
+            "Key Vault certificates",
+            "Key Vault secrets",
+            "Network security groups",
+            "Encryption at rest/transit",
+            "Compliance center"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "identity-access-lab",
+              "enterprise-governance-lab"
+            ],
+            "coverage_percentage": 75,
+            "gaps": [
+              "Certificate Manager to Key Vault migration lab",
+              "Advanced secrets management patterns",
+              "Compliance framework implementation"
+            ]
+          }
+        },
+        "2.4": {
+          "topic": "Design a strategy to meet reliability requirements",
+          "aws_concepts": [
+            "Auto Scaling strategies",
+            "Load balancing patterns",
+            "Health monitoring",
+            "Circuit breaker patterns",
+            "Retry logic implementation"
+          ],
+          "azure_equivalents": [
+            "VM Scale Sets strategies",
+            "Load balancing patterns",
+            "Azure Monitor",
+            "Circuit breaker patterns",
+            "Retry policies"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "vm-deployment-lab",
+              "advanced-networking-patterns-lab",
+              "monitoring-logging-lab"
+            ],
+            "coverage_percentage": 80,
+            "gaps": [
+              "Advanced Auto Scaling to VM Scale Sets patterns",
+              "Circuit breaker implementation examples"
+            ]
+          }
+        },
+        "2.5": {
+          "topic": "Design a solution to meet performance objectives",
+          "aws_concepts": [
+            "Caching strategies",
+            "Content delivery",
+            "Database performance optimization",
+            "Compute optimization",
+            "Storage performance tuning"
+          ],
+          "azure_equivalents": [
+            "Azure Cache for Redis",
+            "Azure CDN",
+            "Database performance tuning",
+            "VM and container optimization",
+            "Storage performance optimization"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "database-migration-lab",
+              "advanced-container-orchestration-lab"
+            ],
+            "coverage_percentage": 45,
+            "gaps": [
+              "ElastiCache to Azure Cache for Redis comprehensive lab",
+              "CloudFront to Azure CDN migration patterns",
+              "Performance optimization best practices lab",
+              "Storage performance tuning strategies"
+            ]
+          }
+        },
+        "2.6": {
+          "topic": "Determine a cost optimization strategy to meet solution goals",
+          "aws_concepts": [
+            "Resource rightsizing",
+            "Storage optimization",
+            "Compute cost optimization",
+            "Network cost optimization",
+            "Reserved capacity planning"
+          ],
+          "azure_equivalents": [
+            "VM rightsizing",
+            "Storage tier optimization",
+            "Compute cost optimization",
+            "Bandwidth optimization",
+            "Reserved capacity planning"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "storage-migration-lab"
+            ],
+            "coverage_percentage": 35,
+            "gaps": [
+              "Comprehensive cost optimization strategies lab",
+              "Resource rightsizing methodologies",
+              "Network cost optimization patterns"
+            ]
+          }
+        }
+      }
+    },
+    "domain_3": {
+      "name": "Migration Planning",
+      "weight": "20%",
+      "sub_domains": {
+        "3.1": {
+          "topic": "Select existing workloads and processes for potential migration",
+          "aws_concepts": [
+            "Application Discovery Service",
+            "Migration evaluator",
+            "Portfolio assessment",
+            "TCO analysis",
+            "Migration patterns (6 R's)"
+          ],
+          "azure_equivalents": [
+            "Azure Migrate assessment",
+            "Service Map",
+            "Dependency analysis",
+            "TCO calculator",
+            "Migration strategies"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "advanced-migration-modernization-lab"
+            ],
+            "coverage_percentage": 90,
+            "gaps": [
+              "Advanced portfolio assessment techniques"
+            ]
+          }
+        },
+        "3.2": {
+          "topic": "Select migration tools and/or services for new and migrated solutions",
+          "aws_concepts": [
+            "AWS Migration Hub",
+            "Database Migration Service",
+            "Server Migration Service",
+            "DataSync",
+            "Snow family",
+            "CloudEndure"
+          ],
+          "azure_equivalents": [
+            "Azure Migrate hub",
+            "Database Migration Service",
+            "Azure Site Recovery",
+            "Azure Data Box",
+            "Data Box family",
+            "Azure Migrate tools"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "advanced-migration-modernization-lab",
+              "database-migration-lab"
+            ],
+            "coverage_percentage": 95,
+            "gaps": [
+              "Snow family to Data Box detailed comparison"
+            ]
+          }
+        },
+        "3.3": {
+          "topic": "Determine a new cloud architecture for an existing solution",
+          "aws_concepts": [
+            "Microservices architecture",
+            "Serverless patterns",
+            "Container orchestration",
+            "API-driven design",
+            "Event-driven architecture"
+          ],
+          "azure_equivalents": [
+            "Microservices on Azure",
+            "Serverless computing",
+            "AKS patterns",
+            "API Management",
+            "Event-driven patterns"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "advanced-container-orchestration-lab",
+              "serverless-functions-lab",
+              "data-analytics-realtime-processing-lab"
+            ],
+            "coverage_percentage": 90,
+            "gaps": [
+              "API-driven design patterns detailed comparison"
+            ]
+          }
+        },
+        "3.4": {
+          "topic": "Determine a strategy for migrating existing on-premises workloads to the cloud",
+          "aws_concepts": [
+            "Lift and shift strategies",
+            "Application modernization",
+            "Data migration strategies",
+            "Network connectivity during migration",
+            "Phased migration approaches"
+          ],
+          "azure_equivalents": [
+            "Rehost strategies",
+            "Application modernization",
+            "Data migration approaches",
+            "Hybrid connectivity",
+            "Phased migration planning"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "advanced-migration-modernization-lab"
+            ],
+            "coverage_percentage": 95,
+            "gaps": [
+              "Advanced phased migration orchestration"
+            ]
+          }
+        }
+      }
+    },
+    "domain_4": {
+      "name": "Continuous Improvement for Existing Solutions",
+      "weight": "25%",
+      "sub_domains": {
+        "4.1": {
+          "topic": "Determine a strategy to improve an overall operational excellence",
+          "aws_concepts": [
+            "Infrastructure as Code",
+            "Configuration management",
+            "Automation strategies",
+            "Operational metrics",
+            "Incident response"
+          ],
+          "azure_equivalents": [
+            "ARM Templates/Bicep",
+            "Azure Automation",
+            "DevOps practices",
+            "Azure Monitor metrics",
+            "Incident management"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "azure-landing-zones-lab",
+              "monitoring-logging-lab"
+            ],
+            "coverage_percentage": 75,
+            "gaps": [
+              "Advanced Infrastructure as Code patterns",
+              "Configuration management best practices",
+              "Incident response automation"
+            ]
+          }
+        },
+        "4.2": {
+          "topic": "Determine a strategy to improve security",
+          "aws_concepts": [
+            "Security assessment",
+            "Compliance monitoring",
+            "Threat detection",
+            "Security automation",
+            "Data protection strategies"
+          ],
+          "azure_equivalents": [
+            "Security Center assessment",
+            "Compliance monitoring",
+            "Security Center threat detection",
+            "Security automation",
+            "Information protection"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "identity-access-lab",
+              "enterprise-governance-lab"
+            ],
+            "coverage_percentage": 75,
+            "gaps": [
+              "Advanced threat detection patterns",
+              "Security automation implementations",
+              "Data classification and protection"
+            ]
+          }
+        },
+        "4.3": {
+          "topic": "Determine a strategy to improve performance",
+          "aws_concepts": [
+            "Performance monitoring",
+            "Bottleneck identification",
+            "Scaling strategies",
+            "Caching optimization",
+            "Database performance tuning"
+          ],
+          "azure_equivalents": [
+            "Application Insights",
+            "Performance analysis",
+            "Auto-scaling patterns",
+            "Cache optimization",
+            "Database advisor"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "monitoring-logging-lab",
+              "high-performance-computing-lab"
+            ],
+            "coverage_percentage": 80,
+            "gaps": [
+              "Application Insights detailed implementation",
+              "Advanced caching strategies"
+            ]
+          }
+        },
+        "4.4": {
+          "topic": "Determine a strategy to improve reliability",
+          "aws_concepts": [
+            "Chaos engineering",
+            "Fault injection testing",
+            "Service resilience patterns",
+            "Automated recovery",
+            "Health monitoring"
+          ],
+          "azure_equivalents": [
+            "Chaos Studio",
+            "Fault injection",
+            "Resilience patterns",
+            "Automated failover",
+            "Health monitoring"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "well-architected-framework-lab",
+              "monitoring-logging-lab"
+            ],
+            "coverage_percentage": 50,
+            "gaps": [
+              "Chaos engineering patterns lab",
+              "Fault injection testing implementation",
+              "Automated recovery strategies"
+            ]
+          }
+        },
+        "4.5": {
+          "topic": "Identify opportunities to improve cost effectiveness",
+          "aws_concepts": [
+            "Cost analysis and reporting",
+            "Resource optimization",
+            "Scheduling strategies",
+            "Reserved capacity optimization",
+            "Usage pattern analysis"
+          ],
+          "azure_equivalents": [
+            "Cost analysis tools",
+            "Advisor recommendations",
+            "VM scheduling",
+            "Reserved Instance optimization",
+            "Usage analytics"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "aws-organizations-advanced-lab"
+            ],
+            "coverage_percentage": 40,
+            "gaps": [
+              "Cost analysis and reporting comprehensive lab",
+              "Resource optimization automation",
+              "Usage pattern analysis implementation"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "overall_coverage_summary": {
+    "total_sub_domains": 20,
+    "excellent_coverage": 7,
+    "good_coverage": 6,
+    "partial_coverage": 7,
+    "poor_coverage": 0,
+    "overall_percentage": 74,
+    "certification_readiness": "GOOD - Well-prepared for most exam topics with some gaps in cost optimization and operational excellence"
+  },
+  "priority_gaps": [
+    {
+      "priority": "HIGH",
+      "domain": "Design for New Solutions",
+      "gap": "CodePipeline to Azure DevOps comprehensive migration patterns",
+      "impact": "Critical for deployment strategy questions (29% domain weight)"
+    },
+    {
+      "priority": "HIGH",
+      "domain": "Design for New Solutions",
+      "gap": "ElastiCache to Azure Cache for Redis performance optimization",
+      "impact": "Essential for performance objectives in high-weight domain"
+    },
+    {
+      "priority": "HIGH",
+      "domain": "Continuous Improvement",
+      "gap": "Cost analysis and resource optimization automation",
+      "impact": "Major topic in cost effectiveness improvement"
+    },
+    {
+      "priority": "MEDIUM",
+      "domain": "Design Solutions for Organizational Complexity",
+      "gap": "Multi-region disaster recovery comprehensive patterns",
+      "impact": "Important for reliability architecture design"
+    },
+    {
+      "priority": "MEDIUM",
+      "domain": "Continuous Improvement",
+      "gap": "Chaos engineering and fault injection testing",
+      "impact": "Advanced reliability improvement topic"
+    },
+    {
+      "priority": "MEDIUM",
+      "domain": "Design for New Solutions",
+      "gap": "CloudFormation to ARM Templates/Bicep migration",
+      "impact": "Infrastructure as Code deployment strategies"
+    }
+  ]
+}

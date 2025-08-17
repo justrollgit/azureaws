@@ -1,0 +1,314 @@
+{
+  "id": "soa-c02-networking-content-delivery-lab",
+  "title": "AWS Networking to Azure Virtual Networks: Network Operations and Content Delivery",
+  "category": "network-operations",
+  "difficulty": "intermediate",
+  "estimatedTime": "125 minutes",
+  "awsCertification": "SOA-C02",
+  "certificationWeight": "18% - Networking & Content Delivery Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master network operations by implementing AWS VPC networking and migrating to Azure Virtual Networks with advanced routing, security, content delivery, and network performance optimization across both platforms.",
+  
+  "learningObjectives": [
+    "Design and implement advanced VPC and Virtual Network architectures",
+    "Configure network security with security groups, NACLs, and NSGs",
+    "Implement content delivery networks with CloudFront and Azure CDN",
+    "Build network connectivity solutions including VPN and ExpressRoute",
+    "Configure DNS management and traffic routing strategies",
+    "Optimize network performance and troubleshoot connectivity issues"
+  ],
+
+  "prerequisites": [
+    "Completion of SOA-C02 Monitoring, Reliability, Deployment, and Security labs",
+    "Understanding of networking fundamentals and TCP/IP concepts",
+    "Basic knowledge of DNS, routing, and network security",
+    "Familiarity with load balancing and traffic distribution concepts"
+  ],
+
+  "awsServices": [
+    "Amazon VPC (Virtual Private Cloud)",
+    "AWS Transit Gateway",
+    "Amazon CloudFront",
+    "AWS Global Accelerator",
+    "Amazon Route 53",
+    "AWS Direct Connect",
+    "AWS VPN Gateway",
+    "Elastic Load Balancing",
+    "AWS PrivateLink",
+    "AWS Network Firewall"
+  ],
+
+  "azureServices": [
+    "Azure Virtual Network (VNet)",
+    "Azure Virtual WAN",
+    "Azure CDN",
+    "Azure Front Door",
+    "Azure DNS",
+    "Azure ExpressRoute",
+    "Azure VPN Gateway",
+    "Azure Load Balancer",
+    "Azure Private Link",
+    "Azure Firewall"
+  ],
+
+  "businessScenario": "GlobalNet Solutions operates a distributed application architecture serving customers worldwide with strict performance and availability requirements. They need to implement advanced networking solutions across AWS and Azure platforms, including multi-region connectivity, content delivery optimization, network security, and hybrid cloud connectivity while ensuring compliance and cost optimization.",
+
+  "sections": [
+    {
+      "title": "Advanced Network Architecture and Connectivity",
+      "duration": "35 minutes",
+      "topics": [
+        "AWS VPC design patterns and multi-VPC connectivity",
+        "Azure Virtual Network architecture and VNet peering",
+        "AWS Transit Gateway for centralized connectivity",
+        "Azure Virtual WAN for global network architecture",
+        "Hybrid connectivity with Direct Connect and ExpressRoute"
+      ],
+      "tasks": [
+        {
+          "title": "Design Enterprise Network Architecture",
+          "description": "Implement advanced network architecture with multi-region and hybrid connectivity",
+          "steps": [
+            "Design AWS multi-VPC architecture with Transit Gateway connectivity",
+            "Create equivalent Azure Virtual Network with Virtual WAN implementation",
+            "Configure VPC peering and VNet peering for cross-region connectivity",
+            "Implement hybrid connectivity using Direct Connect and ExpressRoute",
+            "Setup network segmentation and micro-segmentation strategies",
+            "Configure network monitoring and flow logging for troubleshooting"
+          ],
+          "deliverables": [
+            "Multi-VPC architecture with Transit Gateway connectivity",
+            "Azure Virtual Network with Virtual WAN implementation",
+            "Hybrid connectivity configuration and testing",
+            "Network segmentation and monitoring implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Network Security and Access Control",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS Security Groups and Network ACLs configuration",
+        "Azure Network Security Groups and application security groups",
+        "AWS Network Firewall and traffic inspection",
+        "Azure Firewall and network security policies",
+        "Network-based threat detection and prevention"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Network Security",
+          "description": "Setup layered network security with advanced threat protection",
+          "steps": [
+            "Configure AWS Security Groups with least privilege access principles",
+            "Setup Azure Network Security Groups with equivalent security policies",
+            "Implement AWS Network Firewall for advanced traffic inspection",
+            "Configure Azure Firewall with network and application rules",
+            "Setup network-based intrusion detection and prevention",
+            "Implement network security monitoring and alerting"
+          ],
+          "deliverables": [
+            "Security Groups and NSGs with least privilege configuration",
+            "Network Firewall and Azure Firewall implementation",
+            "Network threat detection and prevention setup",
+            "Network security monitoring and alerting framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Content Delivery and Performance Optimization",
+      "duration": "30 minutes",
+      "topics": [
+        "Amazon CloudFront distribution configuration and optimization",
+        "Azure CDN and Front Door global distribution",
+        "AWS Global Accelerator for application performance",
+        "Content caching strategies and cache optimization",
+        "Performance monitoring and analytics for content delivery"
+      ],
+      "tasks": [
+        {
+          "title": "Build Global Content Delivery Network",
+          "description": "Implement comprehensive content delivery with performance optimization",
+          "steps": [
+            "Configure Amazon CloudFront with optimal distribution settings",
+            "Setup Azure CDN and Front Door for equivalent global distribution",
+            "Implement AWS Global Accelerator for application performance optimization",
+            "Configure content caching strategies and cache invalidation policies",
+            "Setup performance monitoring and analytics for content delivery",
+            "Implement security features including WAF and DDoS protection"
+          ],
+          "deliverables": [
+            "CloudFront distribution with optimal configuration",
+            "Azure CDN and Front Door global distribution setup",
+            "Content caching and performance optimization implementation",
+            "CDN security and DDoS protection configuration"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "DNS Management and Traffic Routing",
+      "duration": "30 minutes",
+      "topics": [
+        "Amazon Route 53 DNS management and health checks",
+        "Azure DNS and traffic management strategies",
+        "Advanced routing policies and failover configurations",
+        "DNS-based load balancing and geographic routing",
+        "DNS security and performance optimization"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced DNS and Traffic Management",
+          "description": "Setup comprehensive DNS management with intelligent traffic routing",
+          "steps": [
+            "Configure Amazon Route 53 with advanced routing policies",
+            "Setup Azure DNS with equivalent traffic management capabilities",
+            "Implement health checks and automated failover procedures",
+            "Configure geographic and latency-based routing for global applications",
+            "Setup DNS security features including DNSSEC and threat protection",
+            "Implement DNS performance monitoring and optimization"
+          ],
+          "deliverables": [
+            "Route 53 configuration with advanced routing policies",
+            "Azure DNS and Traffic Manager implementation",
+            "Health checks and automated failover setup",
+            "DNS security and performance optimization"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Global Multi-Cloud Network Architecture",
+      "description": "Build comprehensive global network spanning AWS and Azure regions",
+      "steps": [
+        "Design global network architecture spanning multiple regions and clouds",
+        "Implement cross-cloud connectivity and data replication",
+        "Configure intelligent traffic routing based on performance and health",
+        "Setup network security and compliance across all regions",
+        "Implement disaster recovery and failover procedures",
+        "Test end-to-end connectivity and performance optimization"
+      ],
+      "expectedOutcome": "Production-ready global network architecture with cross-cloud connectivity"
+    },
+    {
+      "title": "Enterprise Content Delivery Platform",
+      "description": "Build comprehensive content delivery platform with advanced optimization",
+      "steps": [
+        "Design content delivery strategy for different content types and audiences",
+        "Implement global CDN with edge optimization and caching strategies",
+        "Configure dynamic content acceleration and API optimization",
+        "Setup real-time analytics and performance monitoring",
+        "Implement security features and DDoS protection",
+        "Test content delivery performance across different regions and devices"
+      ],
+      "expectedOutcome": "Enterprise content delivery platform with optimal performance and security"
+    },
+    {
+      "title": "Network Security and Compliance Framework",
+      "description": "Implement comprehensive network security with compliance automation",
+      "steps": [
+        "Design network security architecture with defense-in-depth principles",
+        "Implement network segmentation and micro-segmentation strategies",
+        "Configure automated threat detection and incident response",
+        "Setup compliance monitoring and reporting for network security",
+        "Implement network forensics and audit trail capabilities",
+        "Test security controls with penetration testing and red team exercises"
+      ],
+      "expectedOutcome": "Comprehensive network security framework with compliance automation"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Complex network connectivity issues across multiple regions and clouds",
+      "solution": "Implement comprehensive network monitoring and logging, use network diagnostic tools, create network documentation and topology maps, and implement automated connectivity testing"
+    },
+    {
+      "issue": "Performance issues with content delivery and application latency",
+      "solution": "Optimize CDN configuration and caching strategies, implement intelligent routing, use performance monitoring and analytics, and optimize network paths and protocols"
+    },
+    {
+      "issue": "Network security vulnerabilities and compliance gaps",
+      "solution": "Implement layered security controls, use automated security scanning, implement network segmentation, and maintain security baselines and compliance monitoring"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Network Architecture Design",
+      "criteria": [
+        "Can design advanced VPC and Virtual Network architectures",
+        "Understands multi-region and hybrid connectivity patterns",
+        "Can implement network segmentation and connectivity solutions",
+        "Demonstrates network monitoring and troubleshooting capabilities"
+      ]
+    },
+    {
+      "category": "Network Security Implementation",
+      "criteria": [
+        "Can implement comprehensive network security controls",
+        "Understands layered security and threat protection",
+        "Can configure network firewalls and access controls",
+        "Demonstrates network security monitoring and incident response"
+      ]
+    },
+    {
+      "category": "Content Delivery Optimization",
+      "criteria": [
+        "Can implement global content delivery networks",
+        "Understands caching strategies and performance optimization",
+        "Can configure CDN security and DDoS protection",
+        "Demonstrates content delivery analytics and monitoring"
+      ]
+    },
+    {
+      "category": "DNS and Traffic Management",
+      "criteria": [
+        "Can implement advanced DNS management and routing",
+        "Understands health checks and automated failover",
+        "Can configure intelligent traffic routing strategies",
+        "Demonstrates DNS security and performance optimization"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SOA-C02": {
+      "domain": "Networking & Content Delivery",
+      "weight": "18%",
+      "coverage": [
+        "Configure and manage VPC networking",
+        "Configure CloudFront distributions",
+        "Implement Route 53 DNS and routing policies",
+        "Configure VPN and Direct Connect connectivity",
+        "Troubleshoot network connectivity issues"
+      ],
+      "examTopics": [
+        "VPC configuration, subnets, and routing tables",
+        "Security Groups and Network ACLs management",
+        "CloudFront distribution setup and optimization",
+        "Route 53 DNS management and health checks",
+        "VPN Gateway and Direct Connect configuration"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can design and implement advanced network architectures",
+    "Demonstrates ability to configure comprehensive network security",
+    "Shows understanding of global content delivery and optimization",
+    "Can implement advanced DNS management and traffic routing",
+    "Understands network performance optimization and troubleshooting"
+  ],
+
+  "nextSteps": [
+    "Proceed to SOA-C02 Cost & Performance Optimization Lab (12% domain weight)",
+    "Gain hands-on experience with advanced networking and CDN optimization",
+    "Practice implementing network solutions in production environments",
+    "Explore advanced network security and performance monitoring tools"
+  ]
+}

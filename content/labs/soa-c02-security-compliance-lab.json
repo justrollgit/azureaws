@@ -1,0 +1,314 @@
+{
+  "id": "soa-c02-security-compliance-lab",
+  "title": "AWS Security Operations to Azure Security Center: Operational Security and Compliance Management",
+  "category": "security-operations",
+  "difficulty": "intermediate",
+  "estimatedTime": "110 minutes",
+  "awsCertification": "SOA-C02",
+  "certificationWeight": "16% - Security & Compliance Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master operational security by implementing AWS security services and migrating to Azure Security Center equivalents with security monitoring, compliance automation, incident response, and threat detection across both platforms.",
+  
+  "learningObjectives": [
+    "Implement operational security monitoring with AWS Security Hub and Azure Security Center",
+    "Build compliance automation using AWS Config and Azure Policy",
+    "Create security incident response workflows and threat detection",
+    "Design security patch management and vulnerability remediation",
+    "Implement security audit logging and forensic capabilities",
+    "Build security governance and risk management frameworks"
+  ],
+
+  "prerequisites": [
+    "Completion of SOA-C02 Monitoring, Reliability, and Deployment labs",
+    "Understanding of security fundamentals and compliance frameworks",
+    "Basic knowledge of network security and access control concepts",
+    "Familiarity with security incident response procedures"
+  ],
+
+  "awsServices": [
+    "AWS Security Hub",
+    "AWS Config",
+    "AWS CloudTrail",
+    "AWS GuardDuty",
+    "Amazon Inspector",
+    "AWS Systems Manager Patch Manager",
+    "AWS IAM Access Analyzer",
+    "AWS Secrets Manager",
+    "Amazon Macie",
+    "AWS Well-Architected Tool"
+  ],
+
+  "azureServices": [
+    "Azure Security Center (Microsoft Defender for Cloud)",
+    "Azure Policy",
+    "Azure Activity Log",
+    "Microsoft Sentinel",
+    "Azure Security Center Assessments",
+    "Azure Update Management",
+    "Azure AD Access Reviews",
+    "Azure Key Vault",
+    "Microsoft Purview",
+    "Azure Well-Architected Review"
+  ],
+
+  "businessScenario": "SecureOps Financial Services operates in a highly regulated environment requiring SOC 2, PCI DSS, and regulatory compliance. They need to implement comprehensive operational security across AWS and Azure platforms, including automated compliance monitoring, threat detection, incident response, and security governance while maintaining operational efficiency and cost optimization.",
+
+  "sections": [
+    {
+      "title": "Security Monitoring and Threat Detection",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS Security Hub centralized security findings management",
+        "Azure Security Center (Microsoft Defender for Cloud) security posture",
+        "AWS GuardDuty threat detection and response",
+        "Microsoft Sentinel SIEM and security analytics",
+        "Automated threat intelligence and incident correlation"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Security Monitoring",
+          "description": "Setup centralized security monitoring and threat detection across both platforms",
+          "steps": [
+            "Configure AWS Security Hub for centralized security findings management",
+            "Setup Azure Security Center with comprehensive security posture monitoring",
+            "Enable AWS GuardDuty for automated threat detection and analysis",
+            "Configure Microsoft Sentinel for SIEM capabilities and security analytics",
+            "Implement threat intelligence feeds and automated correlation",
+            "Setup security incident escalation and response workflows"
+          ],
+          "deliverables": [
+            "Security Hub configuration with consolidated findings",
+            "Azure Security Center setup with security posture monitoring",
+            "GuardDuty and Sentinel threat detection implementation",
+            "Automated threat correlation and incident response workflows"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Compliance Automation and Governance",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS Config rules for compliance monitoring and enforcement",
+        "Azure Policy for governance automation and compliance",
+        "Automated remediation of compliance violations",
+        "Compliance reporting and audit trail management",
+        "Regulatory framework mapping and implementation"
+      ],
+      "tasks": [
+        {
+          "title": "Build Automated Compliance Management",
+          "description": "Implement comprehensive compliance automation with remediation capabilities",
+          "steps": [
+            "Configure AWS Config rules for automated compliance checking",
+            "Setup Azure Policy definitions for governance and compliance enforcement",
+            "Implement automated remediation workflows for compliance violations",
+            "Configure compliance reporting and dashboard visualization",
+            "Map regulatory requirements to technical controls and policies",
+            "Setup compliance audit trails and evidence collection"
+          ],
+          "deliverables": [
+            "Config rules for automated compliance monitoring",
+            "Azure Policy definitions with enforcement and remediation",
+            "Compliance reporting dashboard and audit trails",
+            "Regulatory framework mapping and control implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Vulnerability Management and Patch Automation",
+      "duration": "25 minutes",
+      "topics": [
+        "Amazon Inspector vulnerability assessments and reporting",
+        "Azure Security Center vulnerability management",
+        "AWS Systems Manager Patch Manager automation",
+        "Azure Update Management and patch deployment",
+        "Security baseline enforcement and drift detection"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Automated Vulnerability Management",
+          "description": "Setup comprehensive vulnerability management with automated patching",
+          "steps": [
+            "Configure Amazon Inspector for automated vulnerability assessments",
+            "Setup Azure Security Center vulnerability management and recommendations",
+            "Implement AWS Systems Manager Patch Manager for automated patching",
+            "Configure Azure Update Management for equivalent patch automation",
+            "Setup security baseline enforcement and configuration drift detection",
+            "Create vulnerability remediation workflows and tracking"
+          ],
+          "deliverables": [
+            "Inspector vulnerability assessment automation",
+            "Azure Security Center vulnerability management",
+            "Automated patch management implementation",
+            "Security baseline enforcement and drift detection"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Security Audit and Forensic Capabilities",
+      "duration": "30 minutes",
+      "topics": [
+        "AWS CloudTrail comprehensive audit logging",
+        "Azure Activity Log and audit trail management",
+        "Security event correlation and forensic analysis",
+        "Data classification and privacy protection automation",
+        "Incident response and digital forensics procedures"
+      ],
+      "tasks": [
+        {
+          "title": "Setup Security Audit and Forensic Framework",
+          "description": "Implement comprehensive audit logging and forensic capabilities",
+          "steps": [
+            "Configure AWS CloudTrail for comprehensive audit logging and integrity",
+            "Setup Azure Activity Log with equivalent audit trail capabilities",
+            "Implement security event correlation and forensic analysis tools",
+            "Configure data classification and privacy protection using Macie and Purview",
+            "Create incident response procedures and digital forensics playbooks",
+            "Setup security metrics and executive reporting dashboards"
+          ],
+          "deliverables": [
+            "CloudTrail comprehensive audit logging configuration",
+            "Azure Activity Log and audit trail management",
+            "Security event correlation and forensic analysis framework",
+            "Incident response procedures and forensic capabilities"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Enterprise Security Operations Center (SOC) Implementation",
+      "description": "Build complete security operations center with monitoring, detection, and response",
+      "steps": [
+        "Design security operations center architecture and workflows",
+        "Implement centralized security monitoring and threat detection",
+        "Create automated incident response and escalation procedures",
+        "Setup security metrics and KPI dashboards for different audiences",
+        "Implement threat hunting capabilities and security analytics",
+        "Test end-to-end security incident response with simulated attacks"
+      ],
+      "expectedOutcome": "Production-ready security operations center with automated detection and response"
+    },
+    {
+      "title": "Regulatory Compliance Automation Platform",
+      "description": "Build automated compliance management for multiple regulatory frameworks",
+      "steps": [
+        "Map regulatory requirements (SOC 2, PCI DSS, HIPAA) to technical controls",
+        "Implement automated compliance checking and continuous monitoring",
+        "Create compliance reporting and evidence collection automation",
+        "Setup automated remediation for common compliance violations",
+        "Implement compliance risk assessment and management workflows",
+        "Test compliance automation with audit simulation scenarios"
+      ],
+      "expectedOutcome": "Automated compliance platform supporting multiple regulatory frameworks"
+    },
+    {
+      "title": "Security Incident Response Automation",
+      "description": "Build automated security incident response with containment and recovery",
+      "steps": [
+        "Design incident classification and response procedure matrix",
+        "Implement automated threat detection and incident creation",
+        "Create automated containment and isolation procedures",
+        "Setup forensic data collection and evidence preservation",
+        "Implement automated communication and stakeholder notification",
+        "Test incident response automation with red team exercises"
+      ],
+      "expectedOutcome": "Automated incident response system with containment and recovery capabilities"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Alert fatigue from excessive security alerts and false positives",
+      "solution": "Implement intelligent alerting with machine learning, use alert correlation and suppression, tune detection rules based on environment, and implement tiered response procedures"
+    },
+    {
+      "issue": "Complex compliance requirements causing operational friction",
+      "solution": "Automate compliance checking and remediation, implement policy-as-code, use continuous compliance monitoring, and integrate compliance into CI/CD pipelines"
+    },
+    {
+      "issue": "Slow incident response due to manual processes and poor coordination",
+      "solution": "Implement automated incident response workflows, use security orchestration tools, create clear escalation procedures, and practice incident response regularly"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Security Monitoring Implementation",
+      "criteria": [
+        "Can implement centralized security monitoring and threat detection",
+        "Understands SIEM configuration and security analytics",
+        "Can setup automated threat correlation and incident response",
+        "Demonstrates security metrics and reporting capabilities"
+      ]
+    },
+    {
+      "category": "Compliance Automation",
+      "criteria": [
+        "Can implement automated compliance monitoring and enforcement",
+        "Understands regulatory framework mapping and technical controls",
+        "Can setup automated remediation and compliance reporting",
+        "Demonstrates audit trail management and evidence collection"
+      ]
+    },
+    {
+      "category": "Vulnerability Management",
+      "criteria": [
+        "Can implement automated vulnerability assessments and management",
+        "Understands patch management automation and security baselines",
+        "Can setup vulnerability remediation workflows and tracking",
+        "Demonstrates security configuration management and drift detection"
+      ]
+    },
+    {
+      "category": "Security Operations",
+      "criteria": [
+        "Can implement comprehensive security audit logging",
+        "Understands incident response automation and forensic procedures",
+        "Can setup data classification and privacy protection",
+        "Demonstrates security governance and risk management"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SOA-C02": {
+      "domain": "Security & Compliance",
+      "weight": "16%",
+      "coverage": [
+        "Implement and manage security policies",
+        "Implement access controls when using AWS services",
+        "Implement data security",
+        "Configure compliance monitoring",
+        "Identify and remediate security incidents"
+      ],
+      "examTopics": [
+        "Security Hub and centralized security management",
+        "Config rules and compliance automation",
+        "CloudTrail audit logging and security monitoring",
+        "GuardDuty threat detection and incident response",
+        "Systems Manager and security patch management"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive security monitoring and threat detection",
+    "Demonstrates ability to build automated compliance management systems",
+    "Shows understanding of vulnerability management and patch automation",
+    "Can create security audit and forensic capabilities",
+    "Understands security operations and incident response automation"
+  ],
+
+  "nextSteps": [
+    "Proceed to SOA-C02 Networking & Content Delivery Lab (18% domain weight)",
+    "Gain hands-on experience with advanced security tools and threat hunting",
+    "Practice implementing security operations in production environments",
+    "Explore advanced compliance frameworks and security automation"
+  ]
+}

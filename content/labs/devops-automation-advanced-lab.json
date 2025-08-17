@@ -1,0 +1,1358 @@
+{
+  "lab_metadata": {
+    "id": "devops-automation-advanced-lab",
+    "title": "AWS DevOps to Azure DevOps: Advanced CI/CD Automation and Infrastructure as Code",
+    "category": "devops-automation",
+    "difficulty": "expert",
+    "estimated_time": "210 minutes",
+    "description": "Master enterprise-scale DevOps automation by migrating from AWS DevOps services to Azure DevOps with advanced CI/CD pipelines, infrastructure as code, automated testing, and comprehensive monitoring",
+    "aws_services": ["CodeCommit", "CodeBuild", "CodeDeploy", "CodePipeline", "CloudFormation", "CDK", "CodeGuru", "X-Ray"],
+    "azure_services": ["Azure Repos", "Azure Pipelines", "Azure Artifacts", "Azure Test Plans", "ARM Templates", "Bicep", "Application Insights", "Azure Monitor"],
+    "tags": ["devops", "ci-cd", "infrastructure-as-code", "automation", "testing", "dop-c02-critical", "enterprise"],
+    "prerequisites": [
+      "Understanding of DevOps principles and CI/CD methodologies",
+      "Knowledge of infrastructure as code concepts and practices",
+      "Familiarity with automated testing strategies and frameworks",
+      "Experience with container orchestration and deployment patterns",
+      "Understanding of monitoring, observability, and performance optimization"
+    ],
+    "learning_objectives": [
+      "Migrate AWS CodeCommit repositories to Azure Repos with advanced branching strategies",
+      "Transform CodeBuild and CodeDeploy to Azure Pipelines with enterprise CI/CD patterns",
+      "Convert CloudFormation and CDK to ARM Templates and Bicep for infrastructure automation",
+      "Implement CodeGuru equivalent using Azure DevOps analytics and code quality tools",
+      "Establish X-Ray tracing equivalent using Application Insights and distributed tracing",
+      "Design advanced deployment strategies with blue-green, canary, and feature flag patterns",
+      "Implement comprehensive DevSecOps practices with automated security scanning"
+    ]
+  },
+  "scenario": {
+    "title": "Global SaaS Platform DevOps Transformation",
+    "description": "TechCorp operates a global SaaS platform serving 10M+ users with microservices architecture across 20+ regions. They need to migrate from AWS DevOps to Azure DevOps while implementing advanced automation, zero-downtime deployments, comprehensive observability, and enterprise-grade security with SOC 2 and ISO 27001 compliance.",
+    "business_requirements": [
+      "Zero-downtime deployments with automated rollback capabilities for 100+ microservices",
+      "Advanced CI/CD pipelines supporting multiple deployment strategies (blue-green, canary, feature flags)",
+      "Infrastructure as Code automation for consistent, repeatable deployments across 20+ regions",
+      "Comprehensive automated testing including unit, integration, performance, and security testing",
+      "Real-time observability and monitoring with distributed tracing and performance analytics",
+      "DevSecOps practices with automated security scanning and compliance validation",
+      "Enterprise-scale artifact management with dependency scanning and vulnerability assessment"
+    ],
+    "current_aws_architecture": [
+      "CodeCommit repositories with GitFlow branching and pull request workflows",
+      "CodeBuild for CI with parallel builds and artifact management",
+      "CodeDeploy for automated deployments with blue-green strategies",
+      "CodePipeline orchestrating end-to-end CI/CD workflows",
+      "CloudFormation and CDK for infrastructure automation",
+      "CodeGuru for code quality analysis and performance recommendations",
+      "X-Ray for distributed tracing and application performance monitoring"
+    ],
+    "target_azure_architecture": [
+      "Azure Repos with advanced Git workflows and branch policies",
+      "Azure Pipelines for comprehensive CI/CD with enterprise-scale automation",
+      "Azure Artifacts for artifact management with security scanning",
+      "ARM Templates and Bicep for infrastructure as code automation",
+      "Application Insights for application performance monitoring and distributed tracing",
+      "Azure Test Plans for comprehensive test management and automation",
+      "Azure Monitor for end-to-end observability and alerting"
+    ]
+  },
+  "lab_sections": [
+    {
+      "section": 1,
+      "title": "Advanced Source Control: CodeCommit to Azure Repos Migration",
+      "estimated_time": "45 minutes",
+      "description": "Implement enterprise-scale source control with advanced Git workflows",
+      "aws_context": {
+        "service": "AWS CodeCommit",
+        "description": "Managed Git repositories with integration to AWS DevOps services",
+        "key_features": [
+          "Git repositories with IAM integration for access control",
+          "Pull request workflows with code review processes",
+          "Branch protection and merge strategies",
+          "Integration with CodeBuild and CodePipeline",
+          "Encryption at rest and in transit for source code security"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Repos",
+        "description": "Enterprise Git repositories with advanced collaboration and security features",
+        "key_features": [
+          "Git repositories with Azure AD integration and granular permissions",
+          "Advanced branch policies with required reviewers and build validation",
+          "Pull request templates and automated code quality checks",
+          "Integration with Azure Pipelines and comprehensive DevOps toolchain",
+          "Enterprise security with conditional access and audit logging"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise Azure Repos with Advanced Git Workflows",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create Azure DevOps organization with enterprise repository structure",
+              "aws_context": "Similar to CodeCommit with multiple repositories and access control",
+              "repos_deployment": {
+                "organization_setup": {
+                  "organization_name": "techcorp-devops",
+                  "region": "Central US",
+                  "billing_setup": "Enterprise Agreement",
+                  "security_policies": {
+                    "conditional_access": true,
+                    "two_factor_authentication": "Required",
+                    "ip_restrictions": ["203.0.113.0/24", "198.51.100.0/24"],
+                    "third_party_application_access": "Administrator approval required"
+                  }
+                },
+                "project_structure": [
+                  {
+                    "project_name": "TechCorp-Platform",
+                    "description": "Core platform services and infrastructure",
+                    "visibility": "Private",
+                    "repositories": [
+                      {
+                        "name": "platform-api-gateway",
+                        "description": "API Gateway microservice",
+                        "default_branch": "main",
+                        "branching_strategy": "GitFlow with feature branches"
+                      },
+                      {
+                        "name": "platform-auth-service",
+                        "description": "Authentication and authorization service",
+                        "default_branch": "main",
+                        "branching_strategy": "GitHub Flow with release branches"
+                      },
+                      {
+                        "name": "platform-infrastructure",
+                        "description": "Infrastructure as Code templates",
+                        "default_branch": "main",
+                        "branching_strategy": "Environment-based branching"
+                      }
+                    ]
+                  },
+                  {
+                    "project_name": "TechCorp-Applications",
+                    "description": "Customer-facing applications and services",
+                    "visibility": "Private",
+                    "repositories": [
+                      {
+                        "name": "customer-portal-frontend",
+                        "description": "React-based customer portal",
+                        "default_branch": "main",
+                        "branching_strategy": "Feature branches with automated testing"
+                      },
+                      {
+                        "name": "mobile-api-backend",
+                        "description": "Mobile application backend services",
+                        "default_branch": "main",
+                        "branching_strategy": "Release branches with hotfix support"
+                      }
+                    ]
+                  }
+                ],
+                "azure_cli_setup": "az devops configure --defaults organization=https://dev.azure.com/techcorp-devops project=TechCorp-Platform && az repos create --name platform-api-gateway --project TechCorp-Platform"
+              },
+              "explanation": "Creates enterprise-scale DevOps organization with structured repository management"
+            },
+            {
+              "step": 2,
+              "description": "Configure advanced branch policies and code quality gates",
+              "branch_policies": {
+                "main_branch_protection": {
+                  "branch_name": "main",
+                  "policies": [
+                    {
+                      "policy_type": "MinimumNumberOfReviewers",
+                      "settings": {
+                        "minimum_approver_count": 2,
+                        "creator_vote_counts": false,
+                        "allow_downvotes": false,
+                        "reset_on_source_push": true,
+                        "required_reviewer_policies": [
+                          {
+                            "required_reviewers": ["Security-Team", "Architecture-Team"],
+                            "message": "Security and architecture review required for main branch"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "policy_type": "RequireBuildToPass",
+                      "settings": {
+                        "build_definition_id": "platform-api-gateway-ci",
+                        "valid_duration": 720,
+                        "manual_queue_only": false,
+                        "display_name": "Platform API Gateway CI/CD"
+                      }
+                    },
+                    {
+                      "policy_type": "RequireUpToDateBranches",
+                      "settings": {
+                        "enabled": true
+                      }
+                    },
+                    {
+                      "policy_type": "CommentRequirements",
+                      "settings": {
+                        "status": "Active",
+                        "comment_required": true
+                      }
+                    },
+                    {
+                      "policy_type": "RequireLinkedWorkItems",
+                      "settings": {
+                        "enabled": true
+                      }
+                    }
+                  ]
+                },
+                "environment_branch_policies": {
+                  "development": {
+                    "auto_merge": true,
+                    "delete_source_branch": true,
+                    "required_reviewers": 1
+                  },
+                  "staging": {
+                    "auto_merge": false,
+                    "delete_source_branch": false,
+                    "required_reviewers": 2,
+                    "required_builds": ["staging-deployment-validation"]
+                  },
+                  "production": {
+                    "auto_merge": false,
+                    "delete_source_branch": false,
+                    "required_reviewers": 3,
+                    "required_builds": ["production-readiness-check", "security-scan"],
+                    "additional_approvers": ["Release-Managers", "Security-Leads"]
+                  }
+                },
+                "automated_quality_checks": [
+                  {
+                    "check_name": "Code Coverage Validation",
+                    "tool": "Azure Pipelines",
+                    "threshold": "85% line coverage",
+                    "failure_action": "Block merge"
+                  },
+                  {
+                    "check_name": "Security Vulnerability Scan",
+                    "tool": "Azure Security Center",
+                    "severity_threshold": "Medium",
+                    "failure_action": "Block merge and create security work item"
+                  },
+                  {
+                    "check_name": "Code Quality Analysis",
+                    "tool": "SonarQube",
+                    "quality_gate": "TechCorp Quality Gate",
+                    "failure_action": "Block merge"
+                  },
+                  {
+                    "check_name": "Dependency Vulnerability Check",
+                    "tool": "WhiteSource/Mend",
+                    "policy": "TechCorp Security Policy",
+                    "failure_action": "Create vulnerability work item"
+                  }
+                ]
+              },
+              "explanation": "Implements comprehensive branch protection with automated quality gates and security checks"
+            },
+            {
+              "step": 3,
+              "description": "Configure advanced Git workflow automation and integrations",
+              "workflow_automation": {
+                "pull_request_templates": {
+                  "default_template": {
+                    "title": "## Summary\n\n## Changes Made\n\n## Testing Done\n\n## Security Considerations\n\n## Breaking Changes\n\n## Checklist\n- [ ] Code follows style guidelines\n- [ ] Tests added/updated\n- [ ] Documentation updated\n- [ ] Security review completed\n- [ ] Performance impact assessed",
+                    "auto_assign_reviewers": true,
+                    "auto_assign_work_items": true
+                  },
+                  "security_template": {
+                    "triggers": ["security", "auth", "crypto"],
+                    "required_reviewers": ["Security-Team"],
+                    "additional_checks": ["OWASP security scan", "Compliance validation"]
+                  },
+                  "infrastructure_template": {
+                    "triggers": ["infrastructure", "deployment", "config"],
+                    "required_reviewers": ["Infrastructure-Team", "Security-Team"],
+                    "additional_checks": ["Terraform plan validation", "Cost impact analysis"]
+                  }
+                },
+                "automated_workflows": [
+                  {
+                    "workflow_name": "Feature Branch Automation",
+                    "trigger": "Branch creation with 'feature/' prefix",
+                    "actions": [
+                      "Create corresponding work item if not linked",
+                      "Set up automated CI pipeline",
+                      "Configure branch protection policies",
+                      "Notify team members",
+                      "Create draft pull request"
+                    ]
+                  },
+                  {
+                    "workflow_name": "Release Branch Preparation",
+                    "trigger": "Branch creation with 'release/' prefix",
+                    "actions": [
+                      "Trigger comprehensive test suite",
+                      "Perform security and dependency scans",
+                      "Generate release notes from work items",
+                      "Create deployment validation environment",
+                      "Notify release management team"
+                    ]
+                  },
+                  {
+                    "workflow_name": "Hotfix Automation",
+                    "trigger": "Branch creation with 'hotfix/' prefix",
+                    "actions": [
+                      "Fast-track review process",
+                      "Automated critical path testing",
+                      "Emergency deployment preparation",
+                      "Incident management integration",
+                      "Automated rollback plan creation"
+                    ]
+                  }
+                ],
+                "integration_configurations": {
+                  "work_item_integration": {
+                    "auto_link_commits": true,
+                    "auto_transition_states": {
+                      "on_pr_created": "Active",
+                      "on_pr_approved": "Resolved",
+                      "on_merge_completed": "Closed"
+                    },
+                    "auto_create_work_items": {
+                      "for_bugs": true,
+                      "for_features": true,
+                      "template": "User Story"
+                    }
+                  },
+                  "external_tool_integration": {
+                    "slack_notifications": {
+                      "enabled": true,
+                      "channels": {
+                        "development": "#dev-notifications",
+                        "releases": "#release-notifications",
+                        "security": "#security-alerts"
+                      }
+                    },
+                    "jira_integration": {
+                      "enabled": true,
+                      "auto_transition": true,
+                      "field_mapping": {
+                        "azure_devops_id": "customfield_10001",
+                        "azure_devops_state": "customfield_10002"
+                      }
+                    }
+                  }
+                }
+              },
+              "explanation": "Establishes advanced automation with comprehensive integrations and workflow optimization"
+            }
+          ],
+          "validation": [
+            "Verify Azure Repos enforces branch policies and quality gates correctly",
+            "Test pull request automation and review processes work as expected",
+            "Confirm external integrations function properly with Git workflows",
+            "Validate security policies and access controls are properly enforced"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "title": "Advanced CI/CD Pipelines: CodeBuild/Deploy to Azure Pipelines",
+      "estimated_time": "70 minutes",
+      "description": "Implement enterprise-scale CI/CD automation with advanced deployment strategies",
+      "aws_context": {
+        "service": "AWS CodeBuild + CodeDeploy + CodePipeline",
+        "description": "Comprehensive CI/CD automation with build, test, and deployment orchestration",
+        "key_features": [
+          "CodeBuild for scalable build automation with custom environments",
+          "CodeDeploy for automated deployments with blue-green and rolling strategies",
+          "CodePipeline for end-to-end workflow orchestration",
+          "Integration with CloudFormation for infrastructure deployment",
+          "Artifact management and promotion across environments"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "Azure Pipelines",
+        "description": "Unified CI/CD platform with advanced automation and deployment capabilities",
+        "key_features": [
+          "YAML-based pipelines with template reusability and inheritance",
+          "Multi-stage deployments with approval gates and conditions",
+          "Integration with Azure Resource Manager for infrastructure deployment",
+          "Advanced deployment strategies including blue-green, canary, and feature flags",
+          "Comprehensive artifact management with Azure Artifacts integration"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Enterprise CI/CD Pipelines with Advanced Automation",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create comprehensive CI pipeline with parallel builds and quality gates",
+              "ci_pipeline_configuration": {
+                "pipeline_definition": {
+                  "name": "TechCorp-Platform-CI",
+                  "trigger": {
+                    "branches": {
+                      "include": ["main", "develop", "feature/*", "release/*"],
+                      "exclude": ["experimental/*"]
+                    },
+                    "paths": {
+                      "include": ["src/*", "tests/*", "*.yaml", "*.json"],
+                      "exclude": ["docs/*", "*.md"]
+                    }
+                  },
+                  "variables": [
+                    {
+                      "name": "BuildConfiguration",
+                      "value": "Release"
+                    },
+                    {
+                      "name": "DOTNET_SKIP_FIRST_TIME_EXPERIENCE",
+                      "value": "true"
+                    },
+                    {
+                      "name": "SonarQube.ProjectKey",
+                      "value": "techcorp-platform-api"
+                    }
+                  ],
+                  "pool": {
+                    "vmImage": "ubuntu-latest"
+                  }
+                },
+                "build_stages": [
+                  {
+                    "stage": "Build",
+                    "display_name": "Build and Test",
+                    "jobs": [
+                      {
+                        "job": "BuildApplication",
+                        "display_name": "Build Application Components",
+                        "strategy": {
+                          "parallel": 4
+                        },
+                        "steps": [
+                          {
+                            "task": "UseDotNet@2",
+                            "display_name": "Use .NET 8.0",
+                            "inputs": {
+                              "version": "8.0.x"
+                            }
+                          },
+                          {
+                            "task": "DotNetCoreCLI@2",
+                            "display_name": "Restore NuGet Packages",
+                            "inputs": {
+                              "command": "restore",
+                              "projects": "**/*.csproj",
+                              "feedsToUse": "select",
+                              "includeNuGetOrg": true
+                            }
+                          },
+                          {
+                            "task": "SonarQubePrepare@5",
+                            "display_name": "Prepare SonarQube Analysis",
+                            "inputs": {
+                              "SonarQube": "TechCorp-SonarQube",
+                              "projectKey": "$(SonarQube.ProjectKey)",
+                              "projectName": "TechCorp Platform API"
+                            }
+                          },
+                          {
+                            "task": "DotNetCoreCLI@2",
+                            "display_name": "Build Application",
+                            "inputs": {
+                              "command": "build",
+                              "projects": "**/*.csproj",
+                              "arguments": "--configuration $(BuildConfiguration) --no-restore"
+                            }
+                          },
+                          {
+                            "task": "DotNetCoreCLI@2",
+                            "display_name": "Run Unit Tests",
+                            "inputs": {
+                              "command": "test",
+                              "projects": "**/*Tests.csproj",
+                              "arguments": "--configuration $(BuildConfiguration) --no-build --collect 'Code coverage' --logger trx --results-directory $(Agent.TempDirectory)"
+                            }
+                          },
+                          {
+                            "task": "SonarQubeAnalyze@5",
+                            "display_name": "Run SonarQube Analysis"
+                          },
+                          {
+                            "task": "SonarQubePublish@5",
+                            "display_name": "Publish SonarQube Results"
+                          }
+                        ]
+                      },
+                      {
+                        "job": "SecurityScan",
+                        "display_name": "Security and Vulnerability Scanning",
+                        "steps": [
+                          {
+                            "task": "WhiteSource@21",
+                            "display_name": "WhiteSource Dependency Scan",
+                            "inputs": {
+                              "cwd": "$(Build.SourcesDirectory)",
+                              "projectName": "TechCorp-Platform-API"
+                            }
+                          },
+                          {
+                            "task": "CredScan@3",
+                            "display_name": "Credential Scanner",
+                            "inputs": {
+                              "toolMajorVersion": "V2",
+                              "scanFolder": "$(Build.SourcesDirectory)",
+                              "outputFormat": "sarif"
+                            }
+                          },
+                          {
+                            "task": "AntiMalware@4",
+                            "display_name": "Anti-Malware Scan",
+                            "inputs": {
+                              "InputType": "Basic",
+                              "ScanType": "CustomScan",
+                              "FileDirPath": "$(Build.StagingDirectory)",
+                              "EnableServices": true
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "stage": "QualityGates",
+                    "display_name": "Quality Gates and Validation",
+                    "dependsOn": "Build",
+                    "condition": "succeeded()",
+                    "jobs": [
+                      {
+                        "job": "CodeQualityValidation",
+                        "display_name": "Code Quality Validation",
+                        "steps": [
+                          {
+                            "task": "SonarQubePublish@5",
+                            "display_name": "Publish Quality Gate Results"
+                          },
+                          {
+                            "task": "sonar-quality-gate-check@1",
+                            "display_name": "Check SonarQube Quality Gate",
+                            "inputs": {
+                              "sonarQubeRunAnalysis": true
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "job": "SecurityValidation",
+                        "display_name": "Security Validation",
+                        "steps": [
+                          {
+                            "task": "PublishSecurityAnalysisLogs@3",
+                            "display_name": "Publish Security Analysis Logs"
+                          },
+                          {
+                            "task": "PostAnalysis@2",
+                            "display_name": "Post Security Analysis",
+                            "inputs": {
+                              "GdnBreakAllTools": true,
+                              "GdnBreakPolicy": "Microsoft",
+                              "GdnBreakPolicyMinSev": "Warning"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "stage": "PackageAndPublish",
+                    "display_name": "Package and Publish Artifacts",
+                    "dependsOn": "QualityGates",
+                    "condition": "succeeded()",
+                    "jobs": [
+                      {
+                        "job": "CreateArtifacts",
+                        "display_name": "Create and Publish Artifacts",
+                        "steps": [
+                          {
+                            "task": "DotNetCoreCLI@2",
+                            "display_name": "Publish Application",
+                            "inputs": {
+                              "command": "publish",
+                              "projects": "**/*.csproj",
+                              "arguments": "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app"
+                            }
+                          },
+                          {
+                            "task": "Docker@2",
+                            "display_name": "Build and Push Docker Image",
+                            "inputs": {
+                              "containerRegistry": "TechCorp-ACR",
+                              "repository": "platform/api-gateway",
+                              "command": "buildAndPush",
+                              "Dockerfile": "**/Dockerfile",
+                              "tags": "$(Build.BuildNumber)"
+                            }
+                          },
+                          {
+                            "task": "PublishBuildArtifacts@1",
+                            "display_name": "Publish Build Artifacts",
+                            "inputs": {
+                              "pathToPublish": "$(Build.ArtifactStagingDirectory)",
+                              "artifactName": "platform-api-gateway",
+                              "publishLocation": "Container"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Creates comprehensive CI pipeline with parallel execution, quality gates, and security scanning"
+            },
+            {
+              "step": 2,
+              "description": "Configure advanced CD pipeline with multiple deployment strategies",
+              "cd_pipeline_configuration": {
+                "release_pipeline": {
+                  "name": "TechCorp-Platform-CD",
+                  "artifact_source": "TechCorp-Platform-CI",
+                  "trigger": {
+                    "artifact_filters": [
+                      {
+                        "artifact": "platform-api-gateway",
+                        "branch_filters": ["main", "release/*"]
+                      }
+                    ],
+                    "schedule": {
+                      "enabled": false
+                    }
+                  }
+                },
+                "environments": [
+                  {
+                    "environment": "Development",
+                    "deployment_strategy": "Rolling",
+                    "pre_deployment_conditions": {
+                      "gates": [
+                        {
+                          "gate_type": "Query Azure Monitor",
+                          "display_name": "Check Development Environment Health",
+                          "task": {
+                            "subscription": "TechCorp-Development",
+                            "resource_group": "rg-platform-dev",
+                            "query": "AzureMetrics | where ResourceId contains 'platform-dev' | where MetricName == 'AvailabilityResults/availabilityPercentage' | where Average < 95",
+                            "evaluation_options": {
+                              "timeout": 5,
+                              "interval": 2,
+                              "retry_interval": 1
+                            }
+                          }
+                        }
+                      ],
+                      "approvals": {
+                        "required": false,
+                        "timeout": 0
+                      }
+                    },
+                    "deployment_tasks": [
+                      {
+                        "task": "AzureRmWebAppDeployment@4",
+                        "display_name": "Deploy to Azure App Service",
+                        "inputs": {
+                          "azureSubscription": "TechCorp-Development",
+                          "appType": "webAppContainer",
+                          "WebAppName": "platform-api-gateway-dev",
+                          "DockerNamespace": "techcorpacr.azurecr.io",
+                          "DockerRepository": "platform/api-gateway",
+                          "DockerImageTag": "$(Build.BuildNumber)"
+                        }
+                      },
+                      {
+                        "task": "AzureCLI@2",
+                        "display_name": "Update Application Configuration",
+                        "inputs": {
+                          "azureSubscription": "TechCorp-Development",
+                          "scriptType": "bash",
+                          "scriptLocation": "inlineScript",
+                          "inlineScript": "az webapp config appsettings set --name platform-api-gateway-dev --resource-group rg-platform-dev --settings ASPNETCORE_ENVIRONMENT=Development"
+                        }
+                      }
+                    ],
+                    "post_deployment_conditions": {
+                      "gates": [
+                        {
+                          "gate_type": "Invoke REST API",
+                          "display_name": "Health Check Validation",
+                          "task": {
+                            "url": "https://platform-api-gateway-dev.azurewebsites.net/health",
+                            "method": "GET",
+                            "headers": "{}",
+                            "success_criteria": "eq(root['status'], 'Healthy')"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "environment": "Staging",
+                    "deployment_strategy": "Blue-Green",
+                    "pre_deployment_conditions": {
+                      "gates": [
+                        {
+                          "gate_type": "Query Azure Monitor",
+                          "display_name": "Staging Environment Readiness Check",
+                          "task": {
+                            "subscription": "TechCorp-Staging",
+                            "query": "AzureActivity | where OperationNameValue == 'MICROSOFT.RESOURCES/DEPLOYMENTS/WRITE' | where ActivityStatusValue == 'Failed' | where TimeGenerated > ago(1h)"
+                          }
+                        }
+                      ],
+                      "approvals": {
+                        "required": true,
+                        "approvers": ["Staging-Deployment-Team"],
+                        "timeout": 240,
+                        "instructions": "Please verify staging environment is ready for deployment"
+                      }
+                    },
+                    "deployment_tasks": [
+                      {
+                        "task": "AzureResourceManagerTemplateDeployment@3",
+                        "display_name": "Deploy Blue Environment",
+                        "inputs": {
+                          "azureResourceManagerConnection": "TechCorp-Staging",
+                          "subscriptionId": "staging-subscription-id",
+                          "resourceGroupName": "rg-platform-staging",
+                          "location": "East US",
+                          "templateLocation": "Linked artifact",
+                          "csmFile": "$(System.DefaultWorkingDirectory)/infrastructure/blue-green-template.json",
+                          "csmParametersFile": "$(System.DefaultWorkingDirectory)/infrastructure/staging-parameters.json",
+                          "overrideParameters": "-slotName blue -containerImage techcorpacr.azurecr.io/platform/api-gateway:$(Build.BuildNumber)"
+                        }
+                      },
+                      {
+                        "task": "AzureAppServiceManage@0",
+                        "display_name": "Warm Up Blue Slot",
+                        "inputs": {
+                          "azureSubscription": "TechCorp-Staging",
+                          "action": "Start Azure App Service",
+                          "webAppName": "platform-api-gateway-staging",
+                          "specifySlotOrASE": true,
+                          "slot": "blue"
+                        }
+                      },
+                      {
+                        "task": "AzureCLI@2",
+                        "display_name": "Run Integration Tests on Blue Slot",
+                        "inputs": {
+                          "azureSubscription": "TechCorp-Staging",
+                          "scriptType": "bash",
+                          "scriptLocation": "inlineScript",
+                          "inlineScript": "newman run $(System.DefaultWorkingDirectory)/tests/integration-tests.postman_collection.json --environment $(System.DefaultWorkingDirectory)/tests/blue-slot-environment.json --reporters cli,junit --reporter-junit-export $(Agent.TempDirectory)/integration-test-results.xml"
+                        }
+                      },
+                      {
+                        "task": "AzureAppServiceManage@0",
+                        "display_name": "Swap Blue to Production",
+                        "inputs": {
+                          "azureSubscription": "TechCorp-Staging",
+                          "action": "Swap Slots",
+                          "webAppName": "platform-api-gateway-staging",
+                          "sourceSlot": "blue",
+                          "targetSlot": "production"
+                        }
+                      }
+                    ],
+                    "post_deployment_conditions": {
+                      "gates": [
+                        {
+                          "gate_type": "Query Azure Monitor",
+                          "display_name": "Post-Deployment Health Validation",
+                          "task": {
+                            "query": "requests | where timestamp > ago(10m) | where url contains 'platform-api-gateway-staging' | summarize SuccessRate = (countif(success == true) * 100.0) / count() | where SuccessRate < 99"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "environment": "Production",
+                    "deployment_strategy": "Canary",
+                    "pre_deployment_conditions": {
+                      "gates": [
+                        {
+                          "gate_type": "Query Azure Monitor",
+                          "display_name": "Production Environment Health Check",
+                          "task": {
+                            "query": "AzureMetrics | where ResourceId contains 'platform-prod' | where TimeGenerated > ago(30m) | summarize AvgCPU = avg(Average) by bin(TimeGenerated, 5m) | where AvgCPU > 80"
+                          }
+                        }
+                      ],
+                      "approvals": {
+                        "required": true,
+                        "approvers": ["Production-Release-Team", "Security-Team", "Engineering-Managers"],
+                        "timeout": 1440,
+                        "instructions": "Production deployment requires security review and release manager approval. Please ensure all pre-production validations have passed."
+                      }
+                    },
+                    "deployment_tasks": [
+                      {
+                        "task": "AzureResourceManagerTemplateDeployment@3",
+                        "display_name": "Deploy Canary Environment (10% Traffic)",
+                        "inputs": {
+                          "azureResourceManagerConnection": "TechCorp-Production",
+                          "subscriptionId": "production-subscription-id",
+                          "resourceGroupName": "rg-platform-prod",
+                          "templateLocation": "Linked artifact",
+                          "csmFile": "$(System.DefaultWorkingDirectory)/infrastructure/canary-deployment-template.json",
+                          "overrideParameters": "-canaryPercentage 10 -containerImage techcorpacr.azurecr.io/platform/api-gateway:$(Build.BuildNumber)"
+                        }
+                      },
+                      {
+                        "task": "Delay@1",
+                        "display_name": "Canary Observation Period",
+                        "inputs": {
+                          "delayForMinutes": "30"
+                        }
+                      },
+                      {
+                        "task": "AzureCLI@2",
+                        "display_name": "Evaluate Canary Metrics",
+                        "inputs": {
+                          "azureSubscription": "TechCorp-Production",
+                          "scriptType": "bash",
+                          "scriptLocation": "inlineScript",
+                          "inlineScript": "python $(System.DefaultWorkingDirectory)/scripts/evaluate-canary-metrics.py --subscription production-subscription-id --resource-group rg-platform-prod --timespan 30m"
+                        }
+                      },
+                      {
+                        "task": "AzureResourceManagerTemplateDeployment@3",
+                        "display_name": "Scale Canary to 50% Traffic",
+                        "condition": "succeeded()",
+                        "inputs": {
+                          "azureResourceManagerConnection": "TechCorp-Production",
+                          "overrideParameters": "-canaryPercentage 50"
+                        }
+                      },
+                      {
+                        "task": "Delay@1",
+                        "display_name": "Extended Canary Observation",
+                        "inputs": {
+                          "delayForMinutes": "60"
+                        }
+                      },
+                      {
+                        "task": "AzureResourceManagerTemplateDeployment@3",
+                        "display_name": "Complete Canary Deployment (100% Traffic)",
+                        "condition": "succeeded()",
+                        "inputs": {
+                          "azureResourceManagerConnection": "TechCorp-Production",
+                          "overrideParameters": "-canaryPercentage 100"
+                        }
+                      }
+                    ],
+                    "post_deployment_conditions": {
+                      "gates": [
+                        {
+                          "gate_type": "Query Azure Monitor",
+                          "display_name": "Production Deployment Success Validation",
+                          "task": {
+                            "query": "requests | where timestamp > ago(1h) | where cloud_RoleName == 'platform-api-gateway' | summarize ErrorRate = (countif(success == false) * 100.0) / count(), AvgDuration = avg(duration) | where ErrorRate > 1 or AvgDuration > 5000"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "explanation": "Implements advanced multi-environment CD pipeline with different deployment strategies and comprehensive validation"
+            }
+          ],
+          "validation": [
+            "Verify CI pipeline executes parallel builds and quality gates correctly",
+            "Test different deployment strategies work as expected in each environment",
+            "Confirm approval processes and gates function properly",
+            "Validate rollback procedures and failure handling work correctly"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "title": "Infrastructure as Code: CloudFormation/CDK to ARM/Bicep",
+      "estimated_time": "55 minutes",
+      "description": "Transform infrastructure automation with advanced IaC patterns",
+      "aws_context": {
+        "service": "AWS CloudFormation + CDK",
+        "description": "Infrastructure as Code with declarative templates and programmatic constructs",
+        "key_features": [
+          "CloudFormation templates for declarative infrastructure definition",
+          "AWS CDK for programmatic infrastructure with multiple language support",
+          "Stack management with change sets and drift detection",
+          "Cross-stack references and nested stack patterns",
+          "Integration with CodePipeline for automated infrastructure deployment"
+        ]
+      },
+      "azure_equivalent": {
+        "service": "ARM Templates + Bicep",
+        "description": "Advanced infrastructure as code with declarative and domain-specific languages",
+        "key_features": [
+          "ARM Templates for declarative Azure resource deployment",
+          "Bicep as a domain-specific language for simplified Azure resource definition",
+          "Template specs for reusable and versionable infrastructure patterns",
+          "What-if operations for deployment validation and impact analysis",
+          "Integration with Azure Pipelines for automated infrastructure delivery"
+        ]
+      },
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Implement Advanced Infrastructure as Code with Bicep and ARM Templates",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Create modular Bicep infrastructure templates",
+              "bicep_templates": {
+                "foundation_template": {
+                  "file_name": "main.bicep",
+                  "description": "Main infrastructure template with modular design",
+                  "content": "targetScope = 'subscription'\n\n@description('Environment name (dev, staging, prod)')\n@allowed(['dev', 'staging', 'prod'])\nparam environment string\n\n@description('Application name')\nparam applicationName string = 'techcorp-platform'\n\n@description('Location for all resources')\nparam location string = 'East US'\n\n@description('Tags to apply to all resources')\nparam tags object = {\n  Environment: environment\n  Application: applicationName\n  ManagedBy: 'Azure DevOps'\n  CostCenter: 'Engineering'\n}\n\n// Resource Group\nresource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {\n  name: 'rg-${applicationName}-${environment}'\n  location: location\n  tags: tags\n}\n\n// Networking Module\nmodule networking 'modules/networking.bicep' = {\n  scope: resourceGroup\n  name: 'networking-deployment'\n  params: {\n    environment: environment\n    applicationName: applicationName\n    location: location\n    tags: tags\n  }\n}\n\n// App Service Module\nmodule appService 'modules/appservice.bicep' = {\n  scope: resourceGroup\n  name: 'appservice-deployment'\n  params: {\n    environment: environment\n    applicationName: applicationName\n    location: location\n    subnetId: networking.outputs.appServiceSubnetId\n    tags: tags\n  }\n}\n\n// Database Module\nmodule database 'modules/database.bicep' = {\n  scope: resourceGroup\n  name: 'database-deployment'\n  params: {\n    environment: environment\n    applicationName: applicationName\n    location: location\n    subnetId: networking.outputs.databaseSubnetId\n    tags: tags\n  }\n}\n\n// Monitoring Module\nmodule monitoring 'modules/monitoring.bicep' = {\n  scope: resourceGroup\n  name: 'monitoring-deployment'\n  params: {\n    environment: environment\n    applicationName: applicationName\n    location: location\n    appServiceResourceId: appService.outputs.appServiceResourceId\n    databaseResourceId: database.outputs.databaseResourceId\n    tags: tags\n  }\n}\n\n// Output important resource information\noutput resourceGroupName string = resourceGroup.name\noutput appServiceUrl string = appService.outputs.appServiceUrl\noutput databaseConnectionString string = database.outputs.connectionString\noutput applicationInsightsInstrumentationKey string = monitoring.outputs.instrumentationKey"
+                },
+                "networking_module": {
+                  "file_name": "modules/networking.bicep",
+                  "description": "Networking infrastructure with security and connectivity",
+                  "content": "@description('Environment name')\nparam environment string\n\n@description('Application name')\nparam applicationName string\n\n@description('Location for resources')\nparam location string\n\n@description('Resource tags')\nparam tags object\n\n// Virtual Network\nresource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-04-01' = {\n  name: 'vnet-${applicationName}-${environment}'\n  location: location\n  tags: tags\n  properties: {\n    addressSpace: {\n      addressPrefixes: [\n        '10.0.0.0/16'\n      ]\n    }\n    subnets: [\n      {\n        name: 'subnet-appservice'\n        properties: {\n          addressPrefix: '10.0.1.0/24'\n          delegations: [\n            {\n              name: 'Microsoft.Web/serverFarms'\n              properties: {\n                serviceName: 'Microsoft.Web/serverFarms'\n              }\n            }\n          ]\n          serviceEndpoints: [\n            {\n              service: 'Microsoft.Sql'\n            }\n            {\n              service: 'Microsoft.Storage'\n            }\n          ]\n        }\n      }\n      {\n        name: 'subnet-database'\n        properties: {\n          addressPrefix: '10.0.2.0/24'\n          privateEndpointNetworkPolicies: 'Disabled'\n          privateLinkServiceNetworkPolicies: 'Disabled'\n        }\n      }\n      {\n        name: 'subnet-privateendpoints'\n        properties: {\n          addressPrefix: '10.0.3.0/24'\n          privateEndpointNetworkPolicies: 'Disabled'\n        }\n      }\n    ]\n  }\n}\n\n// Network Security Groups\nresource appServiceNsg 'Microsoft.Network/networkSecurityGroups@2023-04-01' = {\n  name: 'nsg-appservice-${environment}'\n  location: location\n  tags: tags\n  properties: {\n    securityRules: [\n      {\n        name: 'AllowHTTPS'\n        properties: {\n          protocol: 'Tcp'\n          sourcePortRange: '*'\n          destinationPortRange: '443'\n          sourceAddressPrefix: '*'\n          destinationAddressPrefix: '*'\n          access: 'Allow'\n          priority: 100\n          direction: 'Inbound'\n        }\n      }\n      {\n        name: 'AllowAppServiceManagement'\n        properties: {\n          protocol: 'Tcp'\n          sourcePortRange: '*'\n          destinationPortRanges: [\n            '454'\n            '455'\n          ]\n          sourceAddressPrefix: 'AppServiceManagement'\n          destinationAddressPrefix: '*'\n          access: 'Allow'\n          priority: 110\n          direction: 'Inbound'\n        }\n      }\n    ]\n  }\n}\n\nresource databaseNsg 'Microsoft.Network/networkSecurityGroups@2023-04-01' = {\n  name: 'nsg-database-${environment}'\n  location: location\n  tags: tags\n  properties: {\n    securityRules: [\n      {\n        name: 'AllowAppServiceSubnet'\n        properties: {\n          protocol: 'Tcp'\n          sourcePortRange: '*'\n          destinationPortRange: '1433'\n          sourceAddressPrefix: '10.0.1.0/24'\n          destinationAddressPrefix: '*'\n          access: 'Allow'\n          priority: 100\n          direction: 'Inbound'\n        }\n      }\n      {\n        name: 'DenyAllInbound'\n        properties: {\n          protocol: '*'\n          sourcePortRange: '*'\n          destinationPortRange: '*'\n          sourceAddressPrefix: '*'\n          destinationAddressPrefix: '*'\n          access: 'Deny'\n          priority: 4096\n          direction: 'Inbound'\n        }\n      }\n    ]\n  }\n}\n\n// Associate NSGs with subnets\nresource appServiceSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-04-01' = {\n  parent: virtualNetwork\n  name: 'subnet-appservice'\n  properties: {\n    addressPrefix: '10.0.1.0/24'\n    networkSecurityGroup: {\n      id: appServiceNsg.id\n    }\n    delegations: [\n      {\n        name: 'Microsoft.Web/serverFarms'\n        properties: {\n          serviceName: 'Microsoft.Web/serverFarms'\n        }\n      }\n    ]\n    serviceEndpoints: [\n      {\n        service: 'Microsoft.Sql'\n      }\n      {\n        service: 'Microsoft.Storage'\n      }\n    ]\n  }\n}\n\nresource databaseSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-04-01' = {\n  parent: virtualNetwork\n  name: 'subnet-database'\n  properties: {\n    addressPrefix: '10.0.2.0/24'\n    networkSecurityGroup: {\n      id: databaseNsg.id\n    }\n    privateEndpointNetworkPolicies: 'Disabled'\n    privateLinkServiceNetworkPolicies: 'Disabled'\n  }\n}\n\n// Outputs\noutput virtualNetworkId string = virtualNetwork.id\noutput appServiceSubnetId string = appServiceSubnet.id\noutput databaseSubnetId string = databaseSubnet.id\noutput virtualNetworkName string = virtualNetwork.name"
+                },
+                "pipeline_integration": {
+                  "bicep_build_pipeline": {
+                    "stage": "InfrastructureBuild",
+                    "jobs": [
+                      {
+                        "job": "ValidateAndBuildBicep",
+                        "steps": [
+                          {
+                            "task": "AzureCLI@2",
+                            "display_name": "Validate Bicep Templates",
+                            "inputs": {
+                              "azureSubscription": "TechCorp-Development",
+                              "scriptType": "bash",
+                              "scriptLocation": "inlineScript",
+                              "inlineScript": "az bicep build --file infrastructure/main.bicep && az deployment sub validate --location 'East US' --template-file infrastructure/main.json --parameters @infrastructure/parameters/dev.json"
+                            }
+                          },
+                          {
+                            "task": "AzureCLI@2",
+                            "display_name": "Run What-If Analysis",
+                            "inputs": {
+                              "azureSubscription": "TechCorp-Development",
+                              "scriptType": "bash",
+                              "scriptLocation": "inlineScript",
+                              "inlineScript": "az deployment sub what-if --location 'East US' --template-file infrastructure/main.json --parameters @infrastructure/parameters/dev.json"
+                            }
+                          },
+                          {
+                            "task": "PublishBuildArtifacts@1",
+                            "display_name": "Publish Infrastructure Artifacts",
+                            "inputs": {
+                              "pathToPublish": "infrastructure",
+                              "artifactName": "infrastructure-templates"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "explanation": "Creates modular, reusable Bicep templates with comprehensive networking and security"
+            }
+          ],
+          "validation": [
+            "Verify Bicep templates compile and validate successfully",
+            "Test infrastructure deployment across different environments",
+            "Confirm modular design allows for component reusability",
+            "Validate what-if analysis provides accurate deployment previews"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "title": "Advanced Monitoring and Observability",
+      "estimated_time": "40 minutes",
+      "description": "Implement comprehensive DevOps monitoring and observability",
+      "hands_on_exercises": [
+        {
+          "exercise": 1,
+          "title": "Deploy Advanced Application Performance Monitoring and Distributed Tracing",
+          "steps": [
+            {
+              "step": 1,
+              "description": "Configure Application Insights with advanced telemetry and distributed tracing",
+              "monitoring_configuration": {
+                "application_insights": {
+                  "configuration": {
+                    "name": "appi-techcorp-platform",
+                    "application_type": "web",
+                    "retention_in_days": 90,
+                    "sampling_percentage": 100,
+                    "disable_ip_masking": false
+                  },
+                  "advanced_features": {
+                    "live_metrics": {
+                      "enabled": true,
+                      "authentication_api_key": "enabled"
+                    },
+                    "profiler": {
+                      "enabled": true,
+                      "cpu_profiling": true,
+                      "memory_profiling": true
+                    },
+                    "snapshot_debugger": {
+                      "enabled": true,
+                      "collect_snapshot_for_exceptions": true
+                    },
+                    "distributed_tracing": {
+                      "enabled": true,
+                      "auto_collect_dependencies": true,
+                      "correlation_headers": ["Request-Id", "Request-Context"]
+                    }
+                  },
+                  "custom_telemetry": {
+                    "business_metrics": [
+                      {
+                        "metric_name": "UserRegistrations",
+                        "description": "Number of new user registrations",
+                        "aggregation": "sum"
+                      },
+                      {
+                        "metric_name": "PaymentTransactions",
+                        "description": "Payment transaction volume and success rate",
+                        "aggregation": "sum",
+                        "dimensions": ["PaymentMethod", "Status"]
+                      },
+                      {
+                        "metric_name": "APILatency",
+                        "description": "API endpoint response time percentiles",
+                        "aggregation": "avg",
+                        "dimensions": ["Endpoint", "Method"]
+                      }
+                    ],
+                    "alert_rules": [
+                      {
+                        "alert_name": "High Error Rate",
+                        "metric": "exceptions/count",
+                        "threshold": 10,
+                        "evaluation_frequency": "PT5M",
+                        "window_size": "PT15M",
+                        "severity": 2,
+                        "action_groups": ["ag-platform-critical"]
+                      },
+                      {
+                        "alert_name": "Performance Degradation",
+                        "metric": "performanceCounters/requestsPerSecond",
+                        "threshold": 1000,
+                        "operator": "GreaterThan",
+                        "time_aggregation": "Average",
+                        "evaluation_frequency": "PT1M",
+                        "severity": 3
+                      }
+                    ]
+                  }
+                },
+                "log_analytics_workspace": {
+                  "name": "law-techcorp-platform",
+                  "sku": "PerGB2018",
+                  "retention_days": 90,
+                  "daily_quota_gb": 10,
+                  "solutions": [
+                    "ApplicationInsights",
+                    "ContainerInsights",
+                    "SecurityInsights",
+                    "ServiceMap"
+                  ]
+                },
+                "azure_monitor_workbooks": [
+                  {
+                    "workbook_name": "DevOps Performance Dashboard",
+                    "description": "Comprehensive DevOps metrics and KPIs",
+                    "sections": [
+                      {
+                        "section_name": "Deployment Metrics",
+                        "visualizations": [
+                          "Deployment frequency by environment",
+                          "Lead time for changes",
+                          "Mean time to recovery (MTTR)",
+                          "Change failure rate"
+                        ]
+                      },
+                      {
+                        "section_name": "Application Performance",
+                        "visualizations": [
+                          "Response time percentiles",
+                          "Request volume and error rates",
+                          "Dependency performance",
+                          "User session analytics"
+                        ]
+                      },
+                      {
+                        "section_name": "Infrastructure Health",
+                        "visualizations": [
+                          "Resource utilization trends",
+                          "Cost analysis by service",
+                          "Availability and uptime metrics",
+                          "Capacity planning projections"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "explanation": "Establishes comprehensive monitoring with business metrics and advanced diagnostics"
+            }
+          ],
+          "validation": [
+            "Verify Application Insights captures comprehensive telemetry data",
+            "Test distributed tracing across microservices works correctly",
+            "Confirm alert rules trigger appropriate notifications and responses",
+            "Validate custom business metrics provide actionable insights"
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_optimization": [
+    {
+      "area": "DevOps Tool Consolidation",
+      "aws_comparison": "Separate costs for multiple AWS DevOps services",
+      "azure_model": "Integrated Azure DevOps suite with unified licensing",
+      "optimization_strategies": [
+        "Consolidate CI/CD, repositories, and project management in Azure DevOps",
+        "Use Azure DevOps Basic plan for most users, stakeholder licenses for limited access",
+        "Leverage included Azure Pipelines minutes and build agents",
+        "Implement efficient artifact management with Azure Artifacts"
+      ],
+      "estimated_savings": "30-50% reduction in DevOps tooling costs"
+    },
+    {
+      "area": "Infrastructure Automation",
+      "aws_comparison": "Manual infrastructure management with higher operational overhead",
+      "azure_model": "Automated infrastructure as code with Bicep and ARM templates",
+      "optimization_strategies": [
+        "Automate infrastructure provisioning and configuration",
+        "Use Azure Resource Manager for consistent deployments",
+        "Implement infrastructure cost optimization through automation",
+        "Leverage Azure Policy for automated compliance and governance"
+      ],
+      "estimated_savings": "40-60% reduction in infrastructure management costs"
+    },
+    {
+      "area": "Monitoring and Observability",
+      "aws_comparison": "Multiple monitoring tools with separate licensing and management",
+      "azure_model": "Integrated Azure Monitor and Application Insights platform",
+      "optimization_strategies": [
+        "Consolidate monitoring, logging, and analytics in Azure Monitor",
+        "Use Application Insights for comprehensive application performance monitoring",
+        "Implement intelligent alerting to reduce noise and operational overhead",
+        "Leverage built-in dashboards and workbooks for reporting"
+      ],
+      "estimated_savings": "25-40% reduction in monitoring and observability costs"
+    }
+  ],
+  "security_best_practices": [
+    {
+      "category": "Pipeline Security",
+      "practices": [
+        "Use Azure Key Vault for secrets management in pipelines",
+        "Implement least privilege access with service connections",
+        "Enable pipeline security scanning with credential scanner and anti-malware",
+        "Use signed commits and verified publishers for enhanced security"
+      ]
+    },
+    {
+      "category": "Infrastructure Security",
+      "practices": [
+        "Implement infrastructure as code security scanning",
+        "Use Azure Policy for automated compliance validation",
+        "Enable Azure Security Center for infrastructure security monitoring",
+        "Implement network security with NSGs and private endpoints"
+      ]
+    },
+    {
+      "category": "Application Security",
+      "practices": [
+        "Integrate security testing into CI/CD pipelines",
+        "Use Application Insights for security monitoring and threat detection",
+        "Implement dependency vulnerability scanning with WhiteSource/Mend",
+        "Enable Azure AD authentication for application access"
+      ]
+    },
+    {
+      "category": "Compliance and Governance",
+      "practices": [
+        "Implement audit logging for all DevOps activities",
+        "Use Azure DevOps work item tracking for compliance documentation",
+        "Enable retention policies for build and deployment artifacts",
+        "Implement approval processes for production deployments"
+      ]
+    }
+  ],
+  "migration_checklist": [
+    {
+      "phase": "Pre-Migration Planning",
+      "tasks": [
+        "Document current AWS DevOps workflows and tool configurations",
+        "Assess current CI/CD pipelines, repositories, and artifact management",
+        "Analyze current monitoring and observability implementations",
+        "Plan Azure DevOps organization structure and project hierarchy",
+        "Design Azure-based CI/CD pipeline architecture and deployment strategies"
+      ]
+    },
+    {
+      "phase": "Azure DevOps Foundation Setup",
+      "tasks": [
+        "Create Azure DevOps organization with proper security and access controls",
+        "Set up Azure Repos with branch policies and quality gates",
+        "Configure Azure Pipelines with comprehensive CI/CD automation",
+        "Implement Azure Artifacts for artifact and dependency management",
+        "Set up Application Insights and Azure Monitor for observability"
+      ]
+    },
+    {
+      "phase": "Migration Execution",
+      "tasks": [
+        "Migrate source code repositories from CodeCommit to Azure Repos",
+        "Convert CodeBuild/CodeDeploy workflows to Azure Pipelines",
+        "Transform CloudFormation/CDK templates to Bicep/ARM templates",
+        "Implement advanced deployment strategies and approval processes",
+        "Configure comprehensive monitoring and alerting"
+      ]
+    },
+    {
+      "phase": "Testing and Validation",
+      "tasks": [
+        "Test CI/CD pipelines across all environments",
+        "Validate deployment strategies and rollback procedures",
+        "Verify infrastructure as code deployments and automation",
+        "Test monitoring and alerting functionality",
+        "Conduct end-to-end DevOps workflow validation"
+      ]
+    },
+    {
+      "phase": "Optimization and Operations",
+      "tasks": [
+        "Optimize pipeline performance and resource utilization",
+        "Implement advanced DevOps metrics and KPI tracking",
+        "Establish operational procedures and documentation",
+        "Train teams on Azure DevOps best practices and workflows",
+        "Implement continuous improvement processes for DevOps practices"
+      ]
+    }
+  ],
+  "troubleshooting_guide": [
+    {
+      "issue": "Pipeline Build Failures",
+      "symptoms": [
+        "Builds failing inconsistently across environments",
+        "Dependency resolution issues in Azure Pipelines",
+        "Permission errors during build or deployment"
+      ],
+      "solutions": [
+        "Review pipeline logs and error messages for specific failure points",
+        "Verify service connections and permissions are configured correctly",
+        "Check Azure DevOps service status and regional availability",
+        "Validate build agent capabilities and software requirements",
+        "Review artifact dependencies and repository access permissions"
+      ]
+    },
+    {
+      "issue": "Deployment Strategy Issues",
+      "symptoms": [
+        "Blue-green deployments not switching correctly",
+        "Canary deployments showing unexpected behavior",
+        "Rollback procedures failing or incomplete"
+      ],
+      "solutions": [
+        "Verify deployment slot configurations and traffic routing",
+        "Check application health probes and readiness checks",
+        "Review deployment scripts and template parameters",
+        "Validate Azure Resource Manager template syntax and dependencies",
+        "Monitor Azure Resource Manager deployment logs for errors"
+      ]
+    },
+    {
+      "issue": "Infrastructure as Code Problems",
+      "symptoms": [
+        "Bicep template compilation errors",
+        "ARM template deployment failures",
+        "Resource dependency conflicts during deployment"
+      ],
+      "solutions": [
+        "Use Bicep CLI to validate template syntax and compilation",
+        "Run what-if analysis to preview deployment changes",
+        "Review resource dependencies and deployment order",
+        "Check Azure resource provider registrations and quotas",
+        "Validate parameter files and variable substitutions"
+      ]
+    },
+    {
+      "issue": "Monitoring and Alerting Issues",
+      "symptoms": [
+        "Application Insights not collecting telemetry data",
+        "Alert rules not triggering as expected",
+        "Dashboard visualizations showing incorrect data"
+      ],
+      "solutions": [
+        "Verify Application Insights instrumentation key configuration",
+        "Check application telemetry SDK installation and configuration",
+        "Review alert rule logic and evaluation criteria",
+        "Validate Log Analytics workspace connectivity and data ingestion",
+        "Monitor Azure Monitor service health and data freshness"
+      ]
+    }
+  ],
+  "learning_resources": [
+    {
+      "type": "Official Documentation",
+      "links": [
+        "Azure DevOps documentation - https://docs.microsoft.com/en-us/azure/devops/",
+        "Azure Pipelines documentation - https://docs.microsoft.com/en-us/azure/devops/pipelines/",
+        "Bicep documentation - https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/",
+        "Application Insights documentation - https://docs.microsoft.com/en-us/azure/azure-monitor/app/"
+      ]
+    },
+    {
+      "type": "Best Practices Guides",
+      "links": [
+        "DevOps best practices and implementation patterns",
+        "CI/CD pipeline design and optimization strategies",
+        "Infrastructure as code best practices with Bicep and ARM",
+        "Application performance monitoring and observability strategies"
+      ]
+    },
+    {
+      "type": "Migration Resources",
+      "links": [
+        "AWS DevOps to Azure DevOps migration patterns and strategies",
+        "CI/CD pipeline migration planning and execution guides",
+        "Infrastructure as code migration from CloudFormation to Bicep",
+        "Monitoring and observability migration best practices"
+      ]
+    }
+  ],
+  "next_steps": [
+    "Implement Azure Test Plans for comprehensive test management and automation",
+    "Set up Azure Artifacts with advanced package management and security scanning",
+    "Configure Azure DevOps Analytics for advanced DevOps metrics and insights",
+    "Explore GitHub Advanced Security integration for enhanced security scanning",
+    "Implement Azure Resource Manager template specs for enterprise template management",
+    "Set up Azure Monitor for Containers for comprehensive container observability"
+  ]
+}

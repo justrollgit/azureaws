@@ -1,0 +1,307 @@
+{
+  "id": "sqs-sns-servicebus-eventgrid-lab",
+  "title": "SQS/SNS to Service Bus/Event Grid: Message Queuing and Event-Driven Architecture",
+  "difficulty": "intermediate",
+  "estimated_time": "120 minutes",
+  "aws_prerequisite": "Experience with SQS queues, SNS topics, and event-driven applications",
+  "azure_target": "Master Service Bus Queues/Topics and Event Grid for messaging and event-driven architectures",
+  "learning_objectives": [
+    "Compare AWS SQS and Azure Service Bus Queue architectures and features",
+    "Migrate SNS pub/sub patterns to Event Grid and Service Bus Topics",
+    "Implement dead letter queues and message retry policies",
+    "Design event-driven microservices architectures",
+    "Configure cross-service messaging patterns and integration",
+    "Optimize message processing for performance and reliability"
+  ],
+  "aws_context": {
+    "equivalent_service": "SQS, SNS, EventBridge",
+    "key_concepts": [
+      "SQS Standard Queue → Service Bus Queue",
+      "SQS FIFO Queue → Service Bus Queue with Sessions",
+      "SNS Topics → Service Bus Topics or Event Grid",
+      "SNS Subscriptions → Service Bus Subscriptions",
+      "EventBridge → Event Grid Custom Topics",
+      "Dead Letter Queues → Dead Letter Queues",
+      "Message Visibility Timeout → Message Lock Duration",
+      "Long Polling → Message Wait Time"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Understanding Message Queuing Services",
+      "content": "AWS SQS and Azure Service Bus Queues both provide reliable message queuing for decoupled applications. While SQS offers simplicity with standard and FIFO queues, Service Bus provides enterprise features like sessions, transactions, and duplicate detection.",
+      "comparison_table": {
+        "queue_types": {
+          "aws": "SQS Standard (at-least-once) and FIFO (exactly-once)",
+          "azure": "Service Bus Queues with at-least-once and exactly-once semantics",
+          "use_case": "Asynchronous processing, work distribution"
+        },
+        "message_size": {
+          "aws": "256KB per message (extended to 2GB with S3)",
+          "azure": "256KB standard, 100MB premium tier",
+          "use_case": "Large message handling strategies"
+        },
+        "retention": {
+          "aws": "1 minute to 14 days",
+          "azure": "Up to 14 days default, configurable",
+          "use_case": "Message durability requirements"
+        },
+        "throughput": {
+          "aws": "Standard: unlimited, FIFO: 3,000 msgs/sec",
+          "azure": "Depends on tier: Standard/Premium performance levels",
+          "use_case": "High-volume message processing"
+        }
+      },
+      "code_examples": {
+        "sqs_to_servicebus_send": {
+          "language": "python",
+          "title": "Message Sending: SQS to Service Bus Migration",
+          "code": "# AWS SQS Example\nimport boto3\nsqs = boto3.client('sqs')\n\nresponse = sqs.send_message(\n    QueueUrl='https://sqs.region.amazonaws.com/account/queue-name',\n    MessageBody='Order processing request',\n    MessageAttributes={\n        'OrderId': {'StringValue': '12345', 'DataType': 'String'},\n        'Priority': {'StringValue': 'High', 'DataType': 'String'}\n    }\n)\n\n# Azure Service Bus Example\nfrom azure.servicebus import ServiceBusClient, ServiceBusMessage\n\nconnection_str = 'Endpoint=sb://namespace.servicebus.windows.net/...'\nqueue_name = 'orders-queue'\n\nwith ServiceBusClient.from_connection_string(connection_str) as client:\n    sender = client.get_queue_sender(queue_name)\n    message = ServiceBusMessage(\n        'Order processing request',\n        application_properties={'OrderId': '12345', 'Priority': 'High'},\n        time_to_live=datetime.timedelta(days=1)\n    )\n    sender.send_messages(message)"
+        },
+        "sqs_to_servicebus_receive": {
+          "language": "python",
+          "title": "Message Receiving: SQS to Service Bus Pattern",
+          "code": "# AWS SQS Receive\nimport boto3\nsqs = boto3.client('sqs')\n\nresponse = sqs.receive_message(\n    QueueUrl=queue_url,\n    MaxNumberOfMessages=10,\n    WaitTimeSeconds=20,  # Long polling\n    VisibilityTimeout=30\n)\n\nfor message in response.get('Messages', []):\n    # Process message\n    process_order(message['Body'])\n    # Delete message after processing\n    sqs.delete_message(\n        QueueUrl=queue_url,\n        ReceiptHandle=message['ReceiptHandle']\n    )\n\n# Azure Service Bus Receive\nfrom azure.servicebus import ServiceBusClient\n\nwith ServiceBusClient.from_connection_string(connection_str) as client:\n    receiver = client.get_queue_receiver(\n        queue_name,\n        max_wait_time=20  # Similar to long polling\n    )\n    \n    messages = receiver.receive_messages(\n        max_message_count=10,\n        max_wait_time=5\n    )\n    \n    for message in messages:\n        # Process message\n        process_order(str(message))\n        # Complete message (similar to delete)\n        receiver.complete_message(message)"
+        }
+      }
+    },
+    {
+      "title": "Pub/Sub Patterns: SNS to Service Bus Topics and Event Grid",
+      "content": "AWS SNS and Azure's Service Bus Topics/Event Grid both enable publish-subscribe patterns. Service Bus Topics provide enterprise messaging features while Event Grid excels at reactive event-driven scenarios with massive scale.",
+      "comparison_table": {
+        "sns_to_service_bus_topics": {
+          "aws": "SNS Topics with multiple subscription types",
+          "azure": "Service Bus Topics with filtered subscriptions",
+          "use_case": "Enterprise pub/sub messaging with guaranteed delivery"
+        },
+        "sns_to_event_grid": {
+          "aws": "SNS with HTTP/S endpoints and fan-out",
+          "azure": "Event Grid with event handlers and filtering",
+          "use_case": "Reactive programming and serverless events"
+        },
+        "filtering": {
+          "aws": "SNS Message filtering on attributes",
+          "azure": "Service Bus SQL filters / Event Grid advanced filters",
+          "use_case": "Selective message/event routing"
+        },
+        "delivery_guarantees": {
+          "aws": "At-least-once delivery with retries",
+          "azure": "Service Bus: At-least-once, Event Grid: At-least-once with retry",
+          "use_case": "Reliability requirements"
+        }
+      },
+      "code_examples": {
+        "sns_to_servicebus_topics": {
+          "language": "python",
+          "title": "Pub/Sub Migration: SNS to Service Bus Topics",
+          "code": "# AWS SNS Publish\nimport boto3\nsns = boto3.client('sns')\n\nresponse = sns.publish(\n    TopicArn='arn:aws:sns:region:account:order-events',\n    Message='New order received',\n    Subject='Order Event',\n    MessageAttributes={\n        'EventType': {'DataType': 'String', 'StringValue': 'OrderCreated'},\n        'Region': {'DataType': 'String', 'StringValue': 'US-East'}\n    }\n)\n\n# Azure Service Bus Topics Publish\nfrom azure.servicebus import ServiceBusClient, ServiceBusMessage\n\nwith ServiceBusClient.from_connection_string(connection_str) as client:\n    sender = client.get_topic_sender('order-events')\n    message = ServiceBusMessage(\n        'New order received',\n        subject='OrderCreated',  # Used for filtering\n        application_properties={\n            'EventType': 'OrderCreated',\n            'Region': 'US-East'\n        }\n    )\n    sender.send_messages(message)\n\n# Subscription with Filter (Azure)\n# Create subscription with SQL filter in portal or via management SDK\n# Filter example: EventType = 'OrderCreated' AND Region = 'US-East'"
+        },
+        "sns_to_eventgrid": {
+          "language": "python",
+          "title": "Event-Driven Pattern: SNS to Event Grid",
+          "code": "# AWS EventBridge (Evolution of SNS for events)\nimport boto3\nevents = boto3.client('events')\n\nresponse = events.put_events(\n    Entries=[{\n        'Source': 'order.service',\n        'DetailType': 'Order Status Change',\n        'Detail': json.dumps({\n            'orderId': '12345',\n            'status': 'shipped',\n            'timestamp': datetime.now().isoformat()\n        })\n    }]\n)\n\n# Azure Event Grid Publish\nfrom azure.eventgrid import EventGridPublisherClient, EventGridEvent\nfrom azure.core.credentials import AzureKeyCredential\n\nclient = EventGridPublisherClient(\n    endpoint='https://topic.region.eventgrid.azure.net',\n    credential=AzureKeyCredential(key)\n)\n\nevent = EventGridEvent(\n    subject='orders/shipping',\n    event_type='Order.Shipped',\n    data={\n        'orderId': '12345',\n        'status': 'shipped',\n        'timestamp': datetime.now().isoformat()\n    },\n    data_version='1.0'\n)\n\nclient.send(event)"
+        }
+      }
+    },
+    {
+      "title": "Dead Letter Queues and Error Handling",
+      "content": "Both AWS and Azure provide dead letter queue mechanisms for handling failed messages. These patterns are critical for building resilient message-driven applications.",
+      "comparison_table": {
+        "dlq_configuration": {
+          "aws": "Configure DLQ with max receive count",
+          "azure": "Auto-forward to DLQ after max delivery count",
+          "use_case": "Handling poison messages"
+        },
+        "retry_policies": {
+          "aws": "Visibility timeout and redrive policy",
+          "azure": "Lock duration and max delivery count",
+          "use_case": "Transient failure handling"
+        },
+        "monitoring": {
+          "aws": "CloudWatch metrics for DLQ depth",
+          "azure": "Azure Monitor metrics for dead letter messages",
+          "use_case": "Alerting on processing failures"
+        }
+      },
+      "code_examples": {
+        "dlq_configuration": {
+          "language": "bash",
+          "title": "Dead Letter Queue Configuration",
+          "code": "# AWS SQS DLQ Configuration\naws sqs create-queue --queue-name orders-dlq\naws sqs create-queue --queue-name orders-queue \\\n  --attributes '{\n    \"RedrivePolicy\": \"{\\\"deadLetterTargetArn\\\":\\\"arn:aws:sqs:region:account:orders-dlq\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\",\n    \"MessageRetentionPeriod\": \"345600\"\n  }'\n\n# Azure Service Bus DLQ (Azure CLI)\naz servicebus queue create \\\n  --resource-group myRG \\\n  --namespace-name myNamespace \\\n  --name orders-queue \\\n  --max-delivery-count 3 \\\n  --forward-dead-lettered-messages-to orders-dlq\n\n# Note: In Service Bus, DLQ is automatically created as a sub-queue\n# Access pattern: orders-queue/$deadletterqueue"
+        },
+        "dlq_processing": {
+          "language": "python",
+          "title": "Processing Dead Letter Messages",
+          "code": "# AWS SQS DLQ Processing\nimport boto3\nsqs = boto3.client('sqs')\n\ndef process_dlq():\n    dlq_url = 'https://sqs.region.amazonaws.com/account/orders-dlq'\n    \n    while True:\n        response = sqs.receive_message(\n            QueueUrl=dlq_url,\n            MaxNumberOfMessages=10\n        )\n        \n        for message in response.get('Messages', []):\n            # Analyze why message failed\n            error_count = message['Attributes'].get('ApproximateReceiveCount')\n            \n            # Attempt to reprocess or log for manual intervention\n            if can_retry(message['Body']):\n                # Send back to main queue\n                sqs.send_message(\n                    QueueUrl=main_queue_url,\n                    MessageBody=message['Body']\n                )\n            else:\n                log_to_error_store(message)\n            \n            # Remove from DLQ\n            sqs.delete_message(\n                QueueUrl=dlq_url,\n                ReceiptHandle=message['ReceiptHandle']\n            )\n\n# Azure Service Bus DLQ Processing\nfrom azure.servicebus import ServiceBusClient\n\ndef process_dlq():\n    with ServiceBusClient.from_connection_string(connection_str) as client:\n        # Access DLQ sub-queue\n        dlq_receiver = client.get_queue_receiver(\n            queue_name='orders-queue',\n            sub_queue=ServiceBusSubQueue.DEAD_LETTER\n        )\n        \n        messages = dlq_receiver.receive_messages(max_message_count=10)\n        \n        for message in messages:\n            # Get delivery count and error reason\n            delivery_count = message.delivery_count\n            error_reason = message.dead_letter_reason\n            error_desc = message.dead_letter_error_description\n            \n            # Attempt reprocessing\n            if can_retry(str(message)):\n                # Send back to main queue\n                sender = client.get_queue_sender('orders-queue')\n                new_message = ServiceBusMessage(str(message))\n                sender.send_messages(new_message)\n            else:\n                log_to_error_store(message, error_reason)\n            \n            # Complete DLQ message\n            dlq_receiver.complete_message(message)"
+        }
+      }
+    },
+    {
+      "title": "Event-Driven Microservices Architecture",
+      "content": "Implementing event-driven architectures using message queues and event systems enables loose coupling, scalability, and resilience in microservices applications.",
+      "architecture_patterns": {
+        "choreography_pattern": {
+          "description": "Services communicate through events without central orchestration",
+          "aws_implementation": "SNS + SQS fan-out pattern or EventBridge",
+          "azure_implementation": "Service Bus Topics + Subscriptions or Event Grid",
+          "use_case": "Decoupled microservices with autonomous service behavior"
+        },
+        "saga_pattern": {
+          "description": "Distributed transactions across multiple services",
+          "aws_implementation": "Step Functions with SQS/SNS",
+          "azure_implementation": "Durable Functions with Service Bus",
+          "use_case": "Complex workflows requiring compensation logic"
+        },
+        "event_sourcing": {
+          "description": "Store state changes as sequence of events",
+          "aws_implementation": "Kinesis + DynamoDB Streams",
+          "azure_implementation": "Event Hubs + Cosmos DB Change Feed",
+          "use_case": "Audit trails and temporal queries"
+        }
+      },
+      "code_examples": {
+        "event_driven_order_processing": {
+          "language": "python",
+          "title": "Event-Driven Order Processing System",
+          "code": "# Azure Implementation - Order Service\nfrom azure.servicebus import ServiceBusClient, ServiceBusMessage\nfrom azure.eventgrid import EventGridPublisherClient, EventGridEvent\n\nclass OrderService:\n    def __init__(self, sb_conn_str, eg_endpoint, eg_key):\n        self.sb_client = ServiceBusClient.from_connection_string(sb_conn_str)\n        self.eg_client = EventGridPublisherClient(\n            endpoint=eg_endpoint,\n            credential=AzureKeyCredential(eg_key)\n        )\n    \n    async def create_order(self, order_data):\n        # 1. Validate and save order\n        order = await save_order_to_db(order_data)\n        \n        # 2. Send command to inventory service via Service Bus\n        inventory_sender = self.sb_client.get_queue_sender('inventory-commands')\n        command = ServiceBusMessage(\n            json.dumps({\n                'command': 'ReserveInventory',\n                'orderId': order.id,\n                'items': order.items\n            }),\n            subject='ReserveInventory',\n            correlation_id=order.id\n        )\n        inventory_sender.send_messages(command)\n        \n        # 3. Publish event for other services via Event Grid\n        event = EventGridEvent(\n            subject=f'orders/{order.id}',\n            event_type='Order.Created',\n            data={\n                'orderId': order.id,\n                'customerId': order.customer_id,\n                'total': order.total,\n                'items': order.items\n            },\n            data_version='1.0'\n        )\n        self.eg_client.send(event)\n        \n        return order\n\n# Inventory Service - Service Bus Queue Processor\nclass InventoryService:\n    def __init__(self, sb_conn_str, eg_endpoint, eg_key):\n        self.sb_client = ServiceBusClient.from_connection_string(sb_conn_str)\n        self.eg_client = EventGridPublisherClient(\n            endpoint=eg_endpoint,\n            credential=AzureKeyCredential(eg_key)\n        )\n    \n    async def process_inventory_commands(self):\n        receiver = self.sb_client.get_queue_receiver(\n            'inventory-commands',\n            max_wait_time=30\n        )\n        \n        async for message in receiver:\n            try:\n                command_data = json.loads(str(message))\n                \n                if command_data['command'] == 'ReserveInventory':\n                    # Reserve inventory\n                    success = await reserve_inventory(\n                        command_data['orderId'],\n                        command_data['items']\n                    )\n                    \n                    # Publish result event\n                    event_type = 'Inventory.Reserved' if success else 'Inventory.Failed'\n                    event = EventGridEvent(\n                        subject=f\"inventory/{command_data['orderId']}\",\n                        event_type=event_type,\n                        data={\n                            'orderId': command_data['orderId'],\n                            'success': success,\n                            'timestamp': datetime.now().isoformat()\n                        }\n                    )\n                    self.eg_client.send(event)\n                \n                # Complete message on success\n                await receiver.complete_message(message)\n            \n            except Exception as e:\n                # Message goes to DLQ after max retries\n                await receiver.abandon_message(message)\n                logging.error(f'Failed to process command: {e}')\n\n# Payment Service - Event Grid Subscriber\nclass PaymentService:\n    async def handle_order_events(self, event: EventGridEvent):\n        if event.event_type == 'Order.Created':\n            # Process payment for new order\n            order_id = event.data['orderId']\n            amount = event.data['total']\n            \n            payment_result = await process_payment(\n                order_id,\n                amount,\n                event.data['customerId']\n            )\n            \n            # Publish payment result\n            result_event = EventGridEvent(\n                subject=f'payments/{order_id}',\n                event_type='Payment.Processed' if payment_result.success else 'Payment.Failed',\n                data={\n                    'orderId': order_id,\n                    'success': payment_result.success,\n                    'transactionId': payment_result.transaction_id\n                }\n            )\n            await publish_event(result_event)"
+        },
+        "fan_out_pattern": {
+          "language": "json",
+          "title": "Fan-Out Pattern Configuration",
+          "code": "// AWS SNS + SQS Fan-out\n{\n  \"OrderEventsTopic\": {\n    \"Type\": \"AWS::SNS::Topic\",\n    \"Properties\": {\n      \"DisplayName\": \"Order Events\",\n      \"Subscriptions\": [\n        {\n          \"Endpoint\": \"arn:aws:sqs:region:account:inventory-queue\",\n          \"Protocol\": \"sqs\"\n        },\n        {\n          \"Endpoint\": \"arn:aws:sqs:region:account:shipping-queue\",\n          \"Protocol\": \"sqs\"\n        },\n        {\n          \"Endpoint\": \"arn:aws:sqs:region:account:analytics-queue\",\n          \"Protocol\": \"sqs\"\n        }\n      ]\n    }\n  }\n}\n\n// Azure Service Bus Topics Fan-out\n{\n  \"serviceBusNamespace\": \"order-messaging\",\n  \"topic\": {\n    \"name\": \"order-events\",\n    \"subscriptions\": [\n      {\n        \"name\": \"inventory-subscription\",\n        \"forwardTo\": \"inventory-processing-queue\",\n        \"sqlFilter\": \"EventType IN ('OrderCreated', 'OrderUpdated')\"\n      },\n      {\n        \"name\": \"shipping-subscription\",\n        \"forwardTo\": \"shipping-processing-queue\",\n        \"sqlFilter\": \"EventType = 'OrderConfirmed'\"\n      },\n      {\n        \"name\": \"analytics-subscription\",\n        \"forwardTo\": \"analytics-queue\",\n        \"sqlFilter\": \"1=1\"  // Receives all messages\n      }\n    ]\n  }\n}"
+        }
+      }
+    },
+    {
+      "title": "Performance Optimization and Best Practices",
+      "content": "Optimizing message processing performance requires understanding batching, parallel processing, and proper resource allocation strategies.",
+      "optimization_strategies": {
+        "batch_processing": {
+          "aws": "SQS batch operations (SendMessageBatch, ReceiveMessage with MaxNumberOfMessages)",
+          "azure": "Service Bus batch send/receive operations",
+          "performance_gain": "Up to 10x throughput improvement"
+        },
+        "parallel_consumers": {
+          "aws": "Multiple Lambda functions or EC2 instances polling SQS",
+          "azure": "Multiple Function Apps or Service Bus processor instances",
+          "performance_gain": "Linear scalability with consumer count"
+        },
+        "message_prefetch": {
+          "aws": "SQS long polling with WaitTimeSeconds",
+          "azure": "Service Bus PrefetchCount setting",
+          "performance_gain": "Reduced latency and API calls"
+        }
+      },
+      "code_examples": {
+        "batch_operations": {
+          "language": "python",
+          "title": "Batch Message Processing for Performance",
+          "code": "# Azure Service Bus Batch Operations\nfrom azure.servicebus import ServiceBusClient, ServiceBusMessage\nimport asyncio\n\nclass BatchMessageProcessor:\n    def __init__(self, connection_str, queue_name):\n        self.client = ServiceBusClient.from_connection_string(connection_str)\n        self.queue_name = queue_name\n    \n    async def send_batch(self, messages):\n        \"\"\"Send messages in batches for better performance\"\"\"\n        sender = self.client.get_queue_sender(self.queue_name)\n        \n        # Create batch\n        batch = sender.create_message_batch()\n        \n        for msg_data in messages:\n            message = ServiceBusMessage(\n                json.dumps(msg_data),\n                application_properties={'ProcessingType': 'Batch'}\n            )\n            \n            # Add to batch, send if full\n            if not batch.add_message(message):\n                await sender.send_messages(batch)\n                batch = sender.create_message_batch()\n                batch.add_message(message)\n        \n        # Send remaining messages\n        if batch:\n            await sender.send_messages(batch)\n    \n    async def receive_batch(self, batch_size=50):\n        \"\"\"Receive and process messages in batches\"\"\"\n        receiver = self.client.get_queue_receiver(\n            self.queue_name,\n            prefetch_count=batch_size * 2,  # Prefetch for performance\n            max_wait_time=30\n        )\n        \n        while True:\n            # Receive batch\n            messages = receiver.receive_messages(\n                max_message_count=batch_size,\n                max_wait_time=5\n            )\n            \n            if not messages:\n                break\n            \n            # Process batch in parallel\n            tasks = []\n            for message in messages:\n                tasks.append(self.process_message(message))\n            \n            results = await asyncio.gather(*tasks, return_exceptions=True)\n            \n            # Complete successful messages\n            for i, (message, result) in enumerate(zip(messages, results)):\n                if not isinstance(result, Exception):\n                    receiver.complete_message(message)\n                else:\n                    # Abandon failed messages for retry\n                    receiver.abandon_message(message)\n                    logging.error(f'Failed to process: {result}')\n    \n    async def process_message(self, message):\n        \"\"\"Process individual message\"\"\"\n        data = json.loads(str(message))\n        # Simulate processing\n        await asyncio.sleep(0.1)\n        return f\"Processed: {data.get('id')}\"\n\n# Performance comparison\n# Single message processing: ~100 msgs/sec\n# Batch processing with prefetch: ~1000+ msgs/sec"
+        },
+        "concurrent_processing": {
+          "language": "python",
+          "title": "Concurrent Message Processing Pattern",
+          "code": "# Azure Service Bus Concurrent Processing\nfrom azure.servicebus.aio import ServiceBusClient\nfrom concurrent.futures import ThreadPoolExecutor\nimport asyncio\n\nclass ConcurrentMessageProcessor:\n    def __init__(self, connection_str, num_workers=10):\n        self.connection_str = connection_str\n        self.num_workers = num_workers\n        self.executor = ThreadPoolExecutor(max_workers=num_workers)\n    \n    async def process_queue_concurrently(self, queue_name):\n        \"\"\"Process messages from queue with multiple concurrent workers\"\"\"\n        tasks = []\n        \n        # Create multiple worker tasks\n        for worker_id in range(self.num_workers):\n            task = asyncio.create_task(\n                self.worker(queue_name, worker_id)\n            )\n            tasks.append(task)\n        \n        # Wait for all workers\n        await asyncio.gather(*tasks)\n    \n    async def worker(self, queue_name, worker_id):\n        \"\"\"Individual worker processing messages\"\"\"\n        async with ServiceBusClient.from_connection_string(\n            self.connection_str\n        ) as client:\n            \n            receiver = client.get_queue_receiver(\n                queue_name,\n                prefetch_count=10\n            )\n            \n            async with receiver:\n                while True:\n                    messages = await receiver.receive_messages(\n                        max_message_count=5,\n                        max_wait_time=10\n                    )\n                    \n                    if not messages:\n                        logging.info(f'Worker {worker_id}: No messages, waiting...')\n                        await asyncio.sleep(5)\n                        continue\n                    \n                    for message in messages:\n                        try:\n                            # Process message\n                            await self.process_single_message(\n                                message,\n                                worker_id\n                            )\n                            \n                            # Mark as complete\n                            await receiver.complete_message(message)\n                            \n                        except Exception as e:\n                            logging.error(\n                                f'Worker {worker_id} error: {e}'\n                            )\n                            await receiver.abandon_message(message)\n    \n    async def process_single_message(self, message, worker_id):\n        \"\"\"Process individual message with CPU-bound work\"\"\"\n        data = json.loads(str(message))\n        \n        # Offload CPU-intensive work to thread pool\n        loop = asyncio.get_event_loop()\n        result = await loop.run_in_executor(\n            self.executor,\n            self.cpu_intensive_task,\n            data\n        )\n        \n        logging.info(f'Worker {worker_id} processed: {result}')\n        return result\n    \n    def cpu_intensive_task(self, data):\n        \"\"\"Simulate CPU-intensive processing\"\"\"\n        # Complex data transformation, calculations, etc.\n        import time\n        time.sleep(0.5)  # Simulate work\n        return f\"Processed {data.get('id')}\"\n\n# Usage\nprocessor = ConcurrentMessageProcessor(\n    connection_str='...',\n    num_workers=20  # Adjust based on workload\n)\n\n# Run concurrent processing\nasyncio.run(\n    processor.process_queue_concurrently('high-volume-queue')\n)"
+        }
+      }
+    }
+  ],
+  "exercise": {
+    "scenario": "Your company is migrating a multi-service e-commerce platform from AWS to Azure. The platform uses SQS for order processing, SNS for event notifications, and needs to maintain the same reliability and performance characteristics.",
+    "steps": [
+      {
+        "step": 1,
+        "title": "Create Service Bus Namespace and Resources",
+        "aws_equivalent": "Creating SQS queues and SNS topics",
+        "instructions": "Set up Azure Service Bus namespace with queues and topics for the order processing system",
+        "code": {
+          "cli": "# Create resource group\naz group create --name MessageLabRG --location eastus\n\n# Create Service Bus namespace (Premium for better performance)\naz servicebus namespace create \\\n  --resource-group MessageLabRG \\\n  --name ordersystem$RANDOM \\\n  --location eastus \\\n  --sku Premium\n\n# Create order processing queue\naz servicebus queue create \\\n  --resource-group MessageLabRG \\\n  --namespace-name ordersystem \\\n  --name order-processing \\\n  --max-delivery-count 3 \\\n  --lock-duration PT30S\n\n# Create dead letter queue monitoring\naz servicebus queue create \\\n  --resource-group MessageLabRG \\\n  --namespace-name ordersystem \\\n  --name order-processing-dlq",
+          "portal": "Navigate to Service Bus → Create namespace → Add queues and topics with dead letter queue enabled"
+        }
+      },
+      {
+        "step": 2,
+        "title": "Set Up Service Bus Topics and Subscriptions",
+        "aws_equivalent": "Creating SNS topics with subscriptions",
+        "instructions": "Create topics for pub/sub messaging with filtered subscriptions",
+        "code": {
+          "cli": "# Create order events topic\naz servicebus topic create \\\n  --resource-group MessageLabRG \\\n  --namespace-name ordersystem \\\n  --name order-events\n\n# Create inventory subscription with filter\naz servicebus topic subscription create \\\n  --resource-group MessageLabRG \\\n  --namespace-name ordersystem \\\n  --topic-name order-events \\\n  --name inventory-subscription\n\n# Add SQL filter for inventory events\naz servicebus topic subscription rule create \\\n  --resource-group MessageLabRG \\\n  --namespace-name ordersystem \\\n  --topic-name order-events \\\n  --subscription-name inventory-subscription \\\n  --name inventory-filter \\\n  --filter-sql-expression \"EventType IN ('OrderCreated', 'OrderUpdated')\"",
+          "portal": "Service Bus namespace → Topics → Create topic → Add subscriptions with SQL filters"
+        }
+      },
+      {
+        "step": 3,
+        "title": "Configure Event Grid for Event-Driven Architecture",
+        "aws_equivalent": "Setting up EventBridge rules and targets",
+        "instructions": "Create Event Grid topic for reactive event processing",
+        "code": {
+          "cli": "# Create Event Grid topic\naz eventgrid topic create \\\n  --resource-group MessageLabRG \\\n  --name order-events-grid \\\n  --location eastus\n\n# Create event subscription for Function App\naz eventgrid event-subscription create \\\n  --name order-processor-sub \\\n  --source-resource-id /subscriptions/{subscription-id}/resourceGroups/MessageLabRG/providers/Microsoft.EventGrid/topics/order-events-grid \\\n  --endpoint-type webhook \\\n  --endpoint https://orderfunctions.azurewebsites.net/api/ProcessOrder \\\n  --included-event-types Order.Created Order.Updated",
+          "portal": "Event Grid Topics → Create → Add event subscriptions with webhook endpoints"
+        }
+      },
+      {
+        "step": 4,
+        "title": "Implement Message Processing Application",
+        "aws_equivalent": "Lambda functions processing SQS messages",
+        "instructions": "Deploy Function App to process Service Bus messages",
+        "code": {
+          "cli": "# Create Function App\naz functionapp create \\\n  --resource-group MessageLabRG \\\n  --consumption-plan-location eastus \\\n  --runtime python \\\n  --functions-version 4 \\\n  --name orderfunctions$RANDOM \\\n  --storage-account orderstorage$RANDOM\n\n# Configure Service Bus connection\naz functionapp config appsettings set \\\n  --resource-group MessageLabRG \\\n  --name orderfunctions \\\n  --settings ServiceBusConnection=\"{connection-string}\"",
+          "portal": "Function App → Configuration → Add Service Bus trigger function"
+        },
+        "explanation": "Function Apps with Service Bus triggers provide similar capabilities to Lambda with SQS triggers, with automatic scaling and retry handling"
+      },
+      {
+        "step": 5,
+        "title": "Test Message Flow and Monitor",
+        "aws_equivalent": "CloudWatch monitoring for SQS/SNS",
+        "instructions": "Send test messages and monitor processing through Azure Monitor",
+        "code": {
+          "cli": "# Send test message to queue\naz servicebus queue send \\\n  --resource-group MessageLabRG \\\n  --namespace-name ordersystem \\\n  --queue-name order-processing \\\n  --message '{\"orderId\":\"12345\",\"status\":\"pending\"}'\n\n# Check queue metrics\naz monitor metrics list \\\n  --resource /subscriptions/{subscription-id}/resourceGroups/MessageLabRG/providers/Microsoft.ServiceBus/namespaces/ordersystem \\\n  --metric ActiveMessages \\\n  --interval PT1M",
+          "portal": "Service Bus namespace → Metrics → Monitor active messages, dead letter messages, and throughput"
+        }
+      }
+    ]
+  },
+  "validation_steps": [
+    {
+      "step": "Verify message sending to Service Bus Queue",
+      "command": "az servicebus queue show --resource-group MessageLabRG --namespace-name ordersystem --name order-processing --query messageCount",
+      "expected": "Message count increases after sending test messages"
+    },
+    {
+      "step": "Check dead letter queue for failed messages",
+      "command": "az servicebus queue show --resource-group MessageLabRG --namespace-name ordersystem --name order-processing --query countDetails.deadLetterMessageCount",
+      "expected": "Dead letter count shows failed message count"
+    },
+    {
+      "step": "Verify Event Grid message delivery",
+      "command": "az eventgrid topic show --resource-group MessageLabRG --name order-events-grid --query metric",
+      "expected": "Successful event delivery metrics"
+    },
+    {
+      "step": "Monitor Function App processing",
+      "command": "az functionapp function show --resource-group MessageLabRG --name orderfunctions --function-name ProcessOrder",
+      "expected": "Function execution count and success rate"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all resources to avoid charges",
+    "command": "az group delete --name MessageLabRG --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Service Bus Queues provide enterprise features beyond SQS including sessions, transactions, and duplicate detection",
+    "Service Bus Topics offer more sophisticated filtering than SNS with SQL-based subscription filters",
+    "Event Grid scales massively for event-driven architectures similar to EventBridge",
+    "Dead letter queues in Service Bus are sub-queues with automatic forwarding",
+    "Azure Functions with Service Bus triggers provide similar capabilities to Lambda with SQS",
+    "Batch processing and prefetch significantly improve throughput performance",
+    "Monitor dead letter queues and delivery counts for reliability"
+  ],
+  "next_steps": [
+    "Explore Service Bus sessions for ordered message processing",
+    "Implement transaction support across multiple queues",
+    "Learn about Service Bus duplicate detection features",
+    "Study Event Grid domains for multi-tenant scenarios",
+    "Investigate Azure Logic Apps for complex orchestration"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "category": "Database Services",
+  "description": "Relational databases, NoSQL, and data warehousing solutions",
+  "services": [
+    {
+      "aws": {
+        "name": "Amazon RDS",
+        "description": "Managed relational database service",
+        "use_cases": ["OLTP applications", "Web applications", "Mobile backends", "Enterprise applications"],
+        "pricing_model": "Pay per instance hour, storage, and data transfer"
+      },
+      "azure": {
+        "name": "Azure Database for MySQL/PostgreSQL/MariaDB",
+        "description": "Fully managed relational database services",
+        "use_cases": ["OLTP applications", "Web applications", "Mobile backends", "Enterprise applications"],
+        "pricing_model": "Pay per vCore and storage with flexible and provisioned options"
+      },
+      "migration_notes": [
+        "Azure offers separate services for each database engine (MySQL, PostgreSQL, MariaDB)",
+        "Azure Database flexible server provides more control than single server",
+        "Built-in high availability with zone-redundant options",
+        "Azure Database Migration Service for schema and data migration",
+        "Connection pooling and read replicas available for scaling"
+      ],
+      "learning_resources": [
+        "RDS to Azure Database migration guide",
+        "Azure Database for MySQL quickstart",
+        "Database migration best practices"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon DynamoDB",
+        "description": "Fully managed NoSQL database service",
+        "use_cases": ["Gaming leaderboards", "IoT data", "Mobile backends", "Real-time personalization"],
+        "pricing_model": "Pay per read/write capacity units or on-demand requests"
+      },
+      "azure": {
+        "name": "Azure Cosmos DB",
+        "description": "Globally distributed multi-model database service",
+        "use_cases": ["Gaming leaderboards", "IoT data", "Mobile backends", "Real-time personalization"],
+        "pricing_model": "Pay per provisioned throughput (RU/s) and storage"
+      },
+      "migration_notes": [
+        "Cosmos DB supports multiple APIs: SQL, MongoDB, Cassandra, Gremlin, Table",
+        "Global distribution with multi-region writes (DynamoDB Global Tables equivalent)",
+        "Five consistency levels vs DynamoDB's eventual and strong consistency",
+        "Request Units (RUs) vs Read/Write Capacity Units - different pricing model",
+        "Azure Cosmos DB Migration Tool for data transfer"
+      ],
+      "learning_resources": [
+        "DynamoDB to Cosmos DB migration guide",
+        "Cosmos DB consistency levels explained",
+        "Multi-model database design patterns"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon Redshift",
+        "description": "Fully managed data warehouse service",
+        "use_cases": ["Business intelligence", "Data analytics", "Big data processing", "Reporting"],
+        "pricing_model": "Pay per node hour with reserved instance discounts"
+      },
+      "azure": {
+        "name": "Azure Synapse Analytics",
+        "description": "Analytics service that brings together data warehouse and big data",
+        "use_cases": ["Business intelligence", "Data analytics", "Big data processing", "Machine learning"],
+        "pricing_model": "Pay per data warehouse unit (DWU) or serverless on-demand"
+      },
+      "migration_notes": [
+        "Azure Synapse combines data warehouse, data lake, and analytics workspaces",
+        "Supports both provisioned and serverless compute models",
+        "T-SQL compatibility for easier migration from Redshift",
+        "Integration with Azure Data Factory for ETL workflows",
+        "Built-in Apache Spark pools for big data processing"
+      ],
+      "learning_resources": [
+        "Redshift to Synapse migration strategy",
+        "Azure Synapse workspace setup",
+        "Data warehouse modernization patterns"
+      ]
+    },
+    {
+      "aws": {
+        "name": "Amazon ElastiCache",
+        "description": "In-memory caching service with Redis and Memcached",
+        "use_cases": ["Session storage", "Real-time analytics", "Gaming leaderboards", "Chat/messaging"],
+        "pricing_model": "Pay per node hour by instance type"
+      },
+      "azure": {
+        "name": "Azure Cache for Redis",
+        "description": "Fully managed Redis cache service",
+        "use_cases": ["Session storage", "Real-time analytics", "Gaming leaderboards", "Chat/messaging"],
+        "pricing_model": "Pay per cache size and tier (Basic, Standard, Premium)"
+      },
+      "migration_notes": [
+        "Azure Cache for Redis only supports Redis (no Memcached equivalent)",
+        "Premium tier offers Redis clustering and data persistence",
+        "VNet integration available for secure access",
+        "Built-in monitoring and alerting with Azure Monitor",
+        "Redis modules support in Premium tier for extended functionality"
+      ],
+      "learning_resources": [
+        "ElastiCache to Azure Cache migration",
+        "Redis clustering configuration",
+        "Cache performance optimization"
+      ]
+    }
+  ]
+}

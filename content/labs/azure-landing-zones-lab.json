@@ -1,0 +1,329 @@
+{
+  "id": "azure-landing-zones-lab", 
+  "title": "AWS Landing Zone to Azure Landing Zones: Enterprise Architecture Migration",
+  "difficulty": "expert",
+  "estimated_time": "240 minutes",
+  "aws_prerequisite": "Experience with AWS Control Tower, Landing Zone, Organizations, and enterprise multi-account strategies",
+  "azure_target": "Implement Azure Landing Zones with enterprise-scale architecture, governance, and compliance",
+  "learning_objectives": [
+    "Understand Azure Landing Zones vs AWS Control Tower architecture",
+    "Implement management group hierarchy equivalent to AWS Organizations",
+    "Set up subscription management and governance at scale",
+    "Deploy hub and spoke network architecture",
+    "Implement enterprise governance with Azure Policy and Blueprints",
+    "Set up identity and access management at enterprise scale",
+    "Configure monitoring, logging, and compliance frameworks",
+    "Implement cost management and optimization across subscriptions"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "control_tower": "Azure Landing Zones + Management Groups",
+      "organizations": "Azure Management Groups + Subscriptions",
+      "scp": "Azure Policy at Management Group level",
+      "landing_zone": "Azure Landing Zone accelerator",
+      "account_factory": "Subscription factory with Blueprints",
+      "cloudtrail": "Azure Activity Log + Monitor",
+      "config": "Azure Policy + Resource Graph",
+      "guardduty": "Azure Security Center + Sentinel"
+    },
+    "architecture_mapping": {
+      "root_organization": "Root Management Group",
+      "organizational_units": "Child Management Groups",
+      "aws_accounts": "Azure Subscriptions",
+      "shared_services_account": "Platform/Connectivity Subscriptions",
+      "security_account": "Security/Identity Subscriptions",
+      "workload_accounts": "Landing Zone Subscriptions"
+    }
+  },
+  "sections": [
+    {
+      "title": "Azure Landing Zones Architecture Overview",
+      "content": "Comprehensive architecture comparison between AWS Landing Zone and Azure Landing Zones.",
+      "architecture_comparison": {
+        "foundational_structure": {
+          "aws": "AWS Organizations with OUs and SCPs",
+          "azure": "Management Groups with Azure Policy and RBAC",
+          "key_difference": "Azure provides more granular policy inheritance and RBAC scopes"
+        },
+        "account_subscription_model": {
+          "aws": "Multiple AWS accounts for isolation",
+          "azure": "Subscriptions within Management Groups for isolation",
+          "key_difference": "Azure subscriptions provide similar isolation with better resource management"
+        },
+        "governance_model": {
+          "aws": "SCPs for preventive controls, Config for detective",
+          "azure": "Azure Policy for preventive/detective/corrective controls",
+          "key_difference": "Azure Policy provides more comprehensive governance capabilities"
+        },
+        "networking_model": {
+          "aws": "Transit Gateway for hub-spoke, VPC peering",
+          "azure": "Virtual WAN or traditional hub-spoke with VNet peering",
+          "key_difference": "Azure Virtual WAN provides more integrated global networking"
+        },
+        "identity_model": {
+          "aws": "AWS SSO + Cross-account roles",
+          "azure": "Azure AD with unified identity across subscriptions",
+          "key_difference": "Azure AD provides more native identity integration"
+        }
+      }
+    },
+    {
+      "title": "Management Group Hierarchy Setup",
+      "content": "Create management group structure equivalent to AWS Organizations OUs.",
+      "code_examples": {
+        "create_management_group_hierarchy": {
+          "language": "bash",
+          "title": "Create Enterprise Management Group Structure",
+          "code": "# Create root management group structure (equivalent to AWS Organizations)\n# Note: Root management group already exists, we create structure under it\n\n# Get current tenant root group ID\nROOT_MG_ID=$(az account management-group list --query '[?name==`Tenant Root Group`].id' -o tsv | head -1)\nif [ -z \"$ROOT_MG_ID\" ]; then\n  ROOT_MG_ID=$(az account management-group list --query '[0].id' -o tsv)\nfi\n\necho \"Root Management Group ID: $ROOT_MG_ID\"\n\n# Create Enterprise Scale Management Group structure\n# Level 1: Core business functions\naz account management-group create \\\n  --name \"corp\" \\\n  --display-name \"Corp\" \\\n  --parent $ROOT_MG_ID\n\naz account management-group create \\\n  --name \"platform\" \\\n  --display-name \"Platform\" \\\n  --parent $ROOT_MG_ID\n\naz account management-group create \\\n  --name \"landing-zones\" \\\n  --display-name \"Landing Zones\" \\\n  --parent $ROOT_MG_ID\n\naz account management-group create \\\n  --name \"decommissioned\" \\\n  --display-name \"Decommissioned\" \\\n  --parent $ROOT_MG_ID\n\naz account management-group create \\\n  --name \"sandbox\" \\\n  --display-name \"Sandbox\" \\\n  --parent $ROOT_MG_ID\n\n# Level 2: Platform management groups\naz account management-group create \\\n  --name \"platform-connectivity\" \\\n  --display-name \"Connectivity\" \\\n  --parent \"/providers/Microsoft.Management/managementGroups/platform\"\n\naz account management-group create \\\n  --name \"platform-identity\" \\\n  --display-name \"Identity\" \\\n  --parent \"/providers/Microsoft.Management/managementGroups/platform\"\n\naz account management-group create \\\n  --name \"platform-management\" \\\n  --display-name \"Management\" \\\n  --parent \"/providers/Microsoft.Management/managementGroups/platform\"\n\n# Level 2: Landing zone management groups by environment\naz account management-group create \\\n  --name \"lz-prod\" \\\n  --display-name \"Production Landing Zones\" \\\n  --parent \"/providers/Microsoft.Management/managementGroups/landing-zones\"\n\naz account management-group create \\\n  --name \"lz-nonprod\" \\\n  --display-name \"Non-Production Landing Zones\" \\\n  --parent \"/providers/Microsoft.Management/managementGroups/landing-zones\""
+        },
+        "assign_subscriptions_to_management_groups": {
+          "language": "bash",
+          "title": "Assign Subscriptions to Management Groups",
+          "code": "# Get current subscription ID\nCURRENT_SUB_ID=$(az account show --query id -o tsv)\n\n# Move current subscription to appropriate management group\n# (In real implementation, you'd have separate subscriptions for each purpose)\naz account management-group subscription add \\\n  --name \"lz-nonprod\" \\\n  --subscription $CURRENT_SUB_ID\n\n# List management group hierarchy\necho \"Management Group Hierarchy:\"\naz account management-group show \\\n  --name $ROOT_MG_ID \\\n  --expand \\\n  --recurse \\\n  --query 'properties.details' \\\n  --output json | jq -r '.managementGroupAncestorsChain[0].displayName'\n\n# Show detailed hierarchy\naz account management-group list \\\n  --query 'sort_by([], &name)[].{Name:name, DisplayName:displayName, Parent:properties.parent.displayName}' \\\n  --output table"
+        }
+      ]
+    },
+    {
+      "title": "Enterprise Policy Framework",
+      "content": "Implement governance policies equivalent to AWS SCPs across the management group hierarchy.",
+      "code_examples": {
+        "create_enterprise_policies": {
+          "language": "bash",
+          "title": "Create Enterprise Governance Policies",
+          "code": "# Create policy set for platform governance\ncat > platform-governance-policies.json << 'EOF'\n{\n  \"displayName\": \"Platform Governance Policies\",\n  \"description\": \"Core governance policies for platform subscriptions\",\n  \"metadata\": {\n    \"category\": \"Platform Governance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/0a914e76-4921-4c19-b460-a2d36003525a\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/404c3081-a854-4457-ae30-26a93ef643f9\",\n      \"parameters\": {}\n    }\n  ]\n}\nEOF\n\n# Create Landing Zone policies\ncat > landing-zone-policies.json << 'EOF'\n{\n  \"displayName\": \"Landing Zone Policies\",\n  \"description\": \"Governance policies for workload landing zones\",\n  \"metadata\": {\n    \"category\": \"Landing Zone Governance\"\n  },\n  \"policyDefinitions\": [\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/1e30110a-5ceb-460c-a204-c1c3969c6d62\",\n      \"parameters\": {}\n    },\n    {\n      \"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/013e242c-8828-4970-87b3-ab247555486d\",\n      \"parameters\": {}\n    }\n  ]\n}\nEOF\n\n# Create policy initiatives\naz policy set-definition create \\\n  --name platform-governance \\\n  --definitions platform-governance-policies.json \\\n  --management-group platform\n\naz policy set-definition create \\\n  --name landing-zone-governance \\\n  --definitions landing-zone-policies.json \\\n  --management-group landing-zones\n\n# Assign policies to management groups\naz policy assignment create \\\n  --name \"Platform Governance\" \\\n  --policy-set-definition platform-governance \\\n  --scope \"/providers/Microsoft.Management/managementGroups/platform\" \\\n  --display-name \"Platform Governance Policies\"\n\naz policy assignment create \\\n  --name \"Landing Zone Governance\" \\\n  --policy-set-definition landing-zone-governance \\\n  --scope \"/providers/Microsoft.Management/managementGroups/landing-zones\" \\\n  --display-name \"Landing Zone Governance Policies\""
+        },
+        "create_custom_enterprise_policies": {
+          "language": "bash",
+          "title": "Create Custom Enterprise Policies",
+          "code": "# Create policy for required resource naming convention\ncat > naming-convention-policy.json << 'EOF'\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"in\": [\n            \"Microsoft.Resources/resourceGroups\",\n            \"Microsoft.Compute/virtualMachines\",\n            \"Microsoft.Storage/storageAccounts\",\n            \"Microsoft.Network/virtualNetworks\"\n          ]\n        },\n        {\n          \"not\": {\n            \"anyOf\": [\n              {\n                \"field\": \"name\",\n                \"match\": \"[parameters('namePattern')]\"\n              },\n              {\n                \"field\": \"type\",\n                \"equals\": \"Microsoft.Storage/storageAccounts\"\n              }\n            ]\n          }\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"parameters\": {\n    \"namePattern\": {\n      \"type\": \"String\",\n      \"metadata\": {\n        \"displayName\": \"Name Pattern\",\n        \"description\": \"Pattern that resource names must match\"\n      },\n      \"defaultValue\": \"*-prod-*|*-dev-*|*-test-*\"\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Enforce resource naming convention\",\n    \"description\": \"Ensures resources follow enterprise naming standards\"\n  }\n}\nEOF\n\n# Create allowed locations policy\ncat > allowed-locations-policy.json << 'EOF'\n{\n  \"mode\": \"Indexed\",\n  \"policyRule\": {\n    \"if\": {\n      \"not\": {\n        \"field\": \"location\",\n        \"in\": \"[parameters('allowedLocations')]\"\n      }\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  },\n  \"parameters\": {\n    \"allowedLocations\": {\n      \"type\": \"Array\",\n      \"metadata\": {\n        \"displayName\": \"Allowed locations\",\n        \"description\": \"The list of allowed locations for resources\"\n      },\n      \"defaultValue\": [\"eastus\", \"westus2\", \"centralus\"]\n    }\n  },\n  \"metadata\": {\n    \"displayName\": \"Allowed locations for resources\",\n    \"description\": \"Restricts resources to approved geographic locations\"\n  }\n}\nEOF\n\n# Create the custom policy definitions\naz policy definition create \\\n  --name enterprise-naming-convention \\\n  --rules naming-convention-policy.json \\\n  --management-group corp\n\naz policy definition create \\\n  --name enterprise-allowed-locations \\\n  --rules allowed-locations-policy.json \\\n  --management-group corp"
+        }
+      ]
+    },
+    {
+      "title": "Platform Subscriptions Setup",
+      "content": "Set up platform subscriptions equivalent to AWS shared services accounts.",
+      "code_examples": {
+        "create_platform_resources": {
+          "language": "bash",
+          "title": "Deploy Platform Infrastructure",
+          "code": "# Create resource groups for platform services\naz group create \\\n  --name connectivity-hub-rg \\\n  --location eastus \\\n  --tags Purpose=Connectivity Environment=Platform\n\naz group create \\\n  --name identity-rg \\\n  --location eastus \\\n  --tags Purpose=Identity Environment=Platform\n\naz group create \\\n  --name management-rg \\\n  --location eastus \\\n  --tags Purpose=Management Environment=Platform\n\n# Create Log Analytics workspace for enterprise logging\naz monitor log-analytics workspace create \\\n  --resource-group management-rg \\\n  --workspace-name enterprise-logs-workspace \\\n  --location eastus \\\n  --retention-time 90 \\\n  --sku PerGB2018\n\n# Create Azure Automation account for enterprise automation\naz automation account create \\\n  --resource-group management-rg \\\n  --name enterprise-automation \\\n  --location eastus \\\n  --sku Basic\n\n# Create Key Vault for platform secrets\naz keyvault create \\\n  --name enterprise-platform-kv-$(date +%s) \\\n  --resource-group identity-rg \\\n  --location eastus \\\n  --sku premium \\\n  --enable-soft-delete true \\\n  --soft-delete-retention-days 90 \\\n  --enable-purge-protection true\n\n# Get platform Key Vault name\nPLATFORM_KV=$(az keyvault list --resource-group identity-rg --query '[0].name' -o tsv)"
+        }
+      ]
+    },
+    {
+      "title": "Hub and Spoke Network Architecture",
+      "content": "Implement hub and spoke networking equivalent to AWS Transit Gateway architecture.",
+      "code_examples": {
+        "create_hub_network": {
+          "language": "bash",
+          "title": "Create Hub Virtual Network",
+          "code": "# Create hub virtual network (equivalent to AWS Transit Gateway hub)\naz network vnet create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-vnet \\\n  --address-prefix 10.0.0.0/16 \\\n  --subnet-name GatewaySubnet \\\n  --subnet-prefix 10.0.0.0/26 \\\n  --location eastus\n\n# Add additional subnets to hub\naz network vnet subnet create \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name hub-vnet \\\n  --name AzureFirewallSubnet \\\n  --address-prefix 10.0.1.0/26\n\naz network vnet subnet create \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name hub-vnet \\\n  --name shared-services-subnet \\\n  --address-prefix 10.0.2.0/24\n\naz network vnet subnet create \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name hub-vnet \\\n  --name management-subnet \\\n  --address-prefix 10.0.3.0/24\n\n# Create Azure Firewall for centralized security\naz network public-ip create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-firewall-ip \\\n  --sku Standard \\\n  --location eastus\n\naz extension add --name azure-firewall\naz network firewall create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-firewall \\\n  --location eastus \\\n  --vnet-name hub-vnet \\\n  --public-ip hub-firewall-ip \\\n  --sku AZFW_VNet \\\n  --tier Standard\n\n# Create VPN Gateway for hybrid connectivity\naz network public-ip create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-vpn-gateway-ip \\\n  --sku Standard \\\n  --location eastus\n\naz network vnet-gateway create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-vpn-gateway \\\n  --public-ip-address hub-vpn-gateway-ip \\\n  --vnet hub-vnet \\\n  --gateway-type Vpn \\\n  --sku VpnGw1 \\\n  --vpn-type RouteBased \\\n  --no-wait"
+        },
+        "create_spoke_networks": {
+          "language": "bash",
+          "title": "Create Spoke Networks and Peering",
+          "code": "# Create production spoke network\naz network vnet create \\\n  --resource-group connectivity-hub-rg \\\n  --name prod-spoke-vnet \\\n  --address-prefix 10.1.0.0/16 \\\n  --subnet-name web-subnet \\\n  --subnet-prefix 10.1.1.0/24 \\\n  --location eastus\n\naz network vnet subnet create \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name app-subnet \\\n  --address-prefix 10.1.2.0/24\n\naz network vnet subnet create \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name data-subnet \\\n  --address-prefix 10.1.3.0/24\n\n# Create development spoke network\naz network vnet create \\\n  --resource-group connectivity-hub-rg \\\n  --name dev-spoke-vnet \\\n  --address-prefix 10.2.0.0/16 \\\n  --subnet-name web-subnet \\\n  --subnet-prefix 10.2.1.0/24 \\\n  --location eastus\n\naz network vnet subnet create \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name dev-spoke-vnet \\\n  --name app-subnet \\\n  --address-prefix 10.2.2.0/24\n\n# Create VNet peerings (hub to spokes)\naz network vnet peering create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-to-prod \\\n  --vnet-name hub-vnet \\\n  --remote-vnet prod-spoke-vnet \\\n  --allow-vnet-access \\\n  --allow-gateway-transit\n\naz network vnet peering create \\\n  --resource-group connectivity-hub-rg \\\n  --name prod-to-hub \\\n  --vnet-name prod-spoke-vnet \\\n  --remote-vnet hub-vnet \\\n  --allow-vnet-access \\\n  --use-remote-gateways\n\naz network vnet peering create \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-to-dev \\\n  --vnet-name hub-vnet \\\n  --remote-vnet dev-spoke-vnet \\\n  --allow-vnet-access \\\n  --allow-gateway-transit\n\naz network vnet peering create \\\n  --resource-group connectivity-hub-rg \\\n  --name dev-to-hub \\\n  --vnet-name dev-spoke-vnet \\\n  --remote-vnet hub-vnet \\\n  --allow-vnet-access \\\n  --use-remote-gateways"
+        },
+        "configure_routing": {
+          "language": "bash",
+          "title": "Configure User Defined Routes",
+          "code": "# Get Azure Firewall private IP\nFIREWALL_IP=$(az network firewall show \\\n  --resource-group connectivity-hub-rg \\\n  --name hub-firewall \\\n  --query 'ipConfigurations[0].privateIpAddress' -o tsv)\n\necho \"Firewall IP: $FIREWALL_IP\"\n\n# Create route table for production spoke\naz network route-table create \\\n  --resource-group connectivity-hub-rg \\\n  --name prod-spoke-rt \\\n  --location eastus\n\n# Add route to send traffic through firewall\naz network route-table route create \\\n  --resource-group connectivity-hub-rg \\\n  --route-table-name prod-spoke-rt \\\n  --name default-route \\\n  --address-prefix 0.0.0.0/0 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_IP\n\n# Add route for inter-spoke communication through hub\naz network route-table route create \\\n  --resource-group connectivity-hub-rg \\\n  --route-table-name prod-spoke-rt \\\n  --name to-dev-spoke \\\n  --address-prefix 10.2.0.0/16 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_IP\n\n# Associate route table with prod spoke subnets\naz network vnet subnet update \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name web-subnet \\\n  --route-table prod-spoke-rt\n\naz network vnet subnet update \\\n  --resource-group connectivity-hub-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name app-subnet \\\n  --route-table prod-spoke-rt"
+        }
+      ]
+    },
+    {
+      "title": "Enterprise Identity and Access Management",
+      "content": "Configure enterprise identity equivalent to AWS SSO and cross-account roles.",
+      "code_examples": {
+        "configure_rbac_enterprise": {
+          "language": "bash",
+          "title": "Configure Enterprise RBAC Structure",
+          "code": "# Create custom roles for enterprise governance\ncat > platform-admin-role.json << 'EOF'\n{\n  \"Name\": \"Platform Administrator\",\n  \"Description\": \"Administrative access to platform subscriptions\",\n  \"Actions\": [\n    \"*\"\n  ],\n  \"NotActions\": [\n    \"Microsoft.Authorization/*/Delete\",\n    \"Microsoft.Authorization/*/Write\",\n    \"Microsoft.Authorization/elevateAccess/Action\"\n  ],\n  \"DataActions\": [],\n  \"NotDataActions\": [],\n  \"AssignableScopes\": [\n    \"/providers/Microsoft.Management/managementGroups/platform\"\n  ]\n}\nEOF\n\ncat > landing-zone-contributor-role.json << 'EOF'\n{\n  \"Name\": \"Landing Zone Contributor\",\n  \"Description\": \"Contributor access to landing zone subscriptions with governance restrictions\",\n  \"Actions\": [\n    \"*\"\n  ],\n  \"NotActions\": [\n    \"Microsoft.Authorization/*/Delete\",\n    \"Microsoft.Authorization/*/Write\",\n    \"Microsoft.Network/*/Delete\",\n    \"Microsoft.Compute/disks/delete\"\n  ],\n  \"DataActions\": [],\n  \"NotDataActions\": [],\n  \"AssignableScopes\": [\n    \"/providers/Microsoft.Management/managementGroups/landing-zones\"\n  ]\n}\nEOF\n\n# Create custom roles\naz role definition create --role-definition platform-admin-role.json\naz role definition create --role-definition landing-zone-contributor-role.json\n\n# Create Azure AD groups for enterprise roles\naz ad group create \\\n  --display-name \"Platform Administrators\" \\\n  --mail-nickname \"platform-admins\" \\\n  --description \"Administrators for platform subscriptions\"\n\naz ad group create \\\n  --display-name \"Landing Zone Contributors\" \\\n  --mail-nickname \"lz-contributors\" \\\n  --description \"Contributors for landing zone subscriptions\"\n\naz ad group create \\\n  --display-name \"Security Team\" \\\n  --mail-nickname \"security-team\" \\\n  --description \"Security team with cross-subscription access\"\n\n# Get group object IDs\nPLATFORM_ADMIN_GROUP=$(az ad group show --group \"Platform Administrators\" --query objectId -o tsv)\nLZ_CONTRIBUTOR_GROUP=$(az ad group show --group \"Landing Zone Contributors\" --query objectId -o tsv)\nSECURITY_GROUP=$(az ad group show --group \"Security Team\" --query objectId -o tsv)"
+        },
+        "assign_enterprise_permissions": {
+          "language": "bash",
+          "title": "Assign Enterprise Permissions",
+          "code": "# Assign platform admin role to platform management group\naz role assignment create \\\n  --assignee $PLATFORM_ADMIN_GROUP \\\n  --role \"Platform Administrator\" \\\n  --scope \"/providers/Microsoft.Management/managementGroups/platform\"\n\n# Assign landing zone contributor to landing zones management group\naz role assignment create \\\n  --assignee $LZ_CONTRIBUTOR_GROUP \\\n  --role \"Landing Zone Contributor\" \\\n  --scope \"/providers/Microsoft.Management/managementGroups/landing-zones\"\n\n# Assign security reader at root level\naz role assignment create \\\n  --assignee $SECURITY_GROUP \\\n  --role \"Security Reader\" \\\n  --scope $ROOT_MG_ID\n\n# Assign Key Vault access to appropriate groups\nKEY_VAULT_ID=$(az keyvault show --name $PLATFORM_KV --query id -o tsv)\naz role assignment create \\\n  --assignee $PLATFORM_ADMIN_GROUP \\\n  --role \"Key Vault Administrator\" \\\n  --scope $KEY_VAULT_ID\n\n# List all role assignments\naz role assignment list \\\n  --all \\\n  --query '[].{PrincipalName:principalName, RoleDefinitionName:roleDefinitionName, Scope:scope}' \\\n  --output table"
+        }
+      }
+    },
+    {
+      "title": "Landing Zone Blueprint Template",
+      "content": "Create blueprint for standardized landing zone deployment equivalent to AWS Account Factory.",
+      "code_examples": {
+        "create_landing_zone_blueprint": {
+          "language": "bash",
+          "title": "Create Landing Zone Blueprint",
+          "code": "# Create comprehensive landing zone blueprint\ncat > landing-zone-blueprint.json << 'EOF'\n{\n  \"properties\": {\n    \"displayName\": \"Enterprise Landing Zone\",\n    \"description\": \"Standardized landing zone with governance, security, and connectivity\",\n    \"targetScope\": \"subscription\",\n    \"parameters\": {\n      \"workloadName\": {\n        \"type\": \"string\",\n        \"metadata\": {\n          \"displayName\": \"Workload Name\",\n          \"description\": \"Name of the workload for resource naming\"\n        }\n      },\n      \"environment\": {\n        \"type\": \"string\",\n        \"allowedValues\": [\"dev\", \"test\", \"prod\"],\n        \"metadata\": {\n          \"displayName\": \"Environment\",\n          \"description\": \"Environment type\"\n        }\n      },\n      \"costCenter\": {\n        \"type\": \"string\",\n        \"metadata\": {\n          \"displayName\": \"Cost Center\",\n          \"description\": \"Cost center for billing allocation\"\n        }\n      },\n      \"hubVnetId\": {\n        \"type\": \"string\",\n        \"metadata\": {\n          \"displayName\": \"Hub VNet Resource ID\",\n          \"description\": \"Resource ID of the hub VNet for peering\"\n        }\n      }\n    }\n  }\n}\nEOF\n\naz blueprint create \\\n  --name enterprise-landing-zone \\\n  --definition landing-zone-blueprint.json \\\n  --management-group landing-zones"
+        },
+        "add_blueprint_artifacts": {
+          "language": "bash",
+          "title": "Add Blueprint Artifacts",
+          "code": "# Add resource group artifact\ncat > lz-rg-artifact.json << 'EOF'\n{\n  \"kind\": \"resourceGroup\",\n  \"properties\": {\n    \"displayName\": \"Landing Zone Resource Groups\",\n    \"resourceGroupName\": \"[concat(parameters('workloadName'), '-', parameters('environment'), '-rg')]\",\n    \"location\": \"eastus\",\n    \"tags\": {\n      \"WorkloadName\": \"[parameters('workloadName')]\",\n      \"Environment\": \"[parameters('environment')]\",\n      \"CostCenter\": \"[parameters('costCenter')]\",\n      \"Purpose\": \"Landing Zone\"\n    }\n  }\n}\nEOF\n\n# Add networking artifact\ncat > lz-network-template.json << 'EOF'\n{\n  \"kind\": \"template\",\n  \"properties\": {\n    \"displayName\": \"Landing Zone Network\",\n    \"description\": \"VNet with spoke configuration and hub peering\",\n    \"template\": {\n      \"$schema\": \"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#\",\n      \"contentVersion\": \"1.0.0.0\",\n      \"parameters\": {\n        \"workloadName\": {\"type\": \"string\"},\n        \"environment\": {\"type\": \"string\"},\n        \"costCenter\": {\"type\": \"string\"},\n        \"hubVnetId\": {\"type\": \"string\"}\n      },\n      \"variables\": {\n        \"vnetName\": \"[concat(parameters('workloadName'), '-', parameters('environment'), '-vnet')]\",\n        \"addressPrefix\": \"[if(equals(parameters('environment'), 'prod'), '10.10.0.0/16', '10.20.0.0/16')]\"\n      },\n      \"resources\": [\n        {\n          \"type\": \"Microsoft.Network/virtualNetworks\",\n          \"apiVersion\": \"2021-05-01\",\n          \"name\": \"[variables('vnetName')]\",\n          \"location\": \"[resourceGroup().location]\",\n          \"properties\": {\n            \"addressSpace\": {\n              \"addressPrefixes\": [\"[variables('addressPrefix')]\"]\n            },\n            \"subnets\": [\n              {\n                \"name\": \"web-subnet\",\n                \"properties\": {\n                  \"addressPrefix\": \"[concat(substring(variables('addressPrefix'), 0, lastIndexOf(variables('addressPrefix'), '.')), '.1.0/24')]\"\n                }\n              },\n              {\n                \"name\": \"app-subnet\", \n                \"properties\": {\n                  \"addressPrefix\": \"[concat(substring(variables('addressPrefix'), 0, lastIndexOf(variables('addressPrefix'), '.')), '.2.0/24')]\"\n                }\n              },\n              {\n                \"name\": \"data-subnet\",\n                \"properties\": {\n                  \"addressPrefix\": \"[concat(substring(variables('addressPrefix'), 0, lastIndexOf(variables('addressPrefix'), '.')), '.3.0/24')]\"\n                }\n              }\n            ]\n          },\n          \"tags\": {\n            \"WorkloadName\": \"[parameters('workloadName')]\",\n            \"Environment\": \"[parameters('environment')]\",\n            \"CostCenter\": \"[parameters('costCenter')]\"\n          }\n        }\n      ]\n    },\n    \"resourceGroup\": \"landing-zone-rg\",\n    \"dependsOn\": [\"landing-zone-rg\"]\n  }\n}\nEOF\n\n# Create blueprint artifacts\naz blueprint artifact resource-group create \\\n  --blueprint-name enterprise-landing-zone \\\n  --artifact-name landing-zone-rg \\\n  --definition lz-rg-artifact.json \\\n  --management-group landing-zones\n\naz blueprint artifact template create \\\n  --blueprint-name enterprise-landing-zone \\\n  --artifact-name landing-zone-network \\\n  --definition lz-network-template.json \\\n  --management-group landing-zones\n\n# Publish blueprint version\naz blueprint version publish \\\n  --blueprint-name enterprise-landing-zone \\\n  --version \"1.0\" \\\n  --management-group landing-zones"
+        }
+      ]
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Deploy complete enterprise Azure Landing Zone architecture equivalent to AWS Control Tower setup",
+    "requirements": [
+      "Create management group hierarchy with proper governance structure",
+      "Implement enterprise policies equivalent to AWS SCPs",
+      "Deploy platform subscriptions with shared services",
+      "Create hub and spoke network architecture",
+      "Set up enterprise identity and access management",
+      "Create landing zone blueprint for standardized deployments",
+      "Configure monitoring and compliance across the environment"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify management group hierarchy",
+        "command": "az account management-group list --query 'length(@)'",
+        "expected": "Should return count of management groups created"
+      },
+      {
+        "step": "Check policy assignments",
+        "command": "az policy assignment list --query 'length(@)'", 
+        "expected": "Should return count of assigned policies"
+      },
+      {
+        "step": "Verify hub VNet creation",
+        "command": "az network vnet show --resource-group connectivity-hub-rg --name hub-vnet --query provisioningState",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Check VNet peering status",
+        "command": "az network vnet peering list --resource-group connectivity-hub-rg --vnet-name hub-vnet --query '[].peeringState'",
+        "expected": "Should return 'Connected' for all peerings"
+      },
+      {
+        "step": "Verify custom roles creation",
+        "command": "az role definition list --custom-role-only --query 'length(@)'",
+        "expected": "Should return count of custom roles created"
+      },
+      {
+        "step": "Check blueprint definition",
+        "command": "az blueprint list --management-group landing-zones --query '[?name==`enterprise-landing-zone`].name'",
+        "expected": "Should return enterprise-landing-zone blueprint"
+      }
+    ]
+  },
+  "enterprise_governance_framework": {
+    "management_group_design": {
+      "root_level": "Tenant Root Group",
+      "level_1": ["Platform", "Landing Zones", "Corp", "Decommissioned", "Sandbox"],
+      "level_2_platform": ["Connectivity", "Identity", "Management"],
+      "level_2_landing_zones": ["Production", "Non-Production"],
+      "governance_boundaries": "Policies and RBAC inheritance through hierarchy"
+    },
+    "policy_framework": {
+      "preventive_controls": "Azure Policy deny effects",
+      "detective_controls": "Azure Policy audit effects + monitoring",
+      "corrective_controls": "Azure Policy modify/deployIfNotExists effects",
+      "compliance_monitoring": "Continuous compliance assessment and reporting"
+    },
+    "subscription_strategy": {
+      "platform_subscriptions": ["Connectivity", "Identity", "Management", "Security"],
+      "landing_zone_subscriptions": "Per workload or environment",
+      "sandbox_subscriptions": "Developer experimentation with limited policies",
+      "subscription_limits": "10,000 resource groups, 980 resources per group"
+    }
+  },
+  "cost_model_comparison": {
+    "aws_landing_zone": {
+      "control_tower": "$3 per managed account per month",
+      "additional_services": "CloudTrail, Config, GuardDuty costs",
+      "support_costs": "Business or Enterprise support plans"
+    },
+    "azure_landing_zones": {
+      "management_groups": "Free",
+      "azure_policy": "Free for built-in policies",
+      "blueprints": "Free for deployment",
+      "additional_services": "Log Analytics, Security Center, Monitor costs"
+    },
+    "cost_savings": "Azure Landing Zones typically 30-40% less expensive than AWS Control Tower"
+  },
+  "migration_timeline": {
+    "planning_phase": {
+      "duration": "4-6 weeks",
+      "activities": [
+        "Assess current AWS Organizations and Control Tower setup",
+        "Design Azure management group hierarchy",
+        "Map AWS SCPs to Azure Policies",
+        "Plan network architecture migration",
+        "Design identity and access management"
+      ]
+    },
+    "foundation_phase": {
+      "duration": "8-12 weeks",
+      "activities": [
+        "Create management group hierarchy",
+        "Implement enterprise policies and governance",
+        "Deploy platform subscriptions and shared services",
+        "Set up hub and spoke network architecture",
+        "Configure identity and access management"
+      ]
+    },
+    "landing_zone_phase": {
+      "duration": "4-8 weeks per workload",
+      "activities": [
+        "Create landing zone blueprints",
+        "Deploy standardized landing zones",
+        "Migrate workloads to landing zones",
+        "Validate governance and compliance",
+        "Optimize costs and performance"
+      ]
+    },
+    "optimization_phase": {
+      "duration": "Ongoing",
+      "activities": [
+        "Continuous compliance monitoring",
+        "Cost optimization and management",
+        "Security posture improvements",
+        "Operational excellence enhancements",
+        "Scaling and growth management"
+      ]
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove Azure Landing Zone resources in proper order",
+    "commands": [
+      "# Remove blueprint assignments first",
+      "az blueprint assignment delete --name [assignment-name] --subscription [subscription-id]",
+      "# Remove role assignments",
+      "az role assignment delete --assignee [group-id] --role [role-name]",
+      "# Remove custom roles",
+      "az role definition delete --name 'Platform Administrator'",
+      "az role definition delete --name 'Landing Zone Contributor'",
+      "# Remove policy assignments",
+      "az policy assignment delete --name 'Platform Governance'",
+      "az policy assignment delete --name 'Landing Zone Governance'",
+      "# Remove VNet peerings",
+      "az network vnet peering delete --resource-group connectivity-hub-rg --vnet-name hub-vnet --name hub-to-prod",
+      "# Remove resource groups",
+      "az group delete --name connectivity-hub-rg --yes --no-wait",
+      "az group delete --name identity-rg --yes --no-wait",
+      "az group delete --name management-rg --yes --no-wait",
+      "# Remove management groups (in reverse order)",
+      "az account management-group delete --name lz-prod",
+      "az account management-group delete --name lz-nonprod",
+      "az account management-group delete --name landing-zones"
+    ]
+  },
+  "key_takeaways": [
+    "Azure Landing Zones provide more integrated governance than AWS Control Tower",
+    "Management Groups offer more flexible policy inheritance than AWS OUs",
+    "Azure Policy provides comprehensive preventive, detective, and corrective controls",
+    "Hub and spoke networking in Azure is more flexible than AWS Transit Gateway",
+    "Azure Blueprints enable more comprehensive infrastructure as code than AWS SCPs",
+    "Azure identity integration is more seamless across subscriptions than AWS cross-account roles",
+    "Azure Landing Zones are significantly more cost-effective than AWS Control Tower"
+  ],
+  "next_steps": [
+    "Learn about Azure Virtual WAN for large-scale global networking",
+    "Explore Azure Arc for hybrid and multi-cloud management",
+    "Study Azure Lighthouse for multi-tenant management scenarios",
+    "Practice with Azure Resource Manager templates and Bicep",
+    "Learn about Azure Cost Management for enterprise cost optimization"
+  ]
+}

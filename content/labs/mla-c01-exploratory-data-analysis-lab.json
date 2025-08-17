@@ -1,0 +1,314 @@
+{
+  "id": "mla-c01-exploratory-data-analysis-lab",
+  "title": "AWS SageMaker to Azure ML: Machine Learning Exploratory Data Analysis and Statistical Modeling",
+  "category": "ml-data-analysis",
+  "difficulty": "advanced",
+  "estimatedTime": "120 minutes",
+  "awsCertification": "MLA-C01",
+  "certificationWeight": "16% - Exploratory Data Analysis Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master machine learning exploratory data analysis by implementing statistical analysis, data visualization, and hypothesis testing using SageMaker and migrating to Azure ML equivalents with advanced analytics, feature analysis, and data insights for ML model development.",
+
+  "learningObjectives": [
+    "Implement comprehensive exploratory data analysis using SageMaker Data Wrangler and Azure ML",
+    "Build statistical analysis and hypothesis testing workflows for ML datasets",
+    "Create advanced data visualization and interactive analytics dashboards",
+    "Design feature analysis and correlation studies for ML model development",
+    "Implement automated data profiling and statistical validation workflows",
+    "Build data storytelling and insights communication for ML stakeholders"
+  ],
+
+  "prerequisites": [
+    "Completion of MLA-C01 Data Engineering for ML Lab or equivalent ML data experience",
+    "Understanding of statistical concepts and data analysis methodologies",
+    "Basic knowledge of Python, pandas, matplotlib, seaborn, and statistical libraries",
+    "Familiarity with machine learning concepts and model development workflows"
+  ],
+
+  "awsServices": [
+    "Amazon SageMaker Data Wrangler",
+    "Amazon SageMaker Studio",
+    "Amazon SageMaker Clarify",
+    "Amazon QuickSight",
+    "AWS Glue DataBrew",
+    "Amazon Athena",
+    "Amazon S3 (Analytics)",
+    "AWS Lambda (Analytics)",
+    "Amazon Kinesis Analytics",
+    "Amazon Elasticsearch Service"
+  ],
+
+  "azureServices": [
+    "Azure Machine Learning Studio",
+    "Azure Machine Learning Designer",
+    "Azure Synapse Analytics",
+    "Power BI",
+    "Azure Data Factory",
+    "Azure Data Lake Analytics",
+    "Azure Data Lake Storage",
+    "Azure Functions (Analytics)",
+    "Azure Stream Analytics",
+    "Azure Cognitive Search"
+  ],
+
+  "businessScenario": "Analytics Innovations provides machine learning solutions for retail, healthcare, and financial services. Their data science team needs comprehensive exploratory data analysis capabilities to understand complex datasets, identify patterns, validate hypotheses, and guide ML model development. They must master statistical analysis and data visualization across AWS and Azure ML platforms to deliver actionable insights and build high-performing ML models.",
+
+  "sections": [
+    {
+      "title": "Statistical Analysis and Data Profiling",
+      "duration": "30 minutes",
+      "topics": [
+        "Comprehensive statistical analysis and data profiling techniques",
+        "SageMaker Data Wrangler vs Azure ML statistical analysis workflows",
+        "Descriptive statistics, distributions, and outlier detection",
+        "Missing data analysis and imputation strategy recommendations",
+        "Statistical significance testing and hypothesis validation"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Statistical Analysis Framework",
+          "description": "Build statistical analysis and data profiling with automated insights",
+          "steps": [
+            "Configure SageMaker Data Wrangler for automated statistical profiling",
+            "Setup Azure ML Studio with equivalent statistical analysis capabilities",
+            "Implement descriptive statistics and distribution analysis workflows",
+            "Configure missing data analysis and imputation recommendations",
+            "Setup statistical significance testing and hypothesis validation",
+            "Create automated statistical reporting and insights generation"
+          ],
+          "deliverables": [
+            "SageMaker Data Wrangler statistical profiling configuration",
+            "Azure ML statistical analysis workflows and automation",
+            "Comprehensive data profiling and distribution analysis",
+            "Statistical significance testing and hypothesis validation framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Data Visualization and Interactive Analytics",
+      "duration": "35 minutes",
+      "topics": [
+        "Advanced data visualization techniques for ML datasets",
+        "Interactive dashboards and exploratory data analysis interfaces",
+        "Multi-dimensional data visualization and dimensionality reduction",
+        "Time series analysis and temporal pattern visualization",
+        "Geospatial data analysis and visualization for ML applications"
+      ],
+      "tasks": [
+        {
+          "title": "Build Advanced Data Visualization Platform",
+          "description": "Create comprehensive visualization and interactive analytics capabilities",
+          "steps": [
+            "Design advanced data visualization workflows with multiple chart types",
+            "Implement interactive dashboards for exploratory data analysis",
+            "Configure multi-dimensional visualization and dimensionality reduction",
+            "Setup time series analysis and temporal pattern visualization",
+            "Implement geospatial data visualization and mapping capabilities",
+            "Create automated visualization generation and customization workflows"
+          ],
+          "deliverables": [
+            "Advanced data visualization platform with multiple chart types",
+            "Interactive EDA dashboards with drill-down capabilities",
+            "Multi-dimensional and time series visualization workflows",
+            "Geospatial data analysis and mapping implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Feature Analysis and Correlation Studies",
+      "duration": "30 minutes",
+      "topics": [
+        "Comprehensive feature analysis and relationship identification",
+        "Correlation analysis and multicollinearity detection",
+        "Feature importance and selection for ML model development",
+        "Categorical data analysis and encoding strategy optimization",
+        "Feature interaction analysis and polynomial relationship detection"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Feature Analysis and Correlation Framework",
+          "description": "Build comprehensive feature analysis with ML model guidance",
+          "steps": [
+            "Configure automated feature analysis and relationship identification",
+            "Implement correlation analysis and multicollinearity detection",
+            "Setup feature importance analysis and selection recommendations",
+            "Configure categorical data analysis and encoding optimization",
+            "Implement feature interaction analysis and polynomial detection",
+            "Create feature analysis reporting and ML model guidance"
+          ],
+          "deliverables": [
+            "Automated feature analysis and relationship identification",
+            "Correlation analysis and multicollinearity detection system",
+            "Feature importance and selection recommendation framework",
+            "Feature interaction analysis and ML guidance implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Insights and ML Model Guidance",
+      "duration": "25 minutes",
+      "topics": [
+        "Automated insights generation and data storytelling",
+        "ML model recommendation based on data characteristics",
+        "Data quality assessment and ML readiness evaluation",
+        "Business impact analysis and ROI estimation for ML projects",
+        "Stakeholder communication and executive reporting for ML initiatives"
+      ],
+      "tasks": [
+        {
+          "title": "Build Data Insights and ML Guidance Platform",
+          "description": "Create automated insights with ML model recommendations",
+          "steps": [
+            "Configure automated insights generation and data storytelling",
+            "Implement ML model recommendation based on data analysis",
+            "Setup data quality assessment and ML readiness evaluation",
+            "Configure business impact analysis and ROI estimation workflows",
+            "Implement stakeholder communication and executive reporting",
+            "Create ML project guidance and recommendation automation"
+          ],
+          "deliverables": [
+            "Automated insights generation and data storytelling platform",
+            "ML model recommendation and guidance system",
+            "Data quality and ML readiness assessment framework",
+            "Business impact analysis and stakeholder communication workflows"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Customer Behavior Analytics for Recommendation Systems",
+      "description": "Build comprehensive EDA for e-commerce customer behavior and recommendation ML",
+      "steps": [
+        "Analyze customer transaction and behavior datasets with statistical profiling",
+        "Create advanced visualizations for customer segmentation and pattern identification",
+        "Implement feature analysis for recommendation system model development",
+        "Build interactive dashboards for business stakeholder communication",
+        "Generate automated insights and ML model recommendations",
+        "Test EDA platform with real-world e-commerce datasets and scenarios"
+      ],
+      "expectedOutcome": "Comprehensive customer behavior EDA platform supporting recommendation system development"
+    },
+    {
+      "title": "Financial Risk Analytics and Fraud Detection EDA",
+      "description": "Implement EDA platform for financial risk assessment and fraud detection ML",
+      "steps": [
+        "Analyze financial transaction datasets with advanced statistical methods",
+        "Create risk pattern visualization and anomaly detection workflows",
+        "Implement feature analysis for fraud detection model optimization",
+        "Build real-time analytics dashboards for risk monitoring",
+        "Generate automated risk insights and compliance reporting",
+        "Test platform with simulated fraud scenarios and regulatory requirements"
+      ],
+      "expectedOutcome": "Financial risk EDA platform with fraud detection insights and compliance reporting"
+    },
+    {
+      "title": "Healthcare Analytics and Predictive Modeling EDA",
+      "description": "Build EDA platform for healthcare data analysis and predictive ML development",
+      "steps": [
+        "Analyze healthcare datasets with privacy-preserving statistical analysis",
+        "Create clinical data visualization and outcome pattern identification",
+        "Implement feature analysis for predictive healthcare model development",
+        "Build HIPAA-compliant analytics dashboards and reporting",
+        "Generate automated clinical insights and treatment recommendations",
+        "Test platform with anonymized healthcare datasets and clinical workflows"
+      ],
+      "expectedOutcome": "Healthcare EDA platform with clinical insights and predictive modeling guidance"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Large dataset performance issues and memory constraints during statistical analysis",
+      "solution": "Implement sampling strategies, use distributed computing frameworks, optimize data formats and partitioning, implement progressive analysis, and use cloud-native scaling"
+    },
+    {
+      "issue": "Complex multivariate relationships and high-dimensional data visualization challenges",
+      "solution": "Use dimensionality reduction techniques, implement interactive visualization, create multiple perspective views, use statistical summarization, and implement progressive disclosure"
+    },
+    {
+      "issue": "Statistical significance interpretation and hypothesis testing in ML contexts",
+      "solution": "Implement proper statistical testing frameworks, use multiple comparison corrections, provide contextual interpretation, implement confidence intervals, and create statistical literacy resources"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Statistical Analysis Implementation",
+      "criteria": [
+        "Can implement comprehensive statistical profiling and analysis",
+        "Understands descriptive statistics and distribution analysis",
+        "Can configure hypothesis testing and statistical validation",
+        "Demonstrates missing data analysis and imputation strategies"
+      ]
+    },
+    {
+      "category": "Data Visualization Mastery",
+      "criteria": [
+        "Can build advanced data visualization and interactive dashboards",
+        "Understands multi-dimensional and time series visualization",
+        "Can implement geospatial and specialized visualization techniques",
+        "Demonstrates visualization customization and automation"
+      ]
+    },
+    {
+      "category": "Feature Analysis Expertise",
+      "criteria": [
+        "Can implement comprehensive feature analysis and correlation studies",
+        "Understands multicollinearity detection and feature selection",
+        "Can configure feature importance and interaction analysis",
+        "Demonstrates ML-guided feature analysis and recommendations"
+      ]
+    },
+    {
+      "category": "Insights and ML Guidance",
+      "criteria": [
+        "Can generate automated insights and data storytelling",
+        "Understands ML model recommendation based on data characteristics",
+        "Can assess data quality and ML readiness",
+        "Demonstrates business impact analysis and stakeholder communication"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "MLA-C01": {
+      "domain": "Exploratory Data Analysis",
+      "weight": "16%",
+      "coverage": [
+        "Sanitize and prepare data for modeling",
+        "Perform feature engineering",
+        "Analyze and visualize data for machine learning",
+        "Perform statistical analysis and hypothesis testing",
+        "Apply descriptive statistics and data summarization techniques"
+      ],
+      "examTopics": [
+        "SageMaker Data Wrangler statistical analysis and visualization",
+        "Feature analysis and correlation studies for ML models",
+        "Data visualization techniques and interactive analytics",
+        "Statistical hypothesis testing and validation methods",
+        "Data profiling and ML readiness assessment"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive statistical analysis and data profiling workflows",
+    "Demonstrates ability to build advanced data visualization and interactive analytics",
+    "Shows understanding of feature analysis and correlation studies for ML",
+    "Can create automated insights generation and ML model guidance systems",
+    "Understands statistical validation and hypothesis testing in ML contexts"
+  ],
+
+  "nextSteps": [
+    "Proceed to MLA-C01 Model Development Lab (26% domain weight)",
+    "Gain hands-on experience with advanced statistical analysis and ML feature engineering",
+    "Practice implementing EDA workflows in production ML environments",
+    "Explore advanced data visualization and interactive analytics techniques"
+  ]
+}

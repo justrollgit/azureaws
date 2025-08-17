@@ -1,0 +1,503 @@
+{
+  "exam_info": {
+    "exam_code": "SAA-C03",
+    "exam_name": "AWS Solutions Architect Associate",
+    "total_questions": "65 questions",
+    "passing_score": "720/1000",
+    "duration": "130 minutes",
+    "domains": 4,
+    "last_updated": "2024-08-14"
+  },
+  "domain_analysis": {
+    "domain_1": {
+      "name": "Design Resilient Architectures",
+      "weight": "26%",
+      "sub_domains": {
+        "1.1": {
+          "topic": "Design multi-tier architectures",
+          "aws_concepts": [
+            "Load balancing concepts",
+            "Auto Scaling groups",
+            "Multi-AZ deployments",
+            "Disaster recovery strategies",
+            "Fault-tolerant workloads"
+          ],
+          "azure_equivalents": [
+            "Azure Load Balancer / Application Gateway",
+            "Virtual Machine Scale Sets",
+            "Availability Zones / Availability Sets",
+            "Azure Site Recovery",
+            "Fault domains and update domains"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "vm-deployment-lab",
+              "hub-spoke-architecture-lab",
+              "well-architected-framework-lab"
+            ],
+            "coverage_percentage": 70,
+            "gaps": [
+              "Auto Scaling Groups to VM Scale Sets detailed comparison",
+              "Disaster recovery patterns and scenarios",
+              "Multi-region failover strategies"
+            ]
+          }
+        },
+        "1.2": {
+          "topic": "Design highly available and/or fault-tolerant architectures",
+          "aws_concepts": [
+            "Single points of failure",
+            "Multiple Availability Zones",
+            "Load balancing",
+            "Route 53 health checks",
+            "Elastic File System",
+            "S3 Cross-Region Replication"
+          ],
+          "azure_equivalents": [
+            "Fault domains and update domains",
+            "Multiple Availability Zones",
+            "Load balancing and Traffic Manager",
+            "Azure DNS health checks",
+            "Azure Files",
+            "Storage account geo-replication"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "vm-deployment-lab",
+              "storage-migration-lab",
+              "networking-fundamentals-lab",
+              "advanced-networking-patterns-lab"
+            ],
+            "coverage_percentage": 85,
+            "gaps": [
+              "Route 53 to Azure DNS detailed migration",
+              "Cross-region replication strategies"
+            ]
+          }
+        },
+        "1.3": {
+          "topic": "Design decoupling mechanisms using AWS services",
+          "aws_concepts": [
+            "Simple Queue Service (SQS)",
+            "Simple Notification Service (SNS)",
+            "AWS Lambda",
+            "API Gateway",
+            "EventBridge"
+          ],
+          "azure_equivalents": [
+            "Service Bus Queues",
+            "Service Bus Topics/Event Grid",
+            "Azure Functions",
+            "API Management",
+            "Event Grid"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "serverless-functions-lab"
+            ],
+            "coverage_percentage": 40,
+            "gaps": [
+              "SQS to Service Bus Queue migration lab",
+              "SNS to Event Grid/Service Bus Topics lab",
+              "EventBridge to Event Grid patterns",
+              "API Gateway to API Management comprehensive lab"
+            ]
+          }
+        },
+        "1.4": {
+          "topic": "Choose appropriate resilient storage",
+          "aws_concepts": [
+            "S3 storage classes",
+            "EBS volume types",
+            "EFS",
+            "FSx",
+            "Storage Gateway"
+          ],
+          "azure_equivalents": [
+            "Blob Storage access tiers",
+            "Managed Disk types",
+            "Azure Files",
+            "Azure NetApp Files",
+            "Azure File Sync"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "storage-migration-lab"
+            ],
+            "coverage_percentage": 75,
+            "gaps": [
+              "EFS to Azure Files detailed comparison",
+              "Storage Gateway to File Sync patterns",
+              "Advanced storage performance optimization"
+            ]
+          }
+        }
+      }
+    },
+    "domain_2": {
+      "name": "Design High-Performing Architectures",
+      "weight": "24%",
+      "sub_domains": {
+        "2.1": {
+          "topic": "Identify elastic and scalable compute solutions",
+          "aws_concepts": [
+            "EC2 instance types",
+            "Auto Scaling",
+            "Elastic Load Balancing",
+            "AWS Lambda",
+            "Amazon ECS/EKS"
+          ],
+          "azure_equivalents": [
+            "VM sizes and series",
+            "VM Scale Sets",
+            "Load Balancer/Application Gateway",
+            "Azure Functions",
+            "Container Instances/AKS"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "vm-deployment-lab",
+              "container-services-lab",
+              "serverless-functions-lab",
+              "advanced-container-orchestration-lab"
+            ],
+            "coverage_percentage": 95,
+            "gaps": [
+              "Detailed Auto Scaling to VM Scale Sets policies comparison"
+            ]
+          }
+        },
+        "2.2": {
+          "topic": "Select high-performing and scalable storage solutions",
+          "aws_concepts": [
+            "S3 performance optimization",
+            "EBS optimization",
+            "CloudFront",
+            "ElastiCache",
+            "DynamoDB"
+          ],
+          "azure_equivalents": [
+            "Blob Storage performance tiers",
+            "Disk performance optimization",
+            "Azure CDN",
+            "Azure Cache for Redis",
+            "Cosmos DB"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "storage-migration-lab"
+            ],
+            "coverage_percentage": 50,
+            "gaps": [
+              "CloudFront to Azure CDN migration lab",
+              "ElastiCache to Azure Cache for Redis lab",
+              "DynamoDB to Cosmos DB comprehensive lab",
+              "Storage performance optimization patterns"
+            ]
+          }
+        },
+        "2.3": {
+          "topic": "Select high-performing networking solutions",
+          "aws_concepts": [
+            "VPC design",
+            "Direct Connect",
+            "VPN connections",
+            "Route 53",
+            "CloudFront edge locations"
+          ],
+          "azure_equivalents": [
+            "Virtual Network design",
+            "ExpressRoute",
+            "VPN Gateway",
+            "Azure DNS/Traffic Manager",
+            "CDN edge locations"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "networking-fundamentals-lab",
+              "hub-spoke-architecture-lab",
+              "advanced-networking-patterns-lab"
+            ],
+            "coverage_percentage": 80,
+            "gaps": [
+              "Direct Connect to ExpressRoute detailed migration",
+              "Route 53 advanced routing policies to Traffic Manager"
+            ]
+          }
+        },
+        "2.4": {
+          "topic": "Choose high-performing database solutions",
+          "aws_concepts": [
+            "RDS instance types",
+            "Aurora",
+            "DynamoDB",
+            "Redshift",
+            "Database migration strategies"
+          ],
+          "azure_equivalents": [
+            "Azure SQL Database tiers",
+            "Azure Database services",
+            "Cosmos DB",
+            "Synapse Analytics",
+            "Database Migration Service"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "database-migration-lab",
+              "data-analytics-realtime-processing-lab"
+            ],
+            "coverage_percentage": 80,
+            "gaps": [
+              "Aurora to Azure Database detailed comparison",
+              "Redshift to Synapse migration patterns"
+            ]
+          }
+        }
+      }
+    },
+    "domain_3": {
+      "name": "Design Secure Applications and Architectures",
+      "weight": "30%",
+      "sub_domains": {
+        "3.1": {
+          "topic": "Design secure access to AWS resources",
+          "aws_concepts": [
+            "IAM users, groups, roles",
+            "IAM policies",
+            "Multi-factor authentication",
+            "AWS Organizations",
+            "AWS SSO"
+          ],
+          "azure_equivalents": [
+            "Azure AD users, groups, service principals",
+            "RBAC and custom roles",
+            "Multi-factor authentication",
+            "Management Groups",
+            "Azure AD B2B/B2C"
+          ],
+          "platform_coverage": {
+            "status": "EXCELLENT",
+            "covered_labs": [
+              "identity-access-lab",
+              "aws-organizations-advanced-lab",
+              "enterprise-governance-lab"
+            ],
+            "coverage_percentage": 90,
+            "gaps": [
+              "AWS SSO to Azure AD B2B detailed migration"
+            ]
+          }
+        },
+        "3.2": {
+          "topic": "Design secure application tiers",
+          "aws_concepts": [
+            "Security groups",
+            "NACLs",
+            "WAF",
+            "Shield",
+            "VPC Flow Logs",
+            "CloudTrail"
+          ],
+          "azure_equivalents": [
+            "Network Security Groups",
+            "Application Security Groups",
+            "Web Application Firewall",
+            "DDoS Protection",
+            "NSG Flow Logs",
+            "Activity Log"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "networking-fundamentals-lab",
+              "hub-spoke-architecture-lab",
+              "monitoring-logging-lab"
+            ],
+            "coverage_percentage": 75,
+            "gaps": [
+              "AWS WAF to Azure WAF detailed comparison",
+              "Shield to DDoS Protection migration",
+              "Advanced security monitoring patterns"
+            ]
+          }
+        },
+        "3.3": {
+          "topic": "Select appropriate data security options",
+          "aws_concepts": [
+            "KMS",
+            "CloudHSM",
+            "Certificate Manager",
+            "S3 encryption",
+            "RDS encryption"
+          ],
+          "azure_equivalents": [
+            "Key Vault",
+            "Dedicated HSM",
+            "App Service Certificates",
+            "Storage encryption",
+            "Transparent Data Encryption"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "storage-migration-lab",
+              "database-migration-lab"
+            ],
+            "coverage_percentage": 40,
+            "gaps": [
+              "KMS to Key Vault comprehensive lab",
+              "Certificate Manager to App Service Certificates",
+              "End-to-end encryption patterns",
+              "Data security best practices lab"
+            ]
+          }
+        }
+      }
+    },
+    "domain_4": {
+      "name": "Design Cost-Optimized Architectures",
+      "weight": "20%",
+      "sub_domains": {
+        "4.1": {
+          "topic": "Identify cost-effective storage solutions",
+          "aws_concepts": [
+            "S3 storage classes",
+            "S3 Lifecycle policies",
+            "EBS volume types",
+            "S3 Intelligent Tiering",
+            "Storage optimization"
+          ],
+          "azure_equivalents": [
+            "Blob Storage access tiers",
+            "Lifecycle management policies",
+            "Managed Disk types",
+            "Automated tiering",
+            "Storage optimization"
+          ],
+          "platform_coverage": {
+            "status": "GOOD",
+            "covered_labs": [
+              "storage-migration-lab"
+            ],
+            "coverage_percentage": 75,
+            "gaps": [
+              "Advanced lifecycle management patterns",
+              "Cost optimization strategies detailed comparison"
+            ]
+          }
+        },
+        "4.2": {
+          "topic": "Identify cost-effective compute and database services",
+          "aws_concepts": [
+            "EC2 pricing models",
+            "Reserved Instances",
+            "Spot Instances",
+            "Lambda pricing",
+            "RDS pricing optimization"
+          ],
+          "azure_equivalents": [
+            "VM pricing models",
+            "Reserved VM Instances",
+            "Spot VMs",
+            "Functions pricing",
+            "Database service optimization"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "vm-deployment-lab",
+              "serverless-functions-lab",
+              "database-migration-lab"
+            ],
+            "coverage_percentage": 50,
+            "gaps": [
+              "Reserved Instances to Azure Reservations detailed comparison",
+              "Spot Instances to Spot VMs migration patterns",
+              "Cost optimization best practices lab",
+              "TCO calculator usage and comparison"
+            ]
+          }
+        },
+        "4.3": {
+          "topic": "Design cost-optimized network architectures",
+          "aws_concepts": [
+            "VPC endpoints",
+            "NAT Gateway vs NAT Instance",
+            "Data transfer costs",
+            "CloudFront cost optimization",
+            "Direct Connect pricing"
+          ],
+          "azure_equivalents": [
+            "Private endpoints",
+            "NAT Gateway vs VM-based NAT",
+            "Bandwidth pricing",
+            "CDN cost optimization",
+            "ExpressRoute pricing"
+          ],
+          "platform_coverage": {
+            "status": "PARTIAL",
+            "covered_labs": [
+              "networking-fundamentals-lab",
+              "advanced-networking-patterns-lab"
+            ],
+            "coverage_percentage": 60,
+            "gaps": [
+              "VPC endpoints to Private endpoints detailed lab",
+              "Network cost optimization patterns",
+              "Data transfer cost comparison and strategies"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "overall_coverage_summary": {
+    "total_sub_domains": 12,
+    "excellent_coverage": 2,
+    "good_coverage": 6,
+    "partial_coverage": 4,
+    "poor_coverage": 0,
+    "overall_percentage": 71,
+    "certification_readiness": "GOOD - Additional labs needed for complete coverage"
+  },
+  "priority_gaps": [
+    {
+      "priority": "HIGH",
+      "domain": "Design Resilient Architectures",
+      "gap": "SQS/SNS to Service Bus/Event Grid migration patterns",
+      "impact": "Major exam topic with significant weight"
+    },
+    {
+      "priority": "HIGH",
+      "domain": "Design High-Performing Architectures",
+      "gap": "DynamoDB to Cosmos DB comprehensive migration",
+      "impact": "Critical NoSQL database migration scenario"
+    },
+    {
+      "priority": "HIGH",
+      "domain": "Design Secure Applications",
+      "gap": "KMS to Key Vault encryption management",
+      "impact": "Essential security topic for enterprise scenarios"
+    },
+    {
+      "priority": "MEDIUM",
+      "domain": "Design Cost-Optimized Architectures",
+      "gap": "Reserved Instances to Azure Reservations comparison",
+      "impact": "Important for cost optimization understanding"
+    },
+    {
+      "priority": "MEDIUM",
+      "domain": "Design High-Performing Architectures",
+      "gap": "CloudFront to Azure CDN migration patterns",
+      "impact": "Performance optimization topic"
+    }
+  ]
+}

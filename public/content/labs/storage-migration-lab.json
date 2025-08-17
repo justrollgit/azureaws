@@ -1,0 +1,175 @@
+{
+  "id": "storage-migration-lab",
+  "title": "S3 to Azure Blob Storage: Complete Migration Guide",
+  "difficulty": "intermediate",
+  "estimated_time": "45 minutes",
+  "aws_prerequisite": "Experience with S3 buckets, lifecycle policies, and object management",
+  "azure_target": "Deploy and manage Azure Blob Storage with lifecycle management",
+  "learning_objectives": [
+    "Understand Azure Storage account types and replication options",
+    "Configure blob containers equivalent to S3 buckets",
+    "Implement access tiers and lifecycle management policies",
+    "Set up cross-region replication and backup strategies",
+    "Migrate data from S3 to Blob Storage using AzCopy"
+  ],
+  "aws_context": {
+    "equivalent_service": "Amazon S3",
+    "key_concepts": [
+      "S3 Buckets → Blob Containers",
+      "Storage Classes → Access Tiers (Hot, Cool, Archive)",
+      "S3 Lifecycle → Blob Lifecycle Management",
+      "Cross-Region Replication → Geo-Redundant Storage",
+      "S3 Transfer Acceleration → Azure CDN integration"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Understanding Azure Storage Accounts",
+      "content": "Azure Storage accounts are the foundational component, similar to AWS accounts but with more granular control.",
+      "comparison_table": {
+        "account_types": {
+          "aws": "Single S3 service per region",
+          "azure": "Multiple account types: General Purpose v2, Blob Storage, Premium",
+          "use_case": "Choose based on performance and feature requirements"
+        },
+        "replication": {
+          "aws": "Cross-Region Replication (CRR)",
+          "azure": "LRS, ZRS, GRS, RA-GRS options",
+          "use_case": "Built-in redundancy vs manual replication setup"
+        },
+        "access_tiers": {
+          "aws": "Standard, IA, Glacier, Deep Archive",
+          "azure": "Hot, Cool, Archive tiers",
+          "use_case": "Automatic tier transitions based on access patterns"
+        }
+      }
+    },
+    {
+      "title": "Creating Storage Account and Container",
+      "content": "Set up the Azure equivalent of S3 bucket with proper configuration.",
+      "code_examples": {
+        "aws_s3_setup": {
+          "language": "bash",
+          "title": "AWS S3: Create Bucket with Lifecycle",
+          "code": "# Create S3 bucket\naws s3 mb s3://my-app-bucket --region us-east-1\n\n# Enable versioning\naws s3api put-bucket-versioning \\\n  --bucket my-app-bucket \\\n  --versioning-configuration Status=Enabled\n\n# Create lifecycle policy\naws s3api put-bucket-lifecycle-configuration \\\n  --bucket my-app-bucket \\\n  --lifecycle-configuration file://lifecycle.json"
+        },
+        "azure_storage_setup": {
+          "language": "bash",
+          "title": "Azure CLI: Create Storage Account and Container",
+          "code": "# Create resource group\naz group create --name storage-lab-rg --location eastus\n\n# Create storage account\naz storage account create \\\n  --name myappstorageaccount \\\n  --resource-group storage-lab-rg \\\n  --location eastus \\\n  --sku Standard_GRS \\\n  --kind StorageV2 \\\n  --access-tier Hot\n\n# Create blob container\naz storage container create \\\n  --name my-app-container \\\n  --account-name myappstorageaccount \\\n  --public-access off"
+        }
+      }
+    },
+    {
+      "title": "Hands-On Exercise: Data Migration and Management",
+      "content": "Migrate data from S3 to Azure Blob Storage and configure lifecycle policies.",
+      "exercise": {
+        "scenario": "Migrate a web application's static assets from S3 to Azure Blob Storage with proper access tiers",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Install and Configure AzCopy",
+            "aws_equivalent": "Similar to AWS CLI for data transfer",
+            "instructions": "Download and configure AzCopy for efficient data transfer",
+            "code": {
+              "cli": "# Download AzCopy\nwget https://aka.ms/downloadazcopy-v10-linux -O azcopy.tar.gz\ntar -xf azcopy.tar.gz --strip-components=1\nsudo mv azcopy /usr/local/bin/\n\n# Authenticate with Azure\nazcopy login"
+            }
+          },
+          {
+            "step": 2,
+            "title": "Configure S3 and Azure Storage Access",
+            "aws_equivalent": "Setting up AWS credentials for S3 access",
+            "instructions": "Set up access to both S3 and Azure Storage",
+            "code": {
+              "cli": "# Get Azure Storage account key\nAZURE_KEY=$(az storage account keys list \\\n  --resource-group storage-lab-rg \\\n  --account-name myappstorageaccount \\\n  --query '[0].value' -o tsv)\n\n# Set up S3 access (ensure AWS CLI is configured)\naws configure list"
+            }
+          },
+          {
+            "step": 3,
+            "title": "Create Lifecycle Management Policy",
+            "aws_equivalent": "S3 Lifecycle rules for automated transitions",
+            "instructions": "Configure automatic tier transitions for cost optimization",
+            "code": {
+              "cli": "# Create lifecycle policy JSON\ncat > lifecycle-policy.json << 'EOF'\n{\n  \"rules\": [\n    {\n      \"enabled\": true,\n      \"name\": \"transition-to-cool\",\n      \"type\": \"Lifecycle\",\n      \"definition\": {\n        \"filters\": {\n          \"blobTypes\": [\"blockBlob\"]\n        },\n        \"actions\": {\n          \"baseBlob\": {\n            \"tierToCool\": {\"daysAfterModificationGreaterThan\": 30},\n            \"tierToArchive\": {\"daysAfterModificationGreaterThan\": 90}\n          }\n        }\n      }\n    }\n  ]\n}\nEOF\n\n# Apply lifecycle policy\naz storage account management-policy create \\\n  --account-name myappstorageaccount \\\n  --policy @lifecycle-policy.json"
+            }
+          },
+          {
+            "step": 4,
+            "title": "Perform Data Migration",
+            "aws_equivalent": "Using aws s3 sync or AWS DataSync",
+            "instructions": "Transfer data from S3 to Azure Blob Storage",
+            "code": {
+              "cli": "# Sync from S3 to Azure Blob Storage\nazcopy sync \\\n  \"https://my-s3-bucket.s3.amazonaws.com/\" \\\n  \"https://myappstorageaccount.blob.core.windows.net/my-app-container\" \\\n  --recursive=true \\\n  --delete-destination=false\n\n# Verify transfer\naz storage blob list \\\n  --container-name my-app-container \\\n  --account-name myappstorageaccount \\\n  --output table"
+            },
+            "explanation": "AzCopy provides efficient transfer with resume capability and bandwidth throttling"
+          },
+          {
+            "step": 5,
+            "title": "Configure CDN for Global Distribution",
+            "aws_equivalent": "CloudFront distribution for S3 content",
+            "instructions": "Set up Azure CDN for global content delivery",
+            "code": {
+              "cli": "# Create CDN profile\naz cdn profile create \\\n  --resource-group storage-lab-rg \\\n  --name myapp-cdn-profile \\\n  --sku Standard_Microsoft\n\n# Create CDN endpoint\naz cdn endpoint create \\\n  --resource-group storage-lab-rg \\\n  --profile-name myapp-cdn-profile \\\n  --name myapp-cdn-endpoint \\\n  --origin myappstorageaccount.blob.core.windows.net \\\n  --origin-host-header myappstorageaccount.blob.core.windows.net"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Advanced Configuration: Security and Access Control",
+      "content": "Configure security settings equivalent to S3 bucket policies and IAM roles.",
+      "code_examples": {
+        "azure_access_control": {
+          "language": "bash",
+          "title": "Configure Shared Access Signatures (SAS) - equivalent to S3 pre-signed URLs",
+          "code": "# Generate container SAS token\nEXPIRY=$(date -u -d '30 days' +%Y-%m-%dT%H:%MZ)\n\naz storage container generate-sas \\\n  --name my-app-container \\\n  --account-name myappstorageaccount \\\n  --permissions r \\\n  --expiry $EXPIRY \\\n  --https-only"
+        },
+        "azure_firewall": {
+          "language": "bash",
+          "title": "Configure Storage Firewall - equivalent to S3 bucket policies",
+          "code": "# Allow specific IP ranges\naz storage account network-rule add \\\n  --resource-group storage-lab-rg \\\n  --account-name myappstorageaccount \\\n  --ip-address 203.0.113.0/24\n\n# Enable firewall (deny by default)\naz storage account update \\\n  --resource-group storage-lab-rg \\\n  --name myappstorageaccount \\\n  --default-action Deny"
+        }
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Verify data migration completion",
+      "command": "az storage blob list --container-name my-app-container --account-name myappstorageaccount --query 'length(@)'",
+      "expected": "Count should match source S3 bucket object count"
+    },
+    {
+      "step": "Test lifecycle policy",
+      "command": "az storage account management-policy show --account-name myappstorageaccount --query 'policy.rules[0].definition.actions'",
+      "expected": "Policy should show Cool and Archive transitions"
+    },
+    {
+      "step": "Verify CDN endpoint",
+      "command": "curl -I https://myapp-cdn-endpoint.azureedge.net/sample-file.jpg",
+      "expected": "Should return 200 OK with CDN headers"
+    },
+    {
+      "step": "Test access control",
+      "command": "az storage blob list --container-name my-app-container --account-name myappstorageaccount --auth-mode login",
+      "expected": "Access should work with proper authentication"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all resources to avoid ongoing charges",
+    "command": "az group delete --name storage-lab-rg --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Azure Storage accounts provide more granular control than S3",
+    "Access tiers in Azure are more flexible than S3 storage classes",
+    "Lifecycle management policies are similar but syntax differs",
+    "AzCopy is the preferred tool for large data migrations",
+    "Azure CDN integration is simpler than CloudFront setup",
+    "SAS tokens provide time-limited access similar to pre-signed URLs"
+  ],
+  "next_steps": [
+    "Explore Azure Data Factory for complex ETL scenarios",
+    "Learn about Azure Storage encryption and key management",
+    "Practice with Azure Backup for automated data protection",
+    "Study geo-replication strategies for disaster recovery"
+  ]
+}

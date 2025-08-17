@@ -1,0 +1,204 @@
+{
+  "id": "saa-c03-resilient-architectures-lab",
+  "title": "AWS Resilient Architectures to Azure: Multi-AZ, Auto Scaling, and Disaster Recovery",
+  "category": "resilient-architecture",
+  "difficulty": "advanced",
+  "estimatedTime": "180 minutes",
+  "description": "Master resilient architecture design by implementing AWS multi-AZ deployments, auto scaling, and disaster recovery patterns, then migrating to Azure availability zones, scale sets, and site recovery solutions with enterprise-grade resilience.",
+  "awsCertification": "SAA-C03",
+  "certificationWeight": "26% - Design Resilient Architectures Domain",
+  "awsServices": [
+    "EC2 Auto Scaling",
+    "RDS Multi-AZ",
+    "Application Load Balancer",
+    "Route 53",
+    "S3 Cross-Region Replication",
+    "AWS Backup",
+    "ElastiCache Multi-AZ",
+    "EFS",
+    "CloudFormation",
+    "CloudWatch"
+  ],
+  "azureServices": [
+    "Virtual Machine Scale Sets",
+    "Azure SQL Database",
+    "Application Gateway",
+    "Traffic Manager",
+    "Storage Account GRS",
+    "Azure Backup",
+    "Azure Cache for Redis",
+    "Azure Files",
+    "ARM Templates",
+    "Azure Monitor"
+  ],
+  "prerequisites": [
+    "Understanding of high availability and fault tolerance concepts",
+    "Knowledge of disaster recovery planning (RTO/RPO)",
+    "Familiarity with load balancing and auto scaling",
+    "Basic understanding of backup and recovery strategies"
+  ],
+  "learningObjectives": [
+    "Design and implement multi-AZ architectures in AWS and Azure",
+    "Configure auto scaling for dynamic workload management",
+    "Implement disaster recovery strategies with appropriate RTO/RPO",
+    "Set up cross-region replication and backup solutions",
+    "Design fault-tolerant database architectures",
+    "Implement health checks and automatic failover mechanisms"
+  ],
+  "businessScenario": {
+    "description": "GlobalFinance Corp needs to ensure their payment processing platform maintains 99.99% uptime with automatic failover capabilities and disaster recovery across multiple regions.",
+    "requirements": [
+      "Zero data loss for financial transactions",
+      "RTO of 15 minutes for critical services",
+      "RPO of 5 minutes for transaction data",
+      "Automatic scaling for peak transaction periods",
+      "Multi-region disaster recovery capability"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Multi-AZ High Availability Architecture",
+      "content": "Implement multi-AZ deployments for all critical components to ensure high availability.",
+      "hands-on": {
+        "aws": "1. Deploy RDS Multi-AZ database\n2. Configure EC2 instances across multiple AZs\n3. Set up Application Load Balancer with cross-zone load balancing\n4. Implement ElastiCache with Multi-AZ failover\n5. Configure S3 with cross-region replication",
+        "azure": "1. Deploy Azure SQL Database with zone redundancy\n2. Configure VMs across availability zones\n3. Set up Application Gateway with zone redundancy\n4. Implement Azure Cache for Redis with geo-replication\n5. Configure Storage Account with GRS"
+      }
+    },
+    {
+      "title": "Auto Scaling and Dynamic Workload Management",
+      "content": "Configure auto scaling to handle variable workloads efficiently while maintaining performance.",
+      "hands-on": {
+        "aws": "1. Create Auto Scaling Groups with target tracking policies\n2. Configure scaling based on CPU, memory, and custom metrics\n3. Implement predictive scaling for anticipated load\n4. Set up warm pools for faster scaling\n5. Configure lifecycle hooks for graceful instance management",
+        "azure": "1. Create Virtual Machine Scale Sets with autoscale rules\n2. Configure scaling based on metrics and schedules\n3. Implement predictive autoscaling using Azure ML\n4. Set up instance warm-up periods\n5. Configure custom script extensions for initialization"
+      }
+    },
+    {
+      "title": "Disaster Recovery Implementation",
+      "content": "Design and implement comprehensive disaster recovery strategies meeting business RTO/RPO requirements.",
+      "hands-on": {
+        "aws": "1. Set up pilot light DR in secondary region\n2. Configure AWS Backup for automated backups\n3. Implement Route 53 health checks and failover routing\n4. Create CloudFormation templates for DR environment\n5. Test failover and failback procedures",
+        "azure": "1. Configure Azure Site Recovery for VMs\n2. Set up Azure Backup with retention policies\n3. Implement Traffic Manager with failover routing\n4. Create ARM templates for DR deployment\n5. Conduct DR drills and validate RTO/RPO"
+      }
+    },
+    {
+      "title": "Data Resilience and Backup Strategies",
+      "content": "Implement comprehensive data protection with automated backups and replication.",
+      "hands-on": {
+        "aws": "1. Configure automated RDS backups with point-in-time recovery\n2. Implement S3 versioning and lifecycle policies\n3. Set up cross-region snapshot copying\n4. Configure EBS snapshot automation\n5. Implement backup validation and testing",
+        "azure": "1. Configure Azure SQL automated backups with PITR\n2. Implement blob versioning and soft delete\n3. Set up geo-redundant backup storage\n4. Configure managed disk snapshots\n5. Implement backup compliance reporting"
+      }
+    },
+    {
+      "title": "Health Monitoring and Automatic Recovery",
+      "content": "Implement comprehensive health checks and automatic recovery mechanisms.",
+      "hands-on": {
+        "aws": "1. Configure CloudWatch alarms for all components\n2. Implement EC2 auto-recovery for hardware failures\n3. Set up Route 53 health checks for endpoints\n4. Configure RDS event subscriptions\n5. Implement automated remediation with Systems Manager",
+        "azure": "1. Configure Azure Monitor alerts and action groups\n2. Implement VM auto-recovery policies\n3. Set up Traffic Manager health probes\n4. Configure SQL Database automatic tuning\n5. Implement automated remediation with Azure Automation"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Build Multi-Region Active-Active Architecture",
+      "description": "Design and implement a fully resilient multi-region architecture with active-active configuration.",
+      "tasks": [
+        "Deploy application across two regions",
+        "Configure global load balancing with health checks",
+        "Implement bi-directional data replication",
+        "Set up automated failover mechanisms",
+        "Test region failure scenarios"
+      ],
+      "validation": [
+        "Application remains available during AZ failure",
+        "Automatic failover completes within 60 seconds",
+        "No data loss during failover",
+        "Performance maintained during scaling events"
+      ]
+    },
+    {
+      "title": "Implement Chaos Engineering Tests",
+      "description": "Validate resilience through controlled failure injection.",
+      "tasks": [
+        "Simulate AZ failures",
+        "Test auto scaling under load",
+        "Validate backup restoration",
+        "Verify failover mechanisms",
+        "Document recovery procedures"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "Split-brain scenario in multi-master setup",
+        "solution": "Implement proper quorum mechanisms and conflict resolution"
+      },
+      {
+        "issue": "Slow failover times exceeding RTO",
+        "solution": "Pre-warm standby resources and optimize health check intervals"
+      },
+      {
+        "issue": "Data inconsistency after failover",
+        "solution": "Ensure proper replication lag monitoring and sync validation"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can design multi-AZ architectures for 99.99% availability",
+      "Can implement auto scaling for cost-effective performance",
+      "Can design DR solutions meeting specific RTO/RPO requirements",
+      "Can implement automated backup and recovery procedures",
+      "Can configure health monitoring and automatic remediation"
+    ],
+    "certificationAlignment": {
+      "SAA-C03": {
+        "domain": "Design Resilient Architectures",
+        "weight": "26%",
+        "keyTopics": [
+          "Multi-AZ and multi-region architectures",
+          "Backup and restore strategies",
+          "Decoupling mechanisms",
+          "High availability and fault tolerance"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "Availability zone mapping between AWS and Azure",
+      "Differences in auto scaling behaviors and metrics",
+      "DR orchestration tool variations",
+      "Backup retention and pricing models",
+      "Network latency in cross-region setups"
+    ],
+    "tools": [
+      "Azure Migrate for assessment",
+      "Azure Site Recovery for DR",
+      "Traffic Manager for global routing",
+      "Azure Backup for data protection"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "Achieve 99.99% uptime SLA",
+      "RTO < 15 minutes for all critical services",
+      "RPO < 5 minutes for transaction data",
+      "Automatic scaling response time < 2 minutes",
+      "Successful monthly DR drill completion"
+    ],
+    "business": [
+      "Zero data loss incidents",
+      "Reduced operational overhead by 40%",
+      "Improved customer confidence",
+      "Compliance with financial regulations",
+      "30% reduction in infrastructure costs through right-sizing"
+    ]
+  },
+  "nextSteps": [
+    "Explore advanced DR patterns (warm standby, hot standby)",
+    "Implement infrastructure as code for resilience",
+    "Study SAA-C03 performance optimization patterns",
+    "Practice with AWS Well-Architected Framework reliability pillar"
+  ]
+}

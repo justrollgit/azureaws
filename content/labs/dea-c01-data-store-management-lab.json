@@ -1,0 +1,314 @@
+{
+  "id": "dea-c01-data-store-management-lab",
+  "title": "AWS Data Storage to Azure Data Services: Data Warehousing and Lake Management",
+  "category": "data-storage",
+  "difficulty": "advanced",
+  "estimatedTime": "140 minutes",
+  "awsCertification": "DEA-C01",
+  "certificationWeight": "26% - Data Store Management Domain (Second Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master data storage and warehousing by implementing AWS data lake and warehouse solutions, then migrating to Azure data services with modern data architecture, performance optimization, and scalable storage management.",
+  
+  "learningObjectives": [
+    "Design data lake architectures using Amazon S3 and Azure Data Lake Storage",
+    "Implement data warehousing with Amazon Redshift and Azure Synapse Analytics",
+    "Build data partitioning and indexing strategies for performance optimization",
+    "Create data lifecycle management and cost optimization policies",
+    "Implement data compression, encoding, and storage optimization techniques",
+    "Design hybrid data architectures supporting multiple workload patterns"
+  ],
+
+  "prerequisites": [
+    "Completion of DEA-C01 Data Ingestion & Transformation Lab",
+    "Understanding of database concepts and data modeling",
+    "Basic knowledge of SQL and data warehouse design patterns",
+    "Familiarity with data storage concepts and performance tuning"
+  ],
+
+  "awsServices": [
+    "Amazon S3 (Data Lake Storage)",
+    "Amazon Redshift (Data Warehouse)",
+    "AWS Glue Data Catalog",
+    "Amazon EMR (Big Data Processing)",
+    "Amazon Athena (Serverless Analytics)",
+    "AWS Lake Formation",
+    "Amazon DynamoDB (NoSQL)",
+    "Amazon ElastiCache (Caching)",
+    "AWS Storage Gateway",
+    "Amazon Macie (Data Discovery)"
+  ],
+
+  "azureServices": [
+    "Azure Data Lake Storage Gen2",
+    "Azure Synapse Analytics",
+    "Azure Purview (Data Catalog)",
+    "Azure HDInsight",
+    "Azure Data Explorer",
+    "Azure Data Share",
+    "Azure Cosmos DB (NoSQL)",
+    "Azure Cache for Redis",
+    "Azure StorSimple",
+    "Microsoft Purview (Data Governance)"
+  ],
+
+  "businessScenario": "DataVault Corporation manages petabytes of structured and unstructured data for analytics and machine learning workloads. They need to implement modern data storage architectures supporting data lakes, data warehouses, and hybrid scenarios. The data engineering team must design scalable, cost-effective storage solutions with proper governance, security, and performance optimization across AWS and Azure platforms.",
+
+  "sections": [
+    {
+      "title": "Data Lake Architecture and Management",
+      "duration": "40 minutes",
+      "topics": [
+        "Amazon S3 data lake design patterns and organization",
+        "Azure Data Lake Storage Gen2 hierarchical namespace",
+        "Data lake zones: raw, curated, and consumption layers",
+        "File formats, compression, and storage optimization",
+        "Data lake security and access control implementation"
+      ],
+      "tasks": [
+        {
+          "title": "Design Comprehensive Data Lake Architecture",
+          "description": "Implement enterprise data lake with proper organization and governance",
+          "steps": [
+            "Design Amazon S3 data lake with multi-zone architecture",
+            "Setup Azure Data Lake Storage Gen2 with hierarchical namespace",
+            "Implement data lake zones for raw, curated, and consumption data",
+            "Configure optimal file formats, partitioning, and compression strategies",
+            "Setup data lake security with fine-grained access controls",
+            "Implement data lifecycle management and cost optimization policies"
+          ],
+          "deliverables": [
+            "S3 data lake architecture with multi-zone organization",
+            "Azure Data Lake Storage Gen2 setup with namespace hierarchy",
+            "File format optimization and partitioning strategy",
+            "Data lake security and lifecycle management implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Warehouse Design and Optimization",
+      "duration": "40 minutes",
+      "topics": [
+        "Amazon Redshift cluster design and node configuration",
+        "Azure Synapse Analytics SQL pools and architecture",
+        "Data warehouse schema design and dimensional modeling",
+        "Performance tuning: distribution keys, sort keys, and indexing",
+        "Workload management and query optimization"
+      ],
+      "tasks": [
+        {
+          "title": "Build High-Performance Data Warehouse",
+          "description": "Implement scalable data warehouse with performance optimization",
+          "steps": [
+            "Design Amazon Redshift cluster with optimal node configuration",
+            "Setup Azure Synapse Analytics with equivalent SQL pool architecture",
+            "Implement star schema design with proper dimensional modeling",
+            "Configure distribution keys, sort keys, and indexing strategies",
+            "Setup workload management and query performance optimization",
+            "Implement data warehouse monitoring and performance tuning"
+          ],
+          "deliverables": [
+            "Redshift cluster with optimal configuration and schema design",
+            "Azure Synapse Analytics setup with performance optimization",
+            "Data warehouse schema with dimensional modeling",
+            "Performance tuning and workload management implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hybrid Data Storage and Integration",
+      "duration": "35 minutes",
+      "topics": [
+        "NoSQL database integration with DynamoDB and Cosmos DB",
+        "Caching strategies with ElastiCache and Azure Cache for Redis",
+        "Data federation and cross-platform data access",
+        "Hybrid cloud storage and data synchronization",
+        "Multi-workload data architecture patterns"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Hybrid Data Storage Architecture",
+          "description": "Create integrated storage solution supporting multiple data patterns",
+          "steps": [
+            "Configure Amazon DynamoDB for NoSQL workloads",
+            "Setup Azure Cosmos DB with equivalent NoSQL capabilities",
+            "Implement caching layers with ElastiCache and Azure Cache for Redis",
+            "Create data federation and cross-platform access patterns",
+            "Setup hybrid storage synchronization and data movement",
+            "Design multi-workload architecture supporting OLTP, OLAP, and analytics"
+          ],
+          "deliverables": [
+            "DynamoDB and Cosmos DB NoSQL implementation",
+            "Caching layer implementation with performance optimization",
+            "Data federation and cross-platform integration",
+            "Hybrid storage architecture with synchronization"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Governance and Catalog Management",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS Glue Data Catalog and metadata management",
+        "Azure Purview data discovery and governance",
+        "Data lineage tracking and impact analysis",
+        "Data classification and sensitivity labeling",
+        "Automated data discovery and cataloging"
+      ],
+      "tasks": [
+        {
+          "title": "Build Data Governance and Catalog Framework",
+          "description": "Implement comprehensive data governance with automated cataloging",
+          "steps": [
+            "Configure AWS Glue Data Catalog with automated schema discovery",
+            "Setup Azure Purview with data discovery and classification",
+            "Implement data lineage tracking and impact analysis tools",
+            "Configure data classification and sensitivity labeling",
+            "Setup automated data cataloging and metadata management",
+            "Create data governance policies and compliance monitoring"
+          ],
+          "deliverables": [
+            "AWS Glue Data Catalog with automated discovery",
+            "Azure Purview setup with governance and classification",
+            "Data lineage and impact analysis implementation",
+            "Data governance framework with compliance monitoring"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Enterprise Data Warehouse Modernization",
+      "description": "Migrate traditional data warehouse to modern cloud architecture",
+      "steps": [
+        "Assess existing data warehouse architecture and performance bottlenecks",
+        "Design modern cloud data warehouse with optimal schema and partitioning",
+        "Implement data migration with minimal downtime and validation",
+        "Optimize performance with advanced indexing and compression",
+        "Setup monitoring and automated performance tuning",
+        "Test scalability and performance under production workloads"
+      ],
+      "expectedOutcome": "Modernized data warehouse with improved performance and scalability"
+    },
+    {
+      "title": "Multi-Cloud Data Lake Implementation",
+      "description": "Build comprehensive data lake spanning AWS and Azure platforms",
+      "steps": [
+        "Design unified data lake architecture across multiple clouds",
+        "Implement cross-cloud data replication and synchronization",
+        "Create unified data catalog and governance framework",
+        "Build cross-platform analytics and query capabilities",
+        "Implement unified security and access control policies",
+        "Test data consistency and performance across platforms"
+      ],
+      "expectedOutcome": "Multi-cloud data lake with unified governance and analytics"
+    },
+    {
+      "title": "Real-Time Analytics Data Store",
+      "description": "Build data store optimized for real-time analytics and low-latency queries",
+      "steps": [
+        "Design data store architecture for real-time analytics requirements",
+        "Implement hot, warm, and cold data tier strategies",
+        "Create real-time data ingestion and indexing workflows",
+        "Optimize query performance for sub-second response times",
+        "Implement real-time monitoring and alerting systems",
+        "Test scalability and performance under high-concurrency loads"
+      ],
+      "expectedOutcome": "High-performance data store supporting real-time analytics with low latency"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Poor query performance and high costs in data warehouse operations",
+      "solution": "Optimize distribution and sort keys, implement proper compression, tune workload management, use appropriate node types, and implement query result caching"
+    },
+    {
+      "issue": "Data lake storage costs and performance issues with large datasets",
+      "solution": "Implement intelligent tiering, optimize file formats and partitioning, use appropriate compression, implement lifecycle policies, and optimize data access patterns"
+    },
+    {
+      "issue": "Complex data governance and compliance across multiple storage systems",
+      "solution": "Implement unified data catalog, use automated classification, implement consistent access controls, create audit trails, and use policy-driven governance"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Data Lake Architecture",
+      "criteria": [
+        "Can design comprehensive data lake architectures",
+        "Understands file format optimization and partitioning strategies",
+        "Can implement data lake security and access controls",
+        "Demonstrates data lifecycle management and cost optimization"
+      ]
+    },
+    {
+      "category": "Data Warehouse Implementation",
+      "criteria": [
+        "Can design and implement high-performance data warehouses",
+        "Understands dimensional modeling and schema optimization",
+        "Can configure performance tuning and workload management",
+        "Demonstrates query optimization and monitoring capabilities"
+      ]
+    },
+    {
+      "category": "Hybrid Storage Integration",
+      "criteria": [
+        "Can implement multi-pattern data storage architectures",
+        "Understands NoSQL and caching integration strategies",
+        "Can create data federation and cross-platform access",
+        "Demonstrates hybrid storage synchronization and management"
+      ]
+    },
+    {
+      "category": "Data Governance and Cataloging",
+      "criteria": [
+        "Can implement comprehensive data governance frameworks",
+        "Understands automated data discovery and cataloging",
+        "Can setup data lineage and impact analysis",
+        "Demonstrates data classification and compliance monitoring"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DEA-C01": {
+      "domain": "Data Store Management",
+      "weight": "26%",
+      "coverage": [
+        "Choose appropriate data store technologies",
+        "Design and implement data stores for batch and streaming workloads",
+        "Optimize data store performance",
+        "Manage data store capacity and scaling",
+        "Implement data store security and access controls"
+      ],
+      "examTopics": [
+        "S3 data lake design and organization patterns",
+        "Redshift data warehouse architecture and optimization",
+        "Glue Data Catalog and metadata management",
+        "DynamoDB design patterns and performance tuning",
+        "Cross-service data integration and federation"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can design and implement comprehensive data lake architectures",
+    "Demonstrates ability to build high-performance data warehouses",
+    "Shows understanding of hybrid storage integration strategies",
+    "Can implement data governance and catalog management systems",
+    "Understands storage optimization and cost management techniques"
+  ],
+
+  "nextSteps": [
+    "Proceed to DEA-C01 Data Operations & Support Lab (22% domain weight)",
+    "Gain hands-on experience with advanced data storage optimization",
+    "Practice implementing data governance in production environments",
+    "Explore advanced analytics and machine learning data patterns"
+  ]
+}

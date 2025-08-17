@@ -1,0 +1,240 @@
+{
+  "id": "pas-c01-sap-workloads-design-lab",
+  "title": "AWS SAP Workloads Architecture to Azure: Enterprise SAP Design, High Availability, and Scale-Out Solutions",
+  "category": "sap-architecture",
+  "difficulty": "expert",
+  "estimatedTime": "240 minutes",
+  "description": "Master SAP workload architecture by designing enterprise SAP landscapes on AWS with HANA, S/4HANA, and NetWeaver systems, then implementing equivalent architectures on Azure with certified SAP solutions, high availability patterns, and enterprise-grade resilience.",
+  "awsCertification": "PAS-C01",
+  "certificationWeight": "30% - Design SAP Workloads on AWS Domain",
+  "awsServices": [
+    "EC2 SAP Certified Instances",
+    "EBS Provisioned IOPS",
+    "EFS for SAP",
+    "FSx for Windows File Server",
+    "FSx for NetApp ONTAP",
+    "Application Load Balancer",
+    "Network Load Balancer",
+    "Route 53",
+    "VPC",
+    "Direct Connect",
+    "AWS Backup",
+    "Systems Manager for SAP",
+    "CloudWatch for SAP",
+    "Launch Wizard for SAP"
+  ],
+  "azureServices": [
+    "SAP Certified VMs",
+    "Premium SSD v2",
+    "Azure NetApp Files",
+    "Azure Files Premium",
+    "Application Gateway",
+    "Load Balancer",
+    "Traffic Manager",
+    "Virtual Network",
+    "ExpressRoute",
+    "Azure Backup for SAP",
+    "Azure Monitor for SAP",
+    "Azure Center for SAP",
+    "Azure Site Recovery"
+  ],
+  "prerequisites": [
+    "Advanced understanding of SAP architecture and components",
+    "Experience with SAP Basis administration",
+    "Knowledge of SAP HANA and S/4HANA architectures",
+    "Understanding of high availability and disaster recovery patterns",
+    "Familiarity with SAP sizing and performance requirements"
+  ],
+  "learningObjectives": [
+    "Design multi-tier SAP architectures with proper sizing",
+    "Implement SAP HANA scale-up and scale-out configurations",
+    "Design high availability for SAP with clustering and replication",
+    "Architect disaster recovery solutions for SAP workloads",
+    "Implement SAP-certified storage solutions and performance optimization",
+    "Design network architectures for SAP with proper segmentation",
+    "Implement security and compliance for SAP environments"
+  ],
+  "businessScenario": {
+    "description": "GlobalManufacturingCorp needs to design and deploy a mission-critical SAP S/4HANA environment supporting 10,000+ users across 50 locations, with 99.95% availability, <1 second response times, and complete disaster recovery capabilities.",
+    "requirements": [
+      "SAP S/4HANA with 20TB HANA database",
+      "Multi-AZ high availability with 99.95% SLA",
+      "Disaster recovery with RPO <15 minutes, RTO <1 hour",
+      "Support for 10,000 concurrent users",
+      "Sub-second application response times",
+      "Compliance with industry regulations",
+      "Integration with non-SAP systems"
+    ]
+  },
+  "sections": [
+    {
+      "title": "SAP Application Architecture Design",
+      "content": "Design comprehensive SAP application architectures with proper sizing, instance selection, and performance optimization.",
+      "hands-on": {
+        "aws": "1. Use SAP Quick Sizer for capacity planning\\n2. Select EC2 SAP-certified instances (X1e, M5, R5)\\n3. Design three-tier SAP architecture\\n4. Configure SAP Web Dispatcher for load balancing\\n5. Set up SAP Router for secure connectivity\\n6. Implement SAP Solution Manager integration\\n7. Configure Launch Wizard for SAP deployment",
+        "azure": "1. Use SAP HANA sizing tools for Azure\\n2. Select Azure SAP-certified VMs (M-series, Mv2)\\n3. Design SAP architecture with availability zones\\n4. Configure Application Gateway for SAP\\n5. Set up Azure Bastion for secure access\\n6. Implement Azure Center for SAP solutions\\n7. Deploy using Azure Resource Manager templates"
+      }
+    },
+    {
+      "title": "SAP HANA Infrastructure Design",
+      "content": "Implement SAP HANA with scale-up and scale-out configurations, including high-performance storage and networking.",
+      "hands-on": {
+        "aws": "1. Deploy HANA on X1e.32xlarge instances\\n2. Configure EBS Provisioned IOPS (64,000 IOPS)\\n3. Implement HANA scale-out with cluster networking\\n4. Set up HANA System Replication (HSR)\\n5. Configure HANA backup to S3\\n6. Implement HANA dynamic tiering with warm data\\n7. Set up HANA monitoring with CloudWatch",
+        "azure": "1. Deploy HANA on M208ms_v2 VMs\\n2. Configure Ultra Disks for HANA (160,000 IOPS)\\n3. Implement HANA scale-out with accelerated networking\\n4. Configure HANA System Replication\\n5. Set up HANA backup to Azure Storage\\n6. Implement Azure NetApp Files for HANA\\n7. Configure Azure Monitor for SAP HANA"
+      }
+    },
+    {
+      "title": "High Availability and Clustering",
+      "content": "Design and implement high availability solutions for SAP with clustering, replication, and automated failover.",
+      "hands-on": {
+        "aws": "1. Configure Pacemaker clustering for HANA\\n2. Implement SUSE/RHEL HA for SAP\\n3. Set up overlay IP for cluster communication\\n4. Configure STONITH fencing devices\\n5. Implement SAP enqueue replication\\n6. Set up automated failover with Route 53\\n7. Configure cross-AZ synchronous replication",
+        "azure": "1. Implement Pacemaker with Azure fencing\\n2. Configure SUSE/RHEL HA Extension\\n3. Set up Azure Load Balancer for HA\\n4. Implement STONITH with Azure fence agents\\n5. Configure Enqueue Replication Server 2\\n6. Set up Traffic Manager for failover\\n7. Implement cross-zone synchronous replication"
+      }
+    },
+    {
+      "title": "Disaster Recovery Architecture",
+      "content": "Design comprehensive disaster recovery solutions for SAP with cross-region replication and automated recovery.",
+      "hands-on": {
+        "aws": "1. Design multi-region DR architecture\\n2. Configure HANA System Replication async\\n3. Implement AWS Backup for SAP\\n4. Set up cross-region snapshot copying\\n5. Configure CloudEndure for DR\\n6. Implement DR testing procedures\\n7. Set up automated DR orchestration",
+        "azure": "1. Design cross-region DR with paired regions\\n2. Configure HSR async replication\\n3. Implement Azure Site Recovery for SAP\\n4. Set up geo-redundant backup\\n5. Configure automated failover groups\\n6. Implement DR testing automation\\n7. Set up recovery orchestration"
+      }
+    },
+    {
+      "title": "Storage and Performance Optimization",
+      "content": "Implement optimized storage solutions for SAP with proper IOPS, throughput, and latency requirements.",
+      "hands-on": {
+        "aws": "1. Configure EBS Provisioned IOPS SSD (io2)\\n2. Implement FSx for NetApp ONTAP\\n3. Set up EFS for shared SAP directories\\n4. Configure storage performance monitoring\\n5. Implement SSD caching strategies\\n6. Optimize HANA data volume striping\\n7. Configure backup compression and deduplication",
+        "azure": "1. Configure Premium SSD v2 with custom IOPS\\n2. Implement Azure NetApp Files for SAP\\n3. Set up Azure Files Premium shares\\n4. Configure storage performance analytics\\n5. Implement read caching with Ultra Disks\\n6. Optimize HANA storage layout\\n7. Configure backup optimization"
+      }
+    },
+    {
+      "title": "Network and Security Architecture",
+      "content": "Design secure network architectures for SAP with proper segmentation, connectivity, and access controls.",
+      "hands-on": {
+        "aws": "1. Design VPC with SAP network zones\\n2. Configure security groups for SAP ports\\n3. Implement Direct Connect for on-premises\\n4. Set up VPN backup connectivity\\n5. Configure network ACLs and flow logs\\n6. Implement SAP Router for secure access\\n7. Set up AWS SSO integration with SAP",
+        "azure": "1. Design VNet with SAP subnets\\n2. Configure NSGs for SAP traffic\\n3. Implement ExpressRoute connectivity\\n4. Set up VPN Gateway backup\\n5. Configure Azure Firewall rules\\n6. Implement Azure Bastion access\\n7. Configure Azure AD integration"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Deploy Complete SAP S/4HANA Landscape",
+      "description": "Design and implement a production-ready SAP S/4HANA environment with HA/DR capabilities.",
+      "tasks": [
+        "Size and design SAP S/4HANA architecture",
+        "Deploy HANA database with HA clustering",
+        "Configure application servers with load balancing",
+        "Implement cross-region disaster recovery",
+        "Set up comprehensive monitoring and alerting",
+        "Configure automated backup and recovery",
+        "Validate performance and availability requirements"
+      ],
+      "validation": [
+        "99.95% availability achieved with HA setup",
+        "RPO <15 minutes, RTO <1 hour for DR",
+        "Sub-second response times for transactions",
+        "Successful failover testing completed",
+        "Backup and recovery procedures validated",
+        "Security and compliance requirements met"
+      ]
+    },
+    {
+      "title": "Implement SAP HANA Scale-Out Cluster",
+      "description": "Deploy a multi-node SAP HANA scale-out system with high availability and performance optimization.",
+      "tasks": [
+        "Design HANA scale-out architecture",
+        "Deploy multiple HANA nodes with shared storage",
+        "Configure inter-node communication",
+        "Implement standby nodes for HA",
+        "Set up data distribution and partitioning",
+        "Configure monitoring and management",
+        "Perform scale-out testing and validation"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "HANA performance degradation during peak loads",
+        "solution": "Implement proper NUMA configuration, optimize memory allocation, and configure workload management"
+      },
+      {
+        "issue": "Cluster split-brain scenarios in HA setup",
+        "solution": "Configure proper STONITH fencing, implement quorum devices, and set up proper cluster communication"
+      },
+      {
+        "issue": "Storage latency affecting SAP performance",
+        "solution": "Optimize storage configuration with proper IOPS, implement caching, and use premium storage tiers"
+      },
+      {
+        "issue": "Network connectivity issues in hybrid scenarios",
+        "solution": "Implement redundant connectivity, optimize routing, and configure proper MTU sizes"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can design enterprise SAP architectures on cloud platforms",
+      "Can implement SAP HANA with HA/DR capabilities",
+      "Can configure SAP-certified infrastructure components",
+      "Can design secure network architectures for SAP",
+      "Can implement performance optimization for SAP workloads",
+      "Can configure comprehensive monitoring and management"
+    ],
+    "certificationAlignment": {
+      "PAS-C01": {
+        "domain": "Design SAP Workloads on AWS",
+        "weight": "30%",
+        "keyTopics": [
+          "SAP architecture design patterns",
+          "SAP HANA infrastructure requirements",
+          "High availability and clustering",
+          "Disaster recovery planning",
+          "Storage optimization for SAP",
+          "Network security for SAP",
+          "SAP sizing and capacity planning"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "SAP certification requirements for cloud instances",
+      "HANA-specific infrastructure considerations",
+      "High availability patterns and tools differences",
+      "Storage performance and features comparison",
+      "Network architecture and connectivity options",
+      "Monitoring and management tool differences"
+    ],
+    "tools": [
+      "SAP Cloud Migration Tools",
+      "Azure Migrate for SAP",
+      "SAP Migration Cockpit",
+      "Database Migration Option (DMO)"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "99.95% availability for production SAP systems",
+      "HANA response times <100ms for queries",
+      "RPO <15 minutes, RTO <1 hour achieved",
+      "Zero data loss during failover testing",
+      "Storage IOPS meeting SAP requirements",
+      "Network latency <1ms within availability zones"
+    ],
+    "business": [
+      "30% reduction in infrastructure costs",
+      "50% faster SAP deployment times",
+      "99.9% SLA compliance achieved",
+      "40% improvement in system performance",
+      "Zero unplanned downtime in 12 months",
+      "Successful DR tests completed quarterly"
+    ]
+  },
+  "nextSteps": [
+    "Explore SAP Business Technology Platform integration",
+    "Study SAP Fiori and mobile access patterns",
+    "Implement SAP analytics and reporting on cloud",
+    "Practice with SAP integration scenarios"
+  ]
+}

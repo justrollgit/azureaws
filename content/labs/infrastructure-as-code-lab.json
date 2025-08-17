@@ -1,0 +1,196 @@
+{
+  "id": "infrastructure-as-code-lab",
+  "title": "CloudFormation to ARM/Bicep: Infrastructure as Code Mastery",
+  "difficulty": "advanced",
+  "estimated_time": "120 minutes",
+  "aws_prerequisite": "Experience with CloudFormation, nested stacks, and infrastructure automation",
+  "azure_target": "Master ARM templates, Bicep, and infrastructure automation in Azure",
+  "learning_objectives": [
+    "Migrate CloudFormation templates to ARM/Bicep",
+    "Implement nested deployments and modular infrastructure",
+    "Configure cross-region and cross-subscription deployments",
+    "Automate infrastructure provisioning with parameters and conditions",
+    "Implement infrastructure validation and compliance checking"
+  ],
+  "aws_context": {
+    "equivalent_service": "AWS CloudFormation, AWS SAM",
+    "key_concepts": [
+      "CloudFormation → ARM Templates/Bicep",
+      "Stacks → Resource Groups/Deployments",
+      "Nested Stacks → Nested/Linked Templates",
+      "Change Sets → What-if Deployments",
+      "Stack Sets → Management Groups/Blueprints",
+      "CloudFormation Drift → Azure Resource Drift Detection"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Infrastructure as Code Service Comparison",
+      "content": "Understanding the IaC ecosystem differences between AWS and Azure.",
+      "comparison_table": {
+        "template_language": {
+          "aws": "CloudFormation YAML/JSON",
+          "azure": "ARM JSON / Bicep DSL",
+          "use_case": "Infrastructure definition and configuration"
+        },
+        "deployment_unit": {
+          "aws": "CloudFormation Stacks",
+          "azure": "Resource Groups / Deployments",
+          "use_case": "Logical grouping of resources"
+        },
+        "multi_region": {
+          "aws": "StackSets",
+          "azure": "Management Group Deployments",
+          "use_case": "Cross-region infrastructure deployment"
+        },
+        "change_preview": {
+          "aws": "Change Sets",
+          "azure": "What-if Operations",
+          "use_case": "Preview changes before deployment"
+        },
+        "compliance": {
+          "aws": "CloudFormation Guard",
+          "azure": "Azure Policy / Blueprint",
+          "use_case": "Infrastructure compliance and governance"
+        }
+      }
+    },
+    {
+      "title": "Convert CloudFormation to Bicep",
+      "content": "Learn how to migrate CloudFormation templates to Azure Bicep for cleaner, more maintainable IaC.",
+      "exercise": {
+        "scenario": "Convert a multi-tier CloudFormation template to Bicep, including networking, compute, and database resources.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Create Bicep Template Structure",
+            "aws_equivalent": "CloudFormation template with parameters and resources",
+            "instructions": "Create a Bicep template with parameters, variables, and resources equivalent to CloudFormation.",
+            "code": {
+              "cli": "// main.bicep\n@description('Environment name')\nparam environment string = 'dev'\n\n@allowed([\n  'Standard_B2s'\n  'Standard_D2s_v3'\n])\nparam vmSize string = 'Standard_B2s'\n\nvar location = resourceGroup().location\nvar naming = '${environment}-app'\n\nresource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {\n  name: '${naming}-vnet'\n  location: location\n  properties: {\n    addressSpace: {\n      addressPrefixes: ['10.0.0.0/16']\n    }\n  }\n}",
+              "portal": "Create new Bicep file → Define parameters and resources"
+            },
+            "explanation": "Bicep provides cleaner syntax than ARM templates, similar to CloudFormation YAML simplicity."
+          },
+          {
+            "step": 2,
+            "title": "Implement Nested Deployments",
+            "aws_equivalent": "CloudFormation nested stacks",
+            "instructions": "Create modular Bicep templates with nested deployments for reusability.",
+            "code": {
+              "cli": "// modules/storage.bicep\nparam storageAccountName string\nparam location string\n\nresource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {\n  name: storageAccountName\n  location: location\n  sku: {\n    name: 'Standard_LRS'\n  }\n  kind: 'StorageV2'\n}\n\noutput storageId string = storage.id\n\n// main.bicep\nmodule storageModule 'modules/storage.bicep' = {\n  name: 'storageDeployment'\n  params: {\n    storageAccountName: '${naming}storage'\n    location: location\n  }\n}",
+              "portal": "Create module files → Reference in main template"
+            },
+            "explanation": "Bicep modules provide reusability similar to CloudFormation nested stacks."
+          },
+          {
+            "step": 3,
+            "title": "Configure Conditional Deployments",
+            "aws_equivalent": "CloudFormation conditions",
+            "instructions": "Implement conditional resource deployment based on parameters.",
+            "code": {
+              "cli": "param deployDatabase bool = true\n\nresource sqlServer 'Microsoft.Sql/servers@2021-05-01-preview' = if (deployDatabase) {\n  name: '${naming}-sql'\n  location: location\n  properties: {\n    administratorLogin: 'sqladmin'\n    administratorLoginPassword: loadJsonContent('secrets.json').sqlPassword\n  }\n}",
+              "portal": "Add condition expressions to resources"
+            },
+            "explanation": "Conditional deployments in Bicep work similarly to CloudFormation conditions."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multi-Region and Cross-Subscription Deployments",
+      "content": "Implement enterprise-scale infrastructure deployments across regions and subscriptions.",
+      "exercise": {
+        "scenario": "Deploy infrastructure across multiple Azure regions and subscriptions, similar to CloudFormation StackSets.",
+        "steps": [
+          {
+            "step": 4,
+            "title": "Management Group Deployment",
+            "aws_equivalent": "CloudFormation StackSets for AWS Organizations",
+            "instructions": "Deploy resources at management group level for multi-subscription governance.",
+            "code": {
+              "cli": "az deployment mg create \\\n  --location eastus \\\n  --management-group-id 'myManagementGroup' \\\n  --template-file governance.bicep \\\n  --parameters policySetName='ComplianceBaseline'",
+              "portal": "Management Groups → Deployments → Deploy to management group"
+            },
+            "explanation": "Management group deployments provide organization-wide governance like StackSets."
+          },
+          {
+            "step": 5,
+            "title": "Cross-Region Deployment",
+            "aws_equivalent": "StackSets with multiple regions",
+            "instructions": "Deploy infrastructure to multiple regions using deployment scripts.",
+            "code": {
+              "cli": "// deploy-multiregion.bicep\ntargetScope = 'subscription'\n\nparam regions array = [\n  'eastus'\n  'westus'\n  'northeurope'\n]\n\nresource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = [for region in regions: {\n  name: 'rg-${region}'\n  location: region\n}]\n\nmodule deployment 'app.bicep' = [for (region, i) in regions: {\n  scope: rg[i]\n  name: 'deploy-${region}'\n  params: {\n    location: region\n  }\n}]",
+              "portal": "Use deployment scripts for multi-region orchestration"
+            },
+            "explanation": "Bicep supports multi-region deployments through loops and scopes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Infrastructure Validation and Compliance",
+      "content": "Implement infrastructure validation, drift detection, and compliance checking.",
+      "exercise": {
+        "scenario": "Set up infrastructure validation pipelines with compliance checking and drift detection.",
+        "steps": [
+          {
+            "step": 6,
+            "title": "What-if Analysis",
+            "aws_equivalent": "CloudFormation Change Sets",
+            "instructions": "Preview infrastructure changes before deployment.",
+            "code": {
+              "cli": "az deployment group what-if \\\n  --resource-group 'production-rg' \\\n  --template-file main.bicep \\\n  --parameters @parameters.json",
+              "portal": "Deployment → What-if → Review changes"
+            },
+            "explanation": "What-if operations provide change preview similar to CloudFormation Change Sets."
+          },
+          {
+            "step": 7,
+            "title": "Policy Compliance Validation",
+            "aws_equivalent": "CloudFormation Guard rules",
+            "instructions": "Implement Azure Policy for infrastructure compliance validation.",
+            "code": {
+              "cli": "// compliance-policy.json\n{\n  \"mode\": \"All\",\n  \"policyRule\": {\n    \"if\": {\n      \"allOf\": [\n        {\n          \"field\": \"type\",\n          \"equals\": \"Microsoft.Storage/storageAccounts\"\n        },\n        {\n          \"field\": \"Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly\",\n          \"notEquals\": \"true\"\n        }\n      ]\n    },\n    \"then\": {\n      \"effect\": \"deny\"\n    }\n  }\n}",
+              "portal": "Policy → Definitions → Create custom policy"
+            },
+            "explanation": "Azure Policy provides compliance validation similar to CloudFormation Guard."
+          }
+        ]
+      }
+    }
+  ],
+  "validation_steps": [
+    {
+      "step": "Validate Bicep Template",
+      "command": "az bicep build --file main.bicep",
+      "expected": "Bicep builds successfully without errors"
+    },
+    {
+      "step": "Test What-if Deployment",
+      "command": "az deployment group what-if --resource-group test-rg --template-file main.bicep",
+      "expected": "Changes preview shows expected resources"
+    },
+    {
+      "step": "Verify Multi-Region Deployment",
+      "command": "az resource list --query \"[?location=='westus']\" --output table",
+      "expected": "Resources deployed in multiple regions"
+    }
+  ],
+  "cleanup": {
+    "instructions": "Remove all deployed resources and resource groups",
+    "command": "az group delete --name rg-eastus --yes --no-wait && az group delete --name rg-westus --yes --no-wait"
+  },
+  "key_takeaways": [
+    "Bicep provides cleaner syntax than ARM templates, similar to CloudFormation YAML",
+    "Azure deployment scopes enable multi-region and multi-subscription deployments",
+    "What-if operations provide safe change preview like CloudFormation Change Sets",
+    "Azure Policy enables infrastructure compliance validation",
+    "Bicep modules offer reusability similar to CloudFormation nested stacks"
+  ],
+  "next_steps": [
+    "Explore Bicep extensibility providers for third-party resources",
+    "Learn about Azure Blueprints for enterprise governance",
+    "Study Azure Resource Manager template specs for template sharing"
+  ]
+}

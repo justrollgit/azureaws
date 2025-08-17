@@ -1,0 +1,316 @@
+{
+  "id": "dbs-c01-monitoring-troubleshooting-lab",
+  "title": "AWS Database Monitoring to Azure Database Analytics: Advanced Performance Monitoring and Troubleshooting",
+  "category": "database-monitoring",
+  "difficulty": "expert",
+  "estimatedTime": "140 minutes",
+  "awsCertification": "DBS-C01",
+  "certificationWeight": "18% - Monitoring and Troubleshooting Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master database monitoring and troubleshooting by implementing comprehensive AWS database performance monitoring and migrating to Azure database analytics with advanced troubleshooting frameworks, performance optimization, and enterprise-grade database observability.",
+
+  "learningObjectives": [
+    "Implement comprehensive database performance monitoring and observability",
+    "Build advanced troubleshooting frameworks and root cause analysis",
+    "Create performance optimization and query analysis automation",
+    "Design database alerting and incident response automation",
+    "Implement capacity planning and predictive analytics for databases",
+    "Build database health assessment and proactive monitoring systems"
+  ],
+
+  "prerequisites": [
+    "Completion of previous DBS-C01 labs or equivalent database experience",
+    "Strong understanding of database performance concepts and SQL optimization",
+    "Experience with monitoring tools and troubleshooting methodologies",
+    "Familiarity with performance metrics and database observability principles"
+  ],
+
+  "awsServices": [
+    "Amazon CloudWatch",
+    "AWS Performance Insights",
+    "Amazon CloudWatch Logs",
+    "AWS X-Ray",
+    "Amazon SNS",
+    "AWS Lambda",
+    "Amazon QuickSight",
+    "AWS Systems Manager",
+    "Amazon RDS",
+    "Amazon Aurora",
+    "Amazon DynamoDB",
+    "Amazon Redshift"
+  ],
+
+  "azureServices": [
+    "Azure Monitor",
+    "Azure SQL Analytics",
+    "Azure Monitor Logs",
+    "Azure Application Insights",
+    "Azure Action Groups",
+    "Azure Functions",
+    "Power BI",
+    "Azure Automation",
+    "Azure SQL Database",
+    "Azure Database for PostgreSQL",
+    "Azure Cosmos DB",
+    "Azure Synapse Analytics"
+  ],
+
+  "businessScenario": "Database Performance Solutions provides comprehensive database monitoring and troubleshooting services for enterprise clients requiring advanced performance optimization, proactive monitoring, and rapid incident resolution. Their database performance team needs expertise in monitoring automation, troubleshooting frameworks, performance analysis, and predictive analytics. They must master both AWS and Azure database monitoring platforms for comprehensive performance excellence.",
+
+  "sections": [
+    {
+      "title": "Advanced Database Performance Monitoring and Observability",
+      "duration": "40 minutes",
+      "topics": [
+        "Comprehensive database performance metrics collection and analysis",
+        "Real-time monitoring dashboards and performance visualization",
+        "Database observability and distributed tracing implementation",
+        "Custom metrics development and business-specific monitoring",
+        "Multi-database platform monitoring and unified observability"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Database Performance Monitoring Platform",
+          "description": "Build comprehensive performance monitoring with advanced observability",
+          "steps": [
+            "Configure comprehensive performance monitoring with CloudWatch and Azure Monitor",
+            "Implement Performance Insights and Azure SQL Analytics for query analysis",
+            "Setup real-time monitoring dashboards and performance visualization",
+            "Configure database observability and distributed tracing with X-Ray and Application Insights",
+            "Implement custom metrics development and business-specific monitoring",
+            "Setup multi-database platform monitoring and unified observability"
+          ],
+          "deliverables": [
+            "Comprehensive database performance monitoring with advanced metrics",
+            "Real-time monitoring dashboards and performance visualization",
+            "Database observability and distributed tracing implementation",
+            "Custom metrics and multi-platform unified monitoring system"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Database Troubleshooting and Root Cause Analysis",
+      "duration": "35 minutes",
+      "topics": [
+        "Systematic troubleshooting frameworks and diagnostic methodologies",
+        "Performance bottleneck identification and resolution strategies",
+        "Query analysis and optimization automation",
+        "Database lock contention and deadlock resolution",
+        "Storage and I/O performance troubleshooting"
+      ],
+      "tasks": [
+        {
+          "title": "Build Database Troubleshooting and Analysis Platform",
+          "description": "Implement comprehensive troubleshooting with automated root cause analysis",
+          "steps": [
+            "Configure systematic troubleshooting frameworks and diagnostic automation",
+            "Implement performance bottleneck identification and resolution workflows",
+            "Setup query analysis and optimization automation with Performance Insights",
+            "Configure database lock contention and deadlock detection and resolution",
+            "Implement storage and I/O performance troubleshooting automation",
+            "Setup automated root cause analysis and resolution recommendations"
+          ],
+          "deliverables": [
+            "Systematic troubleshooting frameworks and diagnostic automation",
+            "Performance bottleneck identification and resolution system",
+            "Query analysis and optimization automation with lock detection",
+            "Storage and I/O troubleshooting with automated root cause analysis"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Performance Optimization and Proactive Analytics",
+      "duration": "35 minutes",
+      "topics": [
+        "Automated performance optimization and recommendation systems",
+        "Predictive analytics and capacity planning for database resources",
+        "Performance trending and anomaly detection automation",
+        "Database tuning automation and intelligent optimization",
+        "Performance benchmarking and continuous improvement frameworks"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Performance Optimization and Analytics Platform",
+          "description": "Build comprehensive performance optimization with predictive analytics",
+          "steps": [
+            "Configure automated performance optimization and recommendation systems",
+            "Implement predictive analytics and capacity planning automation",
+            "Setup performance trending and anomaly detection with machine learning",
+            "Configure database tuning automation and intelligent optimization",
+            "Implement performance benchmarking and continuous improvement workflows",
+            "Setup performance optimization reporting and executive analytics"
+          ],
+          "deliverables": [
+            "Automated performance optimization and recommendation systems",
+            "Predictive analytics and capacity planning automation",
+            "Performance trending and anomaly detection with ML",
+            "Database tuning automation and continuous improvement framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Database Alerting and Incident Response Automation",
+      "duration": "30 minutes",
+      "topics": [
+        "Intelligent alerting and notification automation",
+        "Incident response automation and escalation workflows",
+        "Performance threshold management and adaptive alerting",
+        "Alert correlation and noise reduction strategies",
+        "Incident documentation and post-mortem automation"
+      ],
+      "tasks": [
+        {
+          "title": "Build Database Alerting and Incident Response Platform",
+          "description": "Implement comprehensive alerting with automated incident response",
+          "steps": [
+            "Configure intelligent alerting and notification automation with SNS and Action Groups",
+            "Implement incident response automation and escalation workflows",
+            "Setup performance threshold management and adaptive alerting",
+            "Configure alert correlation and noise reduction with machine learning",
+            "Implement incident documentation and post-mortem automation",
+            "Setup incident response metrics and continuous improvement"
+          ],
+          "deliverables": [
+            "Intelligent alerting and notification automation system",
+            "Incident response automation and escalation workflows",
+            "Performance threshold management and adaptive alerting",
+            "Alert correlation and incident documentation with post-mortem automation"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "E-commerce Database Performance Optimization Platform",
+      "description": "Build comprehensive database performance platform for e-commerce with high-traffic monitoring",
+      "steps": [
+        "Design e-commerce database performance architecture for high-traffic workloads",
+        "Implement real-time monitoring and alerting for e-commerce peak load scenarios",
+        "Build performance optimization and query analysis for e-commerce database queries",
+        "Configure predictive analytics and capacity planning for seasonal traffic patterns",
+        "Implement incident response automation for e-commerce database availability",
+        "Test platform with e-commerce performance scenarios and load testing validation"
+      ],
+      "expectedOutcome": "Production-ready e-commerce database performance platform with high-traffic optimization"
+    },
+    {
+      "title": "Financial Services Database Monitoring and Compliance",
+      "description": "Implement financial services database monitoring with regulatory compliance and audit requirements",
+      "steps": [
+        "Design financial services database monitoring architecture for regulatory compliance",
+        "Implement performance monitoring with financial compliance audit requirements",
+        "Build troubleshooting frameworks for financial transaction processing systems",
+        "Configure performance optimization for high-frequency trading and financial workloads",
+        "Implement compliance alerting and incident response for financial regulations",
+        "Test platform with financial performance scenarios and regulatory validation"
+      ],
+      "expectedOutcome": "Financial services database monitoring platform with regulatory compliance and audit capabilities"
+    },
+    {
+      "title": "Multi-Cloud Database Monitoring and Unified Analytics",
+      "description": "Build unified database monitoring platform spanning AWS and Azure with centralized analytics",
+      "steps": [
+        "Design multi-cloud database monitoring architecture with unified analytics",
+        "Implement cross-platform performance monitoring and centralized dashboards",
+        "Build unified troubleshooting frameworks and root cause analysis across clouds",
+        "Configure multi-cloud performance optimization and predictive analytics",
+        "Implement unified alerting and incident response across cloud platforms",
+        "Test platform with complex multi-cloud monitoring and analytics scenarios"
+      ],
+      "expectedOutcome": "Multi-cloud database monitoring platform with unified analytics and centralized management"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Monitoring data volume and performance impact challenges",
+      "solution": "Implement intelligent sampling and data aggregation strategies, use efficient monitoring agents and collection methods, implement monitoring data lifecycle management, use compression and data deduplication, and implement selective monitoring based on criticality and performance impact"
+    },
+    {
+      "issue": "Alert fatigue and false positive management challenges",
+      "solution": "Implement machine learning-based alert correlation and filtering, use adaptive threshold management with baseline analysis, implement alert prioritization and escalation logic, use contextual alerting with business impact analysis, and implement automated alert suppression and grouping"
+    },
+    {
+      "issue": "Performance troubleshooting complexity and root cause identification",
+      "solution": "Implement systematic troubleshooting methodologies and diagnostic automation, use correlation analysis for multi-component performance issues, implement automated performance pattern recognition, use historical analysis for trend identification, and implement expert system recommendations for common issues"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Performance Monitoring Excellence",
+      "criteria": [
+        "Can implement comprehensive database performance monitoring with advanced metrics",
+        "Understands real-time monitoring dashboards and performance visualization",
+        "Can configure database observability and distributed tracing",
+        "Demonstrates custom metrics and multi-platform unified monitoring"
+      ]
+    },
+    {
+      "category": "Troubleshooting Mastery",
+      "criteria": [
+        "Can implement systematic troubleshooting frameworks and diagnostic automation",
+        "Understands performance bottleneck identification and resolution workflows",
+        "Can configure query analysis and optimization automation",
+        "Demonstrates automated root cause analysis and resolution recommendations"
+      ]
+    },
+    {
+      "category": "Performance Optimization",
+      "criteria": [
+        "Can implement automated performance optimization and recommendation systems",
+        "Understands predictive analytics and capacity planning automation",
+        "Can configure performance trending and anomaly detection with ML",
+        "Demonstrates database tuning automation and continuous improvement"
+      ]
+    },
+    {
+      "category": "Alerting and Incident Response",
+      "criteria": [
+        "Can implement intelligent alerting and notification automation",
+        "Understands incident response automation and escalation workflows",
+        "Can configure performance threshold management and adaptive alerting",
+        "Demonstrates alert correlation and incident documentation automation"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DBS-C01": {
+      "domain": "Monitoring and Troubleshooting",
+      "weight": "18%",
+      "coverage": [
+        "Performance monitoring and tuning",
+        "Troubleshooting database issues",
+        "Monitoring tools and techniques"
+      ],
+      "examTopics": [
+        "Advanced database performance monitoring and observability implementation",
+        "Database troubleshooting and root cause analysis automation",
+        "Performance optimization and proactive analytics frameworks",
+        "Database alerting and incident response automation",
+        "Cross-platform monitoring and unified analytics platforms"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive database performance monitoring and observability",
+    "Demonstrates ability to build advanced troubleshooting and root cause analysis",
+    "Shows understanding of performance optimization and proactive analytics",
+    "Can create database alerting and incident response automation",
+    "Understands cross-platform monitoring and unified analytics platforms"
+  ],
+
+  "nextSteps": [
+    "Proceed to DBS-C01 Database Security Lab (18% domain weight)",
+    "Gain hands-on experience with enterprise database monitoring in production environments",
+    "Practice implementing performance optimization for various database workloads",
+    "Explore advanced monitoring automation and predictive analytics techniques"
+  ]
+}

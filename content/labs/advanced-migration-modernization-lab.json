@@ -1,0 +1,240 @@
+{
+  "id": "advanced-migration-modernization-lab",
+  "title": "AWS Migration Services to Azure Migrate: Advanced Migration and Modernization Strategies",
+  "difficulty": "expert",
+  "estimated_time": "360 minutes",
+  "aws_prerequisite": "Advanced experience with AWS Application Migration Service (MGN), Database Migration Service (DMS), Migration Hub, Server Migration Service, and large-scale migration patterns",
+  "azure_target": "Master Azure Migrate, Database Migration Service, App Service Migration Assistant, and comprehensive migration orchestration with modernization strategies",
+  "learning_objectives": [
+    "Design sophisticated migration assessment and planning strategies",
+    "Implement advanced database migration with minimal downtime patterns",
+    "Master application migration and modernization to Azure PaaS services",
+    "Set up enterprise migration governance and compliance frameworks",
+    "Configure automated migration validation and rollback procedures",
+    "Implement legacy application modernization with containerization",
+    "Design hybrid migration strategies with phased cutover approaches",
+    "Establish post-migration optimization and cost management"
+  ],
+  "aws_context": {
+    "migration_services_mapping": {
+      "aws_migration_hub": "Azure Migrate hub",
+      "application_migration_service": "Azure Migrate: Server Migration",
+      "database_migration_service": "Azure Database Migration Service",
+      "server_migration_service": "Azure Migrate: Server Migration",
+      "discovery_connector": "Azure Migrate: Discovery and assessment",
+      "migration_evaluator": "Azure Migrate: Discovery and assessment",
+      "aws_application_discovery": "Azure Migrate appliance",
+      "cloudendure": "Azure Site Recovery",
+      "aws_snowball": "Azure Data Box",
+      "aws_direct_connect": "ExpressRoute for migration"
+    },
+    "migration_patterns": {
+      "rehost_lift_shift": "VM migration with Azure Migrate",
+      "replatform_lift_reshape": "Database migration to Azure SQL",
+      "refactor_rearchitect": "App modernization to Azure App Service",
+      "rebuild_rewrite": "Cloud-native with Azure services",
+      "replace_saas": "Migration to Azure SaaS offerings",
+      "retire_decommission": "Workload retirement planning"
+    },
+    "database_migration_scenarios": {
+      "homogeneous": "SQL Server to Azure SQL Database",
+      "heterogeneous": "Oracle to Azure SQL Database",
+      "nosql": "MongoDB to Cosmos DB",
+      "data_warehouse": "SQL Server DW to Synapse Analytics"
+    }
+  },
+  "sections": [
+    {
+      "title": "Comprehensive Migration Assessment and Planning",
+      "content": "Implement enterprise-scale migration assessment equivalent to AWS Migration Hub with enhanced Azure capabilities.",
+      "assessment_framework": {
+        "discovery_phase": {
+          "infrastructure_discovery": "Azure Migrate appliance for VMware, Hyper-V, and physical servers",
+          "application_dependency_mapping": "Service map and application dependency visualization",
+          "performance_analysis": "Historical performance data collection and analysis",
+          "licensing_assessment": "License optimization and Azure Hybrid Benefit analysis"
+        },
+        "assessment_criteria": {
+          "technical_readiness": "OS compatibility, hardware requirements, network dependencies",
+          "business_readiness": "Application criticality, downtime tolerance, compliance requirements",
+          "cost_analysis": "TCO comparison, Azure sizing recommendations, cost optimization opportunities",
+          "risk_assessment": "Migration complexity, technical risks, business continuity impact"
+        },
+        "migration_waves": {
+          "wave_1_pilot": "Non-critical applications for proof of concept",
+          "wave_2_low_complexity": "Stateless applications with minimal dependencies",
+          "wave_3_moderate_complexity": "Applications with database dependencies",
+          "wave_4_high_complexity": "Mission-critical applications with complex dependencies"
+        }
+      },
+      "code_examples": {
+        "setup_azure_migrate_environment": {
+          "language": "bash",
+          "title": "Setup Comprehensive Azure Migrate Environment",
+          "code": "# Setup Azure Migrate environment for enterprise migration\n\necho \"Setting up Azure Migrate environment...\"\n\n# Create resource group for migration\naz group create \\\n  --name migration-hub-rg \\\n  --location eastus \\\n  --tags Environment=Migration Project=CloudTransformation CostCenter=IT002\n\n# Create Azure Migrate project\necho \"Creating Azure Migrate project...\"\nMIGRATE_PROJECT_NAME=\"migrate-enterprise-project\"\naz migrate project create \\\n  --location eastus \\\n  --name $MIGRATE_PROJECT_NAME \\\n  --resource-group migration-hub-rg\n\n# Create Log Analytics workspace for migration monitoring\necho \"Creating Log Analytics workspace...\"\naz monitor log-analytics workspace create \\\n  --resource-group migration-hub-rg \\\n  --workspace-name migration-monitoring-workspace \\\n  --location eastus \\\n  --sku pergb2018\n\nMIGRATE_WORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group migration-hub-rg \\\n  --workspace-name migration-monitoring-workspace \\\n  --query customerId -o tsv)\n\n# Create Recovery Services Vault for backup and disaster recovery\necho \"Creating Recovery Services Vault...\"\nRECOVERY_VAULT_NAME=\"migrate-recovery-vault\"\naz backup vault create \\\n  --resource-group migration-hub-rg \\\n  --name $RECOVERY_VAULT_NAME \\\n  --location eastus \\\n  --storage-model-type GeoRedundant\n\n# Create virtual network for migration target environment\necho \"Creating migration target network...\"\naz network vnet create \\\n  --resource-group migration-hub-rg \\\n  --name migration-target-vnet \\\n  --address-prefixes 10.10.0.0/16 \\\n  --subnet-name migration-subnet \\\n  --subnet-prefixes 10.10.1.0/24\n\n# Create additional subnets for different tiers\naz network vnet subnet create \\\n  --resource-group migration-hub-rg \\\n  --vnet-name migration-target-vnet \\\n  --name database-subnet \\\n  --address-prefixes 10.10.2.0/24\n\naz network vnet subnet create \\\n  --resource-group migration-hub-rg \\\n  --vnet-name migration-target-vnet \\\n  --name application-subnet \\\n  --address-prefixes 10.10.3.0/24\n\naz network vnet subnet create \\\n  --resource-group migration-hub-rg \\\n  --vnet-name migration-target-vnet \\\n  --name bastion-subnet \\\n  --address-prefixes 10.10.4.0/27\n\n# Create Azure Bastion for secure access\necho \"Creating Azure Bastion for secure access...\"\naz network public-ip create \\\n  --resource-group migration-hub-rg \\\n  --name bastion-public-ip \\\n  --sku Standard \\\n  --location eastus\n\naz network bastion create \\\n  --resource-group migration-hub-rg \\\n  --name migration-bastion \\\n  --public-ip-address bastion-public-ip \\\n  --vnet-name migration-target-vnet \\\n  --location eastus\n\n# Create Key Vault for migration secrets and certificates\necho \"Creating Key Vault for migration secrets...\"\nKEY_VAULT_NAME=\"migrate-kv-$(openssl rand -hex 3)\"\naz keyvault create \\\n  --resource-group migration-hub-rg \\\n  --name $KEY_VAULT_NAME \\\n  --location eastus \\\n  --enable-soft-delete true \\\n  --enable-purge-protection true\n\n# Create storage account for migration artifacts\necho \"Creating storage account for migration artifacts...\"\nMIGRATE_STORAGE_NAME=\"migratestorage$(openssl rand -hex 3)\"\naz storage account create \\\n  --resource-group migration-hub-rg \\\n  --name $MIGRATE_STORAGE_NAME \\\n  --location eastus \\\n  --sku Standard_LRS \\\n  --kind StorageV2\n\n# Create containers for different migration artifacts\naz storage container create \\\n  --account-name $MIGRATE_STORAGE_NAME \\\n  --name assessment-reports \\\n  --auth-mode login\n\naz storage container create \\\n  --account-name $MIGRATE_STORAGE_NAME \\\n  --name migration-scripts \\\n  --auth-mode login\n\naz storage container create \\\n  --account-name $MIGRATE_STORAGE_NAME \\\n  --name backup-artifacts \\\n  --auth-mode login\n\necho \"Azure Migrate environment setup completed.\"\necho \"Migrate Project: $MIGRATE_PROJECT_NAME\"\necho \"Recovery Vault: $RECOVERY_VAULT_NAME\"\necho \"Key Vault: $KEY_VAULT_NAME\"\necho \"Storage Account: $MIGRATE_STORAGE_NAME\""
+        },
+        "create_migration_assessment": {
+          "language": "bash",
+          "title": "Create Comprehensive Migration Assessment",
+          "code": "# Create comprehensive migration assessment\n\necho \"Creating migration assessment framework...\"\n\n# Create assessment script for on-premises infrastructure\ncat > migration-assessment-script.ps1 << 'EOF'\n# PowerShell script for comprehensive migration assessment\n# Run this script on target servers for migration assessment\n\nparam(\n    [string]$OutputPath = \"C:\\MigrationAssessment\",\n    [string]$ServerName = $env:COMPUTERNAME\n)\n\n# Create output directory\nif (!(Test-Path $OutputPath)) {\n    New-Item -Path $OutputPath -ItemType Directory -Force\n}\n\n# System Information Collection\nWrite-Host \"Collecting system information...\"\n$SystemInfo = @{\n    ServerName = $ServerName\n    OS = (Get-WmiObject Win32_OperatingSystem).Caption\n    OSVersion = (Get-WmiObject Win32_OperatingSystem).Version\n    Architecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture\n    TotalRAM = [math]::Round((Get-WmiObject Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 2)\n    CPUCores = (Get-WmiObject Win32_Processor | Measure-Object NumberOfCores -Sum).Sum\n    LogicalProcessors = (Get-WmiObject Win32_Processor | Measure-Object NumberOfLogicalProcessors -Sum).Sum\n}\n\n# Disk Information\nWrite-Host \"Collecting disk information...\"\n$Disks = Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DriveType -eq 3 } | ForEach-Object {\n    @{\n        Drive = $_.DeviceID\n        SizeGB = [math]::Round($_.Size / 1GB, 2)\n        FreeSpaceGB = [math]::Round($_.FreeSpace / 1GB, 2)\n        UsedSpaceGB = [math]::Round(($_.Size - $_.FreeSpace) / 1GB, 2)\n        UsagePercent = [math]::Round((($_.Size - $_.FreeSpace) / $_.Size) * 100, 1)\n    }\n}\n\n# Network Configuration\nWrite-Host \"Collecting network information...\"\n$NetworkAdapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled } | ForEach-Object {\n    @{\n        Description = $_.Description\n        IPAddress = $_.IPAddress -join \", \"\n        SubnetMask = $_.IPSubnet -join \", \"\n        DefaultGateway = $_.DefaultIPGateway -join \", \"\n        DNSServers = $_.DNSServerSearchOrder -join \", \"\n        MACAddress = $_.MACAddress\n    }\n}\n\n# Installed Software\nWrite-Host \"Collecting installed software...\"\n$InstalledSoftware = Get-WmiObject Win32_Product | Select-Object Name, Version, Vendor | Sort-Object Name\n\n# Windows Services\nWrite-Host \"Collecting Windows services...\"\n$Services = Get-Service | Where-Object { $_.StartType -ne \"Disabled\" } | Select-Object Name, Status, StartType, DisplayName\n\n# Performance Counters (sample)\nWrite-Host \"Collecting performance data...\"\n$PerformanceData = @{\n    CPUUtilization = (Get-Counter \"\\Processor(_Total)\\% Processor Time\").CounterSamples.CookedValue\n    MemoryUtilization = [math]::Round(((Get-Counter \"\\Memory\\Available MBytes\").CounterSamples.CookedValue / ($SystemInfo.TotalRAM * 1024)) * 100, 2)\n    DiskIOPS = (Get-Counter \"\\PhysicalDisk(_Total)\\Disk Transfers/sec\").CounterSamples.CookedValue\n}\n\n# SQL Server Detection (if applicable)\nWrite-Host \"Checking for SQL Server...\"\n$SQLInstances = @()\ntry {\n    $SQLServices = Get-Service | Where-Object { $_.Name -like \"MSSQL*\" -or $_.Name -like \"SQLServer*\" }\n    if ($SQLServices) {\n        $SQLInstances = $SQLServices | ForEach-Object {\n            @{\n                ServiceName = $_.Name\n                DisplayName = $_.DisplayName\n                Status = $_.Status\n                StartType = $_.StartType\n            }\n        }\n    }\n} catch {\n    Write-Host \"SQL Server detection failed: $($_.Exception.Message)\"\n}\n\n# IIS Detection\nWrite-Host \"Checking for IIS...\"\n$IISInfo = @{}\ntry {\n    $IISFeature = Get-WindowsFeature -Name \"IIS-WebServerRole\" -ErrorAction SilentlyContinue\n    if ($IISFeature -and $IISFeature.InstallState -eq \"Installed\") {\n        Import-Module WebAdministration -ErrorAction SilentlyContinue\n        $IISInfo = @{\n            Installed = $true\n            Version = (Get-ItemProperty \"HKLM:\\SOFTWARE\\Microsoft\\InetStp\" -Name \"MajorVersion\").MajorVersion\n            Sites = @(Get-Website | Select-Object Name, State, PhysicalPath, @{Name=\"Bindings\"; Expression={$_.Bindings.Collection | ForEach-Object {\"$($_.protocol):$($_.bindingInformation)\"}}})\n            ApplicationPools = @(Get-IISAppPool | Select-Object Name, State, ProcessModel)\n        }\n    } else {\n        $IISInfo = @{ Installed = $false }\n    }\n} catch {\n    $IISInfo = @{ Installed = $false, Error = $_.Exception.Message }\n}\n\n# Compile assessment report\n$AssessmentReport = @{\n    Timestamp = Get-Date -Format \"yyyy-MM-dd HH:mm:ss\"\n    SystemInfo = $SystemInfo\n    Disks = $Disks\n    NetworkAdapters = $NetworkAdapters\n    InstalledSoftware = $InstalledSoftware\n    Services = $Services\n    PerformanceData = $PerformanceData\n    SQLInstances = $SQLInstances\n    IISInfo = $IISInfo\n}\n\n# Export to JSON\n$OutputFile = Join-Path $OutputPath \"$ServerName-Assessment-$(Get-Date -Format 'yyyyMMdd-HHmmss').json\"\n$AssessmentReport | ConvertTo-Json -Depth 5 | Out-File -FilePath $OutputFile -Encoding UTF8\n\nWrite-Host \"Assessment completed. Report saved to: $OutputFile\"\n\n# Create CSV summary for easy analysis\n$SummaryFile = Join-Path $OutputPath \"$ServerName-Summary-$(Get-Date -Format 'yyyyMMdd-HHmmss').csv\"\n$Summary = [PSCustomObject]@{\n    ServerName = $SystemInfo.ServerName\n    OS = $SystemInfo.OS\n    CPUCores = $SystemInfo.CPUCores\n    RAM_GB = $SystemInfo.TotalRAM\n    TotalDiskSpace_GB = ($Disks | Measure-Object SizeGB -Sum).Sum\n    UsedDiskSpace_GB = ($Disks | Measure-Object UsedSpaceGB -Sum).Sum\n    NetworkAdapters = $NetworkAdapters.Count\n    InstalledSoftware = $InstalledSoftware.Count\n    SQLInstalled = ($SQLInstances.Count -gt 0)\n    IISInstalled = $IISInfo.Installed\n    AssessmentDate = (Get-Date -Format \"yyyy-MM-dd HH:mm:ss\")\n}\n\n$Summary | Export-Csv -Path $SummaryFile -NoTypeInformation\n\nWrite-Host \"Summary exported to: $SummaryFile\"\nEOF\n\n# Create migration readiness checker\ncat > check-migration-readiness.py << 'EOF'\n#!/usr/bin/env python3\n\"\"\"\nMigration Readiness Checker\nAnalyzes assessment data and provides migration recommendations\n\"\"\"\n\nimport json\nimport csv\nimport sys\nimport os\nfrom datetime import datetime\n\nclass MigrationReadinessChecker:\n    def __init__(self):\n        self.readiness_score = 0\n        self.recommendations = []\n        self.blocking_issues = []\n        self.warnings = []\n        \n    def analyze_assessment(self, assessment_file):\n        \"\"\"Analyze assessment data and provide recommendations\"\"\"\n        try:\n            with open(assessment_file, 'r') as f:\n                data = json.load(f)\n            \n            self._check_os_compatibility(data)\n            self._check_hardware_requirements(data)\n            self._check_software_compatibility(data)\n            self._check_network_configuration(data)\n            self._check_database_migration(data)\n            self._check_web_server_migration(data)\n            \n            return self._generate_report(data)\n            \n        except Exception as e:\n            return f\"Error analyzing assessment: {str(e)}\"\n    \n    def _check_os_compatibility(self, data):\n        \"\"\"Check OS compatibility with Azure\"\"\"\n        os_info = data.get('SystemInfo', {})\n        os_name = os_info.get('OS', '')\n        \n        if 'Windows Server 2008' in os_name:\n            self.blocking_issues.append(\"Windows Server 2008 is end-of-life. Upgrade required before migration.\")\n            self.readiness_score -= 30\n        elif 'Windows Server 2012' in os_name:\n            self.warnings.append(\"Windows Server 2012 support ends soon. Consider upgrading.\")\n            self.readiness_score -= 10\n        elif any(version in os_name for version in ['2016', '2019', '2022']):\n            self.readiness_score += 20\n            self.recommendations.append(\"OS is compatible with Azure. Consider Azure Hybrid Benefit for licensing.\")\n        \n    def _check_hardware_requirements(self, data):\n        \"\"\"Check if hardware meets Azure VM requirements\"\"\"\n        system_info = data.get('SystemInfo', {})\n        ram_gb = system_info.get('TotalRAM', 0)\n        cpu_cores = system_info.get('CPUCores', 0)\n        \n        if ram_gb < 1:\n            self.blocking_issues.append(\"Insufficient RAM. Minimum 1GB required for Azure VMs.\")\n            self.readiness_score -= 25\n        elif ram_gb < 4:\n            self.warnings.append(\"Low RAM detected. Consider upgrading for better performance.\")\n            self.readiness_score -= 5\n        else:\n            self.readiness_score += 15\n        \n        if cpu_cores < 1:\n            self.blocking_issues.append(\"Insufficient CPU cores. Minimum 1 core required.\")\n            self.readiness_score -= 25\n        else:\n            self.readiness_score += 10\n            \n        # Recommend Azure VM sizes based on resources\n        if ram_gb <= 8 and cpu_cores <= 4:\n            self.recommendations.append(\"Recommended Azure VM size: Standard_D2s_v3 or Standard_B2s\")\n        elif ram_gb <= 16 and cpu_cores <= 8:\n            self.recommendations.append(\"Recommended Azure VM size: Standard_D4s_v3\")\n        else:\n            self.recommendations.append(\"Consider higher-tier Azure VM sizes for optimal performance\")\n    \n    def _check_software_compatibility(self, data):\n        \"\"\"Check installed software compatibility\"\"\"\n        software_list = data.get('InstalledSoftware', [])\n        \n        legacy_software = []\n        for software in software_list:\n            name = software.get('Name', '').lower()\n            if any(legacy in name for legacy in ['norton', 'mcafee', 'trend micro']):\n                legacy_software.append(software.get('Name'))\n        \n        if legacy_software:\n            self.warnings.append(f\"Legacy security software detected: {', '.join(legacy_software)}. Consider Azure Security Center.\")\n            self.readiness_score -= 5\n        \n        self.readiness_score += min(len(software_list) * 2, 20)  # Cap at 20 points\n    \n    def _check_network_configuration(self, data):\n        \"\"\"Check network configuration\"\"\"\n        network_adapters = data.get('NetworkAdapters', [])\n        \n        if not network_adapters:\n            self.blocking_issues.append(\"No active network adapters detected.\")\n            self.readiness_score -= 30\n        else:\n            self.readiness_score += 10\n            self.recommendations.append(\"Configure Azure Virtual Network for optimal connectivity.\")\n    \n    def _check_database_migration(self, data):\n        \"\"\"Check database migration requirements\"\"\"\n        sql_instances = data.get('SQLInstances', [])\n        \n        if sql_instances:\n            self.recommendations.append(\"SQL Server detected. Consider Azure SQL Database or SQL Managed Instance.\")\n            self.recommendations.append(\"Use Azure Database Migration Service for minimal downtime migration.\")\n            self.readiness_score += 15\n    \n    def _check_web_server_migration(self, data):\n        \"\"\"Check web server migration requirements\"\"\"\n        iis_info = data.get('IISInfo', {})\n        \n        if iis_info.get('Installed'):\n            sites = iis_info.get('Sites', [])\n            if sites:\n                self.recommendations.append(f\"IIS detected with {len(sites)} site(s). Consider Azure App Service migration.\")\n                self.recommendations.append(\"Use App Service Migration Assistant for assessment.\")\n                self.readiness_score += 15\n    \n    def _generate_report(self, data):\n        \"\"\"Generate migration readiness report\"\"\"\n        # Calculate final readiness score (0-100)\n        final_score = max(0, min(100, self.readiness_score))\n        \n        if final_score >= 80:\n            readiness_level = \"High\"\n            migration_approach = \"Recommended for immediate migration\"\n        elif final_score >= 60:\n            readiness_level = \"Medium\"\n            migration_approach = \"Ready with minor preparations\"\n        elif final_score >= 40:\n            readiness_level = \"Low\"\n            migration_approach = \"Requires preparation before migration\"\n        else:\n            readiness_level = \"Not Ready\"\n            migration_approach = \"Significant preparation required\"\n        \n        report = {\n            'server_name': data.get('SystemInfo', {}).get('ServerName', 'Unknown'),\n            'assessment_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),\n            'readiness_score': final_score,\n            'readiness_level': readiness_level,\n            'migration_approach': migration_approach,\n            'blocking_issues': self.blocking_issues,\n            'warnings': self.warnings,\n            'recommendations': self.recommendations\n        }\n        \n        return report\n\ndef main():\n    if len(sys.argv) != 2:\n        print(\"Usage: python check-migration-readiness.py <assessment_file.json>\")\n        sys.exit(1)\n    \n    assessment_file = sys.argv[1]\n    if not os.path.exists(assessment_file):\n        print(f\"Error: Assessment file '{assessment_file}' not found.\")\n        sys.exit(1)\n    \n    checker = MigrationReadinessChecker()\n    report = checker.analyze_assessment(assessment_file)\n    \n    if isinstance(report, str):\n        print(report)\n        sys.exit(1)\n    \n    # Print report\n    print(f\"\\n=== Migration Readiness Report for {report['server_name']} ===\")\n    print(f\"Assessment Date: {report['assessment_date']}\")\n    print(f\"Readiness Score: {report['readiness_score']}/100\")\n    print(f\"Readiness Level: {report['readiness_level']}\")\n    print(f\"Migration Approach: {report['migration_approach']}\")\n    \n    if report['blocking_issues']:\n        print(\"\\n🚫 BLOCKING ISSUES:\")\n        for issue in report['blocking_issues']:\n            print(f\"   - {issue}\")\n    \n    if report['warnings']:\n        print(\"\\n⚠️  WARNINGS:\")\n        for warning in report['warnings']:\n            print(f\"   - {warning}\")\n    \n    if report['recommendations']:\n        print(\"\\n💡 RECOMMENDATIONS:\")\n        for recommendation in report['recommendations']:\n            print(f\"   - {recommendation}\")\n    \n    # Save report to file\n    output_file = f\"{report['server_name']}-readiness-report.json\"\n    with open(output_file, 'w') as f:\n        json.dump(report, f, indent=2)\n    \n    print(f\"\\nDetailed report saved to: {output_file}\")\n\nif __name__ == \"__main__\":\n    main()\nEOF\n\nchmod +x check-migration-readiness.py\n\necho \"Migration assessment tools created successfully.\"\necho \"\\nUsage Instructions:\"\necho \"1. Run migration-assessment-script.ps1 on Windows servers\"\necho \"2. Analyze results with: python3 check-migration-readiness.py <assessment-file>.json\""
+        }
+      }
+    },
+    {
+      "title": "Advanced Database Migration Strategies",
+      "content": "Implement sophisticated database migration patterns equivalent to AWS DMS with enhanced Azure DMS capabilities.",
+      "code_examples": {
+        "setup_database_migration_service": {
+          "language": "bash",
+          "title": "Setup Advanced Database Migration Service",
+          "code": "# Setup Azure Database Migration Service for complex scenarios\n\necho \"Setting up Database Migration Service...\"\n\n# Create DMS service (Premium tier for advanced features)\nDMS_SERVICE_NAME=\"dms-enterprise-service\"\naz dms create \\\n  --resource-group migration-hub-rg \\\n  --name $DMS_SERVICE_NAME \\\n  --location eastus \\\n  --sku Premium_4vCores \\\n  --vnet-subnet-id $(az network vnet subnet show --resource-group migration-hub-rg --vnet-name migration-target-vnet --name migration-subnet --query id -o tsv) \\\n  --tags Environment=Migration Service=DatabaseMigration\n\n# Create target Azure SQL Database (managed instance for complex scenarios)\necho \"Creating target Azure SQL Managed Instance...\"\nSQL_MI_NAME=\"sqlmi-target-$(openssl rand -hex 3)\"\n\n# Note: SQL Managed Instance creation can take 4-6 hours\n# For demonstration, we'll create a regular SQL Database and show the MI command\necho \"Creating Azure SQL Database for migration target...\"\nSQL_SERVER_NAME=\"sql-migration-target-$(openssl rand -hex 3)\"\n\naz sql server create \\\n  --resource-group migration-hub-rg \\\n  --name $SQL_SERVER_NAME \\\n  --location eastus \\\n  --admin-user sqladmin \\\n  --admin-password 'MigrateP@ssw0rd123!' \\\n  --enable-public-network false\n\n# Create target databases for different migration scenarios\necho \"Creating target databases...\"\n\n# OLTP database\naz sql db create \\\n  --resource-group migration-hub-rg \\\n  --server $SQL_SERVER_NAME \\\n  --name northwind-migrated \\\n  --edition Premium \\\n  --capacity 125 \\\n  --max-size 100GB\n\n# Data warehouse database\naz sql db create \\\n  --resource-group migration-hub-rg \\\n  --server $SQL_SERVER_NAME \\\n  --name datawarehouse-migrated \\\n  --edition Premium \\\n  --capacity 250 \\\n  --max-size 500GB\n\n# Create Cosmos DB for NoSQL migration scenarios\necho \"Creating Cosmos DB for NoSQL migration...\"\nCOSMOS_ACCOUNT_NAME=\"cosmos-migration-$(openssl rand -hex 3)\"\naz cosmosdb create \\\n  --resource-group migration-hub-rg \\\n  --name $COSMOS_ACCOUNT_NAME \\\n  --locations regionName=eastus failoverPriority=0 \\\n  --default-consistency-level Session \\\n  --enable-multiple-write-locations false\n\n# Create databases and containers for different data types\naz cosmosdb sql database create \\\n  --resource-group migration-hub-rg \\\n  --account-name $COSMOS_ACCOUNT_NAME \\\n  --name migrated-mongodb\n\naz cosmosdb sql container create \\\n  --resource-group migration-hub-rg \\\n  --account-name $COSMOS_ACCOUNT_NAME \\\n  --database-name migrated-mongodb \\\n  --name products \\\n  --partition-key-path '/categoryId' \\\n  --throughput 1000\n\naz cosmosdb sql container create \\\n  --resource-group migration-hub-rg \\\n  --account-name $COSMOS_ACCOUNT_NAME \\\n  --database-name migrated-mongodb \\\n  --name customers \\\n  --partition-key-path '/region' \\\n  --throughput 800\n\n# Create private endpoints for secure connectivity\necho \"Creating private endpoints for databases...\"\n\n# SQL Server private endpoint\naz network private-endpoint create \\\n  --resource-group migration-hub-rg \\\n  --name sql-server-pe \\\n  --vnet-name migration-target-vnet \\\n  --subnet database-subnet \\\n  --private-connection-resource-id $(az sql server show --resource-group migration-hub-rg --name $SQL_SERVER_NAME --query id -o tsv) \\\n  --group-id sqlServer \\\n  --connection-name sql-server-connection\n\n# Cosmos DB private endpoint\naz network private-endpoint create \\\n  --resource-group migration-hub-rg \\\n  --name cosmos-db-pe \\\n  --vnet-name migration-target-vnet \\\n  --subnet database-subnet \\\n  --private-connection-resource-id $(az cosmosdb show --resource-group migration-hub-rg --name $COSMOS_ACCOUNT_NAME --query id -o tsv) \\\n  --group-id Sql \\\n  --connection-name cosmos-db-connection\n\necho \"Database migration infrastructure created successfully.\"\necho \"DMS Service: $DMS_SERVICE_NAME\"\necho \"SQL Server: $SQL_SERVER_NAME\"\necho \"Cosmos DB: $COSMOS_ACCOUNT_NAME\""
+        },
+        "create_complex_migration_projects": {
+          "language": "bash",
+          "title": "Create Complex Database Migration Projects",
+          "code": "# Create complex database migration projects with DMS\n\necho \"Creating database migration projects...\"\n\n# Create DMS project for SQL Server to Azure SQL Database migration\necho \"Creating SQL Server migration project...\"\nDMS_PROJECT_SQLSERVER=\"sqlserver-migration-project\"\n\n# Create project configuration\ncat > sqlserver-migration-config.json << 'EOF'\n{\n  \"sourcePlatform\": \"SQL\",\n  \"targetPlatform\": \"SQLDB\",\n  \"location\": \"eastus\"\n}\nEOF\n\n# Note: DMS project creation via CLI requires REST API calls\n# This demonstrates the configuration structure\n\n# Create migration task configuration for online migration\ncat > online-migration-task.json << 'EOF'\n{\n  \"taskType\": \"Migrate.SqlServer.SqlDb\",\n  \"input\": {\n    \"sourceConnectionInfo\": {\n      \"serverName\": \"source-sql-server.domain.com\",\n      \"authentication\": \"SqlAuthentication\",\n      \"userName\": \"sa\",\n      \"password\": \"SourcePassword123!\",\n      \"encryptConnection\": true,\n      \"trustServerCertificate\": true\n    },\n    \"targetConnectionInfo\": {\n      \"serverName\": \"SQL_SERVER_NAME.database.windows.net\",\n      \"authentication\": \"SqlAuthentication\",\n      \"userName\": \"sqladmin\",\n      \"password\": \"MigrateP@ssw0rd123!\",\n      \"encryptConnection\": true\n    },\n    \"selectedDatabases\": [\n      {\n        \"name\": \"Northwind\",\n        \"targetDatabaseName\": \"northwind-migrated\",\n        \"makeSourceDbReadOnly\": false,\n        \"tableMap\": {\n          \"dbo.Customers\": \"dbo.Customers\",\n          \"dbo.Orders\": \"dbo.Orders\",\n          \"dbo.Products\": \"dbo.Products\",\n          \"dbo.OrderDetails\": \"dbo.OrderDetails\"\n        }\n      }\n    ]\n  }\n}\nEOF\n\nsed -i \"s/SQL_SERVER_NAME/$SQL_SERVER_NAME/g\" online-migration-task.json\n\n# Create offline migration task for data warehouse\ncat > offline-migration-task.json << 'EOF'\n{\n  \"taskType\": \"Migrate.SqlServer.SqlDb\",\n  \"input\": {\n    \"sourceConnectionInfo\": {\n      \"serverName\": \"source-dwh-server.domain.com\",\n      \"authentication\": \"SqlAuthentication\",\n      \"userName\": \"sa\",\n      \"password\": \"SourcePassword123!\",\n      \"encryptConnection\": true,\n      \"trustServerCertificate\": true\n    },\n    \"targetConnectionInfo\": {\n      \"serverName\": \"SQL_SERVER_NAME.database.windows.net\",\n      \"authentication\": \"SqlAuthentication\",\n      \"userName\": \"sqladmin\",\n      \"password\": \"MigrateP@ssw0rd123!\",\n      \"encryptConnection\": true\n    },\n    \"selectedDatabases\": [\n      {\n        \"name\": \"DataWarehouse\",\n        \"targetDatabaseName\": \"datawarehouse-migrated\",\n        \"makeSourceDbReadOnly\": true,\n        \"tableMap\": {\n          \"dbo.FactSales\": \"dbo.FactSales\",\n          \"dbo.DimCustomer\": \"dbo.DimCustomer\",\n          \"dbo.DimProduct\": \"dbo.DimProduct\",\n          \"dbo.DimTime\": \"dbo.DimTime\"\n        },\n        \"migrationSetting\": {\n          \"EnableMigrationValidation\": true,\n          \"EnableDataIntegrityValidation\": true,\n          \"EnableQueryAnalysisValidation\": true\n        }\n      }\n    ]\n  }\n}\nEOF\n\nsed -i \"s/SQL_SERVER_NAME/$SQL_SERVER_NAME/g\" offline-migration-task.json\n\n# Create MongoDB to Cosmos DB migration configuration\necho \"Creating MongoDB to Cosmos DB migration configuration...\"\ncat > mongodb-cosmosdb-migration.json << 'EOF'\n{\n  \"source\": {\n    \"connectionString\": \"mongodb://source-mongodb:27017\",\n    \"database\": \"ecommerce\",\n    \"collections\": [\n      {\n        \"name\": \"products\",\n        \"shardKey\": \"categoryId\",\n        \"targetContainer\": \"products\"\n      },\n      {\n        \"name\": \"customers\",\n        \"shardKey\": \"region\", \n        \"targetContainer\": \"customers\"\n      },\n      {\n        \"name\": \"orders\",\n        \"shardKey\": \"customerId\",\n        \"targetContainer\": \"orders\"\n      }\n    ]\n  },\n  \"target\": {\n    \"connectionString\": \"COSMOS_CONNECTION_STRING\",\n    \"database\": \"migrated-mongodb\",\n    \"throughput\": {\n      \"shared\": false,\n      \"perContainer\": {\n        \"products\": 1000,\n        \"customers\": 800,\n        \"orders\": 1200\n      }\n    }\n  },\n  \"migrationSettings\": {\n    \"batchSize\": 1000,\n    \"maxParallelism\": 10,\n    \"validateData\": true,\n    \"createIndexes\": true\n  }\n}\nEOF\n\n# Get Cosmos DB connection string\nCOSMOS_CONN_STRING=$(az cosmosdb keys list --resource-group migration-hub-rg --name $COSMOS_ACCOUNT_NAME --type connection-strings --query 'connectionStrings[0].connectionString' -o tsv)\nsed -i \"s/COSMOS_CONNECTION_STRING/$(echo $COSMOS_CONN_STRING | sed 's/\\//\\\\\\//g')/g\" mongodb-cosmosdb-migration.json\n\n# Create pre-migration validation script\necho \"Creating pre-migration validation scripts...\"\ncat > pre-migration-validation.sql << 'EOF'\n-- Pre-migration validation script for SQL Server\n-- Run this script on source database before migration\n\n-- Check database compatibility level\nSELECT \n    name AS DatabaseName,\n    compatibility_level AS CompatibilityLevel,\n    CASE \n        WHEN compatibility_level >= 130 THEN 'Compatible'\n        WHEN compatibility_level >= 120 THEN 'Compatible with minor issues'\n        ELSE 'Requires upgrade'\n    END AS AzureSQLCompatibility\nFROM sys.databases\nWHERE database_id > 4;\n\n-- Check for unsupported features\nSELECT \n    'SQL Server Agent Jobs' AS Feature,\n    COUNT(*) AS Count,\n    'Not supported in Azure SQL Database' AS AzureAlternative\nFROM msdb.dbo.sysjobs\nWHERE enabled = 1\nUNION ALL\nSELECT \n    'Linked Servers' AS Feature,\n    COUNT(*) AS Count,\n    'Use Elastic Query or Azure Data Factory' AS AzureAlternative\nFROM sys.servers\nWHERE is_linked = 1\nUNION ALL\nSELECT \n    'Database Mail' AS Feature,\n    COUNT(*) AS Count,\n    'Use Logic Apps or Azure Functions' AS AzureAlternative\nFROM msdb.dbo.sysmail_profile;\n\n-- Check database size and storage requirements\nSELECT \n    DB_NAME() AS DatabaseName,\n    SUM(CAST(FILEPROPERTY(name, 'SpaceUsed') AS bigint) * 8192.) / 1024 / 1024 / 1024 AS UsedSpaceGB,\n    SUM(size * 8192.) / 1024 / 1024 / 1024 AS AllocatedSpaceGB,\n    CASE \n        WHEN SUM(size * 8192.) / 1024 / 1024 / 1024 <= 100 THEN 'Basic/Standard tier suitable'\n        WHEN SUM(size * 8192.) / 1024 / 1024 / 1024 <= 1024 THEN 'Premium tier recommended'\n        ELSE 'Consider SQL Managed Instance'\n    END AS AzureRecommendation\nFROM sys.database_files;\n\n-- Check for performance-intensive objects\nSELECT \n    'Tables' AS ObjectType,\n    COUNT(*) AS Count,\n    MAX(p.rows) AS MaxRows\nFROM sys.tables t\nINNER JOIN sys.partitions p ON t.object_id = p.object_id\nWHERE p.index_id IN (0,1)\nUNION ALL\nSELECT \n    'Indexes' AS ObjectType,\n    COUNT(*) AS Count,\n    NULL AS MaxRows\nFROM sys.indexes\nWHERE type > 0\nUNION ALL\nSELECT \n    'Stored Procedures' AS ObjectType,\n    COUNT(*) AS Count,\n    NULL AS MaxRows\nFROM sys.procedures\nWHERE is_ms_shipped = 0;\n\n-- Check for security objects\nSELECT \n    'Database Users' AS SecurityObject,\n    COUNT(*) AS Count\nFROM sys.database_principals\nWHERE type IN ('U', 'S')\nUNION ALL\nSELECT \n    'Database Roles' AS SecurityObject,\n    COUNT(*) AS Count\nFROM sys.database_principals\nWHERE type = 'R' AND is_fixed_role = 0;\nEOF\n\n# Create post-migration validation script\ncat > post-migration-validation.sql << 'EOF'\n-- Post-migration validation script for Azure SQL Database\n-- Run this script on target database after migration\n\n-- Validate row counts\nSELECT \n    SCHEMA_NAME(schema_id) AS SchemaName,\n    name AS TableName,\n    SUM(rows) AS RowCount\nFROM sys.tables t\nINNER JOIN sys.partitions p ON t.object_id = p.object_id\nWHERE p.index_id IN (0,1)\nGROUP BY SCHEMA_NAME(schema_id), name\nORDER BY SchemaName, TableName;\n\n-- Check for missing indexes that might affect performance\nSELECT \n    DB_NAME() AS DatabaseName,\n    OBJECT_SCHEMA_NAME(object_id) AS SchemaName,\n    OBJECT_NAME(object_id) AS TableName,\n    ROUND(avg_total_user_cost * avg_user_impact * (user_seeks + user_scans), 0) AS IndexAdvantage,\n    'CREATE INDEX IX_' + OBJECT_NAME(object_id) + '_' + \n        REPLACE(REPLACE(REPLACE(equality_columns, '[', ''), ']', ''), ', ', '_') + \n        ' ON ' + OBJECT_SCHEMA_NAME(object_id) + '.' + OBJECT_NAME(object_id) + \n        ' (' + equality_columns + ')' AS CreateIndexStatement\nFROM sys.dm_db_missing_index_details AS mid\nINNER JOIN sys.dm_db_missing_index_groups AS mig ON mid.index_handle = mig.index_handle\nINNER JOIN sys.dm_db_missing_index_group_stats AS migs ON mig.index_group_handle = migs.group_handle\nWHERE avg_total_user_cost * avg_user_impact * (user_seeks + user_scans) > 1000\nORDER BY IndexAdvantage DESC;\n\n-- Validate data integrity\nDBCC CHECKDB WITH NO_INFOMSGS, ALL_ERRORMSGS;\n\n-- Check query performance compared to baseline\nSELECT \n    query_hash,\n    COUNT(*) AS ExecutionCount,\n    AVG(total_elapsed_time / execution_count) AS AvgDurationMicroseconds,\n    AVG(total_logical_reads / execution_count) AS AvgLogicalReads,\n    AVG(total_physical_reads / execution_count) AS AvgPhysicalReads\nFROM sys.dm_exec_query_stats\nCROSS APPLY sys.dm_exec_sql_text(sql_handle)\nWHERE creation_time > DATEADD(day, -1, GETDATE())\nGROUP BY query_hash\nORDER BY AvgDurationMicroseconds DESC;\nEOF\n\necho \"Database migration projects and validation scripts created successfully.\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Execute comprehensive enterprise migration with multiple workload types",
+    "requirements": [
+      "Set up complete Azure Migrate environment with assessment tools",
+      "Perform infrastructure assessment with automated readiness analysis",
+      "Configure Database Migration Service for complex database scenarios",
+      "Set up application migration to Azure App Service and AKS",
+      "Implement migration validation and rollback procedures",
+      "Create migration monitoring and reporting dashboard",
+      "Configure post-migration optimization and cost management",
+      "Establish ongoing migration governance and compliance"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify Azure Migrate project creation",
+        "command": "az migrate project show --name $MIGRATE_PROJECT_NAME --resource-group migration-hub-rg --query 'provisioningState'",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Check DMS service deployment",
+        "command": "az dms show --resource-group migration-hub-rg --name $DMS_SERVICE_NAME --query 'provisioningState'",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Verify target databases creation",
+        "command": "az sql db list --resource-group migration-hub-rg --server $SQL_SERVER_NAME --query 'length(@)'",
+        "expected": "Should return count of created databases (minimum 2)"
+      },
+      {
+        "step": "Check Recovery Services Vault",
+        "command": "az backup vault show --resource-group migration-hub-rg --name $RECOVERY_VAULT_NAME --query 'provisioningState'",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Verify network infrastructure",
+        "command": "az network vnet subnet list --resource-group migration-hub-rg --vnet-name migration-target-vnet --query 'length(@)'",
+        "expected": "Should return count of subnets (minimum 4)"
+      }
+    ]
+  },
+  "migration_governance_framework": {
+    "assessment_methodology": {
+      "discovery_phase": {
+        "duration": "2-4 weeks",
+        "deliverables": ["Infrastructure inventory", "Application portfolio", "Dependency mapping", "Performance baselines"]
+      },
+      "assessment_phase": {
+        "duration": "2-3 weeks", 
+        "deliverables": ["Migration readiness reports", "Cost analysis", "Risk assessment", "Target architecture design"]
+      },
+      "planning_phase": {
+        "duration": "3-4 weeks",
+        "deliverables": ["Migration strategy", "Wave planning", "Validation procedures", "Rollback plans"]
+      }
+    },
+    "migration_execution": {
+      "pilot_wave": {
+        "scope": "Non-critical applications (5-10% of portfolio)",
+        "objectives": ["Validate procedures", "Train teams", "Refine processes"],
+        "success_criteria": ["<2% data loss", "RTO <4 hours", "Performance within 10% baseline"]
+      },
+      "production_waves": {
+        "scope": "Remaining applications in planned waves",
+        "objectives": ["Execute at scale", "Monitor performance", "Optimize processes"],
+        "success_criteria": ["<0.1% data loss", "RTO <2 hours", "Performance within 5% baseline"]
+      }
+    },
+    "post_migration": {
+      "optimization_phase": {
+        "duration": "Ongoing 3-6 months",
+        "activities": ["Performance tuning", "Cost optimization", "Security hardening"]
+      },
+      "governance_phase": {
+        "duration": "Ongoing",
+        "activities": ["Compliance monitoring", "Cost management", "Operational excellence"]
+      }
+    }
+  },
+  "migration_success_metrics": {
+    "technical_metrics": {
+      "data_integrity": "99.99% data accuracy maintained",
+      "performance": "Within 5% of baseline performance",
+      "availability": "99.9% uptime during migration windows",
+      "security": "Zero security incidents during migration"
+    },
+    "business_metrics": {
+      "downtime": "<2 hours per critical application",
+      "cost_optimization": "20-30% cost reduction post-migration",
+      "time_to_value": "Benefits realized within 90 days",
+      "user_satisfaction": ">90% user acceptance of migrated systems"
+    },
+    "operational_metrics": {
+      "automation_coverage": "80% of migration tasks automated",
+      "rollback_success": "100% successful rollbacks when needed",
+      "team_productivity": "Migration team efficiency improvements",
+      "knowledge_transfer": "100% of teams trained on Azure operations"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove migration resources in proper order",
+    "commands": [
+      "# Stop any running DMS tasks",
+      "# az dms task stop (if any tasks are running)",
+      "# Delete DMS service",
+      "az dms delete --resource-group migration-hub-rg --name $DMS_SERVICE_NAME --yes",
+      "# Delete target databases",
+      "az sql db delete --resource-group migration-hub-rg --server $SQL_SERVER_NAME --name northwind-migrated --yes",
+      "az sql db delete --resource-group migration-hub-rg --server $SQL_SERVER_NAME --name datawarehouse-migrated --yes",
+      "az sql server delete --resource-group migration-hub-rg --name $SQL_SERVER_NAME --yes",
+      "# Delete Cosmos DB",
+      "az cosmosdb delete --resource-group migration-hub-rg --name $COSMOS_ACCOUNT_NAME --yes",
+      "# Delete Recovery Services Vault (remove protected items first)",
+      "az backup vault delete --resource-group migration-hub-rg --name $RECOVERY_VAULT_NAME --yes",
+      "# Delete Azure Migrate project",
+      "az migrate project delete --name $MIGRATE_PROJECT_NAME --resource-group migration-hub-rg --yes",
+      "# Delete Key Vault",
+      "az keyvault delete --resource-group migration-hub-rg --name $KEY_VAULT_NAME",
+      "az keyvault purge --name $KEY_VAULT_NAME",
+      "# Delete storage account",
+      "az storage account delete --resource-group migration-hub-rg --name $MIGRATE_STORAGE_NAME --yes",
+      "# Delete resource group",
+      "az group delete --name migration-hub-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure Migrate provides more comprehensive assessment capabilities than AWS Migration Hub",
+    "Azure Database Migration Service supports more database engines and migration scenarios",
+    "Azure offers better hybrid migration capabilities with Azure Arc and Azure Stack",
+    "Cost optimization opportunities are more granular and immediate in Azure",
+    "Azure provides stronger governance and compliance frameworks during migration",
+    "Integration between Azure migration tools is more seamless than AWS counterparts",
+    "Azure supports more flexible migration patterns including phased and hybrid approaches"
+  ],
+  "next_steps": [
+    "Learn Azure Arc for hybrid and multi-cloud management scenarios",
+    "Explore Azure Lighthouse for multi-tenant migration management",
+    "Study Azure Cost Management for post-migration optimization",
+    "Practice with Azure Policy for migration governance automation",
+    "Learn Azure Monitor for comprehensive migration monitoring"
+  ]
+}

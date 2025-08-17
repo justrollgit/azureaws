@@ -1,0 +1,266 @@
+{
+  "id": "database-migration-lab",
+  "title": "AWS RDS to Azure SQL Database: Database Migration Lab",
+  "difficulty": "intermediate", 
+  "estimated_time": "90 minutes",
+  "aws_prerequisite": "Experience with RDS, DynamoDB, and database administration",
+  "azure_target": "Deploy and migrate databases to Azure SQL Database, Cosmos DB, and other Azure database services",
+  "learning_objectives": [
+    "Understand Azure database service offerings vs AWS",
+    "Migrate relational databases from RDS to Azure SQL Database",
+    "Migrate NoSQL data from DynamoDB to Cosmos DB",
+    "Configure high availability and disaster recovery",
+    "Set up database monitoring and performance tuning",
+    "Implement database security and compliance"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "rds": "Azure SQL Database / Azure Database for MySQL/PostgreSQL",
+      "dynamodb": "Azure Cosmos DB",
+      "redshift": "Azure Synapse Analytics",
+      "elasticache": "Azure Cache for Redis",
+      "aurora": "Azure SQL Database Hyperscale"
+    },
+    "key_concepts": [
+      "RDS Multi-AZ → SQL Database Zone-Redundant",
+      "RDS Read Replicas → SQL Database Read Replicas",
+      "DynamoDB Tables → Cosmos DB Containers",
+      "DynamoDB GSI → Cosmos DB Secondary Indexes",
+      "Parameter Groups → Configuration Settings",
+      "Security Groups → Firewall Rules",
+      "CloudWatch Metrics → Azure Monitor Metrics"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Database Service Comparison Matrix",
+      "content": "Comprehensive comparison between AWS and Azure database services.",
+      "comparison_table": {
+        "relational_databases": {
+          "aws_rds_mysql": {
+            "service": "RDS MySQL",
+            "azure_equivalent": "Azure Database for MySQL",
+            "key_features": "Managed MySQL, automated backups, read replicas",
+            "migration_path": "Database Migration Service or mysqldump"
+          },
+          "aws_rds_postgresql": {
+            "service": "RDS PostgreSQL", 
+            "azure_equivalent": "Azure Database for PostgreSQL",
+            "key_features": "Managed PostgreSQL, flexible server options",
+            "migration_path": "Database Migration Service or pg_dump"
+          },
+          "aws_rds_sqlserver": {
+            "service": "RDS SQL Server",
+            "azure_equivalent": "Azure SQL Database",
+            "key_features": "Fully managed SQL Server, serverless options",
+            "migration_path": "Azure Database Migration Assistant"
+          }
+        },
+        "nosql_databases": {
+          "aws_dynamodb": {
+            "service": "DynamoDB",
+            "azure_equivalent": "Cosmos DB",
+            "key_features": "Multi-model, global distribution, multiple consistency levels",
+            "migration_path": "Azure Data Factory or custom migration tools"
+          }
+        },
+        "caching": {
+          "aws_elasticache": {
+            "service": "ElastiCache Redis",
+            "azure_equivalent": "Azure Cache for Redis",
+            "key_features": "Managed Redis, clustering, persistence",
+            "migration_path": "Redis MIGRATE command or backup/restore"
+          }
+        },
+        "analytics": {
+          "aws_redshift": {
+            "service": "Redshift",
+            "azure_equivalent": "Synapse Analytics",
+            "key_features": "Data warehouse, serverless SQL pools, integrated analytics",
+            "migration_path": "Azure Data Factory or third-party tools"
+          }
+        }
+      }
+    },
+    {
+      "title": "Azure SQL Database Setup and Configuration",
+      "content": "Create and configure Azure SQL Database equivalent to RDS SQL Server.",
+      "code_examples": {
+        "create_sql_server": {
+          "language": "bash",
+          "title": "Create Azure SQL Server and Database",
+          "code": "# Create resource group\naz group create \\\n  --name database-lab-rg \\\n  --location eastus\n\n# Create SQL Server (logical server)\naz sql server create \\\n  --name lab-sql-server-$RANDOM \\\n  --resource-group database-lab-rg \\\n  --location eastus \\\n  --admin-user sqladmin \\\n  --admin-password 'ComplexP@ssw0rd123'\n\n# Get the server name for use in subsequent commands\nSERVER_NAME=$(az sql server list --resource-group database-lab-rg --query '[0].name' -o tsv)\necho \"Server name: $SERVER_NAME\"\n\n# Configure firewall to allow Azure services\naz sql server firewall-rule create \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name AllowAzureServices \\\n  --start-ip-address 0.0.0.0 \\\n  --end-ip-address 0.0.0.0\n\n# Add your IP for management access\nMY_IP=$(curl -s ifconfig.me)\naz sql server firewall-rule create \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name AllowMyIP \\\n  --start-ip-address $MY_IP \\\n  --end-ip-address $MY_IP"
+        },
+        "create_sql_database": {
+          "language": "bash",
+          "title": "Create SQL Database with High Availability",
+          "code": "# Create SQL Database (General Purpose tier)\naz sql db create \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name ecommerce-db \\\n  --service-objective GP_Gen5_2 \\\n  --zone-redundant true \\\n  --backup-storage-redundancy Zone\n\n# Create a second database for testing\naz sql db create \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name test-db \\\n  --service-objective S1\n\n# List databases\naz sql db list \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --output table"
+        }
+      }
+    },
+    {
+      "title": "Database Schema Migration",
+      "content": "Migrate database schema and data from AWS RDS to Azure SQL Database.",
+      "code_examples": {
+        "install_migration_tools": {
+          "language": "bash",
+          "title": "Install SQL Server Migration Tools",
+          "code": "# Install Azure Data Studio (Linux)\nwget -c https://go.microsoft.com/fwlink/?linkid=2246576 -O azure-data-studio.deb\nsudo dpkg -i azure-data-studio.deb\nsudo apt-get install -f\n\n# Or install SQL Server command line tools\ncurl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -\necho \"deb [arch=amd64] https://packages.microsoft.com/ubuntu/20.04/prod focal main\" | sudo tee /etc/apt/sources.list.d/mssql-release.list\nsudo apt-get update\nsudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18\necho 'export PATH=\"$PATH:/opt/mssql-tools18/bin\"' >> ~/.bashrc\nsource ~/.bashrc"
+        },
+        "sample_schema_migration": {
+          "language": "sql",
+          "title": "Create Sample E-commerce Schema",
+          "code": "-- Connect to Azure SQL Database\nsqlcmd -S $SERVER_NAME.database.windows.net -d ecommerce-db -U sqladmin -P 'ComplexP@ssw0rd123'\n\n-- Create sample schema equivalent to what you'd have in RDS\nCREATE TABLE Categories (\n    CategoryID INT IDENTITY(1,1) PRIMARY KEY,\n    CategoryName NVARCHAR(255) NOT NULL,\n    Description NVARCHAR(MAX),\n    CreatedDate DATETIME2 DEFAULT GETUTCDATE()\n);\n\nCREATE TABLE Products (\n    ProductID INT IDENTITY(1,1) PRIMARY KEY,\n    ProductName NVARCHAR(255) NOT NULL,\n    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),\n    Price DECIMAL(10,2) NOT NULL,\n    StockQuantity INT DEFAULT 0,\n    CreatedDate DATETIME2 DEFAULT GETUTCDATE(),\n    ModifiedDate DATETIME2 DEFAULT GETUTCDATE()\n);\n\nCREATE TABLE Customers (\n    CustomerID INT IDENTITY(1,1) PRIMARY KEY,\n    Email NVARCHAR(255) UNIQUE NOT NULL,\n    FirstName NVARCHAR(100) NOT NULL,\n    LastName NVARCHAR(100) NOT NULL,\n    Phone NVARCHAR(20),\n    CreatedDate DATETIME2 DEFAULT GETUTCDATE()\n);\n\nCREATE TABLE Orders (\n    OrderID INT IDENTITY(1,1) PRIMARY KEY,\n    CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID),\n    OrderDate DATETIME2 DEFAULT GETUTCDATE(),\n    TotalAmount DECIMAL(10,2) NOT NULL,\n    Status NVARCHAR(50) DEFAULT 'Pending'\n);\n\nCREATE INDEX IX_Products_CategoryID ON Products(CategoryID);\nCREATE INDEX IX_Orders_CustomerID ON Orders(CustomerID);\nCREATE INDEX IX_Orders_OrderDate ON Orders(OrderDate);\n\nGO"
+        },
+        "sample_data_insertion": {
+          "language": "sql", 
+          "title": "Insert Sample Data",
+          "code": "-- Insert sample data\nINSERT INTO Categories (CategoryName, Description) VALUES \n('Electronics', 'Electronic devices and gadgets'),\n('Books', 'Physical and digital books'),\n('Clothing', 'Apparel and accessories');\n\nINSERT INTO Products (ProductName, CategoryID, Price, StockQuantity) VALUES \n('Laptop Pro', 1, 1299.99, 50),\n('Smartphone X', 1, 699.99, 100),\n('Azure Cloud Book', 2, 39.99, 200),\n('T-Shirt', 3, 19.99, 500);\n\nINSERT INTO Customers (Email, FirstName, LastName, Phone) VALUES \n('john@example.com', 'John', 'Doe', '123-456-7890'),\n('jane@example.com', 'Jane', 'Smith', '098-765-4321');\n\nINSERT INTO Orders (CustomerID, TotalAmount, Status) VALUES \n(1, 1299.99, 'Completed'),\n(2, 39.99, 'Pending');\n\nGO"
+        }
+      }
+    },
+    {
+      "title": "Azure Cosmos DB Setup (DynamoDB Alternative)",
+      "content": "Create and configure Cosmos DB as a DynamoDB alternative.",
+      "code_examples": {
+        "create_cosmos_account": {
+          "language": "bash",
+          "title": "Create Cosmos DB Account with Multi-Region Setup",
+          "code": "# Create Cosmos DB account (SQL API)\naz cosmosdb create \\\n  --resource-group database-lab-rg \\\n  --name lab-cosmosdb-$RANDOM \\\n  --kind GlobalDocumentDB \\\n  --locations regionName=eastus failoverPriority=0 isZoneRedundant=false \\\n  --locations regionName=westus2 failoverPriority=1 isZoneRedundant=false \\\n  --default-consistency-level Session \\\n  --enable-multiple-write-locations true\n\n# Get the account name\nCOSMOS_ACCOUNT=$(az cosmosdb list --resource-group database-lab-rg --query '[0].name' -o tsv)\necho \"Cosmos DB Account: $COSMOS_ACCOUNT\"\n\n# Create database\naz cosmosdb sql database create \\\n  --resource-group database-lab-rg \\\n  --account-name $COSMOS_ACCOUNT \\\n  --name ecommerce\n\n# Create container (equivalent to DynamoDB table)\naz cosmosdb sql container create \\\n  --resource-group database-lab-rg \\\n  --account-name $COSMOS_ACCOUNT \\\n  --database-name ecommerce \\\n  --name products \\\n  --partition-key-path /categoryId \\\n  --throughput 400"
+        },
+        "cosmos_data_operations": {
+          "language": "bash",
+          "title": "Cosmos DB Data Operations",
+          "code": "# Get connection string\nCONNECTION_STRING=$(az cosmosdb keys list \\\n  --resource-group database-lab-rg \\\n  --name $COSMOS_ACCOUNT \\\n  --type connection-strings \\\n  --query 'connectionStrings[0].connectionString' -o tsv)\n\necho \"Connection String: $CONNECTION_STRING\"\n\n# Install Cosmos DB tools\nnpm install -g @azure/cosmos\n\n# Create sample data insertion script\ncat > insert_cosmos_data.js << 'EOF'\nconst { CosmosClient } = require('@azure/cosmos');\n\nconst connectionString = process.env.COSMOS_CONNECTION_STRING;\nconst client = new CosmosClient(connectionString);\n\nconst database = client.database('ecommerce');\nconst container = database.container('products');\n\nasync function insertSampleData() {\n  const products = [\n    {\n      id: '1',\n      categoryId: 'electronics',\n      name: 'Laptop Pro',\n      price: 1299.99,\n      stock: 50,\n      specifications: {\n        cpu: 'Intel i7',\n        ram: '16GB',\n        storage: '512GB SSD'\n      }\n    },\n    {\n      id: '2', \n      categoryId: 'electronics',\n      name: 'Smartphone X',\n      price: 699.99,\n      stock: 100,\n      specifications: {\n        screen: '6.1 inch',\n        camera: '12MP',\n        battery: '3000mAh'\n      }\n    },\n    {\n      id: '3',\n      categoryId: 'books',\n      name: 'Azure Cloud Book',\n      price: 39.99,\n      stock: 200,\n      specifications: {\n        pages: 500,\n        format: 'paperback',\n        isbn: '978-1234567890'\n      }\n    }\n  ];\n\n  for (const product of products) {\n    try {\n      await container.items.create(product);\n      console.log(`Inserted product: ${product.name}`);\n    } catch (error) {\n      console.error(`Error inserting product ${product.name}:`, error.message);\n    }\n  }\n}\n\ninsertSampleData().catch(console.error);\nEOF\n\n# Run the data insertion\nexport COSMOS_CONNECTION_STRING=\"$CONNECTION_STRING\"\nnode insert_cosmos_data.js"
+        }
+      }
+    },
+    {
+      "title": "Azure Database for MySQL Setup",
+      "content": "Create managed MySQL database equivalent to RDS MySQL.",
+      "code_examples": {
+        "create_mysql_server": {
+          "language": "bash",
+          "title": "Create Azure Database for MySQL Flexible Server",
+          "code": "# Create MySQL Flexible Server\naz mysql flexible-server create \\\n  --resource-group database-lab-rg \\\n  --name lab-mysql-server-$RANDOM \\\n  --location eastus \\\n  --admin-user mysqladmin \\\n  --admin-password 'ComplexP@ssw0rd123' \\\n  --sku-name Standard_B1ms \\\n  --tier Burstable \\\n  --version 8.0 \\\n  --storage-size 32 \\\n  --high-availability Disabled\n\n# Get MySQL server name\nMYSQL_SERVER=$(az mysql flexible-server list --resource-group database-lab-rg --query '[0].name' -o tsv)\necho \"MySQL Server: $MySQL_SERVER\"\n\n# Configure firewall\naz mysql flexible-server firewall-rule create \\\n  --resource-group database-lab-rg \\\n  --name $MYSQL_SERVER \\\n  --rule-name AllowAllAzure \\\n  --start-ip-address 0.0.0.0 \\\n  --end-ip-address 0.0.0.0\n\n# Add your IP\naz mysql flexible-server firewall-rule create \\\n  --resource-group database-lab-rg \\\n  --name $MYSQL_SERVER \\\n  --rule-name AllowMyIP \\\n  --start-ip-address $MY_IP \\\n  --end-ip-address $MY_IP\n\n# Create database\naz mysql flexible-server db create \\\n  --resource-group database-lab-rg \\\n  --server-name $MYSQL_SERVER \\\n  --database-name ecommerce"
+        }
+      }
+    },
+    {
+      "title": "Database Migration with Azure Database Migration Service",
+      "content": "Use Azure Database Migration Service for production-grade migrations.",
+      "code_examples": {
+        "create_dms": {
+          "language": "bash",
+          "title": "Create Database Migration Service",
+          "code": "# Create DMS instance\naz dms create \\\n  --resource-group database-lab-rg \\\n  --name lab-dms-service \\\n  --location eastus \\\n  --sku-name Standard_1vCores\n\necho \"Database Migration Service created. Use Azure portal to configure migration projects:\"\necho \"1. Create migration project\"\necho \"2. Configure source and target connections\"\necho \"3. Map databases and tables\"\necho \"4. Run migration assessment\"\necho \"5. Execute migration\""
+        }
+      }
+    },
+    {
+      "title": "Database Monitoring and Performance",
+      "content": "Set up monitoring equivalent to CloudWatch for RDS.",
+      "code_examples": {
+        "enable_monitoring": {
+          "language": "bash",
+          "title": "Configure Database Monitoring",
+          "code": "# Enable Query Performance Insight for SQL Database\naz sql db audit-policy update \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name ecommerce-db \\\n  --state Enabled \\\n  --storage-account-access-key $(az storage account keys list \\\n    --resource-group database-lab-rg \\\n    --account-name flowlogsstorage \\\n    --query '[0].value' -o tsv) \\\n  --storage-endpoint $(az storage account show \\\n    --resource-group database-lab-rg \\\n    --name flowlogsstorage \\\n    --query primaryEndpoints.blob -o tsv)\n\n# Create Log Analytics workspace\naz monitor log-analytics workspace create \\\n  --resource-group database-lab-rg \\\n  --workspace-name database-monitoring \\\n  --location eastus\n\n# Enable diagnostic settings\naz monitor diagnostic-settings create \\\n  --resource \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/database-lab-rg/providers/Microsoft.Sql/servers/$SERVER_NAME/databases/ecommerce-db\" \\\n  --name \"database-diagnostics\" \\\n  --workspace \"/subscriptions/$(az account show --query id -o tsv)/resourceGroups/database-lab-rg/providers/Microsoft.OperationalInsights/workspaces/database-monitoring\" \\\n  --logs '[{\"category\":\"SQLInsights\",\"enabled\":true},{\"category\":\"QueryStoreRuntimeStatistics\",\"enabled\":true}]' \\\n  --metrics '[{\"category\":\"Basic\",\"enabled\":true}]'"
+        }
+      }
+    },
+    {
+      "title": "High Availability and Disaster Recovery",
+      "content": "Configure HA/DR equivalent to RDS Multi-AZ and Read Replicas.",
+      "code_examples": {
+        "configure_ha_dr": {
+          "language": "bash",
+          "title": "Configure High Availability and Geo-Replication",
+          "code": "# Create geo-replica in different region\naz sql db replica create \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name ecommerce-db \\\n  --partner-resource-group database-lab-rg \\\n  --partner-server lab-sql-server-replica-$RANDOM \\\n  --partner-location westus2\n\n# Configure automated backup retention (up to 35 days)\naz sql db ltr-policy set \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --database ecommerce-db \\\n  --weekly-retention P1M \\\n  --monthly-retention P12M \\\n  --yearly-retention P5Y \\\n  --week-of-year 1\n\n# Create failover group for automatic failover\naz sql failover-group create \\\n  --resource-group database-lab-rg \\\n  --server $SERVER_NAME \\\n  --name ecommerce-failover-group \\\n  --partner-resource-group database-lab-rg \\\n  --partner-server lab-sql-server-replica \\\n  --failover-policy Automatic \\\n  --grace-period 1 \\\n  --add-db ecommerce-db"
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Migrate a complete e-commerce database from AWS to Azure",
+    "requirements": [
+      "Migrate relational data from RDS to Azure SQL Database",
+      "Migrate NoSQL product catalog from DynamoDB to Cosmos DB", 
+      "Set up high availability and disaster recovery",
+      "Configure monitoring and alerting",
+      "Implement proper security and access controls"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify SQL Database creation",
+        "command": "az sql db show --resource-group database-lab-rg --server $SERVER_NAME --name ecommerce-db",
+        "expected": "Database should be online with zone redundancy enabled"
+      },
+      {
+        "step": "Test SQL Database connectivity",
+        "command": "sqlcmd -S $SERVER_NAME.database.windows.net -d ecommerce-db -U sqladmin -P 'ComplexP@ssw0rd123' -Q \"SELECT COUNT(*) FROM Products\"",
+        "expected": "Should return count of products"
+      },
+      {
+        "step": "Verify Cosmos DB setup",
+        "command": "az cosmosdb show --resource-group database-lab-rg --name $COSMOS_ACCOUNT",
+        "expected": "Account should be online with multiple regions"
+      },
+      {
+        "step": "Test Cosmos DB data",
+        "command": "Use Azure Data Explorer or portal to query products container",
+        "expected": "Should return inserted product documents"
+      },
+      {
+        "step": "Verify MySQL server",
+        "command": "az mysql flexible-server show --resource-group database-lab-rg --name $MYSQL_SERVER",
+        "expected": "Server should be running and accessible"
+      }
+    ]
+  },
+  "performance_comparison": {
+    "sql_database_vs_rds": {
+      "performance": "Similar performance, Azure SQL offers intelligent insights",
+      "scaling": "More granular scaling options, serverless compute available",
+      "availability": "99.995% SLA with zone redundancy vs 99.95% RDS Multi-AZ",
+      "features": "Built-in AI optimization, advanced threat protection"
+    },
+    "cosmos_db_vs_dynamodb": {
+      "performance": "Single-digit millisecond latency globally",
+      "consistency": "5 consistency levels vs 2 in DynamoDB",
+      "scaling": "Unlimited throughput and storage",
+      "multi_model": "Supports multiple APIs (SQL, MongoDB, Cassandra, Gremlin)"
+    }
+  },
+  "cost_optimization": [
+    "Use Azure Hybrid Benefit for SQL Server licensing savings",
+    "Consider serverless compute for variable workloads",
+    "Use reserved capacity for predictable workloads",
+    "Implement auto-pause for dev/test databases",
+    "Use appropriate service tiers based on performance requirements",
+    "Monitor and optimize Cosmos DB request units (RUs)"
+  ],
+  "cleanup": {
+    "instructions": "Remove all database resources to avoid ongoing charges",
+    "commands": [
+      "az cosmosdb delete --resource-group database-lab-rg --name $COSMOS_ACCOUNT --yes",
+      "az mysql flexible-server delete --resource-group database-lab-rg --name $MYSQL_SERVER --yes",
+      "az sql server delete --resource-group database-lab-rg --name $SERVER_NAME --yes",
+      "az group delete --name database-lab-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure provides more database service options than AWS",
+    "Zone redundancy is built into Azure SQL Database",
+    "Cosmos DB offers more consistency models than DynamoDB",
+    "Azure Database Migration Service simplifies large-scale migrations",
+    "Built-in AI and machine learning features in Azure SQL",
+    "Global distribution is native to Cosmos DB"
+  ],
+  "next_steps": [
+    "Learn about Azure SQL Managed Instance for lift-and-shift scenarios",
+    "Explore Azure Synapse Analytics for data warehousing",
+    "Study database security features like Always Encrypted",
+    "Practice with Azure Data Factory for ETL pipelines",
+    "Learn about Azure Database Migration Service advanced features"
+  ]
+}

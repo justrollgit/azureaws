@@ -1,0 +1,310 @@
+{
+  "id": "hub-spoke-architecture-lab",
+  "title": "AWS Transit Gateway to Azure Hub-Spoke Architecture Migration",
+  "difficulty": "advanced",
+  "estimated_time": "180 minutes",
+  "aws_prerequisite": "Experience with AWS Transit Gateway, VPC peering, Direct Connect, and enterprise networking",
+  "azure_target": "Implement Azure hub-spoke architecture with Virtual WAN, ExpressRoute, and advanced networking",
+  "learning_objectives": [
+    "Understand Azure networking architecture vs AWS Transit Gateway model",
+    "Implement traditional hub-spoke with VNet peering",
+    "Deploy Azure Virtual WAN for scalable connectivity",
+    "Configure ExpressRoute for hybrid connectivity equivalent to Direct Connect",
+    "Set up Azure Firewall for centralized security",
+    "Implement network segmentation and micro-segmentation",
+    "Configure global networking with multiple regions",
+    "Set up monitoring and troubleshooting for enterprise networking"
+  ],
+  "aws_context": {
+    "equivalent_services": {
+      "transit_gateway": "Azure Virtual WAN + Virtual Hubs",
+      "vpc": "Virtual Network (VNet)",
+      "vpc_peering": "VNet Peering",
+      "direct_connect": "ExpressRoute",
+      "site_to_site_vpn": "VPN Gateway",
+      "client_vpn": "Point-to-Site VPN",
+      "route_53_resolver": "Azure Private DNS",
+      "network_firewall": "Azure Firewall",
+      "nat_gateway": "NAT Gateway"
+    },
+    "architecture_patterns": {
+      "aws_tgw_hub": "Centralized routing through Transit Gateway",
+      "azure_hub_spoke": "Hub VNet with spoke VNets peered to hub",
+      "azure_virtual_wan": "Virtual WAN hubs with automatic routing",
+      "hybrid_connectivity": "ExpressRoute + VPN Gateway redundancy"
+    }
+  },
+  "sections": [
+    {
+      "title": "Hub-Spoke Architecture Comparison",
+      "content": "Detailed comparison between AWS Transit Gateway and Azure hub-spoke architectures.",
+      "architecture_comparison": {
+        "traditional_hub_spoke": {
+          "aws_equivalent": "Transit Gateway with route tables",
+          "azure_implementation": "Hub VNet with VNet peering to spokes",
+          "advantages": "More control over routing, lower latency within regions",
+          "limitations": "Manual peering management, complex routing at scale",
+          "best_for": "Single region deployments with <50 spokes"
+        },
+        "virtual_wan": {
+          "aws_equivalent": "Global Transit Gateway Network + Cloud WAN",
+          "azure_implementation": "Virtual WAN with global connectivity",
+          "advantages": "Automated routing, global reach, simplified management",
+          "limitations": "Additional cost, less granular control",
+          "best_for": "Multi-region, large-scale deployments"
+        },
+        "hybrid_connectivity": {
+          "aws_approach": "Direct Connect Gateway + Transit Gateway",
+          "azure_approach": "ExpressRoute + Virtual Network Gateway",
+          "key_difference": "Azure ExpressRoute provides more flexible routing options",
+          "bandwidth_options": "50 Mbps to 100 Gbps in Azure vs 1 Gbps to 100 Gbps in AWS"
+        }
+      }
+    },
+    {
+      "title": "Traditional Hub-Spoke with VNet Peering",
+      "content": "Implement classic hub-spoke architecture equivalent to centralized Transit Gateway design.",
+      "code_examples": {
+        "create_hub_infrastructure": {
+          "language": "bash",
+          "title": "Create Hub VNet with Centralized Services",
+          "code": "# Create resource group for hub-spoke lab\naz group create \\\n  --name hub-spoke-lab-rg \\\n  --location eastus\n\n# Create hub VNet with comprehensive subnet design\naz network vnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name enterprise-hub-vnet \\\n  --address-prefix 10.0.0.0/16 \\\n  --subnet-name GatewaySubnet \\\n  --subnet-prefix 10.0.0.0/24 \\\n  --location eastus\n\n# Add specialized subnets to hub\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name AzureFirewallSubnet \\\n  --address-prefix 10.0.1.0/24\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name AzureFirewallManagementSubnet \\\n  --address-prefix 10.0.2.0/24\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name shared-services-subnet \\\n  --address-prefix 10.0.10.0/24\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name management-subnet \\\n  --address-prefix 10.0.11.0/24\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name dmz-subnet \\\n  --address-prefix 10.0.12.0/24\n\n# Create Network Security Groups for hub subnets\naz network nsg create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name hub-shared-services-nsg\n\naz network nsg create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name hub-management-nsg\n\n# Associate NSGs with subnets\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name shared-services-subnet \\\n  --network-security-group hub-shared-services-nsg\n\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --name management-subnet \\\n  --network-security-group hub-management-nsg"
+        },
+        "deploy_azure_firewall": {
+          "language": "bash",\n          \"title\": \"Deploy Azure Firewall for Centralized Security\",\n          \"code\": \"# Create public IP for Azure Firewall\naz network public-ip create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name hub-firewall-pip \\\n  --sku Standard \\\n  --allocation-method Static \\\n  --location eastus\n\n# Create Azure Firewall Policy for centralized rule management\naz extension add --name azure-firewall\naz network firewall policy create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name hub-firewall-policy \\\n  --location eastus\n\n# Create Azure Firewall with Forced Tunneling support\naz network firewall create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name enterprise-hub-firewall \\\n  --location eastus \\\n  --vnet-name enterprise-hub-vnet \\\n  --public-ip hub-firewall-pip \\\n  --firewall-policy hub-firewall-policy \\\n  --sku AZFW_VNet \\\n  --tier Premium\n\n# Get firewall private IP for routing\nFIREWALL_PRIVATE_IP=$(az network firewall show \\\n  --resource-group hub-spoke-lab-rg \\\n  --name enterprise-hub-firewall \\\n  --query 'ipConfigurations[0].privateIpAddress' -o tsv)\n\necho \\\"Hub Firewall Private IP: $FIREWALL_PRIVATE_IP\\\"\n\n# Create firewall rules for spoke-to-spoke communication\naz network firewall policy rule-collection-group create \\\n  --resource-group hub-spoke-lab-rg \\\n  --policy-name hub-firewall-policy \\\n  --name NetworkRuleCollectionGroup \\\n  --priority 200\n\n# Add network rule for spoke-to-spoke communication\ncat > network-rules.json << 'EOF'\n{\n  \\\"ruleCollections\\\": [\n    {\n      \\\"ruleCollectionType\\\": \\\"FirewallPolicyFilterRuleCollection\\\",\n      \\\"name\\\": \\\"SpokeToSpoke\\\",\n      \\\"priority\\\": 1000,\n      \\\"action\\\": {\n        \\\"type\\\": \\\"Allow\\\"\n      },\n      \\\"rules\\\": [\n        {\n          \\\"ruleType\\\": \\\"NetworkRule\\\",\n          \\\"name\\\": \\\"AllowSpokeToSpoke\\\",\n          \\\"ipProtocols\\\": [\\\"TCP\\\", \\\"UDP\\\"],\n          \\\"sourceAddresses\\\": [\\\"10.1.0.0/16\\\", \\\"10.2.0.0/16\\\", \\\"10.3.0.0/16\\\"],\n          \\\"destinationAddresses\\\": [\\\"10.1.0.0/16\\\", \\\"10.2.0.0/16\\\", \\\"10.3.0.0/16\\\"],\n          \\\"destinationPorts\\\": [\\\"*\\\"]\n        }\n      ]\n    }\n  ]\n}\nEOF\n\naz network firewall policy rule-collection-group collection add-filter-collection \\\n  --resource-group hub-spoke-lab-rg \\\n  --policy-name hub-firewall-policy \\\n  --rule-collection-group-name NetworkRuleCollectionGroup \\\n  --name SpokeToSpoke \\\n  --collection-priority 1000 \\\n  --action Allow \\\n  --rule-name AllowSpokeToSpoke \\\n  --rule-type NetworkRule \\\n  --description \\\"Allow communication between spokes\\\" \\\n  --destination-addresses \\\"10.1.0.0/16\\\" \\\"10.2.0.0/16\\\" \\\"10.3.0.0/16\\\" \\\n  --source-addresses \\\"10.1.0.0/16\\\" \\\"10.2.0.0/16\\\" \\\"10.3.0.0/16\\\" \\\n  --ip-protocols \\\"TCP\\\" \\\"UDP\\\" \\\n  --destination-ports \\\"*\\\"\""
+        },
+        "create_spoke_networks": {
+          "language": "bash",
+          "title": "Create Multiple Spoke Networks",
+          "code": "# Create production spoke (10.1.0.0/16)\naz network vnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name prod-spoke-vnet \\\n  --address-prefix 10.1.0.0/16 \\\n  --subnet-name web-tier \\\n  --subnet-prefix 10.1.1.0/24 \\\n  --location eastus\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name app-tier \\\n  --address-prefix 10.1.2.0/24\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name data-tier \\\n  --address-prefix 10.1.3.0/24\n\n# Create development spoke (10.2.0.0/16)\naz network vnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name dev-spoke-vnet \\\n  --address-prefix 10.2.0.0/16 \\\n  --subnet-name web-tier \\\n  --subnet-prefix 10.2.1.0/24 \\\n  --location eastus\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name dev-spoke-vnet \\\n  --name app-tier \\\n  --address-prefix 10.2.2.0/24\n\n# Create shared services spoke (10.3.0.0/16)\naz network vnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name shared-spoke-vnet \\\n  --address-prefix 10.3.0.0/16 \\\n  --subnet-name shared-services \\\n  --subnet-prefix 10.3.1.0/24 \\\n  --location eastus\n\naz network vnet subnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name shared-spoke-vnet \\\n  --name monitoring \\\n  --address-prefix 10.3.2.0/24\n\n# Create NSGs for spoke subnets\nfor spoke in prod dev shared; do\n  az network nsg create \\\n    --resource-group hub-spoke-lab-rg \\\n    --name ${spoke}-spoke-nsg\ndone"
+        },
+        "configure_vnet_peering": {
+          "language": "bash",
+          "title": "Configure Hub-Spoke VNet Peering",
+          "code": "# Create hub-to-spoke peerings with gateway transit\nfor spoke in prod-spoke dev-spoke shared-spoke; do\n  echo \"Creating peering: hub to $spoke\"\n  az network vnet peering create \\\n    --resource-group hub-spoke-lab-rg \\\n    --name hub-to-${spoke} \\\n    --vnet-name enterprise-hub-vnet \\\n    --remote-vnet ${spoke}-vnet \\\n    --allow-vnet-access true \\\n    --allow-gateway-transit true \\\n    --allow-forwarded-traffic true\n\n  echo \"Creating peering: $spoke to hub\"\n  az network vnet peering create \\\n    --resource-group hub-spoke-lab-rg \\\n    --name ${spoke}-to-hub \\\n    --vnet-name ${spoke}-vnet \\\n    --remote-vnet enterprise-hub-vnet \\\n    --allow-vnet-access true \\\n    --use-remote-gateways false \\\n    --allow-forwarded-traffic true\ndone\n\n# Verify peering status\necho \"\\nPeering Status:\"\naz network vnet peering list \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name enterprise-hub-vnet \\\n  --query '[].{Name:name, State:peeringState, RemoteVNet:remoteVirtualNetwork.id}' \\\n  --output table"
+        }
+      ]
+    },
+    {
+      "title": "User Defined Routing and Traffic Flow",
+      "content": "Configure advanced routing equivalent to Transit Gateway route tables.",
+      "code_examples": {
+        "create_route_tables": {
+          "language": "bash",
+          "title": "Create User Defined Route Tables",
+          "code": "# Create route table for production spoke\naz network route-table create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name prod-spoke-rt \\\n  --location eastus \\\n  --disable-bgp-route-propagation true\n\n# Add routes for production spoke\n# Default route through firewall\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name prod-spoke-rt \\\n  --name default-route \\\n  --address-prefix 0.0.0.0/0 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_PRIVATE_IP\n\n# Route to dev spoke through firewall\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name prod-spoke-rt \\\n  --name to-dev-spoke \\\n  --address-prefix 10.2.0.0/16 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_PRIVATE_IP\n\n# Route to shared services through firewall\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name prod-spoke-rt \\\n  --name to-shared-spoke \\\n  --address-prefix 10.3.0.0/16 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_PRIVATE_IP\n\n# Route to on-premises (placeholder)\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name prod-spoke-rt \\\n  --name to-onprem \\\n  --address-prefix 192.168.0.0/16 \\\n  --next-hop-type VirtualNetworkGateway\n\n# Create route table for development spoke\naz network route-table create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name dev-spoke-rt \\\n  --location eastus \\\n  --disable-bgp-route-propagation true\n\n# Add routes for development spoke (more restrictive)\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name dev-spoke-rt \\\n  --name default-route \\\n  --address-prefix 0.0.0.0/0 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_PRIVATE_IP\n\n# Dev can access shared services but not production\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name dev-spoke-rt \\\n  --name to-shared-spoke \\\n  --address-prefix 10.3.0.0/16 \\\n  --next-hop-type VirtualAppliance \\\n  --next-hop-ip-address $FIREWALL_PRIVATE_IP\n\n# Block access to production (send to firewall for deny rule)\naz network route-table route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --route-table-name dev-spoke-rt \\\n  --name block-prod \\\n  --address-prefix 10.1.0.0/16 \\\n  --next-hop-type None"
+        },
+        "associate_route_tables": {
+          "language": "bash",
+          "title": "Associate Route Tables with Subnets",
+          "code": "# Associate production route table\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name web-tier \\\n  --route-table prod-spoke-rt\n\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name app-tier \\\n  --route-table prod-spoke-rt\n\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name prod-spoke-vnet \\\n  --name data-tier \\\n  --route-table prod-spoke-rt\n\n# Associate development route table\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name dev-spoke-vnet \\\n  --name web-tier \\\n  --route-table dev-spoke-rt\n\naz network vnet subnet update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vnet-name dev-spoke-vnet \\\n  --name app-tier \\\n  --route-table dev-spoke-rt\n\n# Verify route table associations\necho \"Route Table Associations:\"\naz network route-table list \\\n  --resource-group hub-spoke-lab-rg \\\n  --query '[].{Name:name, AssociatedSubnets:length(subnets)}' \\\n  --output table\n\n# Show effective routes for a subnet\necho \"\\nEffective routes for prod web-tier:\"\naz network nic show-effective-route-table \\\n  --resource-group hub-spoke-lab-rg \\\n  --name prod-test-vm-nic || echo \"Create a VM first to see effective routes\""
+        }
+      ]
+    },
+    {
+      "title": "Azure Virtual WAN Implementation",
+      "content": "Deploy Azure Virtual WAN for large-scale, multi-region connectivity equivalent to AWS Cloud WAN.",
+      "code_examples": {
+        "create_virtual_wan": {
+          "language": "bash",
+          "title": "Create Azure Virtual WAN with Multiple Hubs",
+          "code": "# Create Virtual WAN (Global network backbone)\naz network vwan create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name enterprise-virtual-wan \\\n  --location eastus \\\n  --branch-to-branch-traffic true \\\n  --office365-policy-enabled false \\\n  --type Standard\n\n# Create Virtual Hub in East US (Primary)\naz network vhub create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name eastus-hub \\\n  --vwan enterprise-virtual-wan \\\n  --location eastus \\\n  --address-prefix 10.100.0.0/16 \\\n  --sku Standard\n\n# Create Virtual Hub in West US (Secondary)\naz network vhub create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name westus-hub \\\n  --vwan enterprise-virtual-wan \\\n  --location westus2 \\\n  --address-prefix 10.200.0.0/16 \\\n  --sku Standard \\\n  --no-wait\n\n# Wait for hub deployment\necho \"Waiting for Virtual Hub deployment...\"\naz network vhub wait \\\n  --resource-group hub-spoke-lab-rg \\\n  --name eastus-hub \\\n  --created\n\necho \"Virtual WAN and Hubs created successfully\"\n\n# List Virtual WAN configuration\naz network vwan list \\\n  --resource-group hub-spoke-lab-rg \\\n  --query '[].{Name:name, Type:type, AllowBranchToBranch:allowBranchToBranchTraffic}' \\\n  --output table"
+        },
+        "connect_vnets_to_vwan": {
+          "language": "bash",
+          "title": "Connect VNets to Virtual WAN Hubs",
+          "code": "# Create VNet for West US region\naz network vnet create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name westus-prod-vnet \\\n  --address-prefix 10.201.0.0/16 \\\n  --subnet-name app-subnet \\\n  --subnet-prefix 10.201.1.0/24 \\\n  --location westus2\n\n# Connect East US VNets to East US Virtual Hub\necho \"Connecting prod-spoke-vnet to eastus-hub...\"\naz network vhub connection create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --name prod-spoke-connection \\\n  --remote-vnet prod-spoke-vnet \\\n  --no-wait\n\naz network vhub connection create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --name dev-spoke-connection \\\n  --remote-vnet dev-spoke-vnet \\\n  --no-wait\n\n# Wait for Virtual Hub in West US to be ready\necho \"Waiting for westus-hub to be ready...\"\naz network vhub wait \\\n  --resource-group hub-spoke-lab-rg \\\n  --name westus-hub \\\n  --created\n\n# Connect West US VNet to West US Virtual Hub\necho \"Connecting westus-prod-vnet to westus-hub...\"\naz network vhub connection create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name westus-hub \\\n  --name westus-prod-connection \\\n  --remote-vnet westus-prod-vnet \\\n  --no-wait\n\n# Check connection status\necho \"\\nVirtual Hub Connections:\"\naz network vhub connection list \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --query '[].{Name:name, ProvisioningState:provisioningState, RemoteVNet:remoteVirtualNetwork.id}' \\\n  --output table"
+        },
+        "configure_vwan_routing": {
+          "language": "bash",
+          "title": "Configure Virtual WAN Routing Policies",
+          "code": "# Create route table for production workloads\naz network vhub route-table create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --name prod-route-table \\\n  --labels prod\n\n# Create route table for development workloads\naz network vhub route-table create \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --name dev-route-table \\\n  --labels dev\n\n# Associate connections with route tables\naz network vhub connection update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --name prod-spoke-connection \\\n  --associated-route-table prod-route-table \\\n  --propagated-route-tables prod-route-table\n\naz network vhub connection update \\\n  --resource-group hub-spoke-lab-rg \\\n  --vhub-name eastus-hub \\\n  --name dev-spoke-connection \\\n  --associated-route-table dev-route-table \\\n  --propagated-route-tables dev-route-table\n\n# Add custom routes if needed\necho \"Virtual WAN automatically handles routing between hubs and spokes\"\necho \"Custom routing policies can be added through the Azure portal or ARM templates\"\n\n# Show effective routes\naz network vhub get-effective-routes \\\n  --resource-group hub-spoke-lab-rg \\\n  --name eastus-hub \\\n  --resource-type VirtualNetworkConnection \\\n  --resource-id prod-spoke-connection || echo \"Effective routes available after connection is established\""
+        }
+      ]
+    },
+    {
+      "title": "ExpressRoute Configuration",
+      "content": "Set up ExpressRoute for hybrid connectivity equivalent to AWS Direct Connect.",
+      "code_examples": {
+        "create_expressroute_circuit": {
+          "language": "bash",
+          "title": "Create ExpressRoute Circuit and Gateway",
+          "code": "# List ExpressRoute service providers\necho \"Available ExpressRoute Service Providers:\"\naz network express-route list-service-providers \\\n  --query '[].{Provider:name, PeeringLocations:peeringLocations[0], Bandwidths:bandwidthsOffered[].offerName}' \\\n  --output table | head -10\n\n# Create ExpressRoute circuit (placeholder - requires actual provider)\necho \"Creating ExpressRoute circuit (demo configuration)...\"\naz network express-route create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name enterprise-expressroute \\\n  --location eastus \\\n  --service-provider \"Equinix\" \\\n  --peering-location \"Washington DC\" \\\n  --bandwidth 1000 \\\n  --sku-family MeteredData \\\n  --sku-tier Standard \\\n  --allow-global-reach true\n\n# Get service key for provider configuration\nSERVICE_KEY=$(az network express-route show \\\n  --resource-group hub-spoke-lab-rg \\\n  --name enterprise-expressroute \\\n  --query serviceKey -o tsv)\n\necho \"ExpressRoute Service Key: $SERVICE_KEY\"\necho \"Share this key with your connectivity provider\"\n\n# Create ExpressRoute Gateway\naz network public-ip create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name expressroute-gateway-pip \\\n  --sku Standard \\\n  --location eastus\n\necho \"Creating ExpressRoute Gateway (this takes 15-45 minutes)...\"\naz network vnet-gateway create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name expressroute-gateway \\\n  --public-ip-address expressroute-gateway-pip \\\n  --vnet enterprise-hub-vnet \\\n  --gateway-type ExpressRoute \\\n  --sku Standard \\\n  --no-wait\n\n# Check gateway creation status\necho \"\\nExpressRoute Gateway creation initiated. Check status with:\"\necho \"az network vnet-gateway show --resource-group hub-spoke-lab-rg --name expressroute-gateway --query provisioningState\""
+        },
+        "configure_expressroute_peering": {
+          "language": "bash",
+          "title": "Configure ExpressRoute Peering",
+          "code": "# Configure Azure private peering (after circuit is provisioned)\necho \"Configuring Azure Private Peering...\"\naz network express-route peering create \\\n  --resource-group hub-spoke-lab-rg \\\n  --circuit-name enterprise-expressroute \\\n  --peering-type AzurePrivatePeering \\\n  --peer-asn 65001 \\\n  --primary-peer-subnet 192.168.1.0/30 \\\n  --secondary-peer-subnet 192.168.1.4/30 \\\n  --vlan-id 100\n\n# Configure Microsoft peering for Office 365 and Azure public services (optional)\necho \"Configuring Microsoft Peering (optional)...\"\naz network express-route peering create \\\n  --resource-group hub-spoke-lab-rg \\\n  --circuit-name enterprise-expressroute \\\n  --peering-type MicrosoftPeering \\\n  --peer-asn 65001 \\\n  --primary-peer-subnet 192.168.2.0/30 \\\n  --secondary-peer-subnet 192.168.2.4/30 \\\n  --vlan-id 200 \\\n  --advertised-public-prefixes 203.0.113.0/24\n\n# Wait for ExpressRoute Gateway to be ready\necho \"Waiting for ExpressRoute Gateway to be ready...\"\naz network vnet-gateway wait \\\n  --resource-group hub-spoke-lab-rg \\\n  --name expressroute-gateway \\\n  --created\n\n# Create connection between ExpressRoute circuit and gateway\naz network vpn-connection create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name expressroute-connection \\\n  --vnet-gateway1 expressroute-gateway \\\n  --express-route-circuit2 enterprise-expressroute \\\n  --location eastus\n\necho \"ExpressRoute configuration completed\"\necho \"Note: Circuit must be provisioned by service provider before connection will be established\""
+        }
+      ]
+    },
+    {
+      "title": "Network Monitoring and Troubleshooting",
+      "content": "Set up comprehensive network monitoring equivalent to AWS VPC Flow Logs and Transit Gateway monitoring.",
+      "code_examples": {
+        "enable_network_watcher": {
+          "language": "bash",
+          "title": "Configure Network Watcher and Monitoring",
+          "code": "# Enable Network Watcher (usually enabled by default)\naz network watcher configure \\\n  --resource-group NetworkWatcherRG \\\n  --locations eastus \\\n  --enabled true\n\n# Create storage account for flow logs\nSTORAGE_ACCOUNT_NAME=\"hubspokeflowlogs$(date +%s)\"\naz storage account create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name $STORAGE_ACCOUNT_NAME \\\n  --location eastus \\\n  --sku Standard_LRS\n\n# Create Log Analytics workspace for network monitoring\naz monitor log-analytics workspace create \\\n  --resource-group hub-spoke-lab-rg \\\n  --workspace-name network-monitoring-workspace \\\n  --location eastus\n\nWORKSPACE_ID=$(az monitor log-analytics workspace show \\\n  --resource-group hub-spoke-lab-rg \\\n  --workspace-name network-monitoring-workspace \\\n  --query customerId -o tsv)\n\n# Enable NSG Flow Logs for key NSGs\nfor nsg in hub-shared-services-nsg prod-spoke-nsg dev-spoke-nsg; do\n  echo \"Configuring flow logs for $nsg...\"\n  az network watcher flow-log create \\\n    --resource-group hub-spoke-lab-rg \\\n    --name ${nsg}-flow-logs \\\n    --nsg $nsg \\\n    --storage-account $STORAGE_ACCOUNT_NAME \\\n    --log-analytics-workspace $WORKSPACE_ID \\\n    --retention 30 \\\n    --log-format JSON \\\n    --log-version 2 \\\n    --traffic-analytics-workspace $WORKSPACE_ID \\\n    --traffic-analytics-interval 10\ndone\n\necho \"Network monitoring configured with NSG Flow Logs and Traffic Analytics\""
+        },
+        "setup_connection_monitor": {
+          "language": "bash",
+          "title": \"Setup Connection Monitor for End-to-End Monitoring\",\n          \"code\": \"# Create test VMs for connection monitoring (lightweight)\necho \\\"Creating test VMs for connection monitoring...\\\"\n\n# Create VM in hub for monitoring\naz vm create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name hub-monitor-vm \\\n  --image Ubuntu2204 \\\n  --subnet shared-services-subnet \\\n  --vnet-name enterprise-hub-vnet \\\n  --admin-username azureuser \\\n  --generate-ssh-keys \\\n  --size Standard_B1s \\\n  --no-wait\n\n# Create VM in prod spoke\naz vm create \\\n  --resource-group hub-spoke-lab-rg \\\n  --name prod-monitor-vm \\\n  --image Ubuntu2204 \\\n  --subnet web-tier \\\n  --vnet-name prod-spoke-vnet \\\n  --admin-username azureuser \\\n  --generate-ssh-keys \\\n  --size Standard_B1s \\\n  --no-wait\n\n# Install Network Watcher extension on VMs\necho \\\"Installing Network Watcher extensions...\\\"\naz vm extension set \\\n  --resource-group hub-spoke-lab-rg \\\n  --vm-name hub-monitor-vm \\\n  --name NetworkWatcherAgentLinux \\\n  --publisher Microsoft.Azure.NetworkWatcher \\\n  --no-wait\n\naz vm extension set \\\n  --resource-group hub-spoke-lab-rg \\\n  --vm-name prod-monitor-vm \\\n  --name NetworkWatcherAgentLinux \\\n  --publisher Microsoft.Azure.NetworkWatcher \\\n  --no-wait\n\n# Wait for VMs to be ready\necho \\\"Waiting for VMs to be ready...\\\"\naz vm wait --resource-group hub-spoke-lab-rg --name hub-monitor-vm --created\naz vm wait --resource-group hub-spoke-lab-rg --name prod-monitor-vm --created\n\n# Create Connection Monitor\necho \\\"Creating Connection Monitor...\\\"\ncat > connection-monitor.json << 'EOF'\n{\n  \\\"location\\\": \\\"eastus\\\",\n  \\\"properties\\\": {\n    \\\"endpoints\\\": [\n      {\n        \\\"name\\\": \\\"hub-endpoint\\\",\n        \\\"resourceId\\\": \\\"/subscriptions/SUBSCRIPTION_ID/resourceGroups/hub-spoke-lab-rg/providers/Microsoft.Compute/virtualMachines/hub-monitor-vm\\\",\n        \\\"address\\\": \\\"hub-monitor-vm\\\",\n        \\\"type\\\": \\\"AzureVM\\\"\n      },\n      {\n        \\\"name\\\": \\\"prod-endpoint\\\",\n        \\\"resourceId\\\": \\\"/subscriptions/SUBSCRIPTION_ID/resourceGroups/hub-spoke-lab-rg/providers/Microsoft.Compute/virtualMachines/prod-monitor-vm\\\",\n        \\\"address\\\": \\\"prod-monitor-vm\\\",\n        \\\"type\\\": \\\"AzureVM\\\"\n      },\n      {\n        \\\"name\\\": \\\"external-endpoint\\\",\n        \\\"address\\\": \\\"8.8.8.8\\\",\n        \\\"type\\\": \\\"ExternalAddress\\\"\n      }\n    ],\n    \\\"testConfigurations\\\": [\n      {\n        \\\"name\\\": \\\"tcp-test\\\",\n        \\\"protocol\\\": \\\"Tcp\\\",\n        \\\"tcpConfiguration\\\": {\n          \\\"port\\\": 80\n        },\n        \\\"testFrequencySec\\\": 60\n      },\n      {\n        \\\"name\\\": \\\"icmp-test\\\",\n        \\\"protocol\\\": \\\"Icmp\\\",\n        \\\"icmpConfiguration\\\": {},\n        \\\"testFrequencySec\\\": 30\n      }\n    ],\n    \\\"testGroups\\\": [\n      {\n        \\\"name\\\": \\\"hub-to-spoke-connectivity\\\",\n        \\\"sources\\\": [\\\"hub-endpoint\\\"],\n        \\\"destinations\\\": [\\\"prod-endpoint\\\"],\n        \\\"testConfigurations\\\": [\\\"icmp-test\\\", \\\"tcp-test\\\"]\n      },\n      {\n        \\\"name\\\": \\\"internet-connectivity\\\",\n        \\\"sources\\\": [\\\"hub-endpoint\\\", \\\"prod-endpoint\\\"],\n        \\\"destinations\\\": [\\\"external-endpoint\\\"],\n        \\\"testConfigurations\\\": [\\\"icmp-test\\\"]\n      }\n    ],\n    \\\"outputs\\\": [\n      {\n        \\\"type\\\": \\\"Workspace\\\",\n        \\\"workspaceSettings\\\": {\n          \\\"workspaceResourceId\\\": \\\"/subscriptions/SUBSCRIPTION_ID/resourceGroups/hub-spoke-lab-rg/providers/Microsoft.OperationalInsights/workspaces/network-monitoring-workspace\\\"\n        }\n      }\n    ]\n  }\n}\nEOF\n\n# Replace subscription ID\nsed -i \\\"s/SUBSCRIPTION_ID/$(az account show --query id -o tsv)/g\\\" connection-monitor.json\n\n# Create the connection monitor\naz network watcher connection-monitor create \\\n  --resource-group NetworkWatcherRG \\\n  --name hub-spoke-connectivity-monitor \\\n  --location eastus \\\n  --definition connection-monitor.json\n\necho \\\"Connection Monitor created for end-to-end network monitoring\\\"\""
+        }
+      }
+    }
+  ],
+  "hands_on_exercise": {
+    "scenario": "Deploy enterprise-grade hub-spoke architecture with hybrid connectivity and comprehensive monitoring",
+    "requirements": [
+      "Create traditional hub-spoke architecture with centralized security",
+      "Deploy Azure Virtual WAN for multi-region connectivity",
+      "Configure ExpressRoute for hybrid connectivity",
+      "Implement advanced routing and traffic segmentation",
+      "Set up comprehensive network monitoring and troubleshooting",
+      "Configure network security and micro-segmentation",
+      "Test end-to-end connectivity and failover scenarios"
+    ],
+    "validation_steps": [
+      {
+        "step": "Verify hub VNet and subnets",
+        "command": "az network vnet subnet list --resource-group hub-spoke-lab-rg --vnet-name enterprise-hub-vnet --query 'length(@)'",
+        "expected": "Should return 6 subnets in hub VNet"
+      },
+      {
+        "step": "Check VNet peering status",
+        "command": "az network vnet peering list --resource-group hub-spoke-lab-rg --vnet-name enterprise-hub-vnet --query '[].peeringState'",
+        "expected": "All peerings should show 'Connected'"
+      },
+      {
+        "step": "Verify Azure Firewall deployment",
+        "command": "az network firewall show --resource-group hub-spoke-lab-rg --name enterprise-hub-firewall --query provisioningState",
+        "expected": "Should return 'Succeeded'"
+      },
+      {
+        "step": "Check Virtual WAN configuration",
+        "command": "az network vwan show --resource-group hub-spoke-lab-rg --name enterprise-virtual-wan --query allowBranchToBranchTraffic",
+        "expected": "Should return true"
+      },
+      {
+        "step": "Verify route table associations",
+        "command": "az network route-table list --resource-group hub-spoke-lab-rg --query '[].subnets[].id | length(@)'",
+        "expected": "Should return count of associated subnets"
+      },
+      {
+        "step": "Check Network Watcher flow logs",
+        "command": "az network watcher flow-log list --resource-group NetworkWatcherRG --query 'length(@)'",
+        "expected": "Should return count of configured flow logs"
+      }
+    ]
+  },
+  "architecture_decision_matrix": {
+    "traditional_hub_spoke": {
+      "best_for": "Single region, <50 spokes, high control requirements",
+      "complexity": "Medium",
+      "cost": "Lower (no Virtual WAN costs)",
+      "scalability": "Manual scaling required",
+      "global_reach": "Limited to regional peering"
+    },
+    "virtual_wan": {
+      "best_for": "Multi-region, >50 spokes, simplified management",
+      "complexity": "Low",
+      "cost": "Higher (Virtual WAN and hub costs)",
+      "scalability": "Automatic scaling",
+      "global_reach": "Native global connectivity"
+    },
+    "hybrid_approach": {
+      "best_for": "Mixed requirements, gradual migration",
+      "complexity": "High",
+      "cost": "Variable",
+      "scalability": "Mixed",
+      "global_reach": "Depends on implementation"
+    }
+  },
+  "cost_comparison": {
+    "aws_transit_gateway": {
+      "hourly_cost": "$0.05 per attachment per hour",
+      "data_processing": "$0.02 per GB processed",
+      "cross_az_traffic": "$0.01 per GB",
+      "monthly_estimate_100_vpcs": "~$3,600 + data costs"
+    },
+    "azure_traditional_hub_spoke": {
+      "vnet_peering": "$0.01 per GB for cross-region",
+      "azure_firewall": "$1.25 per hour + $0.016 per GB",
+      "expressroute_gateway": "$0.25-$3.50 per hour",
+      "monthly_estimate_100_vnets": "~$2,500 + data costs"
+    },
+    "azure_virtual_wan": {
+      "virtual_hub": "$0.25 per hour per hub",
+      "connection_unit": "$0.05 per hour per connection",
+      "data_processing": "$0.02 per GB",
+      "monthly_estimate_100_connections": "~$3,800 + data costs"
+    }
+  },
+  "migration_strategies": {
+    "forklift_migration": {
+      "description": "Direct 1:1 migration from Transit Gateway to hub-spoke",
+      "timeline": "4-8 weeks",
+      "complexity": "Medium", 
+      "risk": "Low",
+      "best_for": "Simple, single-region architectures"
+    },
+    "modernization_approach": {
+      "description": "Redesign with Virtual WAN and cloud-native features",
+      "timeline": "8-16 weeks",
+      "complexity": "High",
+      "risk": "Medium",
+      "best_for": "Multi-region, growth-oriented architectures"
+    },
+    "hybrid_transition": {
+      "description": "Gradual migration with coexistence period",
+      "timeline": "12-24 weeks",
+      "complexity": "High",
+      "risk": "Low",
+      "best_for": "Large, complex enterprise networks"
+    }
+  },
+  "cleanup": {
+    "instructions": "Remove hub-spoke resources in proper order to avoid dependency issues",
+    "commands": [
+      "# Remove Connection Monitor first",
+      "az network watcher connection-monitor delete --resource-group NetworkWatcherRG --name hub-spoke-connectivity-monitor",
+      "# Remove VMs",
+      "az vm delete --resource-group hub-spoke-lab-rg --name hub-monitor-vm --yes",
+      "az vm delete --resource-group hub-spoke-lab-rg --name prod-monitor-vm --yes",
+      "# Remove Virtual WAN connections",
+      "az network vhub connection delete --resource-group hub-spoke-lab-rg --vhub-name eastus-hub --name prod-spoke-connection --yes",
+      "az network vhub connection delete --resource-group hub-spoke-lab-rg --vhub-name eastus-hub --name dev-spoke-connection --yes",
+      "# Remove Virtual Hubs",
+      "az network vhub delete --resource-group hub-spoke-lab-rg --name eastus-hub --yes",
+      "az network vhub delete --resource-group hub-spoke-lab-rg --name westus-hub --yes",
+      "# Remove Virtual WAN",
+      "az network vwan delete --resource-group hub-spoke-lab-rg --name enterprise-virtual-wan --yes",
+      "# Remove VNet peerings",
+      "az network vnet peering delete --resource-group hub-spoke-lab-rg --vnet-name enterprise-hub-vnet --name hub-to-prod-spoke",
+      "# Remove ExpressRoute resources",
+      "az network vpn-connection delete --resource-group hub-spoke-lab-rg --name expressroute-connection",
+      "az network vnet-gateway delete --resource-group hub-spoke-lab-rg --name expressroute-gateway",
+      "az network express-route delete --resource-group hub-spoke-lab-rg --name enterprise-expressroute",
+      "# Remove Azure Firewall",
+      "az network firewall delete --resource-group hub-spoke-lab-rg --name enterprise-hub-firewall",
+      "# Remove all resource groups",
+      "az group delete --name hub-spoke-lab-rg --yes --no-wait"
+    ]
+  },
+  "key_takeaways": [
+    "Azure hub-spoke provides more flexibility than AWS Transit Gateway for routing control",
+    "Virtual WAN offers simpler management for large-scale, multi-region deployments",
+    "ExpressRoute provides more routing flexibility than AWS Direct Connect",
+    "Azure Firewall integrates better with network architecture than AWS Network Firewall",
+    "Azure network monitoring provides more comprehensive insights than AWS VPC Flow Logs",
+    "Cost optimization depends on architecture choice and scale requirements"
+  ],
+  "next_steps": [
+    "Learn about Azure Virtual Network Manager for simplified network management",
+    "Explore Azure Route Server for dynamic routing scenarios",
+    "Study Azure Private Link for secure service connectivity",
+    "Practice with Azure Network Function Manager for advanced networking",
+    "Learn about Azure Orbital for satellite connectivity scenarios"
+  ]
+}

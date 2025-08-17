@@ -1,0 +1,204 @@
+{
+  "id": "saa-c03-cost-optimized-architectures-lab",
+  "title": "AWS Cost-Optimized Architectures to Azure: Reserved Capacity, Spot Instances, and FinOps",
+  "category": "cost-optimization",
+  "difficulty": "advanced",
+  "estimatedTime": "160 minutes",
+  "description": "Master cost-optimized architecture design by implementing AWS cost optimization strategies including reserved instances, spot instances, and right-sizing, then migrating to Azure with reserved VMs, spot VMs, and comprehensive FinOps practices.",
+  "awsCertification": "SAA-C03",
+  "certificationWeight": "20% - Design Cost-Optimized Architectures Domain",
+  "awsServices": [
+    "EC2 Reserved Instances",
+    "EC2 Spot Instances",
+    "Savings Plans",
+    "S3 Storage Classes",
+    "CloudWatch",
+    "Cost Explorer",
+    "AWS Budgets",
+    "Trusted Advisor",
+    "Lambda",
+    "RDS Reserved Instances"
+  ],
+  "azureServices": [
+    "Reserved VM Instances",
+    "Azure Spot VMs",
+    "Azure Reservations",
+    "Storage Account Tiers",
+    "Azure Monitor",
+    "Cost Management",
+    "Azure Budgets",
+    "Azure Advisor",
+    "Azure Functions",
+    "Reserved Capacity"
+  ],
+  "prerequisites": [
+    "Understanding of cloud pricing models",
+    "Knowledge of capacity planning and forecasting",
+    "Familiarity with monitoring and metrics analysis",
+    "Basic understanding of FinOps principles"
+  ],
+  "learningObjectives": [
+    "Design architectures optimized for cost without sacrificing performance",
+    "Implement reserved capacity and savings plans effectively",
+    "Utilize spot/preemptible instances for appropriate workloads",
+    "Configure automated cost optimization and right-sizing",
+    "Implement tiered storage strategies for cost efficiency",
+    "Set up cost monitoring, budgets, and alerts"
+  ],
+  "businessScenario": {
+    "description": "TechStartup Inc needs to reduce their cloud spending by 40% while maintaining performance for their SaaS platform serving 100,000 users.",
+    "requirements": [
+      "Reduce monthly cloud costs from $50,000 to $30,000",
+      "Maintain 99.9% availability SLA",
+      "Support 20% annual growth",
+      "Implement chargeback for different departments",
+      "Provide cost visibility and forecasting"
+    ]
+  },
+  "sections": [
+    {
+      "title": "Reserved Capacity and Savings Plans",
+      "content": "Implement long-term capacity commitments for predictable workloads to maximize savings.",
+      "hands-on": {
+        "aws": "1. Analyze usage patterns with Cost Explorer\n2. Purchase EC2 Reserved Instances for baseline capacity\n3. Implement Compute Savings Plans for flexibility\n4. Configure RDS Reserved Instances for databases\n5. Set up Reserved Instance utilization alerts",
+        "azure": "1. Analyze usage with Azure Cost Management\n2. Purchase Reserved VM Instances for steady workloads\n3. Implement Azure Reservations for multiple services\n4. Configure SQL Database reserved capacity\n5. Set up reservation utilization monitoring"
+      }
+    },
+    {
+      "title": "Spot Instance Strategy and Implementation",
+      "content": "Leverage spot instances for fault-tolerant and flexible workloads to achieve significant cost savings.",
+      "hands-on": {
+        "aws": "1. Identify spot-suitable workloads (batch, CI/CD, analytics)\n2. Configure Spot Fleet with diversification\n3. Implement spot instance interruption handling\n4. Set up spot-optimized Auto Scaling Groups\n5. Use EC2 Instance Savings Plans for additional savings",
+        "azure": "1. Identify workloads suitable for Spot VMs\n2. Configure Virtual Machine Scale Sets with spot priority\n3. Implement eviction policy and handling\n4. Set up maximum price limits\n5. Combine with regular VMs for baseline capacity"
+      }
+    },
+    {
+      "title": "Storage Optimization and Lifecycle Management",
+      "content": "Implement intelligent storage tiering and lifecycle policies to minimize storage costs.",
+      "hands-on": {
+        "aws": "1. Implement S3 Intelligent-Tiering for automatic optimization\n2. Configure lifecycle policies for object transition\n3. Use S3 Glacier for long-term archival\n4. Implement EBS snapshot lifecycle management\n5. Optimize EBS volume types based on performance needs",
+        "azure": "1. Configure blob storage access tiers (Hot, Cool, Archive)\n2. Implement lifecycle management policies\n3. Use Azure Archive Storage for long-term retention\n4. Configure snapshot retention policies\n5. Optimize managed disk types and sizes"
+      }
+    },
+    {
+      "title": "Right-Sizing and Resource Optimization",
+      "content": "Continuously analyze and optimize resource allocation to eliminate waste.",
+      "hands-on": {
+        "aws": "1. Use AWS Compute Optimizer recommendations\n2. Implement CloudWatch metrics for utilization tracking\n3. Configure auto-shutdown for non-production resources\n4. Use Lambda for serverless workloads\n5. Implement Trusted Advisor cost optimization checks",
+        "azure": "1. Use Azure Advisor cost recommendations\n2. Implement Azure Monitor for resource metrics\n3. Configure auto-shutdown automation\n4. Migrate to Azure Functions for event-driven workloads\n5. Use Azure Cost Management insights"
+      }
+    },
+    {
+      "title": "Cost Governance and FinOps Implementation",
+      "content": "Establish comprehensive cost governance with budgets, alerts, and chargeback mechanisms.",
+      "hands-on": {
+        "aws": "1. Set up AWS Organizations for account structure\n2. Configure AWS Budgets with alerts\n3. Implement cost allocation tags\n4. Create Cost and Usage Reports\n5. Set up automated cost anomaly detection",
+        "azure": "1. Set up Management Groups for organization\n2. Configure Azure Budgets and alerts\n3. Implement comprehensive tagging strategy\n4. Create custom Cost Management views\n5. Configure cost anomaly alerts"
+      }
+    }
+  ],
+  "hands-onExercises": [
+    {
+      "title": "Implement Complete Cost Optimization Strategy",
+      "description": "Design and implement a comprehensive cost optimization strategy achieving 40% cost reduction.",
+      "tasks": [
+        "Analyze current spending patterns and identify optimization opportunities",
+        "Implement reserved capacity for predictable workloads",
+        "Configure spot instances for batch processing",
+        "Optimize storage with intelligent tiering",
+        "Set up comprehensive cost monitoring and alerting"
+      ],
+      "validation": [
+        "40% cost reduction achieved",
+        "No impact on application performance",
+        "Automated cost optimization in place",
+        "Department-level cost visibility enabled"
+      ]
+    },
+    {
+      "title": "Build Serverless Cost-Optimized Architecture",
+      "description": "Migrate monolithic application to serverless for maximum cost efficiency.",
+      "tasks": [
+        "Identify components suitable for serverless",
+        "Implement Lambda/Functions for compute",
+        "Use managed services for databases",
+        "Configure API Gateway for access",
+        "Monitor and optimize cold starts"
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "Reserved instance underutilization",
+        "solution": "Implement RI exchanges and modify instance types for better match"
+      },
+      {
+        "issue": "Unexpected spot instance terminations affecting availability",
+        "solution": "Implement proper spot diversification and graceful shutdown handling"
+      },
+      {
+        "issue": "Storage costs increasing despite lifecycle policies",
+        "solution": "Audit incomplete multipart uploads and versioning settings"
+      }
+    ]
+  },
+  "validation": {
+    "skillsValidation": [
+      "Can analyze and optimize cloud spending effectively",
+      "Can implement reserved capacity strategies",
+      "Can design spot-instance-friendly architectures",
+      "Can implement automated cost optimization",
+      "Can establish FinOps practices and governance"
+    ],
+    "certificationAlignment": {
+      "SAA-C03": {
+        "domain": "Design Cost-Optimized Architectures",
+        "weight": "20%",
+        "keyTopics": [
+          "Cost-effective storage solutions",
+          "Cost-effective compute solutions",
+          "Cost-effective database solutions",
+          "Cost-effective network architectures"
+        ]
+      }
+    }
+  },
+  "migrationFocus": {
+    "keyConsiderations": [
+      "Reserved instance term and payment differences",
+      "Spot instance availability and pricing variations",
+      "Storage tier transition rules and costs",
+      "Tagging strategy standardization",
+      "Cost management tool feature parity"
+    ],
+    "tools": [
+      "Azure Migrate for TCO analysis",
+      "Azure Pricing Calculator",
+      "Azure Cost Management",
+      "Azure Advisor"
+    ]
+  },
+  "successMetrics": {
+    "technical": [
+      "40% reduction in monthly cloud costs",
+      "95% reserved instance utilization",
+      "30% of workloads running on spot instances",
+      "Automated right-sizing recommendations implemented",
+      "Zero unutilized resources"
+    ],
+    "business": [
+      "Cloud cost per transaction reduced by 50%",
+      "Accurate departmental chargeback implemented",
+      "Monthly cost forecasting accuracy > 95%",
+      "ROI on reserved instances > 35%",
+      "FinOps maturity level reached: Optimized"
+    ]
+  },
+  "nextSteps": [
+    "Implement advanced FinOps practices and automation",
+    "Explore container-based cost optimization with ECS/AKS",
+    "Study AWS Well-Architected Framework cost optimization pillar",
+    "Practice with real-world cost optimization scenarios"
+  ]
+}

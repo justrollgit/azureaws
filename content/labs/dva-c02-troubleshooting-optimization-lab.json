@@ -1,0 +1,314 @@
+{
+  "id": "dva-c02-troubleshooting-optimization-lab",
+  "title": "AWS Application Troubleshooting to Azure Diagnostics: Performance Optimization and Issue Resolution",
+  "category": "application-optimization",
+  "difficulty": "intermediate",
+  "estimatedTime": "90 minutes",
+  "awsCertification": "DVA-C02",
+  "certificationWeight": "18% - Troubleshooting and Optimization Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master application troubleshooting and performance optimization by implementing AWS monitoring and debugging tools, then migrating to Azure diagnostics equivalents with root cause analysis, performance tuning, and operational excellence practices.",
+  
+  "learningObjectives": [
+    "Implement application monitoring using AWS CloudWatch and Azure Monitor",
+    "Perform distributed tracing with AWS X-Ray and Azure Application Insights",
+    "Optimize application performance and resource utilization",
+    "Troubleshoot common application issues and errors",
+    "Implement logging strategies and log analysis techniques",
+    "Design alerting and automated remediation workflows"
+  ],
+
+  "prerequisites": [
+    "Completion of all previous DVA-C02 labs (Development, Security, Deployment)",
+    "Understanding of application performance concepts",
+    "Basic knowledge of monitoring and observability principles",
+    "Familiarity with common application architecture patterns"
+  ],
+
+  "awsServices": [
+    "Amazon CloudWatch (Monitoring and Metrics)",
+    "AWS X-Ray (Distributed Tracing)",
+    "AWS CloudWatch Logs",
+    "AWS CloudWatch Insights",
+    "AWS Performance Insights",
+    "AWS Systems Manager (Operational Management)",
+    "AWS Config (Configuration Tracking)",
+    "Amazon SNS (Alerting)",
+    "AWS Lambda (Automated Remediation)",
+    "AWS Cost Explorer (Cost Optimization)"
+  ],
+
+  "azureServices": [
+    "Azure Monitor (Monitoring and Metrics)",
+    "Azure Application Insights",
+    "Azure Log Analytics",
+    "Azure Monitor Logs (KQL Queries)",
+    "Azure Database Insights",
+    "Azure Automation (Operational Management)",
+    "Azure Resource Health",
+    "Azure Action Groups (Alerting)",
+    "Azure Functions (Automated Remediation)",
+    "Azure Cost Management"
+  ],
+
+  "businessScenario": "PerformanceFirst Technologies operates a high-traffic e-commerce platform that experiences performance issues during peak shopping periods. They need to implement comprehensive monitoring, troubleshooting capabilities, and performance optimization strategies. The platform runs on both AWS and Azure, requiring expertise in both monitoring ecosystems to identify bottlenecks, resolve issues quickly, and optimize for cost and performance while maintaining high availability.",
+
+  "sections": [
+    {
+      "title": "Application Monitoring and Metrics",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS CloudWatch custom metrics and dashboards",
+        "Azure Monitor metrics and workbooks",
+        "Application performance monitoring (APM) setup",
+        "Custom metric creation and business KPI tracking",
+        "Real-time monitoring and threshold configuration"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Comprehensive Application Monitoring",
+          "description": "Setup detailed monitoring and metrics collection for application performance",
+          "steps": [
+            "Configure AWS CloudWatch custom metrics for application KPIs",
+            "Setup Azure Monitor equivalent metrics with custom dimensions",
+            "Create comprehensive dashboards for application health visualization",
+            "Implement business metrics tracking (conversion rates, user engagement)",
+            "Configure real-time monitoring with appropriate thresholds",
+            "Setup cross-platform monitoring correlation and comparison"
+          ],
+          "deliverables": [
+            "CloudWatch dashboard with application and business metrics",
+            "Azure Monitor workbook with equivalent visualizations",
+            "Custom metric implementation for both platforms",
+            "Monitoring correlation and comparison framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Distributed Tracing and Debugging",
+      "duration": "25 minutes",
+      "topics": [
+        "AWS X-Ray service map and trace analysis",
+        "Azure Application Insights dependency tracking",
+        "Request flow visualization and bottleneck identification",
+        "Error tracking and exception analysis",
+        "Performance profiling and optimization insights"
+      ],
+      "tasks": [
+        {
+          "title": "Setup Advanced Debugging and Tracing",
+          "description": "Implement distributed tracing for complex application debugging",
+          "steps": [
+            "Configure AWS X-Ray for end-to-end request tracing",
+            "Setup Azure Application Insights with dependency tracking",
+            "Implement custom trace annotations and metadata",
+            "Create service maps for application architecture visualization",
+            "Configure error tracking and exception monitoring",
+            "Implement performance profiling and bottleneck analysis"
+          ],
+          "deliverables": [
+            "X-Ray tracing configuration with service maps",
+            "Application Insights setup with dependency visualization",
+            "Custom tracing implementation and annotations",
+            "Error tracking and performance analysis framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Log Management and Analysis",
+      "duration": "20 minutes",
+      "topics": [
+        "AWS CloudWatch Logs structured logging",
+        "Azure Log Analytics workspace and KQL queries",
+        "Log aggregation and correlation strategies",
+        "Log-based alerting and anomaly detection",
+        "Security and audit log analysis"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Log Management",
+          "description": "Setup comprehensive logging strategy with analysis capabilities",
+          "steps": [
+            "Configure structured logging in applications for CloudWatch Logs",
+            "Setup Azure Log Analytics with equivalent log ingestion",
+            "Implement log correlation using trace IDs and session identifiers",
+            "Create advanced log queries using CloudWatch Insights and KQL",
+            "Configure log-based alerting for error patterns and anomalies",
+            "Implement security and audit log analysis workflows"
+          ],
+          "deliverables": [
+            "Structured logging implementation",
+            "Log Analytics workspace with KQL queries",
+            "Log correlation and analysis framework",
+            "Security and audit log monitoring setup"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Performance Optimization and Cost Management",
+      "duration": "20 minutes",
+      "topics": [
+        "Resource utilization analysis and right-sizing",
+        "Database performance optimization insights",
+        "Cost optimization recommendations and implementation",
+        "Automated scaling and resource management",
+        "Performance testing and capacity planning"
+      ],
+      "tasks": [
+        {
+          "title": "Optimize Performance and Costs",
+          "description": "Implement performance optimization and cost management strategies",
+          "steps": [
+            "Analyze resource utilization patterns using CloudWatch and Azure Monitor",
+            "Implement database performance optimization using Performance Insights",
+            "Configure automated scaling policies based on performance metrics",
+            "Setup cost optimization monitoring using Cost Explorer and Azure Cost Management",
+            "Implement automated resource cleanup and rightsizing recommendations",
+            "Create performance testing and capacity planning frameworks"
+          ],
+          "deliverables": [
+            "Resource utilization analysis and optimization plan",
+            "Database performance optimization implementation",
+            "Automated scaling and cost management policies",
+            "Performance testing and capacity planning framework"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Production Issue Investigation and Resolution",
+      "description": "Simulate and resolve real-world production issues using monitoring tools",
+      "steps": [
+        "Simulate common production issues: high latency, memory leaks, database slowdowns",
+        "Use monitoring tools to identify root causes and impact scope",
+        "Implement immediate mitigation strategies and communication plans",
+        "Perform detailed root cause analysis using tracing and logging",
+        "Create prevention strategies and monitoring improvements",
+        "Document incident response procedures and lessons learned"
+      ],
+      "expectedOutcome": "Complete incident resolution with documented procedures and prevention strategies"
+    },
+    {
+      "title": "Performance Optimization Campaign",
+      "description": "Conduct comprehensive performance optimization across application stack",
+      "steps": [
+        "Baseline current application performance across all components",
+        "Identify performance bottlenecks using profiling and monitoring data",
+        "Implement optimization strategies: caching, database tuning, code optimization",
+        "Measure performance improvements and cost impact",
+        "Implement continuous performance monitoring and regression detection",
+        "Create performance optimization playbook and best practices"
+      ],
+      "expectedOutcome": "Measurable performance improvements with sustainable optimization practices"
+    },
+    {
+      "title": "Automated Remediation and Self-Healing Systems",
+      "description": "Build automated systems that detect and resolve common issues",
+      "steps": [
+        "Identify common failure patterns and manual remediation procedures",
+        "Implement automated detection using custom metrics and log analysis",
+        "Create automated remediation workflows using Lambda and Azure Functions",
+        "Setup escalation procedures for issues requiring human intervention",
+        "Test automated remediation scenarios and failure modes",
+        "Monitor effectiveness and continuously improve automation"
+      ],
+      "expectedOutcome": "Self-healing system with automated issue detection and resolution capabilities"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Overwhelming amount of monitoring data and alert fatigue",
+      "solution": "Implement tiered alerting strategies, use alert correlation and suppression, focus on business-impact metrics, implement intelligent alerting with machine learning"
+    },
+    {
+      "issue": "Difficulty correlating issues across distributed microservices",
+      "solution": "Implement correlation IDs, use distributed tracing comprehensively, create service dependency maps, implement centralized logging with proper context"
+    },
+    {
+      "issue": "Performance optimization changes causing unintended side effects",
+      "solution": "Implement canary deployments for performance changes, use comprehensive testing, monitor business metrics alongside technical metrics, implement rollback procedures"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Monitoring and Metrics Implementation",
+      "criteria": [
+        "Can implement comprehensive application monitoring on both platforms",
+        "Understands custom metrics and business KPI tracking",
+        "Can create effective dashboards and visualizations",
+        "Demonstrates real-time monitoring and alerting capabilities"
+      ]
+    },
+    {
+      "category": "Debugging and Tracing Skills",
+      "criteria": [
+        "Can setup and use distributed tracing effectively",
+        "Understands service dependency mapping and visualization",
+        "Can perform root cause analysis using tracing data",
+        "Demonstrates error tracking and exception handling"
+      ]
+    },
+    {
+      "category": "Log Management and Analysis",
+      "criteria": [
+        "Can implement structured logging strategies",
+        "Understands advanced log querying and analysis",
+        "Can setup log-based alerting and anomaly detection",
+        "Demonstrates security and audit log analysis"
+      ]
+    },
+    {
+      "category": "Performance Optimization",
+      "criteria": [
+        "Can identify and resolve performance bottlenecks",
+        "Understands resource optimization and cost management",
+        "Can implement automated scaling and resource management",
+        "Demonstrates capacity planning and performance testing"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "DVA-C02": {
+      "domain": "Troubleshooting and Optimization",
+      "weight": "18%",
+      "coverage": [
+        "Troubleshoot issues by using AWS services",
+        "Optimize applications by using AWS services and features",
+        "Analyze application performance",
+        "Optimize application performance",
+        "Implement monitoring and logging"
+      ],
+      "examTopics": [
+        "CloudWatch monitoring, metrics, and alarming",
+        "X-Ray distributed tracing and performance analysis",
+        "Log analysis using CloudWatch Logs and Insights",
+        "Performance optimization and resource right-sizing",
+        "Automated remediation and operational excellence"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement comprehensive monitoring and alerting strategies",
+    "Demonstrates effective troubleshooting and root cause analysis skills",
+    "Shows understanding of performance optimization techniques",
+    "Can setup automated remediation and self-healing systems",
+    "Understands operational excellence and continuous improvement practices"
+  ],
+
+  "nextSteps": [
+    "Complete DVA-C02 certification preparation and practice exams",
+    "Begin exploring professional-level certifications (SAP-C02, DOP-C02)",
+    "Gain hands-on experience with advanced monitoring and observability tools",
+    "Practice implementing optimization strategies in production environments"
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "id": "clf-c02-security-compliance-lab",
+  "title": "AWS Security to Azure Security: Shared Responsibility and Compliance Fundamentals",
+  "category": "cloud-security-fundamentals", 
+  "difficulty": "beginner",
+  "estimatedTime": "75 minutes",
+  "awsCertification": "CLF-C02",
+  "certificationWeight": "30% - Security and Compliance Domain (Largest Weight)",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master foundational cloud security concepts by understanding AWS shared responsibility model and migrating to Azure security fundamentals with compliance frameworks, access controls, and core security best practices.",
+  
+  "learningObjectives": [
+    "Understand AWS shared responsibility model and Azure shared responsibility",
+    "Learn core AWS security services and their Azure equivalents",
+    "Explore identity and access management fundamentals",
+    "Understand encryption, data protection, and privacy concepts",
+    "Learn compliance frameworks and security best practices",
+    "Compare AWS and Azure security monitoring and incident response"
+  ],
+
+  "prerequisites": [
+    "Completion of CLF-C02 Cloud Concepts Lab",
+    "Basic understanding of IT security concepts",
+    "Familiarity with user accounts and permissions",
+    "No advanced security experience required"
+  ],
+
+  "awsServices": [
+    "AWS IAM (Identity and Access Management)",
+    "AWS Security Groups and NACLs",
+    "AWS KMS (Key Management Service)",
+    "AWS CloudTrail",
+    "AWS Config",
+    "AWS GuardDuty",
+    "AWS WAF (Web Application Firewall)",
+    "AWS Shield"
+  ],
+
+  "azureServices": [
+    "Azure Active Directory (Azure AD)",
+    "Network Security Groups (NSGs)",
+    "Azure Key Vault", 
+    "Azure Monitor and Activity Log",
+    "Azure Policy",
+    "Microsoft Defender for Cloud",
+    "Azure Web Application Firewall",
+    "Azure DDoS Protection"
+  ],
+
+  "businessScenario": "SecureFinance Corp is a financial services company that handles sensitive customer data and must comply with strict regulatory requirements including PCI DSS, SOX, and regional data protection laws. They're planning to migrate from AWS to Azure and need to understand cloud security fundamentals, shared responsibility models, and how to maintain their security posture and compliance during and after migration.",
+
+  "sections": [
+    {
+      "title": "Shared Responsibility Model Fundamentals",
+      "duration": "20 minutes",
+      "topics": [
+        "AWS shared responsibility model components",
+        "Azure shared responsibility model comparison",
+        "Customer responsibilities vs cloud provider responsibilities",
+        "Security 'of' the cloud vs security 'in' the cloud",
+        "Compliance implications and shared controls"
+      ],
+      "tasks": [
+        {
+          "title": "Map Shared Responsibility Models",
+          "description": "Understand and compare AWS and Azure shared responsibility frameworks",
+          "steps": [
+            "Study AWS shared responsibility model for different service types",
+            "Compare with Azure shared responsibility model components",
+            "Identify customer responsibilities for compute, storage, and networking",
+            "Map cloud provider responsibilities for infrastructure and services",
+            "Understand shared controls and compliance implications",
+            "Create responsibility matrix for common scenarios"
+          ],
+          "deliverables": [
+            "Shared responsibility comparison matrix",
+            "Customer responsibility checklist",
+            "Service-specific responsibility mapping",
+            "Compliance control framework"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Identity and Access Management Foundations",
+      "duration": "20 minutes",
+      "topics": [
+        "AWS IAM fundamentals: users, groups, roles, policies",
+        "Azure Active Directory basics and identity concepts",
+        "Authentication vs authorization principles", 
+        "Multi-factor authentication (MFA) implementation",
+        "Principle of least privilege and access controls"
+      ],
+      "tasks": [
+        {
+          "title": "Design Basic Identity Architecture",
+          "description": "Create foundational identity and access management design",
+          "steps": [
+            "Design AWS IAM structure with users, groups, and roles",
+            "Compare with Azure AD tenant and identity organization",
+            "Implement principle of least privilege access policies",
+            "Configure multi-factor authentication requirements",
+            "Design role-based access control (RBAC) hierarchy",
+            "Plan identity federation and single sign-on approach"
+          ],
+          "deliverables": [
+            "IAM architecture diagram",
+            "Azure AD organization structure",
+            "Access control policy framework",
+            "MFA implementation plan"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Protection and Encryption",
+      "duration": "15 minutes",
+      "topics": [
+        "AWS KMS and encryption key management",
+        "Azure Key Vault and cryptographic services",
+        "Encryption at rest and in transit concepts",
+        "Data classification and protection strategies",
+        "Privacy controls and data sovereignty"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Data Protection Strategy",
+          "description": "Design comprehensive data protection and encryption approach",
+          "steps": [
+            "Plan AWS KMS key management and encryption strategy",
+            "Compare with Azure Key Vault cryptographic services",
+            "Implement encryption at rest for storage services",
+            "Configure encryption in transit for data communication",
+            "Design data classification and labeling framework",
+            "Address data sovereignty and privacy requirements"
+          ],
+          "deliverables": [
+            "Encryption strategy document",
+            "Key management plan",
+            "Data classification framework",
+            "Privacy compliance checklist"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Security Monitoring and Compliance",
+      "duration": "20 minutes",
+      "topics": [
+        "AWS CloudTrail and security logging",
+        "Azure Monitor and Activity Log for security events",
+        "AWS Config and compliance monitoring",
+        "Azure Policy and governance automation",
+        "Incident detection and response fundamentals"
+      ],
+      "tasks": [
+        {
+          "title": "Setup Security Monitoring Framework",
+          "description": "Establish basic security monitoring and compliance tracking",
+          "steps": [
+            "Configure AWS CloudTrail for comprehensive logging",
+            "Set up Azure Activity Log and security event monitoring",
+            "Implement AWS Config rules for compliance checking",
+            "Create Azure Policy definitions for governance automation",
+            "Design incident detection and alerting workflows",
+            "Plan compliance reporting and audit preparation"
+          ],
+          "deliverables": [
+            "Security logging configuration",
+            "Compliance monitoring setup",
+            "Incident response procedures",
+            "Audit preparation checklist"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Shared Responsibility Assessment Exercise",
+      "description": "Conduct shared responsibility assessment for a sample workload",
+      "steps": [
+        "Review provided sample web application architecture",
+        "Identify all components: compute, storage, networking, applications",
+        "Map AWS shared responsibility for each component",
+        "Compare with Azure shared responsibility model",
+        "Document customer security responsibilities",
+        "Create security implementation checklist"
+      ],
+      "expectedOutcome": "Complete shared responsibility assessment with clear customer action items"
+    },
+    {
+      "title": "Basic IAM Policy Design Challenge",
+      "description": "Design access control policies for different user roles",
+      "steps": [
+        "Define three user roles: developer, admin, read-only analyst",
+        "Create AWS IAM policies for each role with appropriate permissions",
+        "Design equivalent Azure AD roles and access assignments",
+        "Implement principle of least privilege for all roles",
+        "Add MFA requirements and conditional access policies",
+        "Test and validate policy effectiveness"
+      ],
+      "expectedOutcome": "Functional IAM policies demonstrating proper access control design"
+    },
+    {
+      "title": "Security Compliance Checklist Creation",
+      "description": "Build security compliance checklist for common frameworks",
+      "steps": [
+        "Research PCI DSS, SOC 2, and ISO 27001 requirements",
+        "Map requirements to AWS and Azure security controls",
+        "Create implementation checklist for each framework",
+        "Identify automated compliance monitoring opportunities",
+        "Design evidence collection and reporting processes",
+        "Plan continuous compliance validation approach"
+      ],
+      "expectedOutcome": "Comprehensive compliance checklist with implementation guidance"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Confusion about customer vs provider security responsibilities",
+      "solution": "Use specific examples and scenarios, provide clear visual diagrams, and emphasize 'if you can see/configure it, you're responsible for securing it'"
+    },
+    {
+      "issue": "Overwhelming number of security services and concepts",
+      "solution": "Start with core concepts (identity, encryption, monitoring), use progressive disclosure, and provide practical examples for each service"
+    },
+    {
+      "issue": "Difficulty understanding compliance requirements",
+      "solution": "Focus on common frameworks, provide business context for compliance needs, and use industry-specific examples"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Shared Responsibility Understanding",
+      "criteria": [
+        "Can clearly explain customer vs provider responsibilities",
+        "Understands responsibility differences across service models (IaaS, PaaS, SaaS)",
+        "Can apply shared responsibility model to real-world scenarios",
+        "Demonstrates awareness of compliance implications"
+      ]
+    },
+    {
+      "category": "Identity and Access Management",
+      "criteria": [
+        "Understands IAM concepts: users, groups, roles, policies",
+        "Can design basic access control frameworks",
+        "Knows how to implement principle of least privilege",
+        "Understands MFA and authentication best practices"
+      ]
+    },
+    {
+      "category": "Data Protection and Encryption",
+      "criteria": [
+        "Understands encryption at rest and in transit concepts",
+        "Can explain key management best practices",
+        "Knows data classification and protection strategies",
+        "Demonstrates awareness of privacy and sovereignty requirements"
+      ]
+    },
+    {
+      "category": "Security Monitoring and Compliance",
+      "criteria": [
+        "Understands importance of comprehensive logging",
+        "Can design basic compliance monitoring approach",
+        "Knows incident detection and response fundamentals",
+        "Demonstrates awareness of common compliance frameworks"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "CLF-C02": {
+      "domain": "Security and Compliance", 
+      "weight": "30%",
+      "coverage": [
+        "Understand the AWS shared responsibility model",
+        "Understand AWS Cloud security, governance, and compliance concepts",
+        "Identify AWS access management capabilities",
+        "Identify components and resources for security",
+        "Identify resources for security support"
+      ],
+      "examTopics": [
+        "Shared responsibility model for security and compliance",
+        "AWS security services and identity management",
+        "Encryption and data protection fundamentals",
+        "Security monitoring and incident response",
+        "Compliance frameworks and governance automation"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can explain shared responsibility model for different scenarios",
+    "Demonstrates understanding of core identity and access management",
+    "Shows knowledge of data protection and encryption fundamentals",
+    "Can design basic security monitoring and compliance approaches",
+    "Understands security best practices for cloud migration"
+  ],
+
+  "nextSteps": [
+    "Proceed to CLF-C02 Cloud Technology and Services Lab (34% domain)",
+    "Begin hands-on practice with AWS IAM and Azure AD",
+    "Explore specific security services in both cloud platforms",
+    "Study compliance frameworks relevant to your industry"
+  ]
+}

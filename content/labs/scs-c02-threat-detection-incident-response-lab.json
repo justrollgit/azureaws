@@ -1,0 +1,317 @@
+{
+  "id": "scs-c02-threat-detection-incident-response-lab",
+  "title": "AWS Threat Detection to Azure Security Response: Advanced Threat Hunting and Incident Management",
+  "category": "threat-detection-response",
+  "difficulty": "expert",
+  "estimatedTime": "135 minutes",
+  "awsCertification": "SCS-C02",
+  "certificationWeight": "14% - Threat Detection & Incident Response Domain",
+  "migrationFocus": "AWS-to-Azure",
+  "description": "Master enterprise threat detection and incident response by implementing comprehensive AWS threat hunting and security response solutions, then migrating to Azure security response equivalents with advanced threat intelligence, automated response, and enterprise-grade security operations.",
+
+  "learningObjectives": [
+    "Implement comprehensive threat detection and advanced threat hunting capabilities",
+    "Build automated incident response and security orchestration systems",
+    "Create threat intelligence integration and behavioral threat analysis",
+    "Design security incident management and forensic investigation workflows",
+    "Implement threat response automation and remediation capabilities",
+    "Build security metrics and threat landscape reporting frameworks"
+  ],
+
+  "prerequisites": [
+    "Completion of previous SCS-C02 labs or equivalent security experience",
+    "Strong understanding of threat detection methodologies and incident response frameworks",
+    "Experience with security operations and threat hunting techniques",
+    "Familiarity with forensic analysis and security investigation procedures"
+  ],
+
+  "awsServices": [
+    "Amazon GuardDuty",
+    "AWS Security Hub",
+    "Amazon Detective",
+    "AWS Config",
+    "AWS CloudTrail",
+    "Amazon Macie",
+    "AWS Systems Manager",
+    "AWS Lambda",
+    "Amazon SNS",
+    "Amazon CloudWatch",
+    "AWS Step Functions",
+    "AWS Organizations"
+  ],
+
+  "azureServices": [
+    "Microsoft Defender for Cloud",
+    "Azure Security Center",
+    "Azure Sentinel",
+    "Azure Policy",
+    "Azure Activity Log",
+    "Microsoft Purview",
+    "Azure Automation",
+    "Azure Functions",
+    "Azure Action Groups",
+    "Azure Monitor",
+    "Azure Logic Apps",
+    "Azure Management Groups"
+  ],
+
+  "businessScenario": "ThreatGuard Operations provides advanced threat detection and incident response services for enterprise clients requiring sophisticated security operations, threat hunting, and incident management. Their security response team needs expertise in threat detection, automated response, forensic analysis, and security orchestration. They must master both AWS and Azure threat detection platforms for comprehensive security operations excellence.",
+
+  "sections": [
+    {
+      "title": "Advanced Threat Detection and Threat Hunting",
+      "duration": "40 minutes",
+      "topics": [
+        "Advanced threat detection and machine learning-based anomaly identification",
+        "Proactive threat hunting and behavioral threat analysis",
+        "Threat intelligence integration and indicator of compromise (IoC) management",
+        "Attack pattern recognition and advanced persistent threat (APT) detection",
+        "Cross-platform threat correlation and unified threat visibility"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Advanced Threat Detection and Hunting Platform",
+          "description": "Build comprehensive threat detection with proactive hunting and intelligence integration",
+          "steps": [
+            "Configure advanced threat detection with GuardDuty and Defender for Cloud",
+            "Implement proactive threat hunting and behavioral threat analysis",
+            "Setup threat intelligence integration and IoC management",
+            "Configure attack pattern recognition and APT detection capabilities",
+            "Implement cross-platform threat correlation and unified visibility",
+            "Setup automated threat hunting workflows and investigation automation"
+          ],
+          "deliverables": [
+            "Advanced threat detection with machine learning anomaly identification",
+            "Proactive threat hunting and behavioral threat analysis system",
+            "Threat intelligence integration and IoC management platform",
+            "Attack pattern recognition and cross-platform threat correlation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Automated Incident Response and Security Orchestration",
+      "duration": "35 minutes",
+      "topics": [
+        "Automated incident response and security orchestration workflows",
+        "Security playbook automation and response standardization",
+        "Incident escalation and communication automation",
+        "Containment and remediation automation for security events",
+        "Response effectiveness measurement and continuous improvement"
+      ],
+      "tasks": [
+        {
+          "title": "Build Automated Incident Response and Orchestration Platform",
+          "description": "Implement comprehensive incident response with automation and orchestration",
+          "steps": [
+            "Configure automated incident response with Security Hub and Azure Sentinel",
+            "Implement security playbook automation and response standardization",
+            "Setup incident escalation and communication automation",
+            "Configure containment and remediation automation for security events",
+            "Implement response effectiveness measurement and improvement workflows",
+            "Setup cross-platform incident coordination and unified response"
+          ],
+          "deliverables": [
+            "Automated incident response and security orchestration workflows",
+            "Security playbook automation and response standardization system",
+            "Incident escalation and communication automation platform",
+            "Containment and remediation automation with effectiveness measurement"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Security Forensics and Investigation Capabilities",
+      "duration": "30 minutes",
+      "topics": [
+        "Digital forensics and evidence collection automation",
+        "Security investigation workflows and case management",
+        "Timeline analysis and attack reconstruction capabilities",
+        "Forensic data preservation and chain of custody management",
+        "Advanced investigation techniques and root cause analysis"
+      ],
+      "tasks": [
+        {
+          "title": "Implement Security Forensics and Investigation Platform",
+          "description": "Build comprehensive forensic capabilities with investigation automation",
+          "steps": [
+            "Configure digital forensics and evidence collection with Detective and Azure Sentinel",
+            "Implement security investigation workflows and case management",
+            "Setup timeline analysis and attack reconstruction capabilities",
+            "Configure forensic data preservation and chain of custody management",
+            "Implement advanced investigation techniques and root cause analysis",
+            "Setup automated forensic reporting and investigation documentation"
+          ],
+          "deliverables": [
+            "Digital forensics and evidence collection automation system",
+            "Security investigation workflows and case management platform",
+            "Timeline analysis and attack reconstruction capabilities",
+            "Forensic data preservation and advanced investigation techniques"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Threat Response Metrics and Security Operations Management",
+      "duration": "30 minutes",
+      "topics": [
+        "Security operations metrics and threat landscape reporting",
+        "Incident response performance measurement and optimization",
+        "Threat detection effectiveness analysis and tuning",
+        "Security operations center (SOC) efficiency and workflow optimization",
+        "Executive security reporting and strategic threat intelligence"
+      ],
+      "tasks": [
+        {
+          "title": "Build Threat Response Metrics and Operations Management Platform",
+          "description": "Implement comprehensive security operations with metrics and optimization",
+          "steps": [
+            "Configure security operations metrics and threat landscape reporting",
+            "Implement incident response performance measurement and optimization",
+            "Setup threat detection effectiveness analysis and tuning workflows",
+            "Configure SOC efficiency measurement and workflow optimization",
+            "Implement executive security reporting and strategic threat intelligence",
+            "Setup continuous improvement and security operations optimization"
+          ],
+          "deliverables": [
+            "Security operations metrics and threat landscape reporting system",
+            "Incident response performance measurement and optimization platform",
+            "Threat detection effectiveness analysis and tuning capabilities",
+            "SOC efficiency and executive security reporting framework"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "hands-onExercises": [
+    {
+      "title": "Financial Services Threat Operations and Fraud Detection",
+      "description": "Build comprehensive threat operations for financial services with fraud detection",
+      "steps": [
+        "Design enterprise threat operations architecture for financial services security",
+        "Implement advanced threat detection and financial fraud hunting capabilities",
+        "Build automated incident response for financial security and fraud events",
+        "Configure forensic investigation workflows for financial crime analysis",
+        "Implement threat operations metrics and regulatory reporting for financial compliance",
+        "Test platform with financial threat scenarios and fraud detection validation"
+      ],
+      "expectedOutcome": "Production-ready threat operations platform for financial services with fraud detection"
+    },
+    {
+      "title": "Healthcare Threat Detection and Patient Data Protection",
+      "description": "Implement healthcare threat operations with patient data protection and HIPAA incident response",
+      "steps": [
+        "Design healthcare threat operations architecture for patient data protection",
+        "Implement medical device threat detection and healthcare-specific hunting",
+        "Build automated incident response for healthcare security and privacy events",
+        "Configure forensic investigation workflows for healthcare security incidents",
+        "Implement healthcare threat metrics and HIPAA compliance reporting",
+        "Test platform with healthcare threat scenarios and patient data protection validation"
+      ],
+      "expectedOutcome": "Healthcare threat operations platform with patient data protection and HIPAA compliance"
+    },
+    {
+      "title": "Multi-Cloud Threat Operations and Unified Security Response",
+      "description": "Build unified threat operations platform spanning AWS and Azure",
+      "steps": [
+        "Design multi-cloud threat operations architecture with unified detection and response",
+        "Implement cross-cloud threat detection and centralized hunting capabilities",
+        "Build unified automated incident response and cross-platform orchestration",
+        "Configure multi-cloud forensic investigation and evidence correlation",
+        "Implement unified threat operations metrics and cross-platform reporting",
+        "Test platform with complex multi-cloud threat scenarios and security events"
+      ],
+      "expectedOutcome": "Multi-cloud threat operations platform with unified detection and response capabilities"
+    }
+  ],
+
+  "troubleshooting": [
+    {
+      "issue": "Threat detection false positives and alert fatigue in security operations",
+      "solution": "Implement machine learning-based alert tuning, use contextual threat analysis, implement threat intelligence enrichment, use behavioral baselines for anomaly detection, and implement risk-based alert prioritization and automated filtering"
+    },
+    {
+      "issue": "Incident response automation complexity and workflow orchestration challenges",
+      "solution": "Implement standardized response playbooks, use API-based integration for automation, implement error handling and rollback procedures, use workflow visualization and testing, and implement gradual automation with human oversight"
+    },
+    {
+      "issue": "Forensic investigation data volume and analysis performance",
+      "solution": "Implement intelligent data filtering and sampling, use distributed analysis capabilities, implement automated evidence correlation, use timeline compression techniques, and implement parallel investigation workflows"
+    }
+  ],
+
+  "validation": [
+    {
+      "category": "Threat Detection Excellence",
+      "criteria": [
+        "Can implement advanced threat detection with machine learning anomaly identification",
+        "Understands proactive threat hunting and behavioral threat analysis",
+        "Can configure threat intelligence integration and IoC management",
+        "Demonstrates attack pattern recognition and cross-platform threat correlation"
+      ]
+    },
+    {
+      "category": "Incident Response Mastery",
+      "criteria": [
+        "Can implement automated incident response and security orchestration workflows",
+        "Understands security playbook automation and response standardization",
+        "Can configure incident escalation and communication automation",
+        "Demonstrates containment and remediation automation with effectiveness measurement"
+      ]
+    },
+    {
+      "category": "Forensic Investigation Excellence",
+      "criteria": [
+        "Can implement digital forensics and evidence collection automation",
+        "Understands security investigation workflows and case management",
+        "Can configure timeline analysis and attack reconstruction capabilities",
+        "Demonstrates forensic data preservation and advanced investigation techniques"
+      ]
+    },
+    {
+      "category": "Security Operations Management",
+      "criteria": [
+        "Can implement security operations metrics and threat landscape reporting",
+        "Understands incident response performance measurement and optimization",
+        "Can configure threat detection effectiveness analysis and tuning",
+        "Demonstrates SOC efficiency and executive security reporting"
+      ]
+    }
+  ],
+
+  "certificationAlignment": {
+    "SCS-C02": {
+      "domain": "Threat Detection & Incident Response",
+      "weight": "14%",
+      "coverage": [
+        "Design and implement an incident response plan",
+        "Detect security threats and anomalies by using AWS services",
+        "Respond to compromised resources and workloads",
+        "Investigate security incidents and anomalies"
+      ],
+      "examTopics": [
+        "Advanced threat detection and threat hunting with GuardDuty and Detective",
+        "Automated incident response and security orchestration workflows",
+        "Security forensics and investigation capabilities implementation",
+        "Threat response metrics and security operations management",
+        "Cross-platform threat correlation and unified security response"
+      ]
+    }
+  },
+
+  "successMetrics": [
+    "Can implement advanced threat detection with comprehensive hunting capabilities",
+    "Demonstrates ability to build automated incident response and security orchestration",
+    "Shows understanding of security forensics and investigation workflows",
+    "Can create threat response metrics and security operations management",
+    "Understands cross-platform threat correlation and unified security response"
+  ],
+
+  "nextSteps": [
+    "Proceed to SCS-C02 Governance & Security Management Lab (14% domain weight)",
+    "Gain hands-on experience with enterprise threat operations in production environments",
+    "Practice implementing threat detection for various compliance frameworks",
+    "Explore advanced threat hunting and incident response techniques"
+  ]
+}
